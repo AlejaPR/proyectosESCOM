@@ -1,8 +1,7 @@
 import React from 'react';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import { NotificationContainer, NotificationManager } from 'react-notifications';
-import '../../../node_modules/react-confirm-alert/src/react-confirm-alert.css'
-import '../../../node_modules/react-notifications/lib/notifications.css'
+
 
 //estilos
 import '../../css/business-casual.css'

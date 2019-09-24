@@ -1,33 +1,33 @@
 import React from 'react';
 
 //Menu lateral, superior y contenido de inicio
-import MenuSuperior from "./componentes/menu/MenuBlancoSuperior.js"
-import MenuLateral from "./componentes/menu/MenuLateral.js"
-import RedireccionarLogin from "./componentes/redirecciones/RedireccionarLogin.js"
-import Inicio from "./componentes/general/ContenidoInicio.js"
+import MenuSuperior from "./SuperAdministrador/componentes/menu/MenuBlancoSuperior.js"
+import MenuLateral from "./SuperAdministrador/componentes/menu/MenuLateral.js"
+import RedireccionarLogin from "./SuperAdministrador/componentes/redirecciones/RedireccionarLogin.js"
+import Inicio from "./SuperAdministrador/componentes/general/ContenidoInicio.js"
 
 
 //administrar usuario
-import EditarUsuario from './componentes/editar/editarUsuario.js'
-import AsignarActividadUsuario from './componentes/asignar/AsignarActividadUsuario.js'
+import EditarUsuario from './SuperAdministrador/componentes/editar/editarUsuario.js'
+import AsignarActividadUsuario from './SuperAdministrador/componentes/asignar/AsignarActividadUsuario.js'
 
 //administrar modulo
-import AdminModulo from './componentes/administrar/ContenidoAdminModulo.js'
-import EditarModulo from './componentes/editar/editarModulo.js';
-import AsignarActividadModulo from './componentes/asignar/asignarActividadModulo.js';
+import AdminModulo from './SuperAdministrador/componentes/administrar/ContenidoAdminModulo.js'
+import EditarModulo from './SuperAdministrador/componentes/editar/editarModulo.js';
+import AsignarActividadModulo from './SuperAdministrador/componentes/asignar/asignarActividadModulo.js';
 
 //Administrar actividad
-import Actividad from './componentes/administrar/ContenidoAdminActividad.js'
+import Actividad from './SuperAdministrador/componentes/administrar/ContenidoAdminActividad.js'
 
-import RedireccionarUsuario from './componentes/redirecciones/RedireccionarUsuario.js';
-import ContenidoReportes from './componentes/reportes/ContenidoReportes.js';
+import RedireccionarUsuario from './SuperAdministrador/componentes/redirecciones/RedireccionarUsuario.js';
+import ContenidoReportes from './SuperAdministrador/componentes/reportes/ContenidoReportes.js';
 
 
 //estilos
-import './css/business-casual.css'
-import './css/estilos.css'
-import './css/bootstrap.min.css'
-import './css/menu.css'
+import './SuperAdministrador/css/business-casual.css'
+import './SuperAdministrador/css/estilos.css'
+import './SuperAdministrador/css/bootstrap.min.css'
+import './SuperAdministrador/css/menu.css'
 
 //rutas
 import { BrowserRouter as Router, Route } from "react-router-dom"
@@ -35,7 +35,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom"
 //store
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import reducers from './reducers';
+import reducers from './SuperAdministrador/reducers';
 import thunk from 'redux-thunk'
 
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
