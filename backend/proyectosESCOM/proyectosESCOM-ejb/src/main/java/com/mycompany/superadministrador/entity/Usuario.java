@@ -1,0 +1,220 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package com.mycompany.superadministrador.entity;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.Date;
+import java.util.List;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+/**
+ *
+ * @author aleja
+ */
+@Entity
+@Table(name = "TBL_USUARIO")
+public class Usuario implements Serializable {
+    
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "PK_USR_IDUSUARIO")
+    private Integer idUsuario;
+    
+    @Size(max = 300)
+    @Column(name = "USR_TOKEN")
+    private String token;
+    
+    @Column(name = "USR_NUMERODOCUMENTO")
+    private Integer numeroDocumento;
+    
+    @Column(name = "USR_NUMEROSESIONES")
+    private Integer numeroSesiones;
+    
+    @Size(max = 20)
+    @Column(name = "USR_APELLIDO")
+    private String apellido;
+    
+    @Size(max = 20)
+    @Column(name = "USR_ESTADO")
+    private String estado;
+    
+    @Column(name = "USR_FECHANACIMIENTO")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaNacimiento;
+    
+    @Column(name = "USR_NUMEROINTENTOS")
+    private Integer numeroIntentos;
+    
+    @Size(max = 20)
+    @Column(name = "USR_NOMBRE")
+    private String nombre;
+    
+    @Column(name = "USR_ULTIMAMODIFICACION")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date ultimaModificacion;
+    
+    @Size(max = 50)
+    @Column(name = "USR_CORREOELECTRONICO")
+    private String correoElectronico;
+    
+    @Size(max = 20)
+    @Column(name = "USR_CONTRASENA")
+    private String contrasena;
+    
+    @JoinColumn(name = "FK_USR_IDTIPODOCUMENTO", referencedColumnName = "PK_TIP_IDTIPODOCUMENTO")
+    @ManyToOne
+    private TipoDocumento fkUsrIdtipodocumento;
+    
+    @OneToMany(mappedBy = "fkUacIdusuario")
+    private List<UsuarioActividad> usuarioActividadList;
+
+    public Usuario(){
+        
+    }
+    
+    public Usuario(String token, Integer numeroDocumento, Integer numeroSesiones, String apellido, String estado, Date fechaNacimiento, Integer numeroIntentos, String nombre, Date ultimaModificacion, String correoElectronico, String contrasena, TipoDocumento fkUsrIdtipodocumento) {
+        this.token = token;
+        this.numeroDocumento = numeroDocumento;
+        this.numeroSesiones = numeroSesiones;
+        this.apellido = apellido;
+        this.estado = estado;
+        this.fechaNacimiento = fechaNacimiento;
+        this.numeroIntentos = numeroIntentos;
+        this.nombre = nombre;
+        this.ultimaModificacion = ultimaModificacion;
+        this.correoElectronico = correoElectronico;
+        this.contrasena = contrasena;
+        this.fkUsrIdtipodocumento = fkUsrIdtipodocumento;
+    }
+
+    public Integer getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(Integer idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public Integer getNumeroDocumento() {
+        return numeroDocumento;
+    }
+
+    public void setNumeroDocumento(Integer numeroDocumento) {
+        this.numeroDocumento = numeroDocumento;
+    }
+
+    public Integer getNumeroSesiones() {
+        return numeroSesiones;
+    }
+
+    public void setNumeroSesiones(Integer numeroSesiones) {
+        this.numeroSesiones = numeroSesiones;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public Date getFechaNacimiento() {
+        return fechaNacimiento;
+    }
+
+    public void setFechaNacimiento(Date fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
+    public Integer getNumeroIntentos() {
+        return numeroIntentos;
+    }
+
+    public void setNumeroIntentos(Integer numeroIntentos) {
+        this.numeroIntentos = numeroIntentos;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public Date getUltimaModificacion() {
+        return ultimaModificacion;
+    }
+
+    public void setUltimaModificacion(Date ultimaModificacion) {
+        this.ultimaModificacion = ultimaModificacion;
+    }
+
+    public String getCorreoElectronico() {
+        return correoElectronico;
+    }
+
+    public void setCorreoElectronico(String correoElectronico) {
+        this.correoElectronico = correoElectronico;
+    }
+
+    public String getContrasena() {
+        return contrasena;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
+    }
+
+    public TipoDocumento getFkUsrIdtipodocumento() {
+        return fkUsrIdtipodocumento;
+    }
+
+    public void setFkUsrIdtipodocumento(TipoDocumento fkUsrIdtipodocumento) {
+        this.fkUsrIdtipodocumento = fkUsrIdtipodocumento;
+    }
+
+    public List<UsuarioActividad> getUsuarioActividadList() {
+        return usuarioActividadList;
+    }
+
+    public void setUsuarioActividadList(List<UsuarioActividad> usuarioActividadList) {
+        this.usuarioActividadList = usuarioActividadList;
+    }
+
+    
+}

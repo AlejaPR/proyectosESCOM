@@ -3,12 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.superadministrador;
+package com.mycompany.superadministrador.services;
+
+import javax.ws.rs.ApplicationPath;
+import javax.ws.rs.core.Application;
 
 /**
  *
  * @author aleja
  */
-public class PruebaEJBSuper {
+@ApplicationPath("app")
+public class Configuration extends Application{
     
 }
