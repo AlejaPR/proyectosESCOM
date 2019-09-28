@@ -8,6 +8,7 @@ package com.mycompany.superadministrador.interfaces;
 import com.mycompany.superadministrador.entity.Usuario;
 import java.util.List;
 import javax.ejb.Local;
+import org.springframework.stereotype.Service;
 
 /**
  *

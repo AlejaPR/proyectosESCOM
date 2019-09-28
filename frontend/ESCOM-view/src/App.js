@@ -16,6 +16,7 @@ import AdminModulo from './SuperAdministrador/componentes/administrar/ContenidoA
 import EditarModulo from './SuperAdministrador/componentes/editar/editarModulo.js';
 import AsignarActividadModulo from './SuperAdministrador/componentes/asignar/asignarActividadModulo.js';
 
+import Color from './SuperAdministrador/componentes/color.js';
 //Administrar actividad
 import Actividad from './SuperAdministrador/componentes/administrar/ContenidoAdminActividad.js'
 
@@ -58,6 +59,7 @@ class App extends React.Component {
 		return (
 			<Provider store={createStoreWithMiddleware(reducers)}>
 				<Router>
+					<Color/>
 					{/*Menus*/}
 
 					{/*Ruta para inicio*/}
@@ -79,14 +81,14 @@ class App extends React.Component {
 					</Route> */}
 
 					{/*Ruta para administrar usuario*/}
-					<Route exact path="/AdminUsuario" render={() => {
+					{/* <Route exact path="/AdminUsuario" render={() => {
 						return <div id="wrapper">
 							<MenuLateral />
 							<MenuSuperior />
 							<RedireccionarUsuario funcionModificar={this.asignarUsuario} />
 						</div>
 					}}>
-					</Route>
+					</Route> */}
 
 					{/*Ruta para editar usuario*/}
 					{/* <Route exact path="/editarUsuario" render={() => {

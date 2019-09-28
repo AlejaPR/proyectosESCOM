@@ -20,7 +20,7 @@
     
     <context:annotation-config/>
     
-    <context:component-scan base-package="com.mycompany.superadministrador.services"/>
+    <context:component-scan base-package="com.mycompany.superadministrador"/>
     
     <mvc:annotation-driven/>
 
