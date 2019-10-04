@@ -39,8 +39,17 @@ import { SketchPicker } from 'react-color'
  
 class Component extends React.Component {
  
+  state = {
+    background: '#fff',
+  };
+
+  handleChangeComplete = (color) => {
+    console.log('cambio');
+    this.setState({ background: color.hex });
+  };
+
   render() {
-    return <SketchPicker />
+    return <SketchPicker color={this.state.background} onChangeComplete={ this.handleChangeComplete } />
   }
 }
 

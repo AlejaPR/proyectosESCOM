@@ -6,6 +6,18 @@ import '../../css/estilos.css'
 import '../../css/bootstrap.min.css'
 import '../../css/menu.css'
 
+//iconos
+import Home from '@icons/material/HomeIcon.js';
+import Persona from '@icons/material/AccountIcon.js';
+import Folder from '@icons/material/LibraryIcon';
+import Bombillo from '@icons/material/LightbulbOnIcon';
+import Libro from  '@icons/material/FileIcon';
+import Configuracion from '@icons/material/PaletteIcon';
+//asignar una actividad import Libro from  '@icons/material/ClipboardAccountIcon';
+//suspender import Libro from  '@icons/material/ClockAlertIcon';
+// import Libro from  '@icons/material/FileIcon';
+//lapiz @icons/material/PencilIcon';
+
 //imagenes
 import home from '../../imagenes/icon-home.png';
 import persona from '../../imagenes/icono-persona.png'
@@ -14,6 +26,8 @@ import bombillo from '../../imagenes/icono-bombillo.png'
 import documento from '../../imagenes/icono-doc.png'
 import logo from '../../imagenes/logo.png'
 
+import { connect } from 'react-redux';
+import { consultarConfiguracion } from '../../actions/actionConfiguracion.js'
 
 class MenuLateral extends React.Component {
 
@@ -25,6 +39,11 @@ class MenuLateral extends React.Component {
 		hoverReportes:false
 	}
 
+	componentWillMount() {
+		this.props.consultarConfiguracion();
+		console.log("ESTA ES LA CONFIGURAC",this.props);
+	}
+
 	hoverOn=(evento)=>{
 		this.setState({ [evento.target.name]: true });
 	}
@@ -33,52 +52,68 @@ class MenuLateral extends React.Component {
 		this.setState({ [evento.target.name]: false });    
 	}
 
+	fondoBarr=()=>{
+		return( {
+			background:this.props.configuracion.fondoBarra,
+			fontSize: "14px",
+			fontFamily: "Open sans, sans-serif"
+		})
+	}
+
 	render() {
 		return (
-			<div  id="sidebar-wrapper" className="toggled" style={fondoMenuLateral}>
-				<div className="col-sm" style={fondoMenuLateral}>
-					<div className="container text-center" style={fondoMenuLateral}>
+			<div  id="sidebar-wrapper" className="toggled" style={this.fondoBarr()}>
+				<div className="col-sm" style={this.fondoBarr()}>
+					<div className="container text-center" style={this.fondoBarr()}>
 						<img src={logo} alt="" width="140" height="60" />
 					</div>
 				</div>
-				<li className="nav-item">
+				<li className="nav-item" style={{height:"75px"}}>
 					<a href="/inicio" name="hoverInicio" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
-					 style={ this.state.hoverInicio ? fondoHover : fondoMenuLateral } >
-						<img src={home} alt="" width="25" height="25" />
+					 style={this.fondoBarr()} >
+						<Home color="#CBC7C7" />
 						<br />
 						<span className="title">Inicio</span>
 					</a>
 				</li>
-				<li className="nav-item">
+				<li className="nav-item"  style={{height:"75px"}}>
 					<a href="/AdminUsuario" name="hoverUsuario" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
-					 style={ this.state.hoverUsuario ? fondoHover : fondoMenuLateral }>
-						<img src={persona} alt="" width="25" height="25" />
+					 style={this.fondoBarr()}>
+						<Persona color="#CBC7C7"/>
 						<br />
 						<span className="title">Administrar usuario</span>
 					</a>
 				</li>
-				<li className="nav-item">
+				<li className="nav-item"  style={{height:"75px"}}>
 					<a href="/AdminModulo" name="hoverModulo" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center" 
-					style={ this.state.hoverModulo ? fondoHover : fondoMenuLateral }>
-						<img src={modulo} alt="" width="25" height="25" />
+					style={this.fondoBarr()}>
+						<Folder color="#CBC7C7"/>
 						<br />
 						<span className="title">Administrar modulo</span>
 					</a>
 				</li>
-				<li className="nav-item">
+				<li className="nav-item"  style={{height:"75px"}}>
 					<a href="/AdminActividad" name="hoverActividad" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
-					style={ this.state.hoverActividad ? fondoHover : fondoMenuLateral } >
-						<img src={bombillo} alt="" width="25" height="25" />
+					style={this.fondoBarr()} >
+						<Bombillo color="#CBC7C7"/>
 						<br />
 						<span className="title">Administrar actividad</span>
 					</a>
 				</li>
-				<li className="nav-item">
+				<li className="nav-item"  style={{height:"75px"}}>
 					<a href="/reportes" name="hoverReportes" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff}   className="list-group-item list-group-item-action text-light text-center" 
-					style={ this.state.hoverReportes ? fondoHover : fondoMenuLateral }>
-						<img src={documento} alt="" width="25" height="25" />
+					style={this.fondoBarr()}>
+						<Libro color="#CBC7C7"/>
 						<br />
 						<span className="title letra">Reportes</span>
+					</a>
+				</li>
+				<li className="nav-item"  style={{height:"75px"}}>
+					<a href="/configuracion" name="hoverReportes" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff}   className="list-group-item list-group-item-action text-light text-center" 
+					style={this.fondoBarr()}>
+						<Configuracion color="#CBC7C7"/>
+						<br />
+						<span className="title letra">Configuracion</span>
 					</a>
 				</li>
 			</div>
@@ -86,13 +121,13 @@ class MenuLateral extends React.Component {
 		)
 	}
 }
-
 const fondoMenuLateral = {
-	background: "#26344B",
+	background: "red",
 	fontSize: "14px",
 	fontFamily: "Open sans, sans-serif"
 
 }
+
 
 const fondoHover = {
 	background: "#2b3b55",
@@ -101,5 +136,12 @@ const fondoHover = {
 
 }
 
+function mapStateToProps(state) {
+	console.log("STATE", this.state)
+    return {
+        configuracion:state.conf.estilos
+    }
+}
 
-export default MenuLateral;
+
+export default connect(mapStateToProps, { consultarConfiguracion })(MenuLateral);

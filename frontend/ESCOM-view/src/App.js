@@ -17,6 +17,7 @@ import EditarModulo from './SuperAdministrador/componentes/editar/editarModulo.j
 import AsignarActividadModulo from './SuperAdministrador/componentes/asignar/asignarActividadModulo.js';
 
 import Color from './SuperAdministrador/componentes/color.js';
+import Configuracion from './SuperAdministrador/componentes/administrar/ContenidoConfiguracion.js';
 //Administrar actividad
 import Actividad from './SuperAdministrador/componentes/administrar/ContenidoAdminActividad.js'
 
@@ -59,7 +60,7 @@ class App extends React.Component {
 		return (
 			<Provider store={createStoreWithMiddleware(reducers)}>
 				<Router>
-					<Color/>
+
 					{/*Menus*/}
 
 					{/*Ruta para inicio*/}
@@ -154,14 +155,30 @@ class App extends React.Component {
 					</Route> */}
 
 					{/*Ruta para reportes */}
-					{/* <Route exact path="/reportes" render={() => {
-						return <div id="wrapper">
+					<Route exact path="/reportes" render={() => {
+						return <>
 							<MenuLateral />
 							<MenuSuperior />
-							<ContenidoReportes />
-						</div>
+							<div id="wrapper">
+								<ContenidoReportes />
+							</div>
+						</>
 					}}>
-					</Route> */}
+					</Route>
+
+
+					{/*Ruta para reportes */}
+					<Route exact path="/configuracion" render={() => {
+						return <>
+							<MenuLateral />
+							<MenuSuperior />
+							<div id="wrapper">
+								<Configuracion />
+							</div>
+						</>
+					}}>
+					</Route>
+
 				</Router>
 			</Provider>
 		);

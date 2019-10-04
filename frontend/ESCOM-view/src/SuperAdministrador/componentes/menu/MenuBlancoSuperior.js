@@ -15,18 +15,31 @@ import { Button, UncontrolledPopover, PopoverBody } from 'reactstrap';
 //imagenes
 import persona from '../../imagenes/icono-persona.png'
 
+import { connect } from 'react-redux';
+import { consultarConfiguracion } from '../../actions/actionConfiguracion.js'
 
 class BarraSuperior extends React.Component {
 	mensaje = () => {
 		console.log('hola');
 	}
 
+	componentWillMount() {
+		this.props.consultarConfiguracion();
+		
+	}
+
+	fondobotoon=()=>{
+		return({
+			background: this.props.configuracion.fondoSuperior
+		})
+	}
+
 	render() {
 		return (
 			<div>
 				<div>
-					<div className="jumbotron p-2 jumbotron-fluid shadow" style={fondoBoton}>
-						<nav className="navbar navbar-expand" style={fondoBoton}>
+					<div className="jumbotron p-1 jumbotron-fluid shadow" style={this.fondobotoon()}>
+						<nav className="navbar navbar-expand" style={this.fondobotoon()}>
 							<div className="collapse navbar-collapse" id="navbarSupportedContent">
 								<ul className="navbar-nav ml-auto mt-2 mt-lg-1 ">
 									<div className="col-sm-12 text-right">
@@ -73,10 +86,13 @@ const botones = {
 
 }
 
-const fondoBoton = {
-	background: "#FFFFFF"
+
+function mapStateToProps(state) {
+    return {
+        configuracion:state.conf.estilos
+    }
 }
 
 
+export default connect(mapStateToProps, { consultarConfiguracion })(BarraSuperior);
 
-export default BarraSuperior;
