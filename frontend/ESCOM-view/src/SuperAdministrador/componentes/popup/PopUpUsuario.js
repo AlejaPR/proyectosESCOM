@@ -7,6 +7,7 @@ import '../../css/business-casual.css'
 import '../../css/estilos.css'
 import '../../css/bootstrap.min.css'
 import '../../css/menu.css'
+import 'react-notifications/lib/notifications.css';
 
 //componentes
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
@@ -77,8 +78,6 @@ class PopUpUsuario extends React.Component {
                   </div>
                   <div className="col-sm-7">
                     <Field name="favoriteColor" className="bs-select form-control" component="select">
-                      <option></option>
-                      <option value="0">Seleccione</option>
                       <option value="1">Cedula de ciudadania</option>
                       <option value="2">Tarjeta de identidad</option>
                     </Field>
@@ -99,7 +98,7 @@ class PopUpUsuario extends React.Component {
                 <br />
                 <div className="row">
                   <div className="col-sm-12">
-                    <Field name="contrasena" component={generarInput} label="Contraseña" />
+                    <Field name="contrasena" type="password" component={generarInput} label="Contraseña" />
                   </div>
                 </div>
                 <br />
@@ -114,9 +113,9 @@ class PopUpUsuario extends React.Component {
                 <Button color="secondary" onClick={this.toggle}>Cancelar</Button>
               </ModalFooter>
             </form>
-            <NotificationContainer />
           </ModalBody>
         </Modal>
+        <NotificationContainer />
       </div>
     );
   }
@@ -134,15 +133,29 @@ const generarInput = ({ input, label, type, meta: { touched, error, warning } })
 const validate = values => {
   const errors = {}
   if (!values.nombre) {
-    errors.nombre = 'Este campo es obligatorio'
+    errors.nombre = 'Este campo es obligatorio *'
   } else if (values.nombre.length < 2) {
-    errors.nombre = 'Minimum be 2 characters or more'
+    errors.nombre = 'Ingrese mas de dos caracteres'
   }
-
-  if (!values.email) {
-    errors.email = 'Required'
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-    errors.email = 'Invalid email address'
+  if (!values.apellido) {
+    errors.apellido = 'Este campo es obligatorio *'
+  } else if (values.apellido.length < 2) {
+    errors.apellido = 'Ingrese mas de dos caracteres'
+  }
+  if (!values.numeroDocumento) {
+    errors.numeroDocumento = 'Este campo es obligatorio *'
+  } else if (values.numeroDocumento.length < 6) {
+    errors.numeroDocumento = 'El documento no es valido'
+  }
+  if (!values.correo) {
+    errors.correo = 'Este campo es obligatorio *'
+  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.correo)) {
+    errors.correo = 'El correo no tiene el formato correcto'
+  }
+  if (!values.contrasena) {
+    errors.contrasena = 'Este campo es obligatorio *'
+  } else if (!/^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,16}$/i.test(values.contrasena)) {
+    errors.contrasena = 'La contraseña debe tener entre 8 y 16 caracteres, al menos un dígito, al menos una minúscula y al menos una mayúscula.'
   }
   return errors
 }

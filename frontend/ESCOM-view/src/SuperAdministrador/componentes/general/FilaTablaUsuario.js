@@ -8,6 +8,7 @@ import '../../css/business-casual.css'
 import '../../css/estilos.css'
 import '../../css/bootstrap.min.css'
 import '../../css/menu.css'
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 //redux
 import { actionAsignarCedula, actionActualizarUsuarios } from '../../actions/actionsUsuario.js';
@@ -21,6 +22,7 @@ class FilaTablaUsuario extends React.Component {
 		}
 
 		if (evento.target.value === '2') {
+			console.log('llego aqui seleccion dos');
 			confirmAlert({
 				title: '',
 				message: '¿Esta seguro?',
@@ -29,7 +31,7 @@ class FilaTablaUsuario extends React.Component {
 						label: 'Si',
 						onClick: () => {
 							// this.props.usuario
-							const respuesta = fetch('http://localhost:9090/SuperadministradorESCOM-web/api/usu/' + this.props.usuario.cedula+"Suspendido",
+							const respuesta = fetch('http://localhost:9090/SuperadministradorESCOM-web/api/usu/' + this.props.usuario.cedula+"/Suspendido",
 								{ method: 'put' }).then(response=>{
 									console.log(response.status);
 								});

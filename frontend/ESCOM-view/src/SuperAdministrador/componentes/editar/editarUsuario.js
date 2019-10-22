@@ -11,11 +11,17 @@ import '../../css/business-casual.css'
 import '../../css/estilos.css'
 import '../../css/bootstrap.min.css'
 import '../../css/menu.css'
+import 'react-notifications/lib/notifications.css';
+
+//componentes
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+import { reduxForm, Field } from 'redux-form';
 
 //redux
 import { actionCargarInformacionDeUsuario, actionEditarUsuario } from '../../actions/actionsUsuario.js'
 import { connect } from "react-redux";
-import { reduxForm, Field } from 'redux-form';
+
+
 
 class editar extends React.Component {
 
@@ -31,25 +37,28 @@ class editar extends React.Component {
 
   handleSubmit = formValues => {
     let nuevo = [];
+    console.log("FORMULARIO ", formValues);
     this.props.actuales.map((post, index) => {
       if (post.cedula === this.props.cedula) {
         let usuario = {
           nombre: formValues.nombre,
           correo: formValues.correo,
-          cedula: formValues.cedula,
-          apellido: post.apellido,
+          cedula: formValues.numeroDocumento,
+          apellido: formValues.apellido,
           tipoDocumento: 1,
-          contrasena: post.contrasena,
+          contrasena: formValues.contrasena,
           fechaNacimiento: "1997/12/18",
           estado: post.estado
         }
+        console.log('cedula es',this.props.cedula);
         this.props.actionEditarUsuario(usuario, this.props.cedula);
         nuevo.push(usuario);
       } else {
         nuevo.push(post);
       }
     });
-
+    NotificationManager.info('Informacion actualizada correctamente');
+    
     // // this.props.anadirUser({ id: formValues.nombre, nombre: formValues.apellido })
   }
 
@@ -83,14 +92,14 @@ class editar extends React.Component {
                 <label for="form_control_1">Nombre</label>
                 <div className="row">
                   <div className="col-sm-5">
-                    <Field name="nombre" component={generarInput} placeholder={this.props.usuarios.nombre} label="Nombre" />
+                    <Field name="nombre" component={generarInput} label="Nombre" />
                   </div>
                 </div>
                 <br />
                 <label for="form_control_1">Apellidos</label>
                 <div className="row">
                   <div className="col-sm-5">
-                    <Field name="apellido" component={generarInput} placeholder={this.props.usuarios.apellido} label="Apellido" />
+                    <Field name="apellido" component={generarInput} label="Apellido" />
                   </div>
                 </div>
                 <br />
@@ -98,7 +107,6 @@ class editar extends React.Component {
                 <div className="row">
                   <div className="col-sm-5">
                     <Field name="tipoDocumento" className="bs-select form-control" component="select">
-                      <option value="0">Seleccione</option>
                       <option value="1">Cedula de ciudadania</option>
                       <option value="2">Tarjeta de identidad</option>
                     </Field>
@@ -108,28 +116,28 @@ class editar extends React.Component {
                 <label for="form_control_1">Numero de documento</label>
                 <div className="row">
                   <div className="col-sm-5">
-                    <Field name="numeroDocumento" component={generarInput} placeholder={this.props.usuarios.cedula} label="Numero de documento" />
+                    <Field name="numeroDocumento" component={generarInput} label="Numero de documento" />
                   </div>
                 </div>
                 <br />
-                <label for="form_control_3">Fecha de nacimiento</label>
+                {/* <label for="form_control_3">Fecha de nacimiento</label>
                 <div className="row">
                   <div className="col-sm-4">
-                    <Field name="fechaNacimiento" component={generarInput} placeholder={this.props.usuarios.fechaNacimiento} label="Fecha de nacimiento" />
+                    <Field name="fechaNacimiento" type="date" component={generarInput} label="Fecha de nacimiento" />
                   </div>
-                </div>
+                </div> */}
                 <br />
                 <label for="form_control_1">Correo</label>
                 <div className="row">
                   <div className="col-sm-5">
-                    <Field name="correo" component={generarInput} placeholder={this.props.usuarios.correo} label="Correo electronico" />
+                    <Field name="correo" component={generarInput} label="Correo electronico" />
                   </div>
                 </div>
                 <br />
                 <label for="form_control_1">Contraseña</label>
                 <div className="row">
                   <div className="col-sm-5">
-                    <Field name="contrasena" component={generarInput} placeholder={this.props.usuarios.contrasena} label="Contraseña" />
+                    <Field name="contrasena" type="password" component={generarInput}  label="Contraseña" />
                   </div>
                 </div>
                 <br />
@@ -170,6 +178,7 @@ class editar extends React.Component {
             </table>
           </div>
         </div>
+        <NotificationContainer />
       </div>
     );
   }
@@ -207,7 +216,7 @@ const estiloTitulo = {
 const generarInput = ({ input, placeholder, label, type, meta: { touched, warning, error } }) => (
   <div>
     <div>
-      <input {...input} placeholder={placeholder} type={type} className="form-control letra form-control-solid placeholder-no-fix" />
+      <input {...input} type={type} className="form-control letra form-control-solid placeholder-no-fix" />
       {touched && ((error && <span className="text-danger letra form-group">{error}</span>) || (warning && <span>{warning}</span>))}
     </div>
   </div>
@@ -216,15 +225,29 @@ const generarInput = ({ input, placeholder, label, type, meta: { touched, warnin
 const validate = values => {
   const errors = {}
   if (!values.nombre) {
-    errors.nombre = 'Este campo es obligatorio'
+    errors.nombre = 'Este campo es obligatorio *'
   } else if (values.nombre.length < 2) {
-    errors.nombre = 'Minimum be 2 characters or more'
+    errors.nombre = 'Ingrese mas de dos caracteres'
   }
-
-  if (!values.email) {
-    errors.email = 'Required'
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-    errors.email = 'Invalid email address'
+  if (!values.apellido) {
+    errors.apellido = 'Este campo es obligatorio *'
+  } else if (values.apellido.length < 2) {
+    errors.apellido = 'Ingrese mas de dos caracteres'
+  }
+  if (!values.numeroDocumento) {
+    errors.numeroDocumento = 'Este campo es obligatorio *'
+  } else if (values.numeroDocumento.length < 6) {
+    errors.numeroDocumento = 'El documento no es valido'
+  }
+  if (!values.correo) {
+    errors.correo = 'Este campo es obligatorio *'
+  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.correo)) {
+    errors.correo = 'El correo no tiene el formato correcto'
+  }
+  if (!values.contrasena) {
+    errors.contrasena = 'Este campo es obligatorio *'
+  } else if (!/^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,16}$/i.test(values.contrasena)) {
+    errors.contrasena = 'La contraseña debe tener entre 8 y 16 caracteres, al menos un dígito, al menos una minúscula y al menos una mayúscula.'
   }
   return errors
 }
@@ -233,12 +256,22 @@ function mapStateToProps(state) {
   return {
     usuarios: state.user.usuarioEditar,
     cedula: state.user.cedula,
-    actuales: state.user.usuariosRegistrados
+    actuales: state.user.usuariosRegistrados,
+    initialValues: {
+      nombre: state.user.usuarioEditar.nombre,
+      apellido: state.user.usuarioEditar.apellido,
+      numeroDocumento: state.user.usuarioEditar.cedula,
+      correo: state.user.usuarioEditar.correo,
+      contrasena: state.user.usuarioEditar.contrasena
+    }
   }
 }
 
+
+
 let formularioEditar = reduxForm({
-  form: 'editarUsuario', validate
+  form: 'editarUsuario', validate,
+  enableReinitialize: true
 })(editar)
 
 export default connect(mapStateToProps, { actionCargarInformacionDeUsuario, actionEditarUsuario })(formularioEditar);

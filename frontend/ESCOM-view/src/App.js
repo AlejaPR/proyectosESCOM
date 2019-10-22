@@ -64,32 +64,35 @@ class App extends React.Component {
 					{/*Menus*/}
 
 					{/*Ruta para inicio*/}
-					{/* <Route exact path="/" render={() => {
+					<Route exact path="/" render={() => {
 						return <div>
-							<RedireccionarLogin />
+							<RedireccionarLogin/>
 						</div>
 					}}>
-					</Route> */}
+					</Route>
 
 					{/*Ruta para inicio*/}
-					{/* <Route exact path="/inicio" render={() => {
-						return <div id="wrapper">
+					<Route exact path="/inicio" render={() => {
+						return <>
 							<MenuLateral />
 							<MenuSuperior />
-							<Inicio />
-						</div>
+							<div id="wrapper">
+								<Inicio />
+							</div>
+						</>
 					}}>
-					</Route> */}
+					</Route>
 
 					{/*Ruta para administrar usuario*/}
-					{/* <Route exact path="/AdminUsuario" render={() => {
-						return <div id="wrapper">
-							<MenuLateral />
+					<Route exact path="/AdminUsuario" render={() => {
+						return <><MenuLateral />
 							<MenuSuperior />
-							<RedireccionarUsuario funcionModificar={this.asignarUsuario} />
-						</div>
+							<div id="wrapper">
+								<RedireccionarUsuario funcionModificar={this.asignarUsuario} />
+							</div>
+						</>
 					}}>
-					</Route> */}
+					</Route>
 
 					{/*Ruta para editar usuario*/}
 					{/* <Route exact path="/editarUsuario" render={() => {
@@ -114,14 +117,16 @@ class App extends React.Component {
 
 
 					{/* Ruta para administrar Modulo */}
-					{/* <Route exact path="/AdminModulo" render={() => {
-						return <div id="wrapper">
+					<Route exact path="/AdminModulo" render={() => {
+						return <>
 							<MenuLateral />
 							<MenuSuperior />
-							<AdminModulo />
-						</div>
+							<div id="wrapper">
+								<AdminModulo />
+							</div>
+						</>
 					}}>
-					</Route> */}
+					</Route>
 
 					{/* Ruta para editarModulo */}
 					{/* <Route exact path="/editarModulo" render={() => {
@@ -145,14 +150,16 @@ class App extends React.Component {
 					</Route> */}
 
 					{/*Ruta para aadministrar actividad */}
-					{/* <Route exact path="/adminActividad" render={() => {
-						return <div id="wrapper">
+					<Route exact path="/adminActividad" render={() => {
+						return <>
 							<MenuLateral />
 							<MenuSuperior />
-							<Actividad />
-						</div>
+							<div id="wrapper">
+								<Actividad />
+							</div>
+						</>
 					}}>
-					</Route> */}
+					</Route>
 
 					{/*Ruta para reportes */}
 					<Route exact path="/reportes" render={() => {
