@@ -16,6 +16,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -29,15 +31,17 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "TBL_USUARIO")
+@NamedQueries({
+    @NamedQuery(name = "consultaLogin",query = "SELECT u FROM Usuario u WHERE u.usuario = :usuario AND u.clave = :clave"),
+    @NamedQuery(name = "editarToken",query = "UPDATE Usuario u SET u.token = :token WHERE u.usuario = :usuario")
+    
+})
 public class Usuario implements Serializable {
     
     @Id
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "PK_USR_IDUSUARIO")
     private Integer idUsuario;
     
-    @Size(max = 300)
     @Column(name = "USR_TOKEN")
     private String token;
     
@@ -47,11 +51,9 @@ public class Usuario implements Serializable {
     @Column(name = "USR_NUMEROSESIONES")
     private Integer numeroSesiones;
     
-    @Size(max = 20)
     @Column(name = "USR_APELLIDO")
     private String apellido;
     
-    @Size(max = 20)
     @Column(name = "USR_ESTADO")
     private String estado;
     
@@ -62,7 +64,6 @@ public class Usuario implements Serializable {
     @Column(name = "USR_NUMEROINTENTOS")
     private Integer numeroIntentos;
     
-    @Size(max = 20)
     @Column(name = "USR_NOMBRE")
     private String nombre;
     
@@ -70,11 +71,9 @@ public class Usuario implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date ultimaModificacion;
     
-    @Size(max = 50)
     @Column(name = "USR_CORREOELECTRONICO")
     private String correoElectronico;
     
-    @Size(max = 20)
     @Column(name = "USR_CONTRASENA")
     private String contrasena;
     

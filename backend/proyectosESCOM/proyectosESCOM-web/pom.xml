@@ -23,7 +23,8 @@
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt</artifactId>
-            <version>0.8.0</version>
+            <version>0.9.0</version>
+            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>commons-codec</groupId>
