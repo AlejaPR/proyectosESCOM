@@ -21,6 +21,7 @@ import javax.persistence.TypedQuery;
  */
 @Stateless
 public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFacadeLocal {
+
     @PersistenceContext(unitName = "conexionSuperadministrador")
     private EntityManager em;
 
@@ -32,57 +33,34 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
     public UsuarioFacade() {
         super(Usuario.class);
     }
-    
 
     @Override
     public List<Usuario> busquedaToken(String token) {
-        TypedQuery<Usuario> consulta = em.createNamedQuery("SELECT u FROM Usuario u WHERE u.token = :token", Usuario.class);
+        TypedQuery<Usuario> consulta = em.createNamedQuery("busquedaToken", Usuario.class);
         consulta.setParameter("token", token);
         return consulta.getResultList();
     }
+
     
-    @Override
-    public List<Usuario> consultaLogin(String usuario, String clave) {
+    public Usuario consultaLogin(String correo, String clave) {
         TypedQuery<Usuario> consultaLogin = em.createNamedQuery("consultaLogin", Usuario.class);
-             consultaLogin.setParameter("usuario", usuario);
-             consultaLogin.setParameter("clave", clave);
-             return consultaLogin.getResultList();
+        consultaLogin.setParameter("correo", correo);
+        consultaLogin.setParameter("clave", clave);
+        return consultaLogin.getSingleResult();
     }
 
     @Override
-    public String loginUsuario(String usuario, String clave) {
-        
-         try {
-            List<Usuario> listaUsuario = new ArrayList();
-            listaUsuario= consultaLogin(usuario,clave);
-            for (Usuario usuarios : listaUsuario) {
-              if(usuarios.getNombre().equals(usuario) && usuarios.getContrasena().equals(clave)){
-                      Seguridad token = new Seguridad();
-                      String usua= usuarios.getNombre();
-                      String clav = usuarios.getContrasena();
-                      String tokencin =  token.generarToken(usuarios, usua, clav);
-                      return tokencin;
-                  }else{
-                      System.out.println("Error");
-                      return "";
-                  }
-            } 
+    public Usuario loginUsuario(String correo, String clave) {
+        try {
+            Usuario usuario = consultaLogin(correo, clave);
+            Seguridad token = new Seguridad();
+            String tokencin = token.generarToken(usuario);
+            usuario.setToken(tokencin);
+            return usuario;
         } catch (Exception e) {
-             System.out.println("ERRR"+e);
+            System.out.println("ERRR" + e);
+            System.out.println("Error");
+            return null;
         }
-        return "";
     }
-
-    @Override
-    public void editarToken(Usuario usuario, String token) {
-        
-        System.out.println(usuario.getNombre());
-        TypedQuery<Usuario> editar = em.createNamedQuery("editarToken", Usuario.class);
-             editar.setParameter("usuario", usuario.getNombre());
-             editar.setParameter("token", token);
-             System.out.println("Consulta"+editar.getSingleResult());   
-    }
-
-  
-    
 }

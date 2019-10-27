@@ -32,8 +32,8 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "TBL_USUARIO")
 @NamedQueries({
-    @NamedQuery(name = "consultaLogin",query = "SELECT u FROM Usuario u WHERE u.usuario = :usuario AND u.clave = :clave"),
-    @NamedQuery(name = "editarToken",query = "UPDATE Usuario u SET u.token = :token WHERE u.usuario = :usuario")
+    @NamedQuery(name = "consultaLogin",query = "SELECT u FROM Usuario u WHERE u.correoElectronico = :correo AND u.contrasena = :clave"),
+    @NamedQuery(name="busquedaToken",query="SELECT u FROM Usuario u WHERE u.token = :token")
     
 })
 public class Usuario implements Serializable {

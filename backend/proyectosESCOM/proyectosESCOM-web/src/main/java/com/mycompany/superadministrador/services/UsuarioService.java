@@ -41,10 +41,6 @@ public class UsuarioService {
     public Response prueba(){
        System.out.println("hola");
        List<Usuario> u =usuarioFacade.findAll();
-       for(int i=0; i<u.size(); i++){
-                System.out.println(u.get(i).getNombre());
-       }
-            
         return Response.status(Response.Status.OK).build();
             
     }

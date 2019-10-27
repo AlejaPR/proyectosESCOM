@@ -33,10 +33,6 @@ public interface UsuarioFacadeLocal {
     
     List<Usuario> busquedaToken(String token);
     
-    List<Usuario> consultaLogin(String usuario, String Clave);
-    
-    String loginUsuario(String usuario, String clave);
-    
-    void editarToken(Usuario usuario, String token);
+    Usuario loginUsuario(String usuario, String clave);
     
 }
