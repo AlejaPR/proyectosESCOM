@@ -9,6 +9,7 @@ import com.mycompany.superadministrador.entity.Usuario;
 import java.util.List;
 import javax.ejb.Local;
 import org.springframework.stereotype.Service;
+import com.mycompany.superadministrador.POJO.UsuarioPOJO;
 
 /**
  *
@@ -31,8 +32,11 @@ public interface UsuarioFacadeLocal {
 
     int count();
     
-    List<Usuario> busquedaToken(String token);
+    UsuarioPOJO loginUsuario(String usuario,String contrasena);
     
-    Usuario loginUsuario(String usuario, String clave);
+    public void registrarUsuario(UsuarioPOJO usuario);
     
+    UsuarioPOJO devolverDatosUsuario(String token);
+    
+    public void cerrarSesion(String token);
 }

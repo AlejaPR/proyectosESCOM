@@ -5,10 +5,27 @@
  */
 package com.mycompany.modulodocumental;
 
+import com.mycompany.superadministrador.POJO.UsuarioPOJO;
+import com.mycompany.superadministrador.interfaces.UsuarioFacadeLocal;
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+
 /**
  *
  * @author aleja
  */
-public class PruebaEJBDocumental {
+@Stateless
+public class PruebaEJBDocumental implements PruebaEJB {
+
+    public PruebaEJBDocumental() {
+    }
+    
+    @EJB
+    UsuarioFacadeLocal usuarioFacade;
+
+    @Override
+    public UsuarioPOJO recuperarDatosUsuario(String token) {
+        return usuarioFacade.devolverDatosUsuario(token);
+    }
     
 }

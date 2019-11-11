@@ -1,11 +1,13 @@
 
-import { MOSTRAR_USUARIOS, AGREGAR_USUARIO, INFORMACION_USUARIO, ANADIR_CEDULA_EDITAR, EDITAR_USUARIO, ACTUALIZAR_USUARIOS } from '../actions/actionsUsuario.js'
+import { MOSTRAR_USUARIOS, REDIRECCIONAR_LOGIN, AGREGAR_USUARIO, INFORMACION_USUARIO, ANADIR_CEDULA_EDITAR, EDITAR_USUARIO, ACTUALIZAR_USUARIOS, LOGIN_USUARIO } from '../actions/actionsUsuario.js'
 
 
 const initialState = {
     usuariosRegistrados: [],
     usuarioEditar: [],
-    cedula: []
+    cedula: [],
+    token: [],
+    redireccionLogin: []
 }
 
 export function reducerUsuario(state = initialState, action) {
@@ -25,6 +27,8 @@ export function reducerUsuario(state = initialState, action) {
             return Object.assign({}, state, { usuarioEditar: action.payload })
         case ACTUALIZAR_USUARIOS:
             return Object.assign({}, state, { usuariosRegistrados: action.usuario })
+        case LOGIN_USUARIO:
+            return Object.assign({}, state, { token: action.token })
         default:
             return state
     }

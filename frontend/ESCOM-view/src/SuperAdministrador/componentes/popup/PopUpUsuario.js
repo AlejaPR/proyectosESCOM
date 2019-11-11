@@ -32,35 +32,46 @@ class PopUpUsuario extends React.Component {
     this.setState(prevState => ({
       modal: !prevState.modal
     }));
+    this.props.reset();
   }
 
   handleSubmit = formValues => {
-    let usuario = {
-      'nombre': formValues.nombre,
-      'apellido': formValues.apellido,
-      'tipoDocumento': 1,
-      'cedula': formValues.numeroDocumento,
-      'correo': formValues.correo,
-      'contrasena': formValues.contrasena,
-      'fechaNacimiento': formValues.fechaNacimiento,
-      'estado': "Activo"
-    };
-    this.props.reset();
-    this.props.actionAgregarUsuario(usuario);
-    NotificationManager.success('Usuario registrado')
+    try {
+      var crypto = require('crypto');
+      var contrasenaEncryp = crypto.createHmac('sha256', formValues.correo).update(formValues.contrasena).digest('hex');
+      console.log('contra',contrasenaEncryp);
+      let date = new Date(formValues.fechaNacimiento);
+
+      // console.log('fecha es', formValues.fechaNacimiento);
+      let usuario = {
+        'nombre': formValues.nombre,
+        'apellido': formValues.apellido,
+        'tipoDocumento': 1,
+        'numeroDocumento': formValues.numeroDocumento,
+        'correoElectronico': formValues.correo,
+        'contrasena': contrasenaEncryp,
+        'fechaNacimiento': date
+      };
+      this.props.reset();
+      this.props.actionAgregarUsuario(usuario, localStorage.getItem('Token'));
+      NotificationManager.success('Usuario registrado')
+
+    } catch (error) {
+      NotificationManager.error('Ingrese todos los datos');
+    }
+
   }
 
 
   render() {
     return (
       <div>
-        <Button color="danger" className="btn btn-dark" style={fondoBoton} onClick={this.toggle}>Crear usuario +</Button>
+        <Button color="danger" className="btn btn-dark letra" style={fondoBoton} onClick={this.toggle}>Crear usuario +</Button>
         <Modal isOpen={this.state.modal}
           toggle={this.toggle}
-          className={this.props.className}
-          size="col-md-6"
+          style={{ width: "400px" }}
         >
-          <ModalHeader toggle={this.toggle} className="center letra">Crear usuario</ModalHeader>
+          <ModalHeader toggle={this.toggle} style={{ height: "50px", width: "400px" }} className="center">Crear usuario</ModalHeader>
           <ModalBody>
             <form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
               <div className="contenedor-inputs">
@@ -74,12 +85,12 @@ class PopUpUsuario extends React.Component {
                 </div>
                 <div className="row">
                   <div className="col-sm-5">
-                    <span>Tipo de documento </span>
+                    <span className="letra">Tipo de documento </span>
                   </div>
                   <div className="col-sm-7">
-                    <Field name="favoriteColor" className="bs-select form-control" component="select">
-                      <option value="1">Cedula de ciudadania</option>
-                      <option value="2">Tarjeta de identidad</option>
+                    <Field name="favoriteColor" style={{ height: "35px", fontSize: "13px" }} className="form-control" component="select">
+                      <option className="letra" style={{ height: "35px", fontSize: "13px" }} value="1">Cedula de ciudadania</option>
+                      <option className="letra" style={{ height: "35px", fontSize: "13px" }} value="2">Tarjeta de identidad</option>
                     </Field>
                   </div>
                 </div>
@@ -110,7 +121,7 @@ class PopUpUsuario extends React.Component {
               </div>
               <ModalFooter>
                 <Button style={fondoBoton} type="submit">Registrar</Button>{''}
-                <Button color="secondary" onClick={this.toggle}>Cancelar</Button>
+                <Button color="secondary" style={fondoBotonCancelar} className="letra" onClick={this.toggle}>Cancelar</Button>
               </ModalFooter>
             </form>
           </ModalBody>
@@ -124,7 +135,7 @@ class PopUpUsuario extends React.Component {
 const generarInput = ({ input, label, type, meta: { touched, error, warning } }) => (
   <div>
     <div>
-      <input {...input} placeholder={label} type={type} className="form-control letra form-control-solid placeholder-no-fix" />
+      <input {...input} placeholder={label} type={type} style={{ height: "35px", fontSize: "12px" }} className="form-control letra placeholder-no-fix" />
       {touched && ((error && <span className="text-danger letra form-group">{error}</span>) || (warning && <span>{warning}</span>))}
     </div>
   </div>
@@ -162,14 +173,23 @@ const validate = values => {
 
 const fondoBoton = {
   background: "#ec671d",
-  fontSize: "14px",
+  fontSize: "12px",
+  fontFamily: "Open sans, sans-serif"
+
+}
+
+const fondoBotonCancelar = {
+  background: "gray",
+  fontSize: "12px",
   fontFamily: "Open sans, sans-serif"
 
 }
 
 function mapStateToProps(state) {
+
   return {
-    users: state.user.list
+    users: state.user.list,
+    token: state.user.token
   }
 }
 

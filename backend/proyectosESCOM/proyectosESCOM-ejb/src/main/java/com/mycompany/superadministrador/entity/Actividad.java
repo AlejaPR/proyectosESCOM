@@ -14,6 +14,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -27,6 +29,9 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "TBL_ACTIVIDAD")
+@NamedQueries({
+    @NamedQuery(name = "consultaActividades", query = "SELECT a FROM Actividad a JOIN UsuarioActividad ua ON ua.fkUacIdactividad=a.pkActIdactividad JOIN Usuario u ON u.idUsuario=ua.fkUacIdusuario WHERE u.idUsuario=:idUsuario")
+})
 public class Actividad implements Serializable{
     
     @Id

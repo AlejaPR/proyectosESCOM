@@ -41,7 +41,6 @@ class MenuLateral extends React.Component {
 
 	componentWillMount() {
 		this.props.consultarConfiguracion();
-		console.log("ESTA ES LA CONFIGURAC",this.props);
 	}
 
 	hoverOn=(evento)=>{
@@ -65,42 +64,42 @@ class MenuLateral extends React.Component {
 			<div  id="sidebar-wrapper" className="toggled" style={this.fondoBarr()}>
 				<div className="col-sm" style={this.fondoBarr()}>
 					<div className="container text-center" style={this.fondoBarr()}>
-						<img src={logo} alt="" width="140" height="60" />
+						<img src={logo} alt="" width="130" height="50" />
 					</div>
 				</div>
-				<li className="nav-item" style={{height:"75px"}}>
+				<li className="nav-item" style={{height:"65px"}}>
 					<a href="/inicio" name="hoverInicio" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
 					 style={this.fondoBarr()} >
-						<Home color="#CBC7C7" />
+						<Home color="#CBC7C7" width="22px"/>
 						<br />
-						<span className="title">Inicio</span>
+						<span className="title letra">Inicio</span>
 					</a>
 				</li>
-				<li className="nav-item"  style={{height:"75px"}}>
+				<li className="nav-item"  style={{height:"65px"}}>
 					<a href="/AdminUsuario" name="hoverUsuario" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
 					 style={this.fondoBarr()}>
 						<Persona color="#CBC7C7"/>
 						<br />
-						<span className="title">Administrar usuario</span>
+						<span className="title letra">Administrar usuario</span>
 					</a>
 				</li>
-				<li className="nav-item"  style={{height:"75px"}}>
+				<li className="nav-item"  style={{height:"65px"}}>
 					<a href="/AdminModulo" name="hoverModulo" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center" 
 					style={this.fondoBarr()}>
 						<Folder color="#CBC7C7"/>
 						<br />
-						<span className="title">Administrar modulo</span>
+						<span className="title letra">Administrar modulo</span>
 					</a>
 				</li>
-				<li className="nav-item"  style={{height:"75px"}}>
+				<li className="nav-item"  style={{height:"65px"}}>
 					<a href="/AdminActividad" name="hoverActividad" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
 					style={this.fondoBarr()} >
 						<Bombillo color="#CBC7C7"/>
 						<br />
-						<span className="title">Administrar actividad</span>
+						<span className="title letra">Administrar actividad</span>
 					</a>
 				</li>
-				<li className="nav-item"  style={{height:"75px"}}>
+				<li className="nav-item"  style={{height:"65px"}}>
 					<a href="/reportes" name="hoverReportes" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff}   className="list-group-item list-group-item-action text-light text-center" 
 					style={this.fondoBarr()}>
 						<Libro color="#CBC7C7"/>
@@ -108,7 +107,7 @@ class MenuLateral extends React.Component {
 						<span className="title letra">Reportes</span>
 					</a>
 				</li>
-				<li className="nav-item"  style={{height:"75px"}}>
+				<li className="nav-item"  style={{height:"65px"}}>
 					<a href="/configuracion" name="hoverReportes" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff}   className="list-group-item list-group-item-action text-light text-center" 
 					style={this.fondoBarr()}>
 						<Configuracion color="#CBC7C7"/>
@@ -137,7 +136,6 @@ const fondoHover = {
 }
 
 function mapStateToProps(state) {
-	console.log("STATE", this.state)
     return {
         configuracion:state.conf.estilos
     }

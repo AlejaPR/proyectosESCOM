@@ -32,7 +32,7 @@ import './SuperAdministrador/css/bootstrap.min.css'
 import './SuperAdministrador/css/menu.css'
 
 //rutas
-import { BrowserRouter as Router, Route } from "react-router-dom"
+import { BrowserRouter as Router, Route,Switch } from "react-router-dom"
 
 //store
 import { Provider } from 'react-redux';
@@ -60,8 +60,7 @@ class App extends React.Component {
 		return (
 			<Provider store={createStoreWithMiddleware(reducers)}>
 				<Router>
-
-					{/*Menus*/}
+			<Switch>					{/*Menus*/}
 
 					{/*Ruta para inicio*/}
 					<Route exact path="/" render={() => {
@@ -185,7 +184,7 @@ class App extends React.Component {
 						</>
 					}}>
 					</Route>
-
+					</Switch>
 				</Router>
 			</Provider>
 		);

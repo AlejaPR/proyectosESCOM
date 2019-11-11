@@ -6,11 +6,8 @@
 package com.mycompany.superadministrador.entity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -22,8 +19,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  *
@@ -32,62 +27,63 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "TBL_USUARIO")
 @NamedQueries({
-    @NamedQuery(name = "consultaLogin",query = "SELECT u FROM Usuario u WHERE u.correoElectronico = :correo AND u.contrasena = :clave"),
-    @NamedQuery(name="busquedaToken",query="SELECT u FROM Usuario u WHERE u.token = :token")
-    
+    @NamedQuery(name = "consultaLogin", query = "SELECT u FROM Usuario u WHERE u.correoElectronico =:correo AND u.contrasena=:contrasena"),
+    @NamedQuery(name = "busquedaToken", query = "SELECT u FROM Usuario u WHERE u.token = :token"),
+    @NamedQuery(name = "editarToken", query = "UPDATE Usuario set token = :token WHERE idUsuario=:idUsuario"),
+    @NamedQuery(name = "editarTokenCerrar", query = "UPDATE Usuario set token = :token WHERE correoElectronico=:correo")
 })
 public class Usuario implements Serializable {
-    
+
     @Id
     @Column(name = "PK_USR_IDUSUARIO")
     private Integer idUsuario;
-    
+
     @Column(name = "USR_TOKEN")
     private String token;
-    
+
     @Column(name = "USR_NUMERODOCUMENTO")
     private Integer numeroDocumento;
-    
+
     @Column(name = "USR_NUMEROSESIONES")
     private Integer numeroSesiones;
-    
+
     @Column(name = "USR_APELLIDO")
     private String apellido;
-    
+
     @Column(name = "USR_ESTADO")
     private String estado;
-    
+
     @Column(name = "USR_FECHANACIMIENTO")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaNacimiento;
-    
+
     @Column(name = "USR_NUMEROINTENTOS")
     private Integer numeroIntentos;
-    
+
     @Column(name = "USR_NOMBRE")
     private String nombre;
-    
+
     @Column(name = "USR_ULTIMAMODIFICACION")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ultimaModificacion;
-    
+
     @Column(name = "USR_CORREOELECTRONICO")
     private String correoElectronico;
-    
+
     @Column(name = "USR_CONTRASENA")
     private String contrasena;
-    
+
     @JoinColumn(name = "FK_USR_IDTIPODOCUMENTO", referencedColumnName = "PK_TIP_IDTIPODOCUMENTO")
     @ManyToOne
     private TipoDocumento fkUsrIdtipodocumento;
-    
+
     @OneToMany(mappedBy = "fkUacIdusuario")
     private List<UsuarioActividad> usuarioActividadList;
 
-    public Usuario(){
-        
+    public Usuario() {
+
     }
-    
+
     public Usuario(String token, Integer numeroDocumento, Integer numeroSesiones, String apellido, String estado, Date fechaNacimiento, Integer numeroIntentos, String nombre, Date ultimaModificacion, String correoElectronico, String contrasena, TipoDocumento fkUsrIdtipodocumento) {
         this.token = token;
         this.numeroDocumento = numeroDocumento;
@@ -215,5 +211,4 @@ public class Usuario implements Serializable {
         this.usuarioActividadList = usuarioActividadList;
     }
 
-    
 }

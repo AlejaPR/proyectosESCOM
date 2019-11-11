@@ -1,66 +1,131 @@
 package com.mycompany.superadministrador.seguridad;
 
-import com.mycompany.superadministrador.ejb.UsuarioFacade;
+import com.google.gson.Gson;
+import com.mycompany.superadministrador.POJO.Token;
+import com.mycompany.superadministrador.entity.Actividad;
 import com.mycompany.superadministrador.entity.Usuario;
-import com.mycompany.superadministrador.interfaces.UsuarioFacadeLocal;
+import com.mycompany.superadministrador.interfaces.SeguridadFacadeLocal;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import java.security.InvalidKeyException;
 import java.security.Key;
-import java.sql.Date;
-import java.util.ArrayList;
+import java.security.NoSuchAlgorithmException;
+import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
-import javax.ejb.Stateless;
-import javax.xml.bind.DatatypeConverter;
-import org.apache.commons.codec.digest.DigestUtils;
 
 /**
  *
  * @author Alejandra Pabon Rodriguez 461 215 234 Clase seguridad que genera
  * token con jwt
  */
-public class Seguridad {
+public class Seguridad implements SeguridadFacadeLocal{
 
-    private static final long tiempo = System.currentTimeMillis();
-    private static final long expiraToken = TimeUnit.MINUTES.toMillis(7200);
 
     /**
      * metodo que genera el token
      *
      * @param usuarios
-     *
      * @param usuario
      * @param clave
      * @return
      */
-    public String generarToken(Usuario usuarios) {
+    public String generarToken(Usuario usuario,List<Actividad> actividades) {
+        Date fechaExpiracion = sumarRestarDiasFecha(new Date(), 10);
         String token = Jwts.builder()
-                .setSubject(usuarios.getNombre())
-                .setIssuedAt(new Date(tiempo))
-                .setExpiration(new Date(tiempo + expiraToken))
-                .setIssuer(usuarios.getNombre())
+                .setSubject(usuario.getNombre())
+                .setIssuedAt(new Date())
+                .setExpiration(fechaExpiracion)
+                .setIssuer(usuario.getCorreoElectronico())
+                .setPayload(pasarPermisosAJSON(actividades))
                 .signWith(SignatureAlgorithm.HS256, "A4J7A3prcc20")
                 .compact();
         return token;
     }
+    
+    public String pasarPermisosAJSON(List<Actividad> actividadesAsignadas){
+         Gson gson = new Gson();
+         return gson.toJson(actividadesAsignadas);
+    }
 
-    /**
-     * metodo que desencripta el token
-     *
-     * @param token
-     *
-     * @return
-     */
-    public static String desencriptar(String token) {
-        Jws parseClaimJws = Jwts.parser().setSigningKey("A4J7A3prcc20").parseClaimsJws(token);
-        System.out.println("Header   " + parseClaimJws.getHeader());
-        System.out.println("Body     " + parseClaimJws.getBody());
-        System.out.println("Signature   " + parseClaimJws.getSignature());
+    public static Token desencriptar(String token) {
+        String clave="A4J7A3prcc20";
+        Token tokenResultado = new Token();
+        Jws parseClaimsJws = Jwts.parser().setSigningKey(clave).parseClaimsJws(token);
 
-        String tokencito = Jwts.parser().setSigningKey("A4J7A3prcc20").parseClaimsJws(token).getBody().getIssuer();
+        //System.out.println("header "+parseClaimsJws.getHeader());
+        tokenResultado.setHeader(parseClaimsJws.getHeader().toString());
+        //System.out.println("body " + Jwts.parser().setSigningKey(clave).parseClaimsJws(token).getBody());
+        tokenResultado.setBody(parseClaimsJws.getBody().toString());
+        //System.out.println("issuer " + Jwts.parser().setSigningKey(clave).parseClaimsJws(token).getBody().getIssuer());
+        tokenResultado.setIssuer(Jwts.parser().setSigningKey(clave).parseClaimsJws(token).getBody().getIssuer());
+        //System.out.println("signature " + parseClaimsJws.getSignature());
+        tokenResultado.setFirma(parseClaimsJws.getSignature());
+        return tokenResultado;
+    }
 
-        return tokencito;
+    
+    
+    public static Date sumarRestarDiasFecha(Date fecha, int anos) {
+
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.setTime(fecha); // Configuramos la fecha que se recibe
+
+        calendar.add(Calendar.YEAR, anos);  // numero de minutos a añadir
+
+        return calendar.getTime(); // Devuelve el objeto Date con los nuevos días añadidos
+    }
+
+    public static String generarHash(String texto) {
+        String respuesta = "";
+        try {
+            // Generamos una clave de 128 bits adecuada para AES
+            KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
+            keyGenerator.init(128);
+            Key key = keyGenerator.generateKey();
+
+            // Alternativamente, una clave que queramos que tenga al menos 16 bytes
+            // y nos quedamos con los bytes 0 a 15
+            key = new SecretKeySpec("h4eBMfS!Nr^.E8:Ye12".getBytes(), 0, 16, "AES");
+
+            // Se obtiene un cifrador AES
+            Cipher aes = Cipher.getInstance("AES/ECB/PKCS5Padding");
+
+            // Se inicializa para encriptacion y se encripta el texto,
+            // que debemos pasar como bytes.
+            aes.init(Cipher.ENCRYPT_MODE, key);
+            byte[] encriptado = aes.doFinal(texto.getBytes());
+
+            // Se escribe byte a byte en hexadecimal el texto
+            // encriptado para ver su pinta.
+            for (byte b : encriptado) {
+                respuesta += Integer.toHexString(0xFF & b).toString();
+            }
+
+            return respuesta;
+
+        } catch (IllegalBlockSizeException ex) {
+//            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (BadPaddingException ex) {
+//            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchAlgorithmException ex) {
+//            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (NoSuchPaddingException ex) {
+//            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InvalidKeyException ex) {
+//            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return respuesta;
     }
 }
