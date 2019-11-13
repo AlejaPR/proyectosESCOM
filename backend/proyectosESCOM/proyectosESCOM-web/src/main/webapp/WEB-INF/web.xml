@@ -22,7 +22,7 @@
         <init-param>
             <param-name>cors.supportedHeaders</param-name>
             <param-value>Accept, Origin, X-Requested-With, Content-Type,
-                Last-Modified,token-auto,TokenAuto</param-value>
+                Last-Modified,TokenAuto,Permiso</param-value>
         </init-param>
         <init-param>
             <param-name>cors.exposedHeaders</param-name>

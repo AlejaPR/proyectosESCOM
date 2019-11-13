@@ -30,8 +30,6 @@ import javax.validation.constraints.NotNull;
 public class UsuarioActividad implements Serializable {
     
     @Id
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "PK_UAC_IDRELACION")
     private Integer idRelacion;
     
@@ -39,11 +37,13 @@ public class UsuarioActividad implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date ultimaModificacion;
     
-    @JoinColumn(name = "FK_UAC_IDACTIVIDAD", referencedColumnName = "PK_ACT_IDACTIVIDAD")
+    @Id
+    @JoinColumn(name = "FK_UAC_IDACTIVIDAD")
     @ManyToOne
     private Actividad fkUacIdactividad;
     
-    @JoinColumn(name = "FK_UAC_IDUSUARIO", referencedColumnName = "PK_USR_IDUSUARIO")
+    @Id
+    @JoinColumn(name = "FK_UAC_IDUSUARIO")
     @ManyToOne
     private Usuario fkUacIdusuario;
 

@@ -33,36 +33,32 @@ public class Seguridad implements SeguridadFacadeLocal{
 
 
     /**
-     * metodo que genera el token
-     *
-     * @param usuarios
+     * 
      * @param usuario
-     * @param clave
-     * @return
+     * @param actividades
+     * @return 
      */
-    public String generarToken(Usuario usuario,List<Actividad> actividades) {
+    public String generarToken(Usuario usuario,String actividades) {
         Date fechaExpiracion = sumarRestarDiasFecha(new Date(), 10);
         String token = Jwts.builder()
                 .setSubject(usuario.getNombre())
                 .setIssuedAt(new Date())
                 .setExpiration(fechaExpiracion)
                 .setIssuer(usuario.getCorreoElectronico())
-                .setPayload(pasarPermisosAJSON(actividades))
                 .signWith(SignatureAlgorithm.HS256, "A4J7A3prcc20")
+                .claim("actividades",actividades)
                 .compact();
         return token;
     }
     
-    public String pasarPermisosAJSON(List<Actividad> actividadesAsignadas){
-         Gson gson = new Gson();
-         return gson.toJson(actividadesAsignadas);
-    }
 
     public static Token desencriptar(String token) {
         String clave="A4J7A3prcc20";
         Token tokenResultado = new Token();
         Jws parseClaimsJws = Jwts.parser().setSigningKey(clave).parseClaimsJws(token);
-
+        
+        
+        
         //System.out.println("header "+parseClaimsJws.getHeader());
         tokenResultado.setHeader(parseClaimsJws.getHeader().toString());
         //System.out.println("body " + Jwts.parser().setSigningKey(clave).parseClaimsJws(token).getBody());
@@ -71,6 +67,7 @@ public class Seguridad implements SeguridadFacadeLocal{
         tokenResultado.setIssuer(Jwts.parser().setSigningKey(clave).parseClaimsJws(token).getBody().getIssuer());
         //System.out.println("signature " + parseClaimsJws.getSignature());
         tokenResultado.setFirma(parseClaimsJws.getSignature());
+        
         return tokenResultado;
     }
 

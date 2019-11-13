@@ -8,7 +8,6 @@ package com.mycompany.superadministrador.interfaces;
 import com.mycompany.superadministrador.entity.Usuario;
 import java.util.List;
 import javax.ejb.Local;
-import org.springframework.stereotype.Service;
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
 
 /**
@@ -39,4 +38,5 @@ public interface UsuarioFacadeLocal {
     UsuarioPOJO devolverDatosUsuario(String token);
     
     public void cerrarSesion(String token);
+   
 }

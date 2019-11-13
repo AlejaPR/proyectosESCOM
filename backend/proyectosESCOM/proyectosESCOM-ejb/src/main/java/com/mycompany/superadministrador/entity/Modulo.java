@@ -50,6 +50,9 @@ public class Modulo implements Serializable{
     @Column(name = "MOD_NOMBREMODULO")
     private String nombreModulo;
     
+    @Column(name = "MOD_ACRONIMO")
+    private String acronimo;
+    
     @Size(max = 120)
     @Column(name = "MOD_DESCRIPCIONMODULO")
     private String descripcionModulo;
@@ -61,12 +64,13 @@ public class Modulo implements Serializable{
         
     }
     
-    public Modulo(Date ultimaModificacion, String estado, String imagen, String nombreModulo, String descripcionModulo) {
+    public Modulo(Date ultimaModificacion, String estado, String imagen, String nombreModulo, String descripcionModulo,String acronimo) {
         this.ultimaModificacion = ultimaModificacion;
         this.estado = estado;
         this.imagen = imagen;
         this.nombreModulo = nombreModulo;
         this.descripcionModulo = descripcionModulo;
+        this.acronimo=acronimo;
     }
 
     public Integer getIdModulo() {
@@ -123,6 +127,14 @@ public class Modulo implements Serializable{
 
     public void setActividadList(List<Actividad> actividadList) {
         this.actividadList = actividadList;
+    }
+
+    public String getAcronimo() {
+        return acronimo;
+    }
+
+    public void setAcronimo(String acronimo) {
+        this.acronimo = acronimo;
     }
 
     

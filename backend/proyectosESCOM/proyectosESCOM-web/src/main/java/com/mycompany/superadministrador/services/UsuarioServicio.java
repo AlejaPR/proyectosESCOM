@@ -2,11 +2,9 @@ package com.mycompany.superadministrador.services;
 
 import com.mycompany.modulodocumental.PruebaEJB;
 import com.mycompany.superadministrador.POJO.Respuesta;
-import com.mycompany.superadministrador.POJO.Token;
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
 import com.mycompany.superadministrador.interfaces.SesionesFacadeLocal;
 import com.mycompany.superadministrador.interfaces.UsuarioFacadeLocal;
-import com.mycompany.superadministrador.seguridad.Seguridad;
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -39,9 +37,10 @@ public class UsuarioServicio {
     @GET
     @Path("/prueba/{token}")
     public Response prueba(@PathParam("token") String token) {
-        System.out.println("hola");
-        UsuarioPOJO usuario = prueba.recuperarDatosUsuario(token);
-        System.out.println("Usuario es " + usuario.getCorreoElectronico() + "id es: " + usuario.getId());
+//        System.out.println("size "+usuarioFacade.consultarActividadesUsuario(8).size());
+//        for(Actividad ac :usuarioFacade.consultarActividadesUsuario(8)){
+//            System.out.println("Actividad "+ac.getDescripcionActividad());
+//        }
         return Response.status(Response.Status.OK).entity(sesiones.getMapaSesiones()).build();
 
     }

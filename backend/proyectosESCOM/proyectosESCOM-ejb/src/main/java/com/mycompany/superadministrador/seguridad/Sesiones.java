@@ -5,7 +5,10 @@
  */
 package com.mycompany.superadministrador.seguridad;
 
+import com.google.gson.Gson;
+import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.interfaces.SesionesFacadeLocal;
+import io.jsonwebtoken.Jwts;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,7 +40,7 @@ public class Sesiones implements SesionesFacadeLocal {
             return false;
         } else {
             if (validacionDeFecha(mapaSesiones.get(llave)) < 0) {
-                //eliminarlo de la mapa de sesiones
+                mapaSesiones.remove(llave);
                 return false;
             } else {
                 Calendar fechaActualizada = sumarRestarDiasFecha(mapaSesiones.get(llave).getTime(), 30);
@@ -75,7 +78,7 @@ public class Sesiones implements SesionesFacadeLocal {
 
     public static Date GetItemDate(final String date) {
         final Calendar cal = Calendar.getInstance(TimeZone.getDefault());
-        final SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy hh:mm:ss a");
+        final SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss a");
         format.setCalendar(cal);
         try {
             return format.parse(date);
@@ -100,6 +103,20 @@ public class Sesiones implements SesionesFacadeLocal {
         calendar.add(Calendar.MINUTE, minutos);  // numero de minutos a añadir
 
         return calendar;// Devuelve el objeto Date con los nuevos días añadidos
+    }
+    
+    @Override
+    public boolean validarPermiso(String llave,String permisoRequerido){
+        Gson gson=new Gson();
+        String claim = Jwts.parser().setSigningKey("A4J7A3prcc20").parseClaimsJws(llave).getBody().get("actividades", String.class);
+        ActividadPOJO[] actividadesAsignadas = gson.fromJson(claim,
+                ActividadPOJO[].class); 
+        for(ActividadPOJO ap : actividadesAsignadas){
+            if(ap.getNombre().equals(permisoRequerido)){
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override

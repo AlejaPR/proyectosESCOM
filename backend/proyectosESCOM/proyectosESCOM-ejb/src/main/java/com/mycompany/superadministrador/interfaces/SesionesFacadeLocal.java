@@ -21,4 +21,6 @@ public interface SesionesFacadeLocal {
     public boolean modificarVencimiento(String llave);
     
     public  int validacionDeFecha(Calendar fechaToken);
+    
+    public boolean validarPermiso(String llave,String permisoRequerido);
 }

@@ -30,7 +30,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "TBL_ACTIVIDAD")
 @NamedQueries({
-    @NamedQuery(name = "consultaActividades", query = "SELECT a FROM Actividad a JOIN UsuarioActividad ua ON ua.fkUacIdactividad=a.pkActIdactividad JOIN Usuario u ON u.idUsuario=ua.fkUacIdusuario WHERE u.idUsuario=:idUsuario")
+    @NamedQuery(name = "consultaActividades", query = "SELECT a from Actividad a,Usuario u, UsuarioActividad ua WHERE a.pkActIdactividad = ua.fkUacIdactividad.pkActIdactividad AND u.idUsuario=ua.fkUacIdusuario.idUsuario AND u.idUsuario=:idUsuario")
 })
 public class Actividad implements Serializable{
     
@@ -40,11 +40,9 @@ public class Actividad implements Serializable{
     @Column(name = "PK_ACT_IDACTIVIDAD")
     private Integer pkActIdactividad;
     
-    @Size(max = 20)
     @Column(name = "ACT_ESTADO")
     private String estado;
     
-    @Size(max = 20)
     @Column(name = "ACT_DESCRIPCIONACTIVIDAD")
     private String descripcionActividad;
     

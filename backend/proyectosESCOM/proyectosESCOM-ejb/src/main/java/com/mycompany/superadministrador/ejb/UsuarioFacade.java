@@ -5,6 +5,8 @@
  */
 package com.mycompany.superadministrador.ejb;
 
+import com.google.gson.Gson;
+import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.POJO.Token;
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
 import com.mycompany.superadministrador.entity.Actividad;
@@ -79,10 +81,17 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         return editarToken.executeUpdate();
     }
     
-    public List<Actividad> consultarActividadesUsuario(int idUsuario){
+
+    public List<ActividadPOJO> consultarActividadesUsuario(int idUsuario){
         TypedQuery<Actividad> consultaActividadesUsuario = em.createNamedQuery("consultaActividades", Actividad.class);
         consultaActividadesUsuario.setParameter("idUsuario", idUsuario);
-        return consultaActividadesUsuario.getResultList();
+        List<ActividadPOJO> actividadesPOJO=new ArrayList<>();
+        for(Actividad a : consultaActividadesUsuario.getResultList()){
+            ActividadPOJO ap=new ActividadPOJO();
+            ap.setNombre(a.getNombreActividad());
+            actividadesPOJO.add(ap);
+        }
+        return actividadesPOJO;
     }
 
     @Override
@@ -94,11 +103,10 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
                 return null;
             }
             Seguridad token = new Seguridad();
-            List<Actividad> actividad=new ArrayList<>();
-            Actividad a=new Actividad();
-            a.setEstado("pospo");
-            actividad.add(a);
-            String tokencin = token.generarToken(usuario,actividad);
+            List<ActividadPOJO> actividad=consultarActividadesUsuario(usuario.getIdUsuario());
+            Gson gson=new Gson();
+            String actividades=gson.toJson(actividad);
+            String tokencin = token.generarToken(usuario,actividades);
             usuario.setToken(Seguridad.desencriptar(tokencin).getFirma());
             editarToken(usuario.getToken(), usuario.getIdUsuario());
             UsuarioPOJO usuarioRespuesta = new UsuarioPOJO();
@@ -109,6 +117,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
             return null;
         }
     }
+    
 
     public void validarTokens(String tokencin) {
         Token token = Seguridad.desencriptar(tokencin);
@@ -144,20 +153,19 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         String contrasena=Seguridad.generarHash(usuario.getContrasena());
         usuario.setContrasena(contrasena);
         try {
-            em.createNativeQuery("INSERT INTO TBL_USUARIO (USR_TOKEN,USR_NUMERODOCUMENTO,USR_NUMEROSESIONES,USR_APELLIDO,USR_ESTADO,USR_FECHANACIMIENTO,USR_NUMEROINTENTOS,USR_NOMBRE,USR_ULTIMAMODIFICACION,USR_CORREOELECTRONICO,"
-                    + "FK_USR_IDTIPODOCUMENTO,USR_CONTRASENA) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)")
+            em.createNativeQuery("INSERT INTO TBL_USUARIO (USR_TOKEN,USR_NUMERODOCUMENTO,USR_APELLIDO,USR_ESTADO,USR_FECHANACIMIENTO,USR_NUMEROINTENTOS,USR_NOMBRE,USR_ULTIMAMODIFICACION,USR_CORREOELECTRONICO,"
+                    + "FK_USR_IDTIPODOCUMENTO,USR_CONTRASENA) VALUES (?,?,?,?,?,?,?,?,?,?,?)")
                     .setParameter(1, " ")
                     .setParameter(2, usuario.getNumeroDocumento())
-                    .setParameter(3, 0)
-                    .setParameter(4, usuario.getApellido())
-                    .setParameter(5, "Activo")
-                    .setParameter(6, usuario.getFechaNacimiento())
-                    .setParameter(7, 0)
-                    .setParameter(8, usuario.getNombre())
-                    .setParameter(9, new Date())
-                    .setParameter(10, usuario.getCorreoElectronico())
-                    .setParameter(11, usuario.getTipoDocumento())
-                    .setParameter(12, usuario.getContrasena())
+                    .setParameter(3, usuario.getApellido())
+                    .setParameter(4, "Activo")
+                    .setParameter(5, usuario.getFechaNacimiento())
+                    .setParameter(6, 0)
+                    .setParameter(7, usuario.getNombre())
+                    .setParameter(8, new Date())
+                    .setParameter(9, usuario.getCorreoElectronico())
+                    .setParameter(10, usuario.getTipoDocumento())
+                    .setParameter(11, usuario.getContrasena())
                     .executeUpdate();
         } catch (Exception e) {
             System.out.println("Exception insertando fila usuario " + e);

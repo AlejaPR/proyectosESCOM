@@ -1,21 +1,11 @@
 package com.mycompany.superadministrador.configuracion;
 
 import com.mycompany.superadministrador.POJO.Respuesta;
-import com.mycompany.superadministrador.POJO.Token;
-import com.mycompany.superadministrador.POJO.UsuarioPOJO;
-import com.mycompany.superadministrador.entity.Usuario;
-import com.mycompany.superadministrador.interfaces.SeguridadFacadeLocal;
 import com.mycompany.superadministrador.interfaces.SesionesFacadeLocal;
 import com.mycompany.superadministrador.interfaces.UsuarioFacadeLocal;
-import com.mycompany.superadministrador.seguridad.Seguridad;
-import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import javax.ejb.EJB;
-import javax.json.Json;
-import javax.json.JsonObject;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.container.PreMatching;
@@ -45,6 +35,7 @@ public class Filtro implements ContainerRequestFilter {
             return;
         }
         String token = requestContext.getHeaderString("TokenAuto");
+        String permiso = requestContext.getHeaderString("Permiso");
         if (token == null) {
             Respuesta respuesta = new Respuesta("Token requerido");
             requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
@@ -55,7 +46,13 @@ public class Filtro implements ContainerRequestFilter {
             try {
                 if (sesionesFacade.getMapaSesiones().containsKey(token)) {
                     if (sesionesFacade.modificarVencimiento(token)) {
-
+                        if (!sesionesFacade.validarPermiso(token, permiso)) {
+                            Respuesta respuesta = new Respuesta("Sin permiso");
+                            requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
+                                    .entity(respuesta)
+                                    .type(MediaType.APPLICATION_JSON)
+                                    .build());
+                        }
                     } else {
                         Respuesta respuesta = new Respuesta("token vencido");
                         requestContext.abortWith(Response.status(Response.Status.NOT_ACCEPTABLE)
@@ -63,12 +60,12 @@ public class Filtro implements ContainerRequestFilter {
                                 .type(MediaType.APPLICATION_JSON)
                                 .build());
                     }
-                }else{
+                } else {
                     Respuesta respuesta = new Respuesta("token no registrado");
-                        requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
-                                .entity(respuesta)
-                                .type(MediaType.APPLICATION_JSON)
-                                .build());
+                    requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)
+                            .entity(respuesta)
+                            .type(MediaType.APPLICATION_JSON)
+                            .build());
                 }
             } catch (MalformedJwtException me) {
                 Respuesta respuesta = new Respuesta("token incorrecto");
@@ -83,6 +80,5 @@ public class Filtro implements ContainerRequestFilter {
             }
         }
     }
-
 
 }

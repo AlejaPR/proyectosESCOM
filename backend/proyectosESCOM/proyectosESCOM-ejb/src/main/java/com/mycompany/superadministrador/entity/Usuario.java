@@ -44,9 +44,6 @@ public class Usuario implements Serializable {
     @Column(name = "USR_NUMERODOCUMENTO")
     private Integer numeroDocumento;
 
-    @Column(name = "USR_NUMEROSESIONES")
-    private Integer numeroSesiones;
-
     @Column(name = "USR_APELLIDO")
     private String apellido;
 
@@ -84,10 +81,9 @@ public class Usuario implements Serializable {
 
     }
 
-    public Usuario(String token, Integer numeroDocumento, Integer numeroSesiones, String apellido, String estado, Date fechaNacimiento, Integer numeroIntentos, String nombre, Date ultimaModificacion, String correoElectronico, String contrasena, TipoDocumento fkUsrIdtipodocumento) {
+    public Usuario(String token, Integer numeroDocumento, String apellido, String estado, Date fechaNacimiento, Integer numeroIntentos, String nombre, Date ultimaModificacion, String correoElectronico, String contrasena, TipoDocumento fkUsrIdtipodocumento) {
         this.token = token;
         this.numeroDocumento = numeroDocumento;
-        this.numeroSesiones = numeroSesiones;
         this.apellido = apellido;
         this.estado = estado;
         this.fechaNacimiento = fechaNacimiento;
@@ -121,14 +117,6 @@ public class Usuario implements Serializable {
 
     public void setNumeroDocumento(Integer numeroDocumento) {
         this.numeroDocumento = numeroDocumento;
-    }
-
-    public Integer getNumeroSesiones() {
-        return numeroSesiones;
-    }
-
-    public void setNumeroSesiones(Integer numeroSesiones) {
-        this.numeroSesiones = numeroSesiones;
     }
 
     public String getApellido() {
