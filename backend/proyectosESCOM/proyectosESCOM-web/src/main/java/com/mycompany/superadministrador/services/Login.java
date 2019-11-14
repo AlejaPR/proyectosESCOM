@@ -1,8 +1,11 @@
 package com.mycompany.superadministrador.services;
 
+import com.mycompany.superadministrador.POJO.GestorBitacora;
 import com.mycompany.superadministrador.POJO.Respuesta;
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
 import com.mycompany.superadministrador.interfaces.UsuarioFacadeLocal;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -18,6 +21,9 @@ import javax.ws.rs.core.Response;
 @javax.enterprise.context.RequestScoped
 @Path("login")
 public class Login {
+    
+    static Logger bitacora = GestorBitacora.getBitacora("com.mycompany.superadministrador.services.Login", "./bitacoraADMIN.txt", Level.SEVERE);
+
     
     /**
      * LLamado del bean de usuario
@@ -45,6 +51,7 @@ public class Login {
             if (usuario != null) {
                 return Response.status(Response.Status.OK).entity(usuario).build();
             } else {
+                bitacora.severe("Credenciales incorrectas");
                 respuesta.setRespuesta("Credenciales incorrectas");
                 return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
             }

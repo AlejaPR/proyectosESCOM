@@ -24,7 +24,8 @@ import javax.ws.rs.core.Response;
 @javax.enterprise.context.RequestScoped
 @Path("usuario")
 public class UsuarioServicio {
-
+    
+    
     @EJB
     UsuarioFacadeLocal usuarioFacade;
 
