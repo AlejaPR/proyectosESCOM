@@ -7,6 +7,7 @@ package com.mycompany.modulodocumental;
 
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
 import com.mycompany.superadministrador.interfaces.UsuarioFacadeLocal;
+import com.mycompany.superadministrador.interfaces.UtilitarioFacadeLocal;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
@@ -21,11 +22,15 @@ public class PruebaEJBDocumental implements PruebaEJB {
     }
     
     @EJB
-    UsuarioFacadeLocal usuarioFacade;
+    UtilitarioFacadeLocal utilitarioDB;
 
     @Override
     public UsuarioPOJO recuperarDatosUsuario(String token) {
-        return usuarioFacade.devolverDatosUsuario(token);
+        return utilitarioDB.devolverInformacionDeUsuario(token);
+    }
+    
+    public void loggerRegistro(){
+       utilitarioDB.registroLogger("");
     }
     
 }
