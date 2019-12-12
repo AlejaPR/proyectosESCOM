@@ -19,9 +19,7 @@ class MyComponent extends React.Component {
         if(this.state.inicio){
             return <Redirect to='/inicio'/>;
         }
-
         return <Login cambiar={this.cambiar}/>
-        
     }
 }
 

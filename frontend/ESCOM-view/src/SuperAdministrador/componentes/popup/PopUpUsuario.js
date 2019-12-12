@@ -39,10 +39,7 @@ class PopUpUsuario extends React.Component {
     try {
       var crypto = require('crypto');
       var contrasenaEncryp = crypto.createHmac('sha256', formValues.correo).update(formValues.contrasena).digest('hex');
-      console.log('contra',contrasenaEncryp);
       let date = new Date(formValues.fechaNacimiento);
-
-      // console.log('fecha es', formValues.fechaNacimiento);
       let usuario = {
         'nombre': formValues.nombre,
         'apellido': formValues.apellido,
@@ -52,8 +49,9 @@ class PopUpUsuario extends React.Component {
         'contrasena': contrasenaEncryp,
         'fechaNacimiento': date
       };
-      this.props.reset();
+
       this.props.actionAgregarUsuario(usuario, localStorage.getItem('Token'));
+      this.props.reset();
       NotificationManager.success('Usuario registrado')
 
     } catch (error) {

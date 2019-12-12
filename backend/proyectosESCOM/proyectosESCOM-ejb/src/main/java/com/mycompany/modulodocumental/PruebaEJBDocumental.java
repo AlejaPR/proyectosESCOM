@@ -6,7 +6,6 @@
 package com.mycompany.modulodocumental;
 
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
-import com.mycompany.superadministrador.interfaces.UsuarioFacadeLocal;
 import com.mycompany.superadministrador.interfaces.UtilitarioFacadeLocal;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;

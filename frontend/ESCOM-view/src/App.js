@@ -3,9 +3,11 @@ import React from 'react';
 //Menu lateral, superior y contenido de inicio
 import MenuSuperior from "./SuperAdministrador/componentes/menu/MenuBlancoSuperior.js"
 import MenuLateral from "./SuperAdministrador/componentes/menu/MenuLateral.js"
-import RedireccionarLogin from "./SuperAdministrador/componentes/redirecciones/RedireccionarLogin.js"
+import Login from "./SuperAdministrador/componentes/general/Login.js"
 import Inicio from "./SuperAdministrador/componentes/general/ContenidoInicio.js"
 
+//inactividad
+import IdleTimer from 'react-idle-timer'
 
 //administrar usuario
 import EditarUsuario from './SuperAdministrador/componentes/editar/editarUsuario.js'
@@ -32,7 +34,7 @@ import './SuperAdministrador/css/bootstrap.min.css'
 import './SuperAdministrador/css/menu.css'
 
 //rutas
-import { BrowserRouter as Router, Route,Switch } from "react-router-dom"
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom"
 
 //store
 import { Provider } from 'react-redux';
@@ -40,155 +42,188 @@ import { createStore, applyMiddleware } from 'redux';
 import reducers from './SuperAdministrador/reducers';
 import thunk from 'redux-thunk'
 
+
 const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
 
 class App extends React.Component {
 
-
-	state = {
-		usuarioModificar: ''
+	constructor(props) {
+		super(props)
+		this.idleTimer = null
+		this.onAction = this._onAction.bind(this)
+		this.onActive = this._onActive.bind(this)
+		this.onIdle = this._onIdle.bind(this)
 	}
 
-	asignarUsuario = (usuario) => {
-		console.log(usuario);
-		this.setState({
-			usuarioModificar: usuario
-		})
-	}
+	renderizarLogin = () => (
+		<Login />
+	)
 
 	render() {
 		return (
 			<Provider store={createStoreWithMiddleware(reducers)}>
+				<IdleTimer
+					ref={ref => { this.idleTimer = ref }}
+					element={document}
+					onActive={this.onActive}
+					onIdle={this.onIdle}
+					onAction={this.onAction}
+					debounce={250}
+					timeout={1000 * 60 * 1} />
 				<Router>
-			<Switch>					{/*Menus*/}
-
-					{/*Ruta para inicio*/}
-					<Route exact path="/" render={() => {
-						return <div>
-							<RedireccionarLogin/>
-						</div>
-					}}>
-					</Route>
-
-					{/*Ruta para inicio*/}
-					<Route exact path="/inicio" render={() => {
-						return <>
-							<MenuLateral />
-							<MenuSuperior />
-							<div id="wrapper">
-								<Inicio />
+					<Switch>
+						{/*Ruta para inicio*/}
+						<Route exact path="/" render={() => {
+							return <div>
+								<Login />
 							</div>
-						</>
-					}}>
-					</Route>
+						}}>
+						</Route>
 
-					{/*Ruta para administrar usuario*/}
-					<Route exact path="/AdminUsuario" render={() => {
-						return <><MenuLateral />
-							<MenuSuperior />
-							<div id="wrapper">
-								<RedireccionarUsuario funcionModificar={this.asignarUsuario} />
-							</div>
-						</>
-					}}>
-					</Route>
+						<RutaProtegida path="/inicio">
+							<>
+								<MenuLateral />
+								<MenuSuperior />
+								<div id="wrapper">
+									<Inicio />
+								</div>
+							</>
+						</RutaProtegida>
 
-					{/*Ruta para editar usuario*/}
-					{/* <Route exact path="/editarUsuario" render={() => {
-						return <div id="wrapper">
-							<MenuLateral />
-							<MenuSuperior />
-							<EditarUsuario cedula={this.state.usuarioModificar} />
-						</div>
-					}}>
-					</Route> */}
+						<RutaProtegida path="/adminUsuario">
+							<>
+								<MenuLateral />
+								<MenuSuperior />
+								<div id="wrapper">
+									<RedireccionarUsuario />
+								</div>
+							</>
+						</RutaProtegida>
 
+						<RutaProtegida path="/editarUsuario">
+							<>
+								<div id="wrapper">
+									<MenuLateral />
+									<MenuSuperior />
+									<EditarUsuario />
+								</div>
+							</>
+						</RutaProtegida>
+						<RutaProtegida path="asignarActividadUsuario">
+							<>
+								<div id="wrapper">
+									<MenuLateral />
+									<MenuSuperior />
+									<AsignarActividadUsuario />
+								</div>
+							</>
+						</RutaProtegida>
 
-					{/*Ruta para asignar actividad a usuario */}
-					{/* <Route exact path="/asignarActividadUsuario" render={() => {
-						return <div id="wrapper">
-							<MenuLateral />
-							<MenuSuperior />
-							<AsignarActividadUsuario />
-						</div>
-					}}>
-					</Route> */}
+						<RutaProtegida path="adminModulo">
+							<>
+								<MenuLateral />
+								<MenuSuperior />
+								<div id="wrapper">
+									<AdminModulo />
+								</div>
+							</>
+						</RutaProtegida>
 
-
-					{/* Ruta para administrar Modulo */}
-					<Route exact path="/AdminModulo" render={() => {
-						return <>
-							<MenuLateral />
-							<MenuSuperior />
-							<div id="wrapper">
-								<AdminModulo />
-							</div>
-						</>
-					}}>
-					</Route>
-
-					{/* Ruta para editarModulo */}
-					{/* <Route exact path="/editarModulo" render={() => {
-						return <div id="wrapper">
-							<MenuLateral />
-							<MenuSuperior />
-							<EditarModulo />
-
-						</div>
-					}}>
-					</Route> */}
-
-					{/*Ruta para asignar actividad a Modulo */}
-					{/* <Route exact path="/asignarActividadModulo" render={() => {
-						return <div id="wrapper">
-							<MenuLateral />
-							<MenuSuperior />
-							<AsignarActividadModulo />
-						</div>
-					}}>
-					</Route> */}
-
-					{/*Ruta para aadministrar actividad */}
-					<Route exact path="/adminActividad" render={() => {
-						return <>
-							<MenuLateral />
-							<MenuSuperior />
-							<div id="wrapper">
-								<Actividad />
-							</div>
-						</>
-					}}>
-					</Route>
-
-					{/*Ruta para reportes */}
-					<Route exact path="/reportes" render={() => {
-						return <>
-							<MenuLateral />
-							<MenuSuperior />
-							<div id="wrapper">
-								<ContenidoReportes />
-							</div>
-						</>
-					}}>
-					</Route>
-
-
-					{/*Ruta para reportes */}
-					<Route exact path="/configuracion" render={() => {
-						return <>
-							<MenuLateral />
-							<MenuSuperior />
-							<div id="wrapper">
-								<Configuracion />
-							</div>
-						</>
-					}}>
-					</Route>
+						<RutaProtegida path="editarModulo">
+							<>
+								<div id="wrapper">
+									<MenuLateral />
+									<MenuSuperior />
+									<EditarModulo />
+								</div>
+							</>
+						</RutaProtegida>
+						<RutaProtegida path="asignarActividadModulo">
+							<>
+								<div id="wrapper">
+									<MenuLateral />
+									<MenuSuperior />
+									<AsignarActividadModulo />
+								</div>
+							</>
+						</RutaProtegida>
+						<RutaProtegida path="adminActividad">
+							<>
+								<MenuLateral />
+								<MenuSuperior />
+								<div id="wrapper">
+									<Actividad />
+								</div>
+							</>
+						</RutaProtegida>
+						<RutaProtegida path="reportes">
+							<>
+								<MenuLateral />
+								<MenuSuperior />
+								<div id="wrapper">
+									<ContenidoReportes />
+								</div>
+							</>
+						</RutaProtegida>
+						<RutaProtegida path="configuracion">
+							<>
+								<MenuLateral />
+								<MenuSuperior />
+								<div id="wrapper">
+									<Configuracion />
+								</div>
+							</>
+						</RutaProtegida>
 					</Switch>
 				</Router>
+
 			</Provider>
 		);
 	}
+
+	_onAction(e) {
+		//captura cualquier accion que realiza el usuario
+		//console.log('user did something', e)
+	}
+
+	_onActive(e) {
+		//captura la accion cuando el usuario pasa de estar inactivo a activo
+		// console.log('user is active', e)
+		// console.log('time remaining', this.idleTimer.getRemainingTime())
+	}
+
+	_onIdle(e) {
+		//captura la accion despues pasados x minutos de inactividad
+		// console.log('user is idle', e)
+		// console.log('last active', this.idleTimer.getLastActiveTime())
+		localStorage.setItem('Token', ' ');
+		window.location.href = "/";
+	}
 }
+
+function RutaProtegida({ children, ...rest }) {
+	let atributo = false;
+	let token = localStorage.getItem('Token');
+	if (token != ' ') {
+		atributo = true;
+	}
+	return (
+		<Route
+			{...rest}
+			render={({ location }) =>
+				atributo ? (
+					children
+				) : (
+						<Redirect
+							to={{
+								pathname: "/"
+							}}
+						/>
+					)
+			}
+		/>
+	);
+}
+
 
 export default App;

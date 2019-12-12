@@ -15,41 +15,31 @@ export const REDIRECCIONAR_LOGIN = 'REDIRECCIONAR_LOGIN';
 export function actionLoginUsuario(correo, contrasena, cambiar) {
     var crypto = require('crypto');
     var contrasenaEncryp = crypto.createHmac('sha256', correo).update(contrasena).digest('hex');
-    var bool;
+    cambiar(true);
     return (dispatch, getState) => {
         axios.get("http://localhost:9090/proyectosESCOM-web/api/login/" + correo + '/' + contrasenaEncryp)
             .then(response => {
                 if (response.status == 200) {
                     var token = encriptar(response.data.token);
                     localStorage.setItem('Token', token);
-                    bool = true;
                     dispatch({
                         type: LOGIN_USUARIO,
                         token: 'Login correcto'
                     });
-                    cambiar('e');
+                    cambiar(false);
                 }
-                if (response.status == 401) {
-                    dispatch({
-                        type: LOGIN_USUARIO,
-                        token: 'Credenciales incorrectas'
-                    });
-                }
-
-            }).catch(function (error) {
-                // handle error
-                console.log('error es: ', error)
+            }).catch((error) => {
                 dispatch({
                     type: LOGIN_USUARIO,
                     token: 'Credenciales incorrectas'
                 });
+                cambiar(false);
             })
     };
 }
 
 export function actionCerrarSesion(token) {
     var tokenlim = desencriptar(token);
-    console.log('token limpio es ', tokenlim)
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': tokenlim
@@ -82,16 +72,24 @@ export function actionAgregarUsuario(usuario, token) {
     var tokenRequest = desencriptar(token);
     const headers = {
         'Content-Type': 'application/json',
-        'TokenAuto': tokenRequest
+        'TokenAuto': tokenRequest,
+        'Permiso': 'SA_CREAR USUARIO'
     }
     return (dispatch, getState) => {
+        try{
         axios.post("http://localhost:9090/proyectosESCOM-web/api/usuario", usuario, { headers: headers })
             .then(response => {
                 dispatch({
                     type: AGREGAR_USUARIO,
                     usuarioARegistrar: usuario
                 });
+            }).catch((error) => {
+                // handle error
+                console.log('error es: ', error)
             });
+        }catch(errora){
+            console.log('atrapado el error a');
+        }
     }
 }
 

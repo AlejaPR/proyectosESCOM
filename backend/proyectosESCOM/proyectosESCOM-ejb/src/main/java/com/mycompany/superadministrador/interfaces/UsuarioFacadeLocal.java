@@ -5,6 +5,7 @@
  */
 package com.mycompany.superadministrador.interfaces;
 
+import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.entity.Usuario;
 import java.util.List;
 import javax.ejb.Local;
@@ -30,13 +31,18 @@ public interface UsuarioFacadeLocal {
     List<Usuario> findRange(int[] range);
 
     int count();
-    
-    UsuarioPOJO loginUsuario(String usuario,String contrasena);
-    
+
+    public Usuario consultaLogin(String correo, String contrasena);
+
+    public List<ActividadPOJO> consultarActividadesUsuario(int idUsuario);
+
+    public int editarToken(String token, int idUsuario);
+
+    public UsuarioPOJO busquedaToken(String firma);
+
+    public int editarTokenCerrarSesion(String firma, String correo);
+
+    public List<Usuario> consultaDatosExistentes(String correo, int idDocumento);
+
     public void registrarUsuario(UsuarioPOJO usuario);
-    
-    UsuarioPOJO devolverDatosUsuario(String token);
-    
-    public void cerrarSesion(String token);
-   
 }

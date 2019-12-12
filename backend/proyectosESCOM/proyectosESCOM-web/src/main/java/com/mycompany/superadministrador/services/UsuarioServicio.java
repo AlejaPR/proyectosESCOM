@@ -3,8 +3,10 @@ package com.mycompany.superadministrador.services;
 import com.mycompany.modulodocumental.PruebaEJB;
 import com.mycompany.superadministrador.POJO.Respuesta;
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
+import com.mycompany.superadministrador.interfaces.LogicaUsuarioFacadeLocal;
 import com.mycompany.superadministrador.interfaces.SesionesFacadeLocal;
 import com.mycompany.superadministrador.interfaces.UsuarioFacadeLocal;
+import com.mycompany.superadministrador.utilitarios.ExcepcionGenerica;
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -27,51 +29,30 @@ public class UsuarioServicio {
     
     
     @EJB
-    UsuarioFacadeLocal usuarioFacade;
+    LogicaUsuarioFacadeLocal usuarioLogica;
 
     @EJB(name = "Sesiones")
     SesionesFacadeLocal sesiones;
 
-    @EJB
-    PruebaEJB prueba;
+    
+    private final Respuesta respuesta = new Respuesta();
 
-    @GET
-    @Path("/prueba/{token}")
-    public Response prueba(@PathParam("token") String token) {
-//        System.out.println("size "+usuarioFacade.consultarActividadesUsuario(8).size());
-//        for(Actividad ac :usuarioFacade.consultarActividadesUsuario(8)){
-//            System.out.println("Actividad "+ac.getDescripcionActividad());
-//        }
-        return Response.status(Response.Status.OK).entity(sesiones.getMapaSesiones()).build();
-
+    public UsuarioServicio() {
     }
     
-
-    @DELETE
-    @Path("/{token}")
-    public Response cerrarSesion(@PathParam("token") String token) {
-        try{
-            usuarioFacade.cerrarSesion(token);
-            Respuesta respuesta = new Respuesta("Sesion cerrada");
-            return Response.status(Response.Status.OK).entity(respuesta).build();
-        }catch(Exception e){
-            Respuesta respuesta = new Respuesta("Ocurrio un error interno del servidor");
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
-        }
-       
-
-    }
-
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response registrarUsuario(UsuarioPOJO usuario) {
         try {
-            usuarioFacade.registrarUsuario(usuario);
-            Respuesta respuesta = new Respuesta("Usuario registrado");
+            usuarioLogica.registrarUsuario(usuario);
+            respuesta.setRespuesta("Usuario registrado");
             return Response.status(Response.Status.OK).entity(respuesta).build();
-        } catch (Exception e) {
-            Respuesta respuesta = new Respuesta("Ocurrio un error interno del servidor");
+        }catch (ExcepcionGenerica e) {
+            respuesta.setRespuesta("Ya existen los datos registrados previamente");
+            return Response.status(Response.Status.NOT_ACCEPTABLE).entity(respuesta).build();
+        }catch (Exception e) {
+            respuesta.setRespuesta("Ocurrio un error interno del servidor");
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }

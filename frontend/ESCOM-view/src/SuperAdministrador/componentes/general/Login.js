@@ -1,29 +1,40 @@
 import React from 'react';
 
-//estilos
-import '../../css/business-casual.css'
-import '../../css/estilos.css'
-import '../../css/bootstrap.min.css'
 import '../../css/menu.css'
 import '../../css/registro.css'
 
 import { Button } from 'reactstrap';
-import { encriptar, desencriptar } from '../general/Encriptar.js';
-import { encriptarContrasena, validarContrasena } from './EncriptarContrasena';
 import { reduxForm, Field } from 'redux-form';
 
 import { actionLoginUsuario } from '../../actions/actionsUsuario.js'
 import { connect } from 'react-redux';
+import { requerido, correo } from '../../utilitario/validacionCampos.js';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { withRouter } from 'react-router-dom';
 
 class Login extends React.Component {
 
-	pruebita = () => {
+	state = {
+		habilitado: false
+	}
 
+	componentDidUpdate() {
+		if (this.props.token === 'Login correcto') {
+			this.props.history.push('/inicio');
+		}
+	}
+
+	habilitarBoton = (valor) => {
+		if (!this.state.habilitado) {
+			this.setState({
+				habilitado: valor
+			});
+		}
 	}
 
 	handleSubmit = formValues => {
-		this.props.actionLoginUsuario(formValues.correo, formValues.contrasena,this.props.cambiar);
-		// this.props.actionRedireccionarLogin('i');
+		this.setState({ habilitado: true });
+		this.props.actionLoginUsuario(formValues.correo, formValues.contrasena, this.habilitarBoton);
 	}
 
 
@@ -42,13 +53,13 @@ class Login extends React.Component {
 												<h3 className="login-heading mb-4">Sistema para el apoyo administrativo</h3>
 												<div className="row">
 													<div className="col-md-12">
-														<Field name="correo" component={generarInput} label="Correo electronico" />
+														<Field name="correo" component={generarInput} validate={[requerido, correo]} label="Correo electronico" />
 													</div>
 												</div>
 												<br />
 												<div className="row">
 													<div className="col-md-12 center">
-														<Field name="contrasena" type="password" component={generarInput} label="Contraseña" />
+														<Field name="contrasena" type="password" component={generarInput} validate={[requerido]} label="Contraseña" />
 													</div>
 												</div>
 												<div className="row">
@@ -63,9 +74,11 @@ class Login extends React.Component {
 												</div>
 												<br />
 												<div className="row">
-													<div className="col-sm-8 center">
-														<Button style={fondoBoton} type="submit">Iniciar sesion</Button>
+													<div className="col-sm-6 center">
+														<Button style={fondoBoton} disabled={this.state.habilitado} type="submit">Iniciar sesion</Button>
+
 													</div>
+													{this.state.habilitado ? <div className="col-sm-2 center"><CircularProgress color="secondary" /></div> : <div></div>}
 												</div>
 											</form>
 										</div>
@@ -92,23 +105,10 @@ const generarInput = ({ input, label, type, meta: { touched, error, warning } })
 const generarMensaje = ({ input, label, type, meta: { touched, error, warning } }) => (
 	<div>
 		<div>
-			<input {...input} value={label} placeholder={label} type={type} style={{ background: "none", border: "none", height: "10px", width: "400px", fontSize: "13px", fontFamily: "sans-serif", color: "#dc3545", margin: "0px 0px 16px" }} disabled="true" className="letra" />
+			<input {...input} value={label} placeholder={label} type={type} style={{ background: "none", border: "none", height: "10px", width: "400px", fontSize: "13px", fontFamily: "sans-serif", color: "#dc3545", margin: "0px 0px 16px" }} disabled={true} className="letra" />
 		</div>
 	</div>
 )
-
-const validate = values => {
-	const errors = {}
-	if (!values.correo) {
-		errors.correo = 'Este campo es obligatorio *'
-	} else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.correo)) {
-		errors.correo = 'El correo no tiene el formato correcto'
-	}
-	if (!values.contrasena) {
-		errors.contrasena = 'Este campo es obligatorio *'
-	}
-	return errors
-}
 
 const fondoBoton = {
 	background: "#ec671d"
@@ -121,7 +121,9 @@ function mapStateToProps(state) {
 }
 
 let formulario = reduxForm({
-	form: 'loginUsuario', validate
+	form: 'loginUsuario'
 })(Login)
 
-export default connect(mapStateToProps, { actionLoginUsuario })(formulario);
+
+
+export default withRouter(connect(mapStateToProps, { actionLoginUsuario })(formulario));

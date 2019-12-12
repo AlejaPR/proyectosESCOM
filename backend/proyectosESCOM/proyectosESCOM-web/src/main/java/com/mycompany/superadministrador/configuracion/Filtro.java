@@ -23,9 +23,6 @@ import javax.ws.rs.ext.Provider;
 public class Filtro implements ContainerRequestFilter {
 
     @EJB
-    UsuarioFacadeLocal usuarioFacade;
-
-    @EJB
     SesionesFacadeLocal sesionesFacade;
 
     @Override

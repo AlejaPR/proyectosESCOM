@@ -11,8 +11,6 @@ export function desencriptar(token) {
     var jwt = require('jsonwebtoken');
     var respuesta;
     jwt.verify(token, 'C6`v2DjMj^n=>F*GE', function (err, decoded) {
-        console.log('decoded');
-        console.log(decoded.data) // bar
         respuesta= decoded.data;
     });
     return respuesta;
