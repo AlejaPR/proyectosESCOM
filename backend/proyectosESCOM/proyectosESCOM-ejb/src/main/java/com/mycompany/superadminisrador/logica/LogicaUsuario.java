@@ -2,15 +2,19 @@ package com.mycompany.superadminisrador.logica;
 
 import com.google.gson.Gson;
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
+import com.mycompany.superadministrador.POJO.TipoDocumentoPOJO;
 import com.mycompany.superadministrador.POJO.Token;
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
+import com.mycompany.superadministrador.entity.TipoDocumento;
 import com.mycompany.superadministrador.entity.Usuario;
 import com.mycompany.superadministrador.interfaces.LogicaUsuarioFacadeLocal;
 import com.mycompany.superadministrador.interfaces.SesionesFacadeLocal;
+import com.mycompany.superadministrador.interfaces.TipoDocumentoFacadeLocal;
 import com.mycompany.superadministrador.interfaces.UsuarioFacadeLocal;
 import com.mycompany.superadministrador.seguridad.Seguridad;
 import com.mycompany.superadministrador.seguridad.Sesiones;
 import com.mycompany.superadministrador.utilitarios.ExcepcionGenerica;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -18,6 +22,7 @@ import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -28,6 +33,9 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
 
     @EJB
     UsuarioFacadeLocal usuarioDB;
+    
+    @EJB
+    TipoDocumentoFacadeLocal tipoDocumentoDB;
 
     @EJB
     SesionesFacadeLocal sesiones;
@@ -148,5 +156,50 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             return false;
         }
     }
+    
+     /**Metodo que llama a la consulta para obtener la lista de usuarios
+     * @return 
+     * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
+     **/
+    @Override
+    public List<UsuarioPOJO> devolverUsuarios() throws ExcepcionGenerica {
+        try{
+          List<UsuarioPOJO> usuariosResultado=usuarioDB.listarUsuarios();
+            if(!usuariosResultado.isEmpty()){
+                return usuariosResultado;
+            }else{
+                throw new NoResultException("No se encontraron datos");
+            }
+        } catch (NullPointerException ex) {
+            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
+        } catch (Exception ex) {
+            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+        }
+    }
+        
+        
+    /**Metodo que llama a la consulta para obtener la lista de tipos de documento
+     * @return 
+     * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
+     **/
+    @Override
+    public List<TipoDocumentoPOJO> devolverDocumentos() throws ExcepcionGenerica {
+        try{
+          List<TipoDocumentoPOJO> tipoDocumentoResultado=tipoDocumentoDB.consultaTipoDocumento();
+            if(!tipoDocumentoResultado.isEmpty()){
+                return tipoDocumentoResultado;
+            }else{
+                throw new NoResultException("No se encontraron datos");
+            }
+        } catch (NullPointerException ex) {
+            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
+        } catch (Exception ex) {
+            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+        }
+          
+    }
 
+   
 }
+
+

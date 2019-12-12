@@ -45,4 +45,8 @@ public interface UsuarioFacadeLocal {
     public List<Usuario> consultaDatosExistentes(String correo, int idDocumento);
 
     public void registrarUsuario(UsuarioPOJO usuario);
+    
+    public List<UsuarioPOJO> listarUsuarios();
+    
+   
 }

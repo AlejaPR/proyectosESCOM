@@ -5,6 +5,7 @@
  */
 package com.mycompany.superadministrador.interfaces;
 
+import com.mycompany.superadministrador.POJO.TipoDocumentoPOJO;
 import com.mycompany.superadministrador.entity.TipoDocumento;
 import java.util.List;
 import javax.ejb.Local;
@@ -30,4 +31,6 @@ public interface TipoDocumentoFacadeLocal {
 
     int count();
     
+    List<TipoDocumentoPOJO> consultaTipoDocumento();
+  
 }

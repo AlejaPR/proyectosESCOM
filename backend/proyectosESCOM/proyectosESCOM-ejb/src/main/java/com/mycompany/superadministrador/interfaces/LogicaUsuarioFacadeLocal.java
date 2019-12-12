@@ -5,8 +5,10 @@
  */
 package com.mycompany.superadministrador.interfaces;
 
+import com.mycompany.superadministrador.POJO.TipoDocumentoPOJO;
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
 import com.mycompany.superadministrador.utilitarios.ExcepcionGenerica;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -23,6 +25,10 @@ public interface LogicaUsuarioFacadeLocal {
     public UsuarioPOJO devolverDatosUsuario(String token);
 
     public void registrarUsuario(UsuarioPOJO usuario)throws ExcepcionGenerica;
+    
+    List<UsuarioPOJO> devolverUsuarios()throws ExcepcionGenerica;
             
-            
+    List<TipoDocumentoPOJO> devolverDocumentos()throws ExcepcionGenerica;
+    
+   
 }
