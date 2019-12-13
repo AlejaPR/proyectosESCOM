@@ -40,6 +40,10 @@ public class UsuarioServicio {
     public UsuarioServicio() {
     }
     
+    /**Servicio que registra usuarios
+     * 
+     * @param usuario
+     * @return  **/
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -68,7 +72,7 @@ public class UsuarioServicio {
             List<UsuarioPOJO> listaUsuarios = usuarioLogica.devolverUsuarios();
             return Response.status(Response.Status.OK).entity(listaUsuarios).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("Credenciales incorrectas");
+            respuesta.setRespuesta("Sin acceso al servicio");
             return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
         } catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error en el servidor ");
@@ -86,10 +90,48 @@ public class UsuarioServicio {
             List<TipoDocumentoPOJO> listaDocumentos = usuarioLogica.devolverDocumentos();
             return Response.status(Response.Status.OK).entity(listaDocumentos).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("Credenciales incorrectas");
+            respuesta.setRespuesta("Sin acceso al servicio");
             return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
         } catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error en el servidor ");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
+        }
+    }
+    
+    /**Servicio que lista los datos de un usuario especifico consultado con la cedula
+     * 
+     * @param cedula
+     * @return  **/
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/datosUsuario/{cedula}")
+    public Response listarUsuarioCedula(@PathParam("cedula") int cedula) {
+        try {
+            UsuarioPOJO usuarioDatos = usuarioLogica.traerUsuarioCedula(cedula);
+            return Response.status(Response.Status.OK).entity(usuarioDatos).build();
+        } catch (ExcepcionGenerica e) {
+            respuesta.setRespuesta("Sin acceso al servicio");
+            return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
+        } catch (Exception e) {
+            respuesta.setRespuesta("Ocurrio un error en el servidor ");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
+        }
+    }
+    
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/editarUsuario")
+    public Response editarUsuario(UsuarioPOJO usuarioEditar ) {
+        try {
+            usuarioLogica.editarUsuario(usuarioEditar);
+            respuesta.setRespuesta("Usuario modificado correctamente");
+            return Response.status(Response.Status.OK).entity(respuesta).build();
+        }catch (ExcepcionGenerica e) {
+            respuesta.setRespuesta("No se ha podido modificar el usuario");
+            return Response.status(Response.Status.NOT_ACCEPTABLE).entity(respuesta).build();
+        }catch (Exception e) {
+            respuesta.setRespuesta("Ocurrio un error interno del servidor");
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }

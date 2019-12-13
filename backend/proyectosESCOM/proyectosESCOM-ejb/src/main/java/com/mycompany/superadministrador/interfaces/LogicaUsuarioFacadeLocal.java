@@ -26,9 +26,13 @@ public interface LogicaUsuarioFacadeLocal {
 
     public void registrarUsuario(UsuarioPOJO usuario)throws ExcepcionGenerica;
     
-    List<UsuarioPOJO> devolverUsuarios()throws ExcepcionGenerica;
+    public List<UsuarioPOJO> devolverUsuarios()throws ExcepcionGenerica;
             
-    List<TipoDocumentoPOJO> devolverDocumentos()throws ExcepcionGenerica;
+    public List<TipoDocumentoPOJO> devolverDocumentos()throws ExcepcionGenerica;
+    
+    public UsuarioPOJO traerUsuarioCedula(int cedula) throws ExcepcionGenerica;
+    
+    public void editarUsuario(UsuarioPOJO usuarioEditar) throws ExcepcionGenerica;
     
    
 }

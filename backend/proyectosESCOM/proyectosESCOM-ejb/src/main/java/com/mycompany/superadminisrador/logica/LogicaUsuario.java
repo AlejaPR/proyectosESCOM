@@ -199,6 +199,40 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
           
     }
 
+    @Override
+    public UsuarioPOJO traerUsuarioCedula(int cedula) throws ExcepcionGenerica {
+        try{
+          UsuarioPOJO usuarioResultado=usuarioDB.buscarUsuarioEspecifico(cedula);
+            if(usuarioResultado != null){
+                return usuarioResultado;
+            }
+            else{
+                throw new NoResultException("No se encontraron datos del usuario");
+            }
+        }catch (NoResultException ex) {
+            throw new ExcepcionGenerica("No se encontraron datos del usuario");
+        } catch (NullPointerException ex) {
+            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
+        } catch (Exception ex) {
+            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+        }
+    }
+
+    @Override
+    public void editarUsuario(UsuarioPOJO usuarioEditar) throws ExcepcionGenerica {
+         try{
+                usuarioDB.editarUsuario(usuarioEditar); 
+                
+        } catch (NullPointerException ex) {
+            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la modificacion del usuario ");
+        } catch (NoResultException ex) {
+            throw new ExcepcionGenerica("El usuario no existe");
+        } catch (Exception ex) {
+            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+        }
+        
+    }
+
    
 }
 

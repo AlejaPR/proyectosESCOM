@@ -48,5 +48,9 @@ public interface UsuarioFacadeLocal {
     
     public List<UsuarioPOJO> listarUsuarios();
     
+    public UsuarioPOJO buscarUsuarioEspecifico(int cedula);
+    
+    public void editarUsuario(UsuarioPOJO usuarioEditar);
+    
    
 }

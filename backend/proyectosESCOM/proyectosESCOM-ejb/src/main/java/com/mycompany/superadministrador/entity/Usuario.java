@@ -32,7 +32,9 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "busquedaToken", query = "SELECT u FROM Usuario u WHERE u.token = :token"),
     @NamedQuery(name = "editarToken", query = "UPDATE Usuario set token = :token WHERE idUsuario=:idUsuario"),
     @NamedQuery(name = "editarTokenCerrar", query = "UPDATE Usuario set token = :token WHERE correoElectronico=:correo"),
-    @NamedQuery(name = "consultarExistencia", query = "SELECT u from Usuario u WHERE u.correoElectronico=:correo OR u.numeroDocumento=:numeroDocumento")
+    @NamedQuery(name = "consultarExistencia", query = "SELECT u from Usuario u WHERE u.correoElectronico=:correo OR u.numeroDocumento=:numeroDocumento"),
+    @NamedQuery(name = "consultaUsuarioEsp", query = "SELECT u from Usuario u WHERE u.numeroDocumento=:cedula")
+   
 })
 public class Usuario implements Serializable {
 

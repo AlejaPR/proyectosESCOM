@@ -141,4 +141,40 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         }
         return listaUsuarios;
     }
+
+    /**Metodo que realiza la consulta a la tabla usuario
+       Devuelve los datos de un usuario registrado con la cedula enviada 
+     * @param cedula
+     * @return 
+       **/
+    @Override
+    public UsuarioPOJO buscarUsuarioEspecifico(int cedula) {
+        TypedQuery<Usuario> consultaUsuarioEsp = em.createNamedQuery("consultaUsuarioEsp", Usuario.class);
+        consultaUsuarioEsp.setParameter("cedula", cedula);
+        Usuario usuarioEspDB = consultaUsuarioEsp.getSingleResult();
+        UsuarioPOJO usuarioRespuesta = new UsuarioPOJO();
+        usuarioRespuesta.setId(usuarioEspDB.getIdUsuario());
+        usuarioRespuesta.setNombre(usuarioEspDB.getNombre());
+        usuarioRespuesta.setApellido(usuarioEspDB.getApellido());
+        usuarioRespuesta.setTipoDocumento(usuarioEspDB.getFkUsrIdtipodocumento().getIdTipodocumento());
+        usuarioRespuesta.setNumeroDocumento(usuarioEspDB.getNumeroDocumento());
+        usuarioRespuesta.setCorreoElectronico(usuarioEspDB.getCorreoElectronico());
+        usuarioRespuesta.setEstado(usuarioEspDB.getEstado());
+        
+        return usuarioRespuesta;
+    }
+
+    @Override
+    public void editarUsuario(UsuarioPOJO usuarioEditar) {
+        em.createNativeQuery("UPDATE TBL_USUARIO SET USR_NUMERODOCUMENTO=?, USR_APELLIDO=?, USR_FECHANACIMIENTO=?, USR_NOMBRE=?,USR_CORREOELECTRONICO=?,USR_CONTRASENA=? WHERE PK_USR_IDUSUARIO=?")
+                .setParameter(1, usuarioEditar.getNumeroDocumento())
+                .setParameter(2, usuarioEditar.getApellido())
+                .setParameter(3, usuarioEditar.getFechaNacimiento())
+                .setParameter(4, usuarioEditar.getNombre())
+                .setParameter(5, usuarioEditar.getCorreoElectronico())
+                .setParameter(6, usuarioEditar.getContrasena())
+                .setParameter(7, usuarioEditar.getId())
+                .executeUpdate();
+      
+    }
 }
