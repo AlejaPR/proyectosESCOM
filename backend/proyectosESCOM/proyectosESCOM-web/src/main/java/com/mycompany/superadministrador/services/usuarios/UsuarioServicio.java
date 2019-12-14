@@ -11,7 +11,9 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import static javax.ws.rs.HttpMethod.PUT;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -118,13 +120,16 @@ public class UsuarioServicio {
         }
     }
     
-    @POST
+    /**Servicio que permite la edicion de usuarios
+     * 
+     * @param cedula
+     * @return  **/
+    @PUT
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/editarUsuario")
-    public Response editarUsuario(UsuarioPOJO usuarioEditar ) {
+    @Path("/editarUsuario/{cedula}")
+    public Response editarUsuario(@PathParam("cedula") int cedula, UsuarioPOJO usuarioEditar ) {
         try {
-            usuarioLogica.editarUsuario(usuarioEditar);
+            usuarioLogica.editarUsuario(cedula, usuarioEditar);
             respuesta.setRespuesta("Usuario modificado correctamente");
             return Response.status(Response.Status.OK).entity(respuesta).build();
         }catch (ExcepcionGenerica e) {
@@ -132,6 +137,27 @@ public class UsuarioServicio {
             return Response.status(Response.Status.NOT_ACCEPTABLE).entity(respuesta).build();
         }catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error interno del servidor");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
+        }
+    }
+    
+    /**Servicio que habilita o deshabilita un usuario recibe como parametro la cedula
+     * 
+     * @param cedula
+     * @return  **/
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/cambiarEstadoUsuario/{cedula}")
+    public Response cambiarEstadoUsuario(@PathParam("cedula") int cedula) {
+        try {
+            usuarioLogica.cambiarEstadoUsuario(cedula);
+            respuesta.setRespuesta("Estado cambiado correctamente");
+            return Response.status(Response.Status.OK).entity(respuesta).build();
+        } catch (ExcepcionGenerica e) {
+            respuesta.setRespuesta("Sin acceso al servicio");
+            return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
+        } catch (Exception e) {
+            respuesta.setRespuesta("Ocurrio un error en el servidor ");
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }

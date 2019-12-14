@@ -50,7 +50,9 @@ public interface UsuarioFacadeLocal {
     
     public UsuarioPOJO buscarUsuarioEspecifico(int cedula);
     
-    public void editarUsuario(UsuarioPOJO usuarioEditar);
+    public void editarUsuario(int cedula, UsuarioPOJO usuarioEditar);
+    
+    public void cambiarEstadoUsuario(int cedula, String estado);
     
    
 }

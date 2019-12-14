@@ -32,7 +32,9 @@ public interface LogicaUsuarioFacadeLocal {
     
     public UsuarioPOJO traerUsuarioCedula(int cedula) throws ExcepcionGenerica;
     
-    public void editarUsuario(UsuarioPOJO usuarioEditar) throws ExcepcionGenerica;
+    public void editarUsuario(int cedula, UsuarioPOJO usuarioEditar) throws ExcepcionGenerica;
+    
+    public void cambiarEstadoUsuario(int cedula) throws ExcepcionGenerica;
     
    
 }

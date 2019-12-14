@@ -101,6 +101,10 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         return actividadesPOJO;
     }
 
+    /**Metodo que realiza el registro de usuarios
+     * 
+     * @param usuario
+       **/
     @Override
     public void registrarUsuario(UsuarioPOJO usuario) {
         String contrasena = Seguridad.generarHash(usuario.getContrasena());
@@ -164,17 +168,39 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         return usuarioRespuesta;
     }
 
+     /**Metodo que realiza la modificacion de un usuario
+       Recibe cedula para filtrar la busqueda
+     * @param cedula
+     * @param usuarioEditar
+     * 
+       **/
     @Override
-    public void editarUsuario(UsuarioPOJO usuarioEditar) {
-        em.createNativeQuery("UPDATE TBL_USUARIO SET USR_NUMERODOCUMENTO=?, USR_APELLIDO=?, USR_FECHANACIMIENTO=?, USR_NOMBRE=?,USR_CORREOELECTRONICO=?,USR_CONTRASENA=? WHERE PK_USR_IDUSUARIO=?")
+    public void editarUsuario(int cedula, UsuarioPOJO usuarioEditar) {
+        em.createNativeQuery("UPDATE TBL_USUARIO SET USR_NUMERODOCUMENTO=?, USR_APELLIDO=?, USR_FECHANACIMIENTO=?, USR_NOMBRE=?,USR_CORREOELECTRONICO=?,USR_CONTRASENA=? WHERE USR_NUMERODOCUMENTO=?")
                 .setParameter(1, usuarioEditar.getNumeroDocumento())
                 .setParameter(2, usuarioEditar.getApellido())
                 .setParameter(3, usuarioEditar.getFechaNacimiento())
                 .setParameter(4, usuarioEditar.getNombre())
                 .setParameter(5, usuarioEditar.getCorreoElectronico())
                 .setParameter(6, usuarioEditar.getContrasena())
-                .setParameter(7, usuarioEditar.getId())
+                .setParameter(7, cedula)
                 .executeUpdate();
       
     }
+
+     /**Metodo que realiza el cambio de estado de un usuario
+       Recibe cedula para filtrar la busqueda y el valor del estado
+     * @param cedula
+     * @param estado
+     * 
+       **/
+    @Override
+    public void cambiarEstadoUsuario(int cedula, String estado) {
+        
+        em.createNativeQuery("UPDATE TBL_USUARIO SET USR_ESTADO=? WHERE USR_NUMERODOCUMENTO=?")
+                .setParameter(1, estado)
+                .setParameter(2, cedula)
+                .executeUpdate();
+    }
+    
 }

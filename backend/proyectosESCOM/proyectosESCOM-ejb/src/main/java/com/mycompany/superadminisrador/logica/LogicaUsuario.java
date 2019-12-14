@@ -199,6 +199,11 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
           
     }
 
+     /**Metodo que llama a la consulta que devuelve los datos del usuario recibiendo la cedula
+     * @param cedula
+     * @return 
+     * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
+     **/
     @Override
     public UsuarioPOJO traerUsuarioCedula(int cedula) throws ExcepcionGenerica {
         try{
@@ -218,10 +223,16 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         }
     }
 
+     /**Metodo que llama a la consulta para editar usuario recibiendo como parametro la cedula
+     *  
+     * @param cedula
+     * @param usuarioEditar
+     * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
+     **/
     @Override
-    public void editarUsuario(UsuarioPOJO usuarioEditar) throws ExcepcionGenerica {
+    public void editarUsuario(int cedula, UsuarioPOJO usuarioEditar) throws ExcepcionGenerica {
          try{
-                usuarioDB.editarUsuario(usuarioEditar); 
+                usuarioDB.editarUsuario(cedula, usuarioEditar); 
                 
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la modificacion del usuario ");
@@ -231,6 +242,34 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             throw new ExcepcionGenerica("Ocurrio una excepcion ");
         }
         
+    }
+
+     /**Metodo que llama a la consulta para cambiar el estado del usuario recibiendo como parametro la cedula
+     *  
+     * @param cedula
+     * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
+     **/
+    @Override
+    public void cambiarEstadoUsuario(int cedula) throws ExcepcionGenerica {
+        try{
+          UsuarioPOJO usuarioResultado=usuarioDB.buscarUsuarioEspecifico(cedula);
+            if(usuarioResultado != null){
+                if(usuarioResultado.getEstado().equals("Activo")){
+                    usuarioDB.cambiarEstadoUsuario(cedula, "Suspendido");
+                }else if(usuarioResultado.getEstado().equals("Suspendido")){
+                    usuarioDB.cambiarEstadoUsuario(cedula, "Activo");
+                } 
+            }
+            else{
+                throw new NoResultException("No se encontraron datos del usuario");
+            }
+        }catch (NoResultException ex) {
+            throw new ExcepcionGenerica("No se encontraron datos del usuario");
+        } catch (NullPointerException ex) {
+            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
+        } catch (Exception ex) {
+            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+        }
     }
 
    
