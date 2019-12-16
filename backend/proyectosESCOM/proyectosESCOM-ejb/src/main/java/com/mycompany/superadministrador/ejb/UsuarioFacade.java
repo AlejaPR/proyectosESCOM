@@ -5,23 +5,16 @@
  */
 package com.mycompany.superadministrador.ejb;
 
-import com.google.gson.Gson;
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
-import com.mycompany.superadministrador.POJO.Token;
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
 import com.mycompany.superadministrador.entity.Actividad;
 import com.mycompany.superadministrador.interfaces.UsuarioFacadeLocal;
 import com.mycompany.superadministrador.entity.Usuario;
-import com.mycompany.superadministrador.entity.UsuarioActividad;
 import com.mycompany.superadministrador.interfaces.SesionesFacadeLocal;
 import com.mycompany.superadministrador.seguridad.Seguridad;
-import com.mycompany.superadministrador.seguridad.Sesiones;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

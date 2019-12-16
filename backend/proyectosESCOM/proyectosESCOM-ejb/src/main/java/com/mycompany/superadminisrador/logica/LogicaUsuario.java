@@ -5,13 +5,11 @@ import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.POJO.TipoDocumentoPOJO;
 import com.mycompany.superadministrador.POJO.Token;
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
-import com.mycompany.superadministrador.entity.TipoDocumento;
 import com.mycompany.superadministrador.entity.Usuario;
 import com.mycompany.superadministrador.interfaces.ActividadFacadeLocal;
 import com.mycompany.superadministrador.interfaces.LogicaUsuarioFacadeLocal;
 import com.mycompany.superadministrador.interfaces.SesionesFacadeLocal;
 import com.mycompany.superadministrador.interfaces.TipoDocumentoFacadeLocal;
-import com.mycompany.superadministrador.interfaces.UsuarioActividadFacadeLocal;
 import com.mycompany.superadministrador.interfaces.UsuarioFacadeLocal;
 import com.mycompany.superadministrador.seguridad.Seguridad;
 import com.mycompany.superadministrador.seguridad.Sesiones;
@@ -24,8 +22,6 @@ import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
-
 /**
  *
  * @author jeiso
@@ -291,7 +287,37 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             if(usuarioResultado != null){            
                 List<ActividadPOJO> listaActividades = new ArrayList();
                 listaActividades= actividadDB.listarActividadesUsuario(usuarioResultado.getId());
-                return listaActividades;
+                if(listaActividades.size() >=0 ){
+                  return listaActividades;   
+                }else{
+                     throw new NoResultException("Error en la consulta");
+                }  
+            }
+            else{
+                throw new NoResultException("No se encontraron datos del usuario");
+            }
+        }catch (NoResultException ex) {
+            throw new ExcepcionGenerica("No se encontraron datos del usuario");
+        } catch (NullPointerException ex) {
+            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
+        } catch (Exception ex) {
+            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+        }
+    }
+
+     /**Metodo que trae los datos del usuario con el parametro cedula para llamar la 
+     * consulta que eliminar la actividades del usuario recibiendo como parametro el id de la actividad
+     * 
+     * @param cedula 
+     * @param idActividad 
+     * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
+     **/
+    @Override
+    public void eliminarActividadUsuario(int cedula, int idActividad) throws ExcepcionGenerica {
+        try{
+          UsuarioPOJO usuarioResultado=usuarioDB.buscarUsuarioEspecifico(cedula);
+            if(usuarioResultado != null){            
+                actividadDB.eliminarActividadUsuario(usuarioResultado.getId(), idActividad);    
             }
             else{
                 throw new NoResultException("No se encontraron datos del usuario");

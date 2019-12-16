@@ -2,7 +2,6 @@ package com.mycompany.superadministrador.configuracion;
 
 import com.mycompany.superadministrador.POJO.Respuesta;
 import com.mycompany.superadministrador.interfaces.SesionesFacadeLocal;
-import com.mycompany.superadministrador.interfaces.UsuarioFacadeLocal;
 import io.jsonwebtoken.MalformedJwtException;
 import java.io.IOException;
 import javax.ejb.EJB;

@@ -14,6 +14,7 @@ import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -48,7 +49,7 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    /**Metodo que la consulta de actividades del usuario especifico
+    /**Metodo que realiza la consulta de actividades del usuario especifico
      * 
      * @param idUsuario
      * @return 
@@ -64,6 +65,36 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
                                 .setParameter(1, idUsuario)
                                 .getResultList();
         return listaFinalActividades;
+    }
+
+     /**Metodo que realiza la consulta para eliminar actividad de usuario especifico
+     * 
+     * @param idUsuario
+     * @param idActividad
+     * 
+       **/
+    @Override
+    public void eliminarActividadUsuario(Integer idUsuario, Integer idActividad) {
+        
+        em.createNativeQuery("DELETE FROM tbl_usuarioactividad WHERE fk_uac_idactividad = ? AND fk_uac_idusuario = ?")
+                                .setParameter(1, idActividad)
+                                .setParameter(2, idUsuario)
+                                .executeUpdate();
+    }
+
+    /**Metodo que realiza la consulta de actividades de un modulo especifico
+     * 
+     * @param idModulo
+     * @return 
+       **/
+    @Override
+    public List<ActividadPOJO> listarActividadesModulo(Integer idModulo) {
+        
+        List<ActividadPOJO> listaActividadesM = new ArrayList<>();
+        listaActividadesM= em.createNativeQuery("Select act_nombreactividad from tbl_actividad where fk_act_idmodulo=?")
+                                .setParameter(1, idModulo)
+                                .getResultList();
+        return listaActividadesM;
     }
 
     

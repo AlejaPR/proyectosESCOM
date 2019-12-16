@@ -5,11 +5,15 @@
  */
 package com.mycompany.superadministrador.ejb;
 
+import com.mycompany.superadministrador.POJO.ModuloPOJO;
 import com.mycompany.superadministrador.interfaces.ModuloFacadeLocal;
 import com.mycompany.superadministrador.entity.Modulo;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -28,20 +32,27 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
     public ModuloFacade() {
         super(Modulo.class);
     }
-    
-    @Override
-    public void create(Modulo documento) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
+    /**Metodo que realiza la consulta a la tabla modulo
+       Devuelve una lista con los modulos registrados
+     * @return 
+       **/
     @Override
-    public void edit(Modulo documento) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void remove(Modulo documento) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<ModuloPOJO> listarModulos() {
+        
+        TypedQuery<Modulo> consultaModulosRegistrados = em.createNamedQuery("consultaModulos", Modulo.class);
+        List<ModuloPOJO> listaModulos = new ArrayList<>();
+        for (Modulo m : consultaModulosRegistrados.getResultList()) {
+            ModuloPOJO modulo = new ModuloPOJO();
+            modulo.setIdModulo(m.getIdModulo());
+            modulo.setEstadoModulo(m.getEstado());
+            modulo.setImagenModulo(m.getImagen());
+            modulo.setNombreModulo(m.getNombreModulo());
+            modulo.setDescripcionModulo(m.getDescripcionModulo());
+            modulo.setAcronimo(m.getAcronimo());
+            listaModulos.add(modulo);
+        }
+        return listaModulos;
     }
 
 }

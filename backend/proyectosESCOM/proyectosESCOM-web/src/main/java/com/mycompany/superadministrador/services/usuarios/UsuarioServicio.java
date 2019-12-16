@@ -6,13 +6,12 @@ import com.mycompany.superadministrador.POJO.TipoDocumentoPOJO;
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
 import com.mycompany.superadministrador.interfaces.LogicaUsuarioFacadeLocal;
 import com.mycompany.superadministrador.interfaces.SesionesFacadeLocal;
-import com.mycompany.superadministrador.interfaces.TipoDocumentoFacadeLocal;
 import com.mycompany.superadministrador.utilitarios.ExcepcionGenerica;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import static javax.ws.rs.HttpMethod.PUT;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
@@ -33,9 +32,6 @@ public class UsuarioServicio {
     
     @EJB
     LogicaUsuarioFacadeLocal usuarioLogica;
-   
-    @EJB(name = "Sesiones")
-    SesionesFacadeLocal sesiones;
 
     
     private final Respuesta respuesta = new Respuesta();
@@ -124,6 +120,7 @@ public class UsuarioServicio {
     /**Servicio que permite la edicion de usuarios
      * 
      * @param cedula
+     * @param usuarioEditar
      * @return  **/
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
@@ -172,9 +169,30 @@ public class UsuarioServicio {
     @Path("/listarActividadesUsuario/{cedula}")
     public Response listarActividadesUsuario(@PathParam("cedula") int cedula) {
         try {
-            List<ActividadPOJO> listaActividades = usuarioLogica.listarActividadesUsuario(cedula);
-           
+            List<ActividadPOJO> listaActividades = usuarioLogica.listarActividadesUsuario(cedula);    
             return Response.status(Response.Status.OK).entity(listaActividades).build();
+        } catch (ExcepcionGenerica e) {
+            respuesta.setRespuesta("Sin acceso al servicio");
+            return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
+        } catch (Exception e) {
+            respuesta.setRespuesta("Ocurrio un error en el servidor ");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
+        }
+    }
+    
+     /**Servicio que elimina actividad a un usuario, recibe como parametro la cedula y el id de la actividad
+     * 
+     * @param cedula
+     * @param idActividad
+     * @return  **/
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/eliminarActividadUsuario/{cedula}/{idActividad}")
+    public Response eliminarActividadUsuario(@PathParam("cedula") int cedula, @PathParam("idActividad") int idActividad) {
+        try {
+            usuarioLogica.eliminarActividadUsuario(cedula,idActividad);
+            respuesta.setRespuesta("Actividad eliminada correctamente");
+            return Response.status(Response.Status.OK).entity(respuesta).build();
         } catch (ExcepcionGenerica e) {
             respuesta.setRespuesta("Sin acceso al servicio");
             return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();

@@ -39,5 +39,6 @@ public interface LogicaUsuarioFacadeLocal {
     
     public List<ActividadPOJO> listarActividadesUsuario(int cedula) throws ExcepcionGenerica;
     
+     public void eliminarActividadUsuario(int cedula, int idActividad) throws ExcepcionGenerica;
    
 }

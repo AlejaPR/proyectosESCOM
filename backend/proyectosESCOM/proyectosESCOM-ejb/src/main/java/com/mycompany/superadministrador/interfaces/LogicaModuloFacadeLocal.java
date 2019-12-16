@@ -5,8 +5,9 @@
  */
 package com.mycompany.superadministrador.interfaces;
 
+import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.POJO.ModuloPOJO;
-import com.mycompany.superadministrador.entity.Modulo;
+import com.mycompany.superadministrador.utilitarios.ExcepcionGenerica;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -15,22 +16,10 @@ import javax.ejb.Local;
  * @author aleja
  */
 @Local
-public interface ModuloFacadeLocal {
-
-    void create(Modulo modulo);
-
-    void edit(Modulo modulo);
-
-    void remove(Modulo modulo);
-
-    Modulo find(Object id);
-
-    List<Modulo> findAll();
-
-    List<Modulo> findRange(int[] range);
-
-    int count();
+public interface LogicaModuloFacadeLocal {
     
-    public List<ModuloPOJO> listarModulos();
+    public List<ModuloPOJO> devolverModulos()throws ExcepcionGenerica;
+    
+    public List<ActividadPOJO> listarActividadesModulo(int idModulo) throws ExcepcionGenerica;
     
 }

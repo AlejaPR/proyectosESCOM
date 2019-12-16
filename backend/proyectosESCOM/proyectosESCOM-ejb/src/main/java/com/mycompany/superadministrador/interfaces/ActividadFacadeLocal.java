@@ -32,4 +32,8 @@ public interface ActividadFacadeLocal {
     int count();
     
     List<ActividadPOJO> listarActividadesUsuario(Integer idUsuario);
+    
+    void eliminarActividadUsuario(Integer idUsuario, Integer idActividad);
+    
+    List<ActividadPOJO> listarActividadesModulo(Integer idModulo);
 }
