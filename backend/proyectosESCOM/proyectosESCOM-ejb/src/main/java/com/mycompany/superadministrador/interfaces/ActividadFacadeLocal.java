@@ -5,6 +5,7 @@
  */
 package com.mycompany.superadministrador.interfaces;
 
+import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.entity.Actividad;
 import java.util.List;
 import javax.ejb.Local;
@@ -30,4 +31,5 @@ public interface ActividadFacadeLocal {
 
     int count();
     
+    List<ActividadPOJO> listarActividadesUsuario(Integer idUsuario);
 }

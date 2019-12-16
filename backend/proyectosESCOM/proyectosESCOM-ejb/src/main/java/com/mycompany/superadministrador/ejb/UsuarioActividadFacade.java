@@ -7,9 +7,12 @@ package com.mycompany.superadministrador.ejb;
 
 import com.mycompany.superadministrador.interfaces.UsuarioActividadFacadeLocal;
 import com.mycompany.superadministrador.entity.UsuarioActividad;
+import java.util.ArrayList;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 /**
  *

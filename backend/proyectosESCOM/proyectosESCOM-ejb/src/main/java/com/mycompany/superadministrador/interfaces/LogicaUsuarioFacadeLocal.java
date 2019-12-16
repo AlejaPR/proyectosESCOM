@@ -5,6 +5,7 @@
  */
 package com.mycompany.superadministrador.interfaces;
 
+import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.POJO.TipoDocumentoPOJO;
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
 import com.mycompany.superadministrador.utilitarios.ExcepcionGenerica;
@@ -35,6 +36,8 @@ public interface LogicaUsuarioFacadeLocal {
     public void editarUsuario(int cedula, UsuarioPOJO usuarioEditar) throws ExcepcionGenerica;
     
     public void cambiarEstadoUsuario(int cedula) throws ExcepcionGenerica;
+    
+    public List<ActividadPOJO> listarActividadesUsuario(int cedula) throws ExcepcionGenerica;
     
    
 }

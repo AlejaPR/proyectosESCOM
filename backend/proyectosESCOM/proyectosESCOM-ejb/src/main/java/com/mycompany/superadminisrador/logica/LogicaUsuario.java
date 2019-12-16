@@ -7,9 +7,11 @@ import com.mycompany.superadministrador.POJO.Token;
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
 import com.mycompany.superadministrador.entity.TipoDocumento;
 import com.mycompany.superadministrador.entity.Usuario;
+import com.mycompany.superadministrador.interfaces.ActividadFacadeLocal;
 import com.mycompany.superadministrador.interfaces.LogicaUsuarioFacadeLocal;
 import com.mycompany.superadministrador.interfaces.SesionesFacadeLocal;
 import com.mycompany.superadministrador.interfaces.TipoDocumentoFacadeLocal;
+import com.mycompany.superadministrador.interfaces.UsuarioActividadFacadeLocal;
 import com.mycompany.superadministrador.interfaces.UsuarioFacadeLocal;
 import com.mycompany.superadministrador.seguridad.Seguridad;
 import com.mycompany.superadministrador.seguridad.Sesiones;
@@ -36,6 +38,9 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
     
     @EJB
     TipoDocumentoFacadeLocal tipoDocumentoDB;
+    
+    @EJB
+    ActividadFacadeLocal actividadDB;
 
     @EJB
     SesionesFacadeLocal sesiones;
@@ -259,6 +264,34 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
                 }else if(usuarioResultado.getEstado().equals("Suspendido")){
                     usuarioDB.cambiarEstadoUsuario(cedula, "Activo");
                 } 
+            }
+            else{
+                throw new NoResultException("No se encontraron datos del usuario");
+            }
+        }catch (NoResultException ex) {
+            throw new ExcepcionGenerica("No se encontraron datos del usuario");
+        } catch (NullPointerException ex) {
+            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
+        } catch (Exception ex) {
+            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+        }
+    }
+
+     /**Metodo que trae los datos del usuario con el parametro cedula para llamar la 
+     * consulta que busca la lista de actividades del usuario 
+     * 
+     * @param cedula
+     * @return 
+     * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
+     **/
+    @Override
+    public List<ActividadPOJO> listarActividadesUsuario(int cedula) throws ExcepcionGenerica {
+        try{
+          UsuarioPOJO usuarioResultado=usuarioDB.buscarUsuarioEspecifico(cedula);
+            if(usuarioResultado != null){            
+                List<ActividadPOJO> listaActividades = new ArrayList();
+                listaActividades= actividadDB.listarActividadesUsuario(usuarioResultado.getId());
+                return listaActividades;
             }
             else{
                 throw new NoResultException("No se encontraron datos del usuario");

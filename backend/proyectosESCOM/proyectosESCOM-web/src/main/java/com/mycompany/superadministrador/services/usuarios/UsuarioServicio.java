@@ -1,5 +1,6 @@
 package com.mycompany.superadministrador.services.usuarios;
 
+import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.POJO.Respuesta;
 import com.mycompany.superadministrador.POJO.TipoDocumentoPOJO;
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
@@ -153,6 +154,27 @@ public class UsuarioServicio {
             usuarioLogica.cambiarEstadoUsuario(cedula);
             respuesta.setRespuesta("Estado cambiado correctamente");
             return Response.status(Response.Status.OK).entity(respuesta).build();
+        } catch (ExcepcionGenerica e) {
+            respuesta.setRespuesta("Sin acceso al servicio");
+            return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
+        } catch (Exception e) {
+            respuesta.setRespuesta("Ocurrio un error en el servidor ");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
+        }
+    }
+    
+     /**Servicio que lista las actividades de un usuario especifico, recibe como parametro la cedula 
+     * 
+     * @param cedula
+     * @return  **/
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/listarActividadesUsuario/{cedula}")
+    public Response listarActividadesUsuario(@PathParam("cedula") int cedula) {
+        try {
+            List<ActividadPOJO> listaActividades = usuarioLogica.listarActividadesUsuario(cedula);
+           
+            return Response.status(Response.Status.OK).entity(listaActividades).build();
         } catch (ExcepcionGenerica e) {
             respuesta.setRespuesta("Sin acceso al servicio");
             return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();

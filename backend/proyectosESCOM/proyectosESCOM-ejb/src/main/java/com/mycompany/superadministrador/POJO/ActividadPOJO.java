@@ -11,10 +11,20 @@ package com.mycompany.superadministrador.POJO;
  */
 public class ActividadPOJO {
     
+    private int idActividad;
     private String nombre;
 
     public ActividadPOJO() {
     }
+
+    public int getIdActividad() {
+        return idActividad;
+    }
+
+    public void setIdActividad(int idActividad) {
+        this.idActividad = idActividad;
+    }
+    
 
     public String getNombre() {
         return nombre;
