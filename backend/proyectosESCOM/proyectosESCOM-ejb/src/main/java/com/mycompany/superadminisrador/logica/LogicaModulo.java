@@ -49,6 +49,52 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
             throw new ExcepcionGenerica("Ocurrio una excepcion ");
         }
     }
+    
+    /**Metodo que llama a la consulta que devuelve los datos del modulo recibiendo el id
+     * @param idModulo
+     * @return 
+     * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
+     **/
+    @Override
+    public ModuloPOJO traerModuloId(int idModulo) throws ExcepcionGenerica {
+        try{
+          ModuloPOJO moduloResultado=moduloDB.buscarModuloEspecifico(idModulo);
+            if(moduloResultado != null){
+                return moduloResultado;
+            }
+            else{
+                throw new NoResultException("No se encontraron datos del modulo");
+            }
+        }catch (NoResultException ex) {
+            throw new ExcepcionGenerica("No se encontraron datos del modulo");
+        } catch (NullPointerException ex) {
+            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
+        } catch (Exception ex) {
+            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+        }
+    }
+    
+     /**Metodo que llama a la consulta para editar modulo recibiendo como parametro el id
+     *  
+     * @param idModulo
+     * @param moduloEditar
+     * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
+     **/
+    @Override
+    public void editarModulo(int idModulo, ModuloPOJO moduloEditar) throws ExcepcionGenerica {
+         try{
+                moduloDB.editarModulo(idModulo, moduloEditar);
+                
+        } catch (NullPointerException ex) {
+            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la modificacion del usuario ");
+        } catch (NoResultException ex) {
+            throw new ExcepcionGenerica("El usuario no existe");
+        } catch (Exception ex) {
+            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+        }
+        
+    }
+
 
     /**Metodo que llama a la consulta para buscar la lista de actividades de un modulo
      * 

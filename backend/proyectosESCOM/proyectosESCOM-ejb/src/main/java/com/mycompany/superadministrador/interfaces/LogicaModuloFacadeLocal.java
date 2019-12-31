@@ -20,6 +20,10 @@ public interface LogicaModuloFacadeLocal {
     
     public List<ModuloPOJO> devolverModulos()throws ExcepcionGenerica;
     
+    public ModuloPOJO traerModuloId(int idModulo) throws ExcepcionGenerica;
+    
     public List<ActividadPOJO> listarActividadesModulo(int idModulo) throws ExcepcionGenerica;
+    
+    public void editarModulo(int idModulo, ModuloPOJO moduloEditar) throws ExcepcionGenerica;
     
 }

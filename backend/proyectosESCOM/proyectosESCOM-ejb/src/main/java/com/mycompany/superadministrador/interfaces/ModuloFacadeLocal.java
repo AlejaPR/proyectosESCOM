@@ -33,4 +33,8 @@ public interface ModuloFacadeLocal {
     
     public List<ModuloPOJO> listarModulos();
     
+    public ModuloPOJO buscarModuloEspecifico(int idModulo);
+    
+    public void editarModulo(int idModulo, ModuloPOJO moduloEditar);
+    
 }

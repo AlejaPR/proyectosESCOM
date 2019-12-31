@@ -13,15 +13,16 @@ import com.mycompany.superadministrador.utilitarios.ExcepcionGenerica;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 /**
+ * Clase encargada de manejar todos los servicios referente al modulo
  *
- * @author aleja
+ * @author jeison gaona - alejandra pabon
  */
 @javax.enterprise.context.RequestScoped
 @Path("modulo")
@@ -49,6 +50,48 @@ public class ModuloServicio {
             return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
         } catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error en el servidor ");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
+        }
+    }
+    
+    /**Servicio que lista los datos de un modulo especifico consultado con el id
+     * 
+     * @param idModulo
+     * @return  **/
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/datosModulo/{idModulo}")
+    public Response listarModuloId(@PathParam("idModulo") int idModulo) {
+        try {
+            ModuloPOJO moduloDatos = moduloLogica.traerModuloId(idModulo);
+            return Response.status(Response.Status.OK).entity(moduloDatos).build();
+        } catch (ExcepcionGenerica e) {
+            respuesta.setRespuesta("Sin acceso al servicio");
+            return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
+        } catch (Exception e) {
+            respuesta.setRespuesta("Ocurrio un error en el servidor ");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
+        }
+    }
+    
+     /**Servicio que permite la edicion de modulos
+     * 
+     * @param idModulo
+     * @param moduloEditar
+     * @return  **/
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/editarModulo/{idModulo}")
+    public Response editarModulo(@PathParam("idModulo") int idModulo, ModuloPOJO moduloEditar ) {
+        try {
+            moduloLogica.editarModulo(idModulo, moduloEditar);
+            respuesta.setRespuesta("Modulo modificado correctamente");
+            return Response.status(Response.Status.OK).entity(respuesta).build();
+        }catch (ExcepcionGenerica e) {
+            respuesta.setRespuesta("No se ha podido modificar el modulo");
+            return Response.status(Response.Status.NOT_ACCEPTABLE).entity(respuesta).build();
+        }catch (Exception e) {
+            respuesta.setRespuesta("Ocurrio un error interno del servidor");
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }

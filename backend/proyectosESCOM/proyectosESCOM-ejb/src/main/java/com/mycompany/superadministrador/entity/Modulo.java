@@ -29,7 +29,8 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "TBL_MODULO")
 @NamedQueries({
-    @NamedQuery(name = "consultaModulos", query = "SELECT m FROM Modulo m")
+    @NamedQuery(name = "consultaModulos", query = "SELECT m FROM Modulo m"),
+    @NamedQuery(name = "consultaModuloEsp", query = "SELECT m from Modulo m WHERE m.pkModIdmodulo=:idModulo")
    
 })
 public class Modulo implements Serializable{
