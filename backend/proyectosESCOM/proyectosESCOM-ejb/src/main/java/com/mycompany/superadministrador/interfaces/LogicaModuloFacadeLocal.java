@@ -26,4 +26,6 @@ public interface LogicaModuloFacadeLocal {
     
     public void editarModulo(int idModulo, ModuloPOJO moduloEditar) throws ExcepcionGenerica;
     
+    public void cambiarEstadoModulo(int idModulo) throws ExcepcionGenerica;
+    
 }

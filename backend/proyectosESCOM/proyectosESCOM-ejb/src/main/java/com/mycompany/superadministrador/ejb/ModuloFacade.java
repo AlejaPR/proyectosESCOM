@@ -94,5 +94,21 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
                 .executeUpdate();
       
     }
+    
+     /**Metodo que realiza el cambio de estado de un modulo
+       Recibe id para filtrar la busqueda y el valor del estado
+     * @param idModulo
+     * @param estado
+     * 
+       **/
+    @Override
+    public void cambiarEstadoModulo(int idModulo, String estado) {
+        
+        em.createNativeQuery("UPDATE TBL_MODULO SET MOD_ESTADO=? WHERE PK_MOD_IDMODULO=?")
+                .setParameter(1, estado)
+                .setParameter(2, idModulo)
+                .executeUpdate();
+    }
+    
 
 }

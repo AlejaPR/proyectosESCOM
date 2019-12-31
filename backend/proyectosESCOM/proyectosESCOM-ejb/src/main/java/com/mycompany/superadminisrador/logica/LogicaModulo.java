@@ -94,6 +94,34 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
         }
         
     }
+    
+     /**Metodo que llama a la consulta para cambiar el estado del modulo recibiendo como parametro el id
+     *  
+     * @param idModulo
+     * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
+     **/
+    @Override
+    public void cambiarEstadoModulo(int idModulo) throws ExcepcionGenerica {
+        try{
+          ModuloPOJO moduloResultado=moduloDB.buscarModuloEspecifico(idModulo);
+            if(moduloResultado != null){
+                if(moduloResultado.getEstadoModulo().equals("Activo")){
+                    moduloDB.cambiarEstadoModulo(idModulo, "Suspendido");
+                }else if(moduloResultado.getEstadoModulo().equals("Suspendido")){
+                    moduloDB.cambiarEstadoModulo(idModulo, "Activo");
+                } 
+            }
+            else{
+                throw new NoResultException("No se encontraron datos del usuario");
+            }
+        }catch (NoResultException ex) {
+            throw new ExcepcionGenerica("No se encontraron datos del usuario");
+        } catch (NullPointerException ex) {
+            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
+        } catch (Exception ex) {
+            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+        }
+    }
 
 
     /**Metodo que llama a la consulta para buscar la lista de actividades de un modulo

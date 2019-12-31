@@ -96,6 +96,27 @@ public class ModuloServicio {
         }
     }
     
+    /**Servicio que habilita o deshabilita un modulo recibe como parametro el id
+     * 
+     * @param idModulo
+     * @return  **/
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/cambiarEstadoModulo/{idModulo}")
+    public Response cambiarEstadoModulo(@PathParam("idModulo") int idModulo) {
+        try {
+            moduloLogica.cambiarEstadoModulo(idModulo);
+            respuesta.setRespuesta("Estado cambiado correctamente");
+            return Response.status(Response.Status.OK).entity(respuesta).build();
+        } catch (ExcepcionGenerica e) {
+            respuesta.setRespuesta("Sin acceso al servicio");
+            return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
+        } catch (Exception e) {
+            respuesta.setRespuesta("Ocurrio un error en el servidor ");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
+        }
+    }
+    
      /**Servicio que lista las actividades de un modulo especifico, recibe como parametro el id 
      * 
      * @param idModulo

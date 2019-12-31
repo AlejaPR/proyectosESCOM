@@ -37,4 +37,6 @@ public interface ModuloFacadeLocal {
     
     public void editarModulo(int idModulo, ModuloPOJO moduloEditar);
     
+    public void cambiarEstadoModulo(int idModulo, String estado);
+    
 }
