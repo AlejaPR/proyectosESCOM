@@ -9,6 +9,7 @@ import { reduxForm, Field } from 'redux-form';
 import { actionLoginUsuario } from '../../actions/actionsUsuario.js'
 import { connect } from 'react-redux';
 import { requerido, correo } from '../../utilitario/validacionCampos.js';
+
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { withRouter } from 'react-router-dom';
 
@@ -25,6 +26,7 @@ class Login extends React.Component {
 	}
 
 	habilitarBoton = (valor) => {
+		
 		if (!this.state.habilitado) {
 			this.setState({
 				habilitado: valor
@@ -33,7 +35,6 @@ class Login extends React.Component {
 	}
 
 	handleSubmit = formValues => {
-		this.setState({ habilitado: true });
 		this.props.actionLoginUsuario(formValues.correo, formValues.contrasena, this.habilitarBoton);
 	}
 
@@ -78,7 +79,9 @@ class Login extends React.Component {
 														<Button style={fondoBoton} disabled={this.state.habilitado} type="submit">Iniciar sesion</Button>
 
 													</div>
-													{this.state.habilitado ? <div className="col-sm-2 center"><CircularProgress color="secondary" /></div> : <div></div>}
+													{
+														this.state.habilitado ? <div className="col-sm-2 center"><CircularProgress color="secondary" /></div> : <div></div>
+													}
 												</div>
 											</form>
 										</div>

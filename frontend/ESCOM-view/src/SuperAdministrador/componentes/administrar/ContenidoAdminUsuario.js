@@ -12,7 +12,8 @@ import Barra from '../general/BarraDirecciones.js'
 import PopUpUsuario from '../popup/PopUpUsuario.js'
 import Fila from '../general/FilaTablaUsuario.js'
 import { Button } from 'reactstrap';
-
+import MaterialTable from 'material-table';
+import MTableToolbar from '../../utilitario/MTableToolbar.js';
 
 //redux conexion
 import { connect } from 'react-redux';
@@ -20,8 +21,11 @@ import { actionConsultarUsuarios } from '../../actions/actionsUsuario.js'
 
 class ContenidoAdminUsuario extends React.Component {
 
+
+	componentDidMount() {
+		this.props.actionConsultarUsuarios(localStorage.getItem('Token'));
+	}
 	componentWillMount() {
-		this.props.actionConsultarUsuarios();
 	}
 
 	renderTableData() {
@@ -47,12 +51,6 @@ class ContenidoAdminUsuario extends React.Component {
 					paddingLeft: "40px",
 					paddingBottom: "7px",
 				}}>
-					<div className="input-group">
-						<input type="text" style={{ fontSize: "14px" }} className="form-control" placeholder="" />
-						<span className="input-group-btn">
-							<Button style={fondoBoton}>Buscar</Button>
-						</span>
-					</div>
 				</div>
 				<div className="container" style={{
 					paddingTop: "7px",
@@ -62,26 +60,80 @@ class ContenidoAdminUsuario extends React.Component {
 					margin: "0px 0px 32px"
 				}}>
 					<div className="container shadow" style={fondoBarraSuperior}>
-						<br />
-						<PopUpUsuario funcion={this.anadirTarea} />
-						<br />
-						<div className="jumbotron p-1 jumbotron-fluid" style={fondoTabla}>
-							<table className="table table-hover table-bordered table-checkable" style={fondoBarraSuperior}>
-								<thead className="table table-hover table-striped col-md-12">
-									<tr>
-										<th className="letra"> Nombre </th>
-										<th className="letra">Cedula </th>
-										<th className="letra"> Correo </th>
-										<th className="letra"> Estado </th>
-										<th className="letra"> Acciones </th>
-									</tr>
-								</thead>
-								<tbody>
-									{
-										this.renderTableData()
+						<div>
+							<MaterialTable
+								title=""
+								localization={{
+									header: {
+										actions: ' '
+									},
+									pagination: {
+										nextTooltip: 'Siguiente ',
+										previousTooltip: 'Anterior',
+										labelDisplayedRows: '{from}-{to} de {count}',
+										lastTooltip: 'Ultima pagina',
+										firstTooltip: 'Primera pagina',
+										labelRowsSelect: 'Registros',
+										firstAriaLabel: 'oooo'
+									},
+									body: {
+										emptyDataSourceMessage: 'Aun no hay ningun usuario registrado'
+									},
+									toolbar: {
+										searchTooltip: 'Buscar',
+										searchPlaceholder: 'Buscar'
 									}
-								</tbody>
-							</table>
+								}}
+								columns={[
+									{
+										title: 'Numero de identificacion', field: 'numeroDocumento', type: 'numeric',
+										headerStyle: estiloCabecera,
+										cellStyle: estiloFila
+									},
+									{ title: 'Nombre', field: 'nombre', headerStyle: estiloCabecera, cellStyle: estiloFila },
+									{ title: 'Correo electronico', field: 'correoElectronico', headerStyle: estiloCabecera, cellStyle: estiloFila },
+									{ title: 'Estado', field: 'estado', headerStyle: estiloCabecera, cellStyle: estiloFila },
+								]}
+								data={this.props.usuarios}
+								options={{
+									search: true,
+									rowStyle: estiloFila
+
+								}}
+								actions={[
+									{
+										icon: 'edit',
+										tooltip: 'Editar informacion',
+										onClick: (event, rowData) => alert("You saved " + rowData.numeroDocumento)
+									},
+									{
+										icon: 'restore',
+										tooltip: 'Suspender / Activar',
+										onClick: (event, rowData) => alert("You saved " + rowData.numeroDocumento)
+									},
+									{
+										icon: 'assignmentInd',
+										tooltip: 'Asignar actividad',
+										onClick: (event, rowData) => alert("You saved " + rowData.numeroDocumento)
+									}
+								]}
+
+								components={{
+									Toolbar: props => (
+										<div className="row">
+											<div className="col-sm-4">
+												<div style={{padding:'16px'}}>
+												<PopUpUsuario funcion={this.anadirTarea} />
+												</div>
+											</div>
+											<div className="col-sm-8">
+												<MTableToolbar {...props} />
+											</div>
+										</div>
+									),
+								}}
+
+							/>
 						</div>
 					</div>
 				</div>
@@ -99,6 +151,20 @@ const fondoBoton = {
 
 }
 
+const estiloCabecera = {
+	fontSize: '13px',
+	fontFamily: 'sans-serif',
+	padding: '8px',
+	background: '#e7ecf1'
+
+}
+
+const estiloFila = {
+	fontSize: '12px',
+	fontFamily: 'sans-serif',
+	padding: '8px',
+}
+
 const estiloLetrero = {
 	paddingTop: "20px",
 	paddingRight: "12px",
@@ -107,8 +173,8 @@ const estiloLetrero = {
 }
 
 const fondoBarraSuperior = {
-	background: "#FFFFFF"
-
+	background: "#FFFFFF",
+	padding: '30px'
 }
 
 const fondoTabla = {
@@ -116,9 +182,9 @@ const fondoTabla = {
 }
 
 function mapStateToProps(state) {
-    return {
-        usuarios:state.user.usuariosRegistrados
-    }
+	return {
+		usuarios: state.user.usuariosRegistrados
+	}
 }
 
 

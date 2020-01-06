@@ -15,8 +15,9 @@ import { NotificationContainer, NotificationManager } from 'react-notifications'
 import { reduxForm, Field } from 'redux-form';
 
 //redux
-import { actionAgregarUsuario } from '../../actions/actionsUsuario.js'
+import { actionAgregarUsuario, actionConsultarDocumentos, actualizarMensajeRegistrar } from '../../actions/actionsUsuario.js'
 import { connect } from 'react-redux';
+import { fechaNacimiento, seleccione } from '../../utilitario/validacionCampos.js';
 
 class PopUpUsuario extends React.Component {
   constructor(props) {
@@ -26,6 +27,25 @@ class PopUpUsuario extends React.Component {
       modal: false
     }
     this.toggle = this.toggle.bind(this);
+  }
+
+  componentDidUpdate() {
+    if (this.props.mensaje === 'Ya existen los datos registrados previamente') {
+      NotificationManager.warning('El correo o numero de identificacion ya estan registrados');
+      this.props.reset();
+      this.props.actualizarMensajeRegistrar('');
+    } else if (this.props.mensaje === 'Usuario registrado') {
+      NotificationManager.info('Usuario registrado correctamente');
+      this.props.actualizarMensajeRegistrar('');
+    } else if (this.props.mensaje === 'No tiene los permisos suficientes para registrar un usuario') {
+      NotificationManager.error('No tiene los permisos suficientes para registrar un usuario');
+      this.props.reset();
+      this.props.actualizarMensajeRegistrar('');
+    }
+  }
+
+  componentWillMount() {
+    this.props.actionConsultarDocumentos(localStorage.getItem('Token'));
   }
 
   toggle() {
@@ -43,20 +63,28 @@ class PopUpUsuario extends React.Component {
       let usuario = {
         'nombre': formValues.nombre,
         'apellido': formValues.apellido,
-        'tipoDocumento': 1,
+        'tipoDocumento': formValues.tipoDocumento,
         'numeroDocumento': formValues.numeroDocumento,
         'correoElectronico': formValues.correo,
         'contrasena': contrasenaEncryp,
-        'fechaNacimiento': date
+        'fechaNacimiento': date,
+        'estado':'Activo'
       };
-
       this.props.actionAgregarUsuario(usuario, localStorage.getItem('Token'));
       this.props.reset();
-      NotificationManager.success('Usuario registrado')
-
     } catch (error) {
       NotificationManager.error('Ingrese todos los datos');
     }
+
+  }
+
+  cargarDocumentos() {
+    return this.props.documentos.map((documento, index) => {
+      const { idTipoDocumento, tipoDocumento } = documento //destructuring
+      return (
+        <option className="letra" style={{ height: "35px", fontSize: "13px" }} value={idTipoDocumento}>{tipoDocumento}</option>
+      )
+    })
 
   }
 
@@ -86,9 +114,9 @@ class PopUpUsuario extends React.Component {
                     <span className="letra">Tipo de documento </span>
                   </div>
                   <div className="col-sm-7">
-                    <Field name="favoriteColor" style={{ height: "35px", fontSize: "13px" }} className="form-control" component="select">
-                      <option className="letra" style={{ height: "35px", fontSize: "13px" }} value="1">Cedula de ciudadania</option>
-                      <option className="letra" style={{ height: "35px", fontSize: "13px" }} value="2">Tarjeta de identidad</option>
+                    <Field name="tipoDocumento" validate={[seleccione]} style={{ height: "35px", fontSize: "13px" }} className="form-control" component={generarSelect} label="Username">
+                      <option className="letra" style={{ height: "35px", fontSize: "13px" }} value="0">Seleccione</option>
+                      {this.props.documentos.map(documento => <option key={documento.idTipoDocumento} className="letra" style={{height:"35px",fontSize:"13px"}} value={documento.idTipoDocumento}>{documento.tipoDocumento}</option>)}
                     </Field>
                   </div>
                 </div>
@@ -113,7 +141,7 @@ class PopUpUsuario extends React.Component {
                 <br />
                 <div className="row">
                   <div className="col-sm-12">
-                    <Field name="fechaNacimiento" type="date" component={generarInput} label="Fecha de nacimiento" />
+                    <Field name="fechaNacimiento" type="date" validate={[fechaNacimiento]} component={generarInput} label="Fecha de nacimiento" />
                   </div>
                 </div>
               </div>
@@ -129,6 +157,19 @@ class PopUpUsuario extends React.Component {
     );
   }
 }
+
+const generarSelect = ({ input, label, type, meta: { touched, error }, children }) => (
+  <div>
+    <div>
+      <select {...input} className="form-control letra" style={{height:"35px",fontSize:"13px"}}>
+        {children}
+      </select>
+      {touched && ((error && <span className="text-danger letra form-group">{error}</span>))}
+    </div>
+  </div>
+)
+
+
 
 const generarInput = ({ input, label, type, meta: { touched, error, warning } }) => (
   <div>
@@ -187,7 +228,9 @@ function mapStateToProps(state) {
 
   return {
     users: state.user.list,
-    token: state.user.token
+    token: state.user.token,
+    documentos: state.user.tiposDocumento,
+    mensaje: state.user.mensajeRegistrar
   }
 }
 
@@ -195,4 +238,4 @@ let formulario = reduxForm({
   form: 'registrarUsuario', validate
 })(PopUpUsuario)
 
-export default connect(mapStateToProps, { actionAgregarUsuario })(formulario);
+export default connect(mapStateToProps, { actionAgregarUsuario, actionConsultarDocumentos, actualizarMensajeRegistrar })(formulario);

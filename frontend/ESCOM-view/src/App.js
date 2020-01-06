@@ -69,7 +69,7 @@ class App extends React.Component {
 					onIdle={this.onIdle}
 					onAction={this.onAction}
 					debounce={250}
-					timeout={1000 * 60 * 1} />
+					timeout={1000 * 60 * 10} />
 				<Router>
 					<Switch>
 						{/*Ruta para inicio*/}

@@ -2,6 +2,7 @@ import React from 'react';
 import { confirmAlert } from 'react-confirm-alert'; // Import
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 
+import CreateTwoToneIcon from '@icons/material/AlertIcon.js';
 
 //estilos
 import '../../css/business-casual.css'
@@ -13,6 +14,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 //redux
 import { actionAsignarCedula, actionActualizarUsuarios } from '../../actions/actionsUsuario.js';
 import { connect } from "react-redux";
+import { Button } from 'reactstrap';
 
 class FilaTablaUsuario extends React.Component {
 	eventoBorrado = (evento) => {
@@ -31,11 +33,11 @@ class FilaTablaUsuario extends React.Component {
 						label: 'Si',
 						onClick: () => {
 							// this.props.usuario
-							const respuesta = fetch('http://localhost:9090/SuperadministradorESCOM-web/api/usu/' + this.props.usuario.cedula+"/Suspendido",
-								{ method: 'put' }).then(response=>{
+							const respuesta = fetch('http://localhost:9090/SuperadministradorESCOM-web/api/usu/' + this.props.usuario.cedula + "/Suspendido",
+								{ method: 'put' }).then(response => {
 									console.log(response.status);
 								});
-							
+
 							this.actualiza(this.props.usuario.cedula);
 							NotificationManager.success('Operacion realizada con exito')
 						}
@@ -85,7 +87,7 @@ class FilaTablaUsuario extends React.Component {
 		if (this.props.usuario.estado === 'Suspendido') {
 			return {
 				textShadow: "none!important",
-				fontSize: "14px",
+				fontSize: "12px",
 				fontFamily: "Open Sans,sans-serif",
 				fontWeight: "300",
 				padding: "3px 6px",
@@ -96,7 +98,7 @@ class FilaTablaUsuario extends React.Component {
 		} else {
 			return {
 				textShadow: "none!important",
-				fontSize: "14px",
+				fontSize: "12px",
 				fontFamily: "Open Sans,sans-serif",
 				fontWeight: "300",
 				padding: "3px 6px",
@@ -110,21 +112,20 @@ class FilaTablaUsuario extends React.Component {
 
 
 	render() {
-		const { nombre, correo, cedula, estado } = this.props.usuario;
+		const { nombre, correoElectronico, numeroDocumento, estado } = this.props.usuario;
 		return (
 
-			<tr key={cedula}>
+			<tr key={numeroDocumento}>
 				<td className="letra">{nombre}</td>
-				<td className="letra">{cedula}</td>
-				<td className="letra">{correo}</td>
+				<td className="letra">{numeroDocumento}</td>
+				<td className="letra">{correoElectronico}</td>
 				<td><span className="label label-sm letra" style={this.estilocompletado()}>{estado}</span></td>
 				<td>
-					<select class="letra dropdown-toggle btn-sm  btn-dark" id="selectDDL" onChange={this.eventoBorrado} title="ACCIONES">
-						<option className="letra" value="0">Seleccione...</option>
-						<option className="letra" value="1">Editar informacion</option>
-						<option className="letra" value="2">Suspender/Activar</option>
-						<option className="letra" value="3">Asignar una actividad</option>
-					</select>
+					<Button type="submit"><CreateTwoToneIcon /></Button>
+					<Button type="submit"><CreateTwoToneIcon /></Button>
+					<Button type="submit"><CreateTwoToneIcon /></Button>
+					<Button type="submit"><CreateTwoToneIcon /></Button>
+
 				</td>
 				<NotificationContainer />
 			</tr>
