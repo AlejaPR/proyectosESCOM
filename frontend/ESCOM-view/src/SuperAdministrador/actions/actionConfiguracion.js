@@ -1,5 +1,5 @@
 
-import axios from 'axios';
+// import axios from 'axios';
 
 export const MOSTRAR_CONFIGURACION = 'MOSTRAR_CONFIGURACION'
 export const ACTUALIZAR_BARRALATERAL= 'ACTUALIZAR_BARRALATERAL'

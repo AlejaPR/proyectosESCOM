@@ -13,15 +13,16 @@ import 'react-notifications/lib/notifications.css';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { reduxForm, Field } from 'redux-form';
+import { withRouter } from 'react-router-dom';
+
 
 //redux
 import { actionAgregarUsuario, actionConsultarDocumentos, actualizarMensajeRegistrar } from '../../actions/actionsUsuario.js'
 import { connect } from 'react-redux';
-import { fechaNacimiento, seleccione } from '../../utilitario/validacionCampos.js';
+import { fechaNacimiento, seleccione, nombre, apellido, contrasena, correo, documentoIdentificacion, requerido } from '../../utilitario/validacionCampos.js';
 
 class PopUpUsuario extends React.Component {
   constructor(props) {
-
     super(props);
     this.state = {
       modal: false
@@ -30,17 +31,31 @@ class PopUpUsuario extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.props.mensaje === 'Ya existen los datos registrados previamente') {
-      NotificationManager.warning('El correo o numero de identificacion ya estan registrados');
-      this.props.reset();
-      this.props.actualizarMensajeRegistrar('');
-    } else if (this.props.mensaje === 'Usuario registrado') {
-      NotificationManager.info('Usuario registrado correctamente');
-      this.props.actualizarMensajeRegistrar('');
-    } else if (this.props.mensaje === 'No tiene los permisos suficientes para registrar un usuario') {
-      NotificationManager.error('No tiene los permisos suficientes para registrar un usuario');
-      this.props.reset();
-      this.props.actualizarMensajeRegistrar('');
+    if (this.props.mensaje !== '') {
+      switch (this.props.mensaje) {
+        case 'Usuario registrado':
+          NotificationManager.info('Usuario registrado correctamente');
+          this.props.actualizarMensajeRegistrar('');
+          break;
+        case 'Sin permiso':
+          NotificationManager.error('No tiene los permisos suficientes para registrar un usuario');
+          this.props.reset();
+          this.props.actualizarMensajeRegistrar('');
+          break;
+        case 'Ya existen los datos registrados previamente':
+          NotificationManager.warning('El correo o numero de identificacion ya estan registrados');
+          this.props.reset();
+          this.props.actualizarMensajeRegistrar('');
+          break;
+        case 'Servidor fuera de servicio temporalmente':
+          NotificationManager.error('Servidor fuera de servicio temporalmente');
+          this.props.reset();
+          this.props.actualizarMensajeRegistrar('');
+          break;
+        default:
+          this.props.history.push('/');
+          break;
+      }
     }
   }
 
@@ -68,7 +83,7 @@ class PopUpUsuario extends React.Component {
         'correoElectronico': formValues.correo,
         'contrasena': contrasenaEncryp,
         'fechaNacimiento': date,
-        'estado':'Activo'
+        'estado': 'Activo'
       };
       this.props.actionAgregarUsuario(usuario, localStorage.getItem('Token'));
       this.props.reset();
@@ -103,9 +118,9 @@ class PopUpUsuario extends React.Component {
               <div className="contenedor-inputs">
                 <div className="row">
                   <div className="col-sm-12">
-                    <Field name="nombre" component={generarInput} label="Nombre" />
+                    <Field name="nombre" validate={[requerido, nombre]} component={generarInput} label="Nombre" />
                     <br />
-                    <Field name="apellido" component={generarInput} label="Apellido" />
+                    <Field name="apellido" validate={[requerido, apellido]} component={generarInput} label="Apellido" />
                     <br />
                   </div>
                 </div>
@@ -116,32 +131,32 @@ class PopUpUsuario extends React.Component {
                   <div className="col-sm-7">
                     <Field name="tipoDocumento" validate={[seleccione]} style={{ height: "35px", fontSize: "13px" }} className="form-control" component={generarSelect} label="Username">
                       <option className="letra" style={{ height: "35px", fontSize: "13px" }} value="0">Seleccione</option>
-                      {this.props.documentos.map(documento => <option key={documento.idTipoDocumento} className="letra" style={{height:"35px",fontSize:"13px"}} value={documento.idTipoDocumento}>{documento.tipoDocumento}</option>)}
+                      {this.props.documentos.map(documento => <option key={documento.idTipoDocumento} className="letra" style={{ height: "35px", fontSize: "13px" }} value={documento.idTipoDocumento}>{documento.tipoDocumento}</option>)}
                     </Field>
                   </div>
                 </div>
                 <br />
                 <div className="row">
                   <div className="col-sm-12">
-                    <Field name="numeroDocumento" component={generarInput} label="Numero de documento" />
+                    <Field name="numeroDocumento" validate={[requerido, documentoIdentificacion]} component={generarInput} label="Numero de documento" />
                   </div>
                 </div>
                 <br />
                 <div className="row">
                   <div className="col-sm-12">
-                    <Field name="correo" component={generarInput} label="Correo electronico" />
+                    <Field name="correo" validate={[requerido, correo]} component={generarInput} label="Correo electronico" />
                   </div>
                 </div>
                 <br />
                 <div className="row">
                   <div className="col-sm-12">
-                    <Field name="contrasena" type="password" component={generarInput} label="Contraseña" />
+                    <Field name="contrasena" validate={[requerido, contrasena]} type="password" component={generarInput} label="Contraseña" />
                   </div>
                 </div>
                 <br />
                 <div className="row">
                   <div className="col-sm-12">
-                    <Field name="fechaNacimiento" type="date" validate={[fechaNacimiento]} component={generarInput} label="Fecha de nacimiento" />
+                    <Field name="fechaNacimiento" type="date" validate={[requerido, fechaNacimiento]} component={generarInput} label="Fecha de nacimiento" />
                   </div>
                 </div>
               </div>
@@ -161,15 +176,13 @@ class PopUpUsuario extends React.Component {
 const generarSelect = ({ input, label, type, meta: { touched, error }, children }) => (
   <div>
     <div>
-      <select {...input} className="form-control letra" style={{height:"35px",fontSize:"13px"}}>
+      <select {...input} className="form-control letra" style={{ height: "35px", fontSize: "13px" }}>
         {children}
       </select>
       {touched && ((error && <span className="text-danger letra form-group">{error}</span>))}
     </div>
   </div>
 )
-
-
 
 const generarInput = ({ input, label, type, meta: { touched, error, warning } }) => (
   <div>
@@ -180,35 +193,6 @@ const generarInput = ({ input, label, type, meta: { touched, error, warning } })
   </div>
 )
 
-const validate = values => {
-  const errors = {}
-  if (!values.nombre) {
-    errors.nombre = 'Este campo es obligatorio *'
-  } else if (values.nombre.length < 2) {
-    errors.nombre = 'Ingrese mas de dos caracteres'
-  }
-  if (!values.apellido) {
-    errors.apellido = 'Este campo es obligatorio *'
-  } else if (values.apellido.length < 2) {
-    errors.apellido = 'Ingrese mas de dos caracteres'
-  }
-  if (!values.numeroDocumento) {
-    errors.numeroDocumento = 'Este campo es obligatorio *'
-  } else if (values.numeroDocumento.length < 6) {
-    errors.numeroDocumento = 'El documento no es valido'
-  }
-  if (!values.correo) {
-    errors.correo = 'Este campo es obligatorio *'
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.correo)) {
-    errors.correo = 'El correo no tiene el formato correcto'
-  }
-  if (!values.contrasena) {
-    errors.contrasena = 'Este campo es obligatorio *'
-  } else if (!/^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,16}$/i.test(values.contrasena)) {
-    errors.contrasena = 'La contraseña debe tener entre 8 y 16 caracteres, al menos un dígito, al menos una minúscula y al menos una mayúscula.'
-  }
-  return errors
-}
 
 const fondoBoton = {
   background: "#ec671d",
@@ -225,7 +209,6 @@ const fondoBotonCancelar = {
 }
 
 function mapStateToProps(state) {
-
   return {
     users: state.user.list,
     token: state.user.token,
@@ -235,7 +218,7 @@ function mapStateToProps(state) {
 }
 
 let formulario = reduxForm({
-  form: 'registrarUsuario', validate
+  form: 'registrarUsuario'
 })(PopUpUsuario)
 
-export default connect(mapStateToProps, { actionAgregarUsuario, actionConsultarDocumentos, actualizarMensajeRegistrar })(formulario);
+export default withRouter(connect(mapStateToProps, { actionAgregarUsuario, actionConsultarDocumentos, actualizarMensajeRegistrar })(formulario));

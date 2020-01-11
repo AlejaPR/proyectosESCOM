@@ -18,7 +18,6 @@ import AdminModulo from './SuperAdministrador/componentes/administrar/ContenidoA
 import EditarModulo from './SuperAdministrador/componentes/editar/editarModulo.js';
 import AsignarActividadModulo from './SuperAdministrador/componentes/asignar/asignarActividadModulo.js';
 
-import Color from './SuperAdministrador/componentes/color.js';
 import Configuracion from './SuperAdministrador/componentes/administrar/ContenidoConfiguracion.js';
 //Administrar actividad
 import Actividad from './SuperAdministrador/componentes/administrar/ContenidoAdminActividad.js'
@@ -55,9 +54,6 @@ class App extends React.Component {
 		this.onIdle = this._onIdle.bind(this)
 	}
 
-	renderizarLogin = () => (
-		<Login />
-	)
 
 	render() {
 		return (
@@ -165,7 +161,7 @@ class App extends React.Component {
 								</div>
 							</>
 						</RutaProtegida>
-						<RutaProtegida path="configuracion">
+						<RutaProtegida path="/configuracion">
 							<>
 								<MenuLateral />
 								<MenuSuperior />
@@ -204,7 +200,7 @@ class App extends React.Component {
 function RutaProtegida({ children, ...rest }) {
 	let atributo = false;
 	let token = localStorage.getItem('Token');
-	if (token != ' ') {
+	if (token !== ' ') {
 		atributo = true;
 	}
 	return (

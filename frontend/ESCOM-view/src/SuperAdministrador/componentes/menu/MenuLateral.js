@@ -18,12 +18,7 @@ import Configuracion from '@icons/material/PaletteIcon';
 // import Libro from  '@icons/material/FileIcon';
 //lapiz @icons/material/PencilIcon';
 
-//imagenes
-import home from '../../imagenes/icon-home.png';
-import persona from '../../imagenes/icono-persona.png'
-import modulo from '../../imagenes/icono-modulo.png'
-import bombillo from '../../imagenes/icono-bombillo.png'
-import documento from '../../imagenes/icono-doc.png'
+
 import logo from '../../imagenes/logo.png'
 
 import { connect } from 'react-redux';
@@ -119,20 +114,6 @@ class MenuLateral extends React.Component {
 
 		)
 	}
-}
-const fondoMenuLateral = {
-	background: "red",
-	fontSize: "14px",
-	fontFamily: "Open sans, sans-serif"
-
-}
-
-
-const fondoHover = {
-	background: "#2b3b55",
-	fontSize: "14px",
-	fontFamily: "Open sans, sans-serif"
-
 }
 
 function mapStateToProps(state) {

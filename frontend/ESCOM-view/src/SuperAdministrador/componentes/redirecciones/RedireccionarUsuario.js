@@ -8,7 +8,12 @@ class MyComponent extends React.Component {
 
     state={
         editar: false,
-        asignar:false
+        asignar:false,
+        identificacion:''
+    }
+
+    guardarIdentificacion(identificacion){
+        this.setState({identificacion:identificacion})
     }
 
     cambiar=(objeto)=>{
@@ -27,14 +32,14 @@ class MyComponent extends React.Component {
 
     render() {
         if(this.state.editar){
-            return <Editar cambiar={this.cambiar} />;
+            return <Editar cambiar={this.cambiar} identificacion={this.state.identificacion}/>;
         }
 
         if(this.state.asignar){
             return <Redirect to='/asignarActividadUsuario' />;
         }
 
-        return <AdminUsuario funcionModificar={this.props.funcionModificar} cambiar={this.cambiar}/>
+        return <AdminUsuario guardar={this.guardarIdentificacion} cambiar={this.cambiar}/>
         
     }
 }

@@ -15,58 +15,79 @@ import 'react-notifications/lib/notifications.css';
 
 //componentes
 import { NotificationContainer, NotificationManager } from 'react-notifications';
-import { reduxForm, Field } from 'redux-form';
+import { withRouter } from 'react-router-dom';
+import { nombre,requerido,seleccione,apellido,fechaNacimiento,correo,contrasena, documentoIdentificacion} from '../../utilitario/validacionCampos.js';
+// import MaterialTable from 'material-table';
 
 //redux
-import { actionCargarInformacionDeUsuario, actionEditarUsuario } from '../../actions/actionsUsuario.js'
+import { actionCargarInformacionDeUsuario, actionEditarUsuario, actionConsultarDocumentos ,actionConsultarActividadesUsuario,actionActualizarUsuarios} from '../../actions/actionsUsuario.js'
 import { connect } from "react-redux";
-
+import { reduxForm, Field } from 'redux-form';
 
 
 class editar extends React.Component {
 
-  componentWillMount() {
-    console.log("Propiedades del editar", this.props);
-    this.props.actionCargarInformacionDeUsuario(this.props.cedula);
+  componentDidUpdate() {
+    console.log('this ',this.props)
+    if (this.props.mensajeEditar === 'Sin permiso') {
+      NotificationManager.error('No tiene permiso para editar la informacion de los usuarios');
+      this.props.history.push('/adminUsuario');
+    }
+  }
+
+  componentDidMount() {
+    if (this.props.cedula === undefined || this.props.cedula.length === 0) {
+      this.props.history.push('/adminUsuario');
+    } else {
+      this.props.actionCargarInformacionDeUsuario(this.props.cedula, localStorage.getItem('Token'), this.cambiarPermiso);
+      this.props.actionConsultarDocumentos(localStorage.getItem('Token'));
+      // this.props.actionConsultarActividadesUsuario(this.props.cedula,localStorage.getItem('Token'));
+    }
   }
 
   onClickCancelar = (event) => {
     event.preventDefault();
-    this.props.cambiar('c');
+    this.props.history.push('/adminUsuario');
   }
 
   handleSubmit = formValues => {
     let nuevo = [];
-    console.log("FORMULARIO ", formValues);
-    this.props.actuales.map((post, index) => {
-      if (post.cedula === this.props.cedula) {
+    let date = new Date(formValues.fechaNacimiento);
+    this.props.usuarios.map((post, index) => {
+      if (post.numeroDocumento === this.props.cedula) {
         let usuario = {
+          id:0,
+          correoElectronico: formValues.correo,
+          estado: post.estado,
+          numeroDocumento: formValues.numeroDocumento,
           nombre: formValues.nombre,
-          correo: formValues.correo,
-          cedula: formValues.numeroDocumento,
           apellido: formValues.apellido,
-          tipoDocumento: 1,
           contrasena: formValues.contrasena,
-          fechaNacimiento: "1997/12/18",
-          estado: post.estado
+          fechaNacimiento: date,
+          tipoDocumento: formValues.tipoDocumento,
+          token:''
         }
-        console.log('cedula es',this.props.cedula);
-        this.props.actionEditarUsuario(usuario, this.props.cedula);
+        console.log('usuario es',usuario);
+        this.props.actionEditarUsuario(usuario, this.props.cedula,localStorage.getItem('Token'));
         nuevo.push(usuario);
+        console.log('nuevo ',nuevo);
       } else {
         nuevo.push(post);
       }
     });
     NotificationManager.info('Informacion actualizada correctamente');
-    
-    // // this.props.anadirUser({ id: formValues.nombre, nombre: formValues.apellido })
+    console.log('actualizada',this.props.usuarios);
+    this.props.actionActualizarUsuarios([]);
+    this.props.actionActualizarUsuarios(nuevo);
+    this.props.history.push('/adminUsuario');
+
   }
 
   render() {
 
     return (
       <div>
-        <div class="text-left titulo letra" style={estiloLetrero}>
+        <div className="text-left titulo letra" style={estiloLetrero}>
           <h4>Editar usuario</h4>
         </div>
         <Barra texto="Inicio > Administracion de usuarios > Editar usuario" />
@@ -89,55 +110,55 @@ class editar extends React.Component {
               <div className="col-md-12 separador"></div>
               <form className="letra" onSubmit={this.props.handleSubmit(this.handleSubmit)}>
                 <br />
-                <label for="form_control_1">Nombre</label>
+                <label>Nombre</label>
                 <div className="row">
                   <div className="col-sm-5">
-                    <Field name="nombre" component={generarInput} label="Nombre" />
+                    <Field name="nombre" validate={[requerido,nombre]} component={generarInput} label="Nombre" />
                   </div>
                 </div>
                 <br />
-                <label for="form_control_1">Apellidos</label>
+                <label>Apellidos</label>
                 <div className="row">
                   <div className="col-sm-5">
-                    <Field name="apellido" component={generarInput} label="Apellido" />
+                    <Field name="apellido" validate={[requerido,apellido]} component={generarInput} label="Apellido" />
                   </div>
                 </div>
                 <br />
-                <label for="form_control_1">Tipo de documento</label>
+                <label>Tipo de documento</label>
                 <div className="row">
                   <div className="col-sm-5">
-                    <Field name="tipoDocumento" className="bs-select form-control" component="select">
-                      <option value="1">Cedula de ciudadania</option>
-                      <option value="2">Tarjeta de identidad</option>
+                    <Field name="tipoDocumento" validate={[seleccione]} style={{ height: "35px", fontSize: "13px" }} className="form-control" component={generarSelect} label="Username">
+                      <option className="letra" style={{ height: "35px", fontSize: "13px" }} value="0">Seleccione</option>
+                      {this.props.documentos.map(documento => <option key={documento.idTipoDocumento} className="letra" style={{ height: "35px", fontSize: "13px" }} value={documento.idTipoDocumento}>{documento.tipoDocumento}</option>)}
                     </Field>
                   </div>
                 </div>
                 <br />
-                <label for="form_control_1">Numero de documento</label>
+                <label>Numero de documento</label>
                 <div className="row">
                   <div className="col-sm-5">
-                    <Field name="numeroDocumento" component={generarInput} label="Numero de documento" />
+                    <Field name="numeroDocumento" type="number" validate={[requerido,documentoIdentificacion]} component={generarInput} label="Numero de documento" />
                   </div>
                 </div>
                 <br />
-                {/* <label for="form_control_3">Fecha de nacimiento</label>
-                <div className="row">
-                  <div className="col-sm-4">
-                    <Field name="fechaNacimiento" type="date" component={generarInput} label="Fecha de nacimiento" />
-                  </div>
-                </div> */}
-                <br />
-                <label for="form_control_1">Correo</label>
+                <label>Fecha de nacimiento</label>
                 <div className="row">
                   <div className="col-sm-5">
-                    <Field name="correo" component={generarInput} label="Correo electronico" />
+                    <Field name="fechaNacimiento" type="date" validate={[requerido,fechaNacimiento]}  component={generarInput} label="Fecha de nacimiento" />
                   </div>
                 </div>
                 <br />
-                <label for="form_control_1">Contraseña</label>
+                <label>Correo</label>
                 <div className="row">
                   <div className="col-sm-5">
-                    <Field name="contrasena" type="password" component={generarInput}  label="Contraseña" />
+                    <Field name="correo" validate={[requerido,correo]} component={generarInput} label="Correo electronico" />
+                  </div>
+                </div>
+                <br />
+                <label >Contraseña</label>
+                <div className="row">
+                  <div className="col-sm-5">
+                    <Field name="contrasena" validate={[contrasena]} type="password" component={generarInput} label="Contraseña" />
                   </div>
                 </div>
                 <br />
@@ -152,7 +173,7 @@ class editar extends React.Component {
           </div>
           <br />
           <br />
-          <div class="text-left titulo letra" style={estiloTitulo}>
+          <div className="text-left titulo letra" style={estiloTitulo}>
             <h4>Actividades actualmente asignadas al usuario</h4>
           </div>
           <div className="container shadow" style={
@@ -163,19 +184,33 @@ class editar extends React.Component {
               paddingLeft: "30px",
               paddingBottom: "0px"
             }}>
-            <table className="table table-hover table-bordered table-checkable">
-              <thead className="table table-hover table-striped col-md-12">
-                <tr>
-                  <th> Nombre </th>
-                  <th>Descripcion </th>
-                  <th> Modulo </th>
-                  <th> </th>
-                </tr>
-              </thead>
-              <tbody>
-
-              </tbody>
-            </table>
+            {/* <MaterialTable
+              title="Actions On Selected Rows Preview"
+              columns={[
+                { title: 'Name', field: 'name' },
+                { title: 'Surname', field: 'surname' },
+                { title: 'Birth Year', field: 'birthYear', type: 'numeric' },
+                {
+                  title: 'Birth Place',
+                  field: 'birthCity',
+                  lookup: { 34: 'İstanbul', 63: 'Şanlıurfa' },
+                },
+              ]}
+              data={[
+                { name: 'Mehmet', surname: 'Baran', birthYear: 1987, birthCity: 63 },
+                { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017, birthCity: 34 },
+              ]}
+              options={{
+                selection: true
+              }}
+              actions={[
+                {
+                  tooltip: 'Remove All Selected Users',
+                  icon: 'delete',
+                  onClick: (evt, data) => alert('You want to delete ' + data.length + ' rows')
+                }
+              ]}
+            /> */}
           </div>
         </div>
         <NotificationContainer />
@@ -213,6 +248,17 @@ const estiloTitulo = {
   paddingBottom: "1px"
 }
 
+const generarSelect = ({ input, label, type, meta: { touched, error }, children }) => (
+  <div>
+    <div>
+      <select {...input} className="form-control letra" style={{ height: "35px", fontSize: "13px" }}>
+        {children}
+      </select>
+      {touched && ((error && <span className="text-danger letra form-group">{error}</span>))}
+    </div>
+  </div>
+)
+
 const generarInput = ({ input, placeholder, label, type, meta: { touched, warning, error } }) => (
   <div>
     <div>
@@ -222,47 +268,21 @@ const generarInput = ({ input, placeholder, label, type, meta: { touched, warnin
   </div>
 )
 
-const validate = values => {
-  const errors = {}
-  if (!values.nombre) {
-    errors.nombre = 'Este campo es obligatorio *'
-  } else if (values.nombre.length < 2) {
-    errors.nombre = 'Ingrese mas de dos caracteres'
-  }
-  if (!values.apellido) {
-    errors.apellido = 'Este campo es obligatorio *'
-  } else if (values.apellido.length < 2) {
-    errors.apellido = 'Ingrese mas de dos caracteres'
-  }
-  if (!values.numeroDocumento) {
-    errors.numeroDocumento = 'Este campo es obligatorio *'
-  } else if (values.numeroDocumento.length < 6) {
-    errors.numeroDocumento = 'El documento no es valido'
-  }
-  if (!values.correo) {
-    errors.correo = 'Este campo es obligatorio *'
-  } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.correo)) {
-    errors.correo = 'El correo no tiene el formato correcto'
-  }
-  if (!values.contrasena) {
-    errors.contrasena = 'Este campo es obligatorio *'
-  } else if (!/^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,16}$/i.test(values.contrasena)) {
-    errors.contrasena = 'La contraseña debe tener entre 8 y 16 caracteres, al menos un dígito, al menos una minúscula y al menos una mayúscula.'
-  }
-  return errors
-}
 
 function mapStateToProps(state) {
   return {
-    usuarios: state.user.usuarioEditar,
     cedula: state.user.cedula,
-    actuales: state.user.usuariosRegistrados,
+    mensajeEditar: state.user.mensajeEditar,
+    usuarios: state.user.usuariosRegistrados,
+    documentos: state.user.tiposDocumento,
+    actividadesUsuario: state.user.actividadesUsuario,
     initialValues: {
       nombre: state.user.usuarioEditar.nombre,
       apellido: state.user.usuarioEditar.apellido,
-      numeroDocumento: state.user.usuarioEditar.cedula,
-      correo: state.user.usuarioEditar.correo,
-      contrasena: state.user.usuarioEditar.contrasena
+      numeroDocumento: state.user.usuarioEditar.numeroDocumento,
+      correo: state.user.usuarioEditar.correoElectronico,
+      tipoDocumento:state.user.usuarioEditar.tipoDocumento,
+      fechaNacimiento:'1990-12-19'
     }
   }
 }
@@ -270,9 +290,9 @@ function mapStateToProps(state) {
 
 
 let formularioEditar = reduxForm({
-  form: 'editarUsuario', validate,
+  form: 'editarUsuario',
   enableReinitialize: true
 })(editar)
 
-export default connect(mapStateToProps, { actionCargarInformacionDeUsuario, actionEditarUsuario })(formularioEditar);
+export default withRouter(connect(mapStateToProps, { actionCargarInformacionDeUsuario, actionEditarUsuario,actionActualizarUsuarios, actionConsultarDocumentos ,actionConsultarActividadesUsuario})(formularioEditar));
 

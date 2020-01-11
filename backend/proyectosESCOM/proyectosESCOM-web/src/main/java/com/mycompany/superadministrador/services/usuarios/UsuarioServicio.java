@@ -28,21 +28,21 @@ import javax.ws.rs.core.Response;
 @javax.enterprise.context.RequestScoped
 @Path("usuario")
 public class UsuarioServicio {
-    
-    
+
     @EJB
     LogicaUsuarioFacadeLocal usuarioLogica;
 
-    
     private final Respuesta respuesta = new Respuesta();
 
     public UsuarioServicio() {
     }
-    
-    /**Servicio que registra usuarios
-     * 
+
+    /**
+     * Servicio que registra usuarios
+     *
      * @param usuario
-     * @return  **/
+     * @return  *
+     */
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -52,17 +52,20 @@ public class UsuarioServicio {
             usuarioLogica.registrarUsuario(usuario);
             respuesta.setRespuesta("Usuario registrado");
             return Response.status(Response.Status.OK).entity(respuesta).build();
-        }catch (ExcepcionGenerica e) {
+        } catch (ExcepcionGenerica e) {
             respuesta.setRespuesta("Ya existen los datos registrados previamente");
             return Response.status(Response.Status.NOT_ACCEPTABLE).entity(respuesta).build();
-        }catch (Exception e) {
+        } catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error interno del servidor");
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }
-    
-    /**Servicio que lista los usuarios registrados
-     * @return  **/
+
+    /**
+     * Servicio que lista los usuarios registrados
+     *
+     * @return  *
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/listarUsuarios")
@@ -78,9 +81,12 @@ public class UsuarioServicio {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }
-    
-    /**Servicio que lista los tipos de documento
-     * @return  **/
+
+    /**
+     * Servicio que lista los tipos de documento
+     *
+     * @return  *
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/tipoDocumento")
@@ -96,11 +102,14 @@ public class UsuarioServicio {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }
-    
-    /**Servicio que lista los datos de un usuario especifico consultado con la cedula
-     * 
+
+    /**
+     * Servicio que lista los datos de un usuario especifico consultado con la
+     * cedula
+     *
      * @param cedula
-     * @return  **/
+     * @return  *
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/datosUsuario/{cedula}")
@@ -116,33 +125,38 @@ public class UsuarioServicio {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }
-    
-    /**Servicio que permite la edicion de usuarios
-     * 
+
+    /**
+     * Servicio que permite la edicion de usuarios
+     *
      * @param cedula
      * @param usuarioEditar
-     * @return  **/
+     * @return  *
+     */
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/editarUsuario/{cedula}")
-    public Response editarUsuario(@PathParam("cedula") int cedula, UsuarioPOJO usuarioEditar ) {
+    public Response editarUsuario(@PathParam("cedula") int cedula, UsuarioPOJO usuarioEditar) {
         try {
             usuarioLogica.editarUsuario(cedula, usuarioEditar);
             respuesta.setRespuesta("Usuario modificado correctamente");
             return Response.status(Response.Status.OK).entity(respuesta).build();
-        }catch (ExcepcionGenerica e) {
+        } catch (ExcepcionGenerica e) {
             respuesta.setRespuesta("No se ha podido modificar el usuario");
             return Response.status(Response.Status.NOT_ACCEPTABLE).entity(respuesta).build();
-        }catch (Exception e) {
+        } catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error interno del servidor");
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }
-    
-    /**Servicio que habilita o deshabilita un usuario recibe como parametro la cedula
-     * 
+
+    /**
+     * Servicio que habilita o deshabilita un usuario recibe como parametro la
+     * cedula
+     *
      * @param cedula
-     * @return  **/
+     * @return  *
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/cambiarEstadoUsuario/{cedula}")
@@ -159,17 +173,20 @@ public class UsuarioServicio {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }
-    
-     /**Servicio que lista las actividades de un usuario especifico, recibe como parametro la cedula 
-     * 
+
+    /**
+     * Servicio que lista las actividades de un usuario especifico, recibe como
+     * parametro la cedula
+     *
      * @param cedula
-     * @return  **/
+     * @return  *
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/listarActividadesUsuario/{cedula}")
     public Response listarActividadesUsuario(@PathParam("cedula") int cedula) {
         try {
-            List<ActividadPOJO> listaActividades = usuarioLogica.listarActividadesUsuario(cedula);    
+            List<ActividadPOJO> listaActividades = usuarioLogica.listarActividadesUsuario(cedula);
             return Response.status(Response.Status.OK).entity(listaActividades).build();
         } catch (ExcepcionGenerica e) {
             respuesta.setRespuesta("Sin acceso al servicio");
@@ -179,18 +196,21 @@ public class UsuarioServicio {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }
-    
-     /**Servicio que elimina actividad a un usuario, recibe como parametro la cedula y el id de la actividad
-     * 
+
+    /**
+     * Servicio que elimina actividad a un usuario, recibe como parametro la
+     * cedula y el id de la actividad
+     *
      * @param cedula
      * @param idActividad
-     * @return  **/
+     * @return  *
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/eliminarActividadUsuario/{cedula}/{idActividad}")
     public Response eliminarActividadUsuario(@PathParam("cedula") int cedula, @PathParam("idActividad") int idActividad) {
         try {
-            usuarioLogica.eliminarActividadUsuario(cedula,idActividad);
+            usuarioLogica.eliminarActividadUsuario(cedula, idActividad);
             respuesta.setRespuesta("Actividad eliminada correctamente");
             return Response.status(Response.Status.OK).entity(respuesta).build();
         } catch (ExcepcionGenerica e) {

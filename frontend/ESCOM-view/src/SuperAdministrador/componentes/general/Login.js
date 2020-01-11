@@ -6,7 +6,7 @@ import '../../css/registro.css'
 import { Button } from 'reactstrap';
 import { reduxForm, Field } from 'redux-form';
 
-import { actionLoginUsuario } from '../../actions/actionsUsuario.js'
+import { actionLoginUsuario, actualizarMensajeLogin } from '../../actions/actionsUsuario.js'
 import { connect } from 'react-redux';
 import { requerido, correo } from '../../utilitario/validacionCampos.js';
 
@@ -20,18 +20,17 @@ class Login extends React.Component {
 	}
 
 	componentDidUpdate() {
-		if (this.props.token === 'Login correcto') {
-			this.props.history.push('/inicio');
+		switch (this.props.mensaje) {
+			case 'Login correcto':
+				this.props.history.push('/inicio');
+				break;
 		}
 	}
 
 	habilitarBoton = (valor) => {
-		
-		if (!this.state.habilitado) {
-			this.setState({
-				habilitado: valor
-			});
-		}
+		this.setState({
+			habilitado: valor
+		});
 	}
 
 	handleSubmit = formValues => {
@@ -65,7 +64,7 @@ class Login extends React.Component {
 												</div>
 												<div className="row">
 													<div className="col-sm-12 center">
-														<Field name="mensaje" component={generarMensaje} label={this.props.token} />
+														<Field name="mensaje" component={generarMensaje} label={this.props.mensaje} />
 													</div>
 												</div>
 												<div className="row">
@@ -119,7 +118,7 @@ const fondoBoton = {
 
 function mapStateToProps(state) {
 	return {
-		token: state.user.token
+		mensaje: state.user.mensajeLogin
 	}
 }
 
@@ -129,4 +128,4 @@ let formulario = reduxForm({
 
 
 
-export default withRouter(connect(mapStateToProps, { actionLoginUsuario })(formulario));
+export default withRouter(connect(mapStateToProps, { actionLoginUsuario, actualizarMensajeLogin })(formulario));

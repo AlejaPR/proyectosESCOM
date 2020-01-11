@@ -7,7 +7,7 @@ import '../../css/bootstrap.min.css'
 import '../../css/menu.css'
 
 //componentes
-import { reduxForm, Field } from 'redux-form';
+import { reduxForm } from 'redux-form';
 import { SketchPicker } from 'react-color';
 import { Button } from 'reactstrap';
 
@@ -127,14 +127,14 @@ class Configuracion extends React.Component {
 
 }
 
-const generarInput = ({ input, label, type, meta: { touched, error, warning } }) => (
-    <div>
-        <div>
-            <input {...input} placeholder={label} type={type} className="form-control letra form-control-solid placeholder-no-fix" />
-            {touched && ((error && <span className="text-danger letra form-group">{error}</span>) || (warning && <span>{warning}</span>))}
-        </div>
-    </div>
-)
+// const generarInput = ({ input, label, type, meta: { touched, error, warning } }) => (
+//     <div>
+//         <div>
+//             <input {...input} placeholder={label} type={type} className="form-control letra form-control-solid placeholder-no-fix" />
+//             {touched && ((error && <span className="text-danger letra form-group">{error}</span>) || (warning && <span>{warning}</span>))}
+//         </div>
+//     </div>
+// )
 
 const validate = values => {
     const errors = {}
@@ -152,12 +152,6 @@ const validate = values => {
     return errors
 }
 
-const fondoBoton = {
-    background: "#ec671d",
-    fontSize: "14px",
-    fontFamily: "Open sans, sans-serif"
-
-}
 
 const estiloLetrero = {
     paddingTop: "20px",
@@ -171,9 +165,7 @@ const fondoBarraSuperior = {
 
 }
 
-const fondoTabla = {
-    background: "#EAF2F2"
-}
+
 
 
 function mapStateToProps(state) {

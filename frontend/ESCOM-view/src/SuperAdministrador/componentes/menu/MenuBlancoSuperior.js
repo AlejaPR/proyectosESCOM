@@ -26,7 +26,7 @@ class BarraSuperior extends React.Component {
 	}
 
 	componentWillMount() {
-		// this.props.consultarConfiguracion();
+		this.props.consultarConfiguracion();
 		
 	}
 

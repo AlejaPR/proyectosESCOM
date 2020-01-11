@@ -33,13 +33,13 @@ class FilaTablaUsuario extends React.Component {
 						label: 'Si',
 						onClick: () => {
 							// this.props.usuario
-							const respuesta = fetch('http://localhost:9090/SuperadministradorESCOM-web/api/usu/' + this.props.usuario.cedula + "/Suspendido",
-								{ method: 'put' }).then(response => {
-									console.log(response.status);
-								});
+							// const respuesta = fetch('http://localhost:9090/SuperadministradorESCOM-web/api/usu/' + this.props.usuario.cedula + "/Suspendido",
+							// 	{ method: 'put' }).then(response => {
+							// 		console.log(response.status);
+							// 	});
 
-							this.actualiza(this.props.usuario.cedula);
-							NotificationManager.success('Operacion realizada con exito')
+							// this.actualiza(this.props.usuario.cedula);
+							// NotificationManager.success('Operacion realizada con exito')
 						}
 					},
 					{
@@ -54,32 +54,32 @@ class FilaTablaUsuario extends React.Component {
 	}
 
 	actualiza = (cedula) => {
-		let nuevo = [];
-		this.props.actuales.map(function (task, index, array) {
-			if (task.cedula === cedula) {
+		// let nuevo = [];
+		// this.props.actuales.map(function (task, index, array) {
+		// 	if (task.cedula === cedula) {
 
-				if (task.estado === "Suspendido") {
-					let usuario = {
-						nombre: task.nombre,
-						cedula: task.cedula,
-						correo: task.correo,
-						estado: "Activo"
-					}
-					nuevo.push(usuario);
-				} else {
-					let usuario = {
-						nombre: task.nombre,
-						cedula: task.cedula,
-						correo: task.correo,
-						estado: "Suspendido"
-					}
-					nuevo.push(usuario);
-				}
-			} else {
-				nuevo.push(task);
-			}
-		});
-		this.props.actionActualizarUsuarios(nuevo);
+		// 		if (task.estado === "Suspendido") {
+		// 			let usuario = {
+		// 				nombre: task.nombre,
+		// 				cedula: task.cedula,
+		// 				correo: task.correo,
+		// 				estado: "Activo"
+		// 			}
+		// 			nuevo.push(usuario);
+		// 		} else {
+		// 			let usuario = {
+		// 				nombre: task.nombre,
+		// 				cedula: task.cedula,
+		// 				correo: task.correo,
+		// 				estado: "Suspendido"
+		// 			}
+		// 			nuevo.push(usuario);
+		// 		}
+		// 	} else {
+		// 		nuevo.push(task);
+		// 	}
+		// });
+		// this.props.actionActualizarUsuarios(nuevo);
 	}
 
 

@@ -157,7 +157,6 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         usuarioRespuesta.setNumeroDocumento(usuarioEspDB.getNumeroDocumento());
         usuarioRespuesta.setCorreoElectronico(usuarioEspDB.getCorreoElectronico());
         usuarioRespuesta.setEstado(usuarioEspDB.getEstado());
-        
         return usuarioRespuesta;
     }
 
