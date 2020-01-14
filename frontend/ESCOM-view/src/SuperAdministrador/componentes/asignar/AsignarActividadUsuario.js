@@ -8,14 +8,32 @@ import '../../css/menu.css'
 
 
 import { Button } from 'reactstrap';
+import { reduxForm, Field } from 'redux-form';
+import { withRouter } from 'react-router-dom';
+import { seleccione } from '../../utilitario/validacionCampos.js';
 
 
 //componentes
 import Barra from '../general/BarraDirecciones.js';
 
+//redux
+import { actionConsultarModulos } from '../../actions/actionsModulo.js'
+import { connect } from 'react-redux';
 
+class AsignarActividadUsuario extends React.Component {
 
-class Contenido extends React.Component {
+    componentWillMount() {
+        this.props.actionConsultarModulos(localStorage.getItem('Token'));
+    }
+    componentDidUpdate(){
+        console.log('prosp',this.props);
+
+    }
+
+    activar(){
+        console.log('cambio');
+    }
+
     render() {
         return (
             <>
@@ -37,17 +55,16 @@ class Contenido extends React.Component {
                             <label for="form_control_1">Seleccione el modulo que tiene asignada la actividad</label>
                             <div className="row">
                                 <div className="col-md-4">
-                                    <select className="bs-select form-control " id="selectDDL" onchange="redirige(this.value)" title="ACCIONES">
-                                        <option value="0">Seleccione...</option>
-                                        <option value="1">Crear usuario</option>
-                                        <option value="2">Generar reporte</option>
-                                        <option value="3">Crear modulo</option>
-                                    </select>
+                                    <div className="col-sm-7">
+                                        <Field name="tipoDocumento" validate={[seleccione]} style={{ height: "35px", fontSize: "13px" }} className="form-control" component={generarSelect} label="Username">
+                                            <option className="letra" style={{ height: "35px", fontSize: "13px" }} value="0">Seleccione</option>
+                                            {this.props.modulos.map(modulo => <option key={modulo.idModulo} className="letra" style={{ height: "35px", fontSize: "13px" }} value={modulo.idModulo}>{modulo.nombreModulo}</option>)}
+                                        </Field>
+                                    </div>
                                 </div>
                             </div>
                             <br />
-                            <label for="form_control_1">Seleccione la actividad que quiere asignar al usuario
-</label>                            
+                            <label for="form_control_1">Seleccione la actividad que quiere asignar al usuario</label>
                             <div className="row">
                                 <div className="col-md-4">
                                     <select className="bs-select form-control " id="selectDDL" onchange="redirige(this.value)" title="ACCIONES">
@@ -110,29 +127,44 @@ class Contenido extends React.Component {
     }
 }
 
+const generarSelect = ({ input, label, type, meta: { touched, error }, children }) => (
+    <div>
+        <div>
+            {console.log(input.onChange)}
+            <select {...input} className="form-control letra"  style={{ height: "35px", fontSize: "13px" }}>
+                {children}
+            </select>
+            {touched && ((error && <span className="text-danger letra form-group">{error}</span>))}
+        </div>
+    </div>
+)
+
+
+
+
 const estiloTitulo = {
-    
-	paddingTop: "7px",
-	paddingRight: "12px",
-	paddingLeft: "5px",
-	paddingBottom: "1px"
+
+    paddingTop: "7px",
+    paddingRight: "12px",
+    paddingLeft: "5px",
+    paddingBottom: "1px"
 }
 
 const estiloLetrero = {
-	paddingTop: "20px",
-	paddingRight: "12px",
-	paddingLeft: "40px",
-	paddingBottom: "1px"
+    paddingTop: "20px",
+    paddingRight: "12px",
+    paddingLeft: "40px",
+    paddingBottom: "1px"
 }
 
 
 const fondoBarraSuperior = {
-	background: "#FFFFFF"
+    background: "#FFFFFF"
 
 }
 
 const fondoTabla = {
-	background: "#EAF2F2"
+    background: "#EAF2F2"
 }
 
 
@@ -140,15 +172,25 @@ const fondoBoton = {
     background: "#ec671d",
     fontSize: "14px",
     fontFamily: "Open sans, sans-serif"
-  
-  }
 
-  const fondoBotonS = {
+}
+
+const fondoBotonS = {
     background: "secondary",
     fontSize: "14px",
     fontFamily: "Open sans, sans-serif"
-  
-  }
 
+}
 
-export default Contenido;
+function mapStateToProps(state) {
+    return {
+        modulos: state.mod.modulosRegistrados,
+        habilitado:state.mod.estadoModulos
+    }
+}
+
+let asignarActividadUsuario = reduxForm({
+    form: 'asignarActividadUsuario'
+})(AsignarActividadUsuario)
+
+export default withRouter(connect(mapStateToProps, {actionConsultarModulos})(asignarActividadUsuario));

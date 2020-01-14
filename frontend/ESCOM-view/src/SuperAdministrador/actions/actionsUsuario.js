@@ -7,13 +7,14 @@ export const ESTADO_USUARIOS = 'ESTADO_USUARIOS';
 export const MOSTRAR_DOCUMENTOS = 'MOSTRAR_DOCUMENTOS';
 export const MOSTRAR_ACTIVIDADES_USUARIO = 'MOSTRAR_ACTIVIDADES_USUARIO';
 export const AGREGAR_USUARIO = 'AGREGAR_USUARIO';
-export const MENSAJE_REGISTRAR = 'MENSAJE_REGISTRAR';
-export const MENSAJE_EDITAR = 'MENSAJE_EDITAR';
 export const INFORMACION_USUARIO = 'INFORMACION_USUARIO';
 export const ANADIR_CEDULA_EDITAR = "ANADIR_CEDULA_EDITAR";
 export const EDITAR_USUARIO = "EDITAR_USUARIO";
 export const ACTUALIZAR_USUARIOS = 'ACTUALIZAR_USUARIOS';
 export const MENSAJE_LOGIN = 'MENSAJE_LOGIN';
+export const MENSAJE_REGISTRAR = 'MENSAJE_REGISTRAR';
+export const MENSAJE_EDITAR = 'MENSAJE_EDITAR';
+export const MENSAJE_SUSPENDER = 'MENSAJE_SUSPENDER';
 export const REDIRECCIONAR_LOGIN = 'REDIRECCIONAR_LOGIN';
 
 
@@ -113,6 +114,17 @@ export function actualizarMensajeRegistrar(mensaje) {
         });
     };
 }
+
+export function actualizarMensajeSuspender(mensaje) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: MENSAJE_SUSPENDER,
+            mensaje: mensaje
+        });
+    };
+}
+
+
 
 export function actionConsultarUsuarios(token) {
     var tokenRequest = desencriptar(token);
@@ -234,6 +246,55 @@ export function actionAgregarUsuario(usuario, token) {
     }
 }
 
+export function actionSuspenderActivarUsuario(cedula, token,actualizados) {
+    var tokenRequest = desencriptar(token);
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': tokenRequest,
+        'Permiso': 'SA_CREAR USUARIO'
+    }
+    return (dispatch, getState) => {
+        axios.get("http://localhost:9090/proyectosESCOM-web/api/usuario/cambiarEstadoUsuario/"+cedula, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: MENSAJE_SUSPENDER,
+                    mensaje: 'Operacion hecha con exito'
+                });
+                dispatch({
+                    type: ACTUALIZAR_USUARIOS,
+                    usuario: actualizados
+                });
+            }).catch((error) => {
+                console.log(error);
+
+                if (error.request.response === '') {
+                    dispatch({
+                        type: MENSAJE_SUSPENDER,
+                        mensaje: 'Servidor fuera de servicio temporalmente'
+                    });
+                }else{
+                    if (error.request) {
+                        var o = JSON.parse(error.request.response);
+                        let respuesta=mensajesDeError(o.respuesta);
+                        if(respuesta!==''){
+                            dispatch({
+                                type: MENSAJE_SUSPENDER,
+                                mensaje: respuesta
+                            });
+                        }else{
+                            dispatch({
+                                type: MENSAJE_SUSPENDER,
+                                mensaje: 'Sin acceso al servicio'
+                            });
+                        }
+                    }
+                } 
+                
+            });
+
+    }
+}
+
 export function actionCargarInformacionDeUsuario(cedula, token) {
     const headers = {
         'Content-Type': 'application/json',
@@ -248,48 +309,28 @@ export function actionCargarInformacionDeUsuario(cedula, token) {
                     informacionUsuario: response.data
                 });
             }).catch((error) => {
-                if (error.request) {
-                    let respuest = error.request;
-                    var o = JSON.parse(respuest.response);
-                    switch (o.respuesta) {
-                        case 'Sin permiso':
+                if (error.request.response === '') {
+                    dispatch({
+                        type: MENSAJE_EDITAR,
+                        mensaje: 'Servidor fuera de servicio temporalmente'
+                    });
+                }else{
+                    if (error.request) {
+                        var o = JSON.parse(error.request.response);
+                        let respuesta=mensajesDeError(o.respuesta);
+                        if(respuesta!==''){
                             dispatch({
                                 type: MENSAJE_EDITAR,
-                                mensaje: 'Sin permiso'
+                                mensaje: respuesta
                             });
-                            break;
-                        case 'Ocurrio un error interno del servidor':
+                        }else{
                             dispatch({
                                 type: MENSAJE_EDITAR,
-                                mensaje: 'Error del servidor'
+                                mensaje: 'Sin acceso al servicio'
                             });
-                            break;
-
-                        case 'token vencido':
-                            dispatch({
-                                type: MENSAJE_EDITAR,
-                                mensaje: 'Su token esta vencido'
-                            });
-                            break;
-
-                        case 'token no registrado':
-                            dispatch({
-                                type: MENSAJE_EDITAR,
-                                mensaje: 'Su token no esta registrado inicie sesion nuevamente'
-                            });
-                            break;
-
-                        case 'token incorrecto':
-                            dispatch({
-                                type: MENSAJE_EDITAR,
-                                mensaje: 'Su token esta incorrecto'
-                            });
-                            break;
-
-                        default:
-                            break;
+                        }
                     }
-                }
+                } 
             });
     };
 }

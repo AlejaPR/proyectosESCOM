@@ -20,14 +20,59 @@ import { NotificationManager } from 'react-notifications';
 
 //redux conexion
 import { connect } from 'react-redux';
-import { actionConsultarUsuarios, actionAsignarCedula, actualizarMensajeEditar, actionActualizarUsuarios } from '../../actions/actionsUsuario.js'
+import { actionConsultarUsuarios, actionAsignarCedula, actualizarMensajeEditar, actualizarMensajeSuspender, actionActualizarUsuarios, actionSuspenderActivarUsuario } from '../../actions/actionsUsuario.js'
 import { withRouter } from 'react-router-dom';
 
 class ContenidoAdminUsuario extends React.Component {
 
+	state = {
+		cedula: 0
+	}
+
 	componentWillMount() {
 		this.props.actionConsultarUsuarios(localStorage.getItem('Token'));
 	}
+
+	componentDidUpdate() {
+		switch (this.props.mensajeSuspender) {
+			case 'Sin permiso':
+				NotificationManager.warning('No tiene permisos para suspender/activar los usuarios')
+				break;
+			case 'Operacion hecha con exito':
+				NotificationManager.info('Operacion realizada con exito')
+				break;
+		}
+		// this.props.actualizarMensajeSuspender('');
+	}
+
+	actualizarUsuarios(numeroDocumento) {
+		let nuevo = [];
+		this.props.usuarios.map(function (task, index, array) {
+			if (task.numeroDocumento === numeroDocumento) {
+				if (task.estado === "Suspendido") {
+					let usuario = {
+						nombre: task.nombre,
+						numeroDocumento: task.numeroDocumento,
+						correoElectronico: task.correoElectronico,
+						estado: "Activo"
+					}
+					nuevo.push(usuario);
+				} else {
+					let usuario = {
+						nombre: task.nombre,
+						numeroDocumento: task.numeroDocumento,
+						correoElectronico: task.correoElectronico,
+						estado: "Suspendido"
+					}
+					nuevo.push(usuario);
+				}
+			} else {
+				nuevo.push(task);
+			}
+		});
+		return nuevo;
+	}
+
 
 	renderTableData() {
 		return this.props.usuarios.map((usuario, index) => {
@@ -47,31 +92,8 @@ class ContenidoAdminUsuario extends React.Component {
 				{
 					label: 'Si',
 					onClick: () => {
-						let nuevo = [];
-						this.props.usuarios.map(function (task, index, array) {
-							if (task.numeroDocumento === cedula) {
-								if (task.estado === "Suspendido") {
-									let usuario = {
-										nombre: task.nombre,
-										numeroDocumento: task.numeroDocumento,
-										correo: task.correo,
-										estado: "Activo"
-									}
-									nuevo.push(usuario);
-								} else {
-									let usuario = {
-										nombre: task.nombre,
-										numeroDocumento: task.numeroDocumento,
-										correo: task.correo,
-										estado: "Suspendido"
-									}
-									nuevo.push(usuario);
-								}
-							} else {
-								nuevo.push(task);
-							}
-						});
-						this.props.actionActualizarUsuarios(nuevo);
+						if (this.state.cedula === 0) { this.setState({ cedula: cedula }) };
+						this.props.actionSuspenderActivarUsuario(cedula, localStorage.getItem('Token'), this.actualizarUsuarios(cedula));
 					}
 				},
 				{
@@ -107,7 +129,7 @@ class ContenidoAdminUsuario extends React.Component {
 					<div className="container shadow" style={fondoBarraSuperior}>
 						<div>
 							{
-								this.props.habilitado ?<div className="col-sm-12"> <span className="col-sm-2 center" style={{
+								this.props.habilitado ? <div className="col-sm-12"> <span className="col-sm-2 center" style={{
 									textShadow: "none!important",
 									fontSize: "16px",
 									fontFamily: "Open Sans,sans-serif",
@@ -200,7 +222,9 @@ class ContenidoAdminUsuario extends React.Component {
 											{
 												icon: 'assignmentInd',
 												tooltip: 'Asignar actividad',
-												onClick: (event, rowData) => alert("You saved " + rowData.numeroDocumento)
+												onClick: (event, rowData) => {
+													this.props.history.push('/asignarActividadUsuario')
+												}
 											}
 										]}
 
@@ -263,9 +287,10 @@ function mapStateToProps(state) {
 		usuarios: state.user.usuariosRegistrados,
 		cedulaEditar: state.user.cedula,
 		mensajeEditar: state.user.mensajeEditar,
-		habilitado: state.user.estadoUsuarios
+		habilitado: state.user.estadoUsuarios,
+		mensajeSuspender: state.user.mensajeSuspender
 	}
 }
 
 
-export default withRouter(connect(mapStateToProps, { actionConsultarUsuarios, actionAsignarCedula, actualizarMensajeEditar, actionActualizarUsuarios })(ContenidoAdminUsuario));
+export default withRouter(connect(mapStateToProps, { actionConsultarUsuarios, actionAsignarCedula, actualizarMensajeSuspender, actualizarMensajeEditar, actionActualizarUsuarios, actionSuspenderActivarUsuario })(ContenidoAdminUsuario));

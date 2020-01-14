@@ -105,7 +105,7 @@ class App extends React.Component {
 								</div>
 							</>
 						</RutaProtegida>
-						<RutaProtegida path="asignarActividadUsuario">
+						<RutaProtegida path="/asignarActividadUsuario">
 							<>
 								<div id="wrapper">
 									<MenuLateral />
@@ -115,7 +115,7 @@ class App extends React.Component {
 							</>
 						</RutaProtegida>
 
-						<RutaProtegida path="adminModulo">
+						<RutaProtegida path="/adminModulo">
 							<>
 								<MenuLateral />
 								<MenuSuperior />
@@ -125,7 +125,7 @@ class App extends React.Component {
 							</>
 						</RutaProtegida>
 
-						<RutaProtegida path="editarModulo">
+						<RutaProtegida path="/editarModulo">
 							<>
 								<div id="wrapper">
 									<MenuLateral />

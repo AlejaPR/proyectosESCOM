@@ -10,7 +10,8 @@ import {
     ANADIR_CEDULA_EDITAR,
     EDITAR_USUARIO,
     ACTUALIZAR_USUARIOS,
-    MENSAJE_LOGIN
+    MENSAJE_LOGIN,
+    MENSAJE_SUSPENDER
 } from '../actions/actionsUsuario.js'
 
 
@@ -24,7 +25,8 @@ const initialState = {
     redireccionLogin: [],
     mensajeLogin: [],
     mensajeRegistrar: '',
-    mensajeEditar: ''
+    mensajeEditar: '',
+    mensajeSuspender:''
 }
 
 export function reducerUsuario(state = initialState, action) {
@@ -42,6 +44,8 @@ export function reducerUsuario(state = initialState, action) {
             return Object.assign({}, state, { mensajeRegistrar: action.mensaje })
         case MENSAJE_EDITAR:
             return Object.assign({}, state, { mensajeEditar: action.mensaje })
+        case MENSAJE_SUSPENDER:
+            return Object.assign({}, state, { mensajeSuspender: action.mensaje })
         case INFORMACION_USUARIO:
             return Object.assign({}, state, { usuarioEditar: action.informacionUsuario })
         case ANADIR_CEDULA_EDITAR:
