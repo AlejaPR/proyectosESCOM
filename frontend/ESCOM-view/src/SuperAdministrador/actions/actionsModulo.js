@@ -7,7 +7,7 @@ export const ESTADO_MODULOS = 'ESTADO_MODULOS';
 export const ANADIR_CODIGO_EDITAR = 'ANADIR_CODIGO_EDITAR';
 export const INFORMACION_MODULO='INFORMACION_MODULO';
 export const MENSAJE_EDITAR_MODULO='MENSAJE_EDITAR_MODULO';
-
+export const ACTIVIDADES_MODULO='ACTIVIDADES_MODULO';
 
 // export function actualizarMensajeSuspender(mensaje) {
 //     return (dispatch, getState) => {
@@ -70,12 +70,55 @@ export function actionCargarInformacionDeModulo(codigoModulo, token) {
         'TokenAuto': desencriptar(token),
         'Permiso': 'SA_CREAR USUARIO'
     }
+
     return (dispatch, getState) => {
         axios.get("http://localhost:9090/proyectosESCOM-web/api/modulo/datosModulo/" + codigoModulo, { headers: headers })
             .then(response => {
                 dispatch({
                     type: INFORMACION_MODULO,
                     informacionModulo: response.data
+                });
+            }).catch((error) => {
+                if (error.request.response === '') {
+                    dispatch({
+                        type: MENSAJE_EDITAR_MODULO,
+                        mensaje: 'Servidor fuera de servicio temporalmente'
+                    });
+                }else{
+                    if (error.request) {
+                        var o = JSON.parse(error.request.response);
+                        let respuesta=mensajesDeError(o.respuesta);
+                        if(respuesta!==''){
+                            dispatch({
+                                type: MENSAJE_EDITAR_MODULO,
+                                mensaje: respuesta
+                            });
+                        }else{
+                            dispatch({
+                                type: MENSAJE_EDITAR_MODULO,
+                                mensaje: 'Sin acceso al servicio'
+                            });
+                        }
+                    }
+                } 
+            });
+    };
+}
+
+export function actionConsultarActividadesModulo(codigoModulo, token) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token),
+        'Permiso': 'SA_CREAR USUARIO'
+    }
+
+    return (dispatch, getState) => {
+        axios.get("http://localhost:9090/proyectosESCOM-web/api/modulo/listarActividadesModulo/" + codigoModulo, { headers: headers })
+            .then(response => {
+                console.log('respuesta',response.data);
+                dispatch({
+                    type: ACTIVIDADES_MODULO,
+                    actividades: response.data
                 });
             }).catch((error) => {
                 if (error.request.response === '') {

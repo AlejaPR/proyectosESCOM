@@ -7,6 +7,7 @@ package com.mycompany.superadministrador.interfaces;
 
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.entity.Actividad;
+import com.mycompany.superadministrador.entity.Modulo;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -35,5 +36,5 @@ public interface ActividadFacadeLocal {
     
     void eliminarActividadUsuario(Integer idUsuario, Integer idActividad);
     
-    List<ActividadPOJO> listarActividadesModulo(Integer idModulo);
+    List<ActividadPOJO> listarActividadesModulo(Modulo modulo);
 }

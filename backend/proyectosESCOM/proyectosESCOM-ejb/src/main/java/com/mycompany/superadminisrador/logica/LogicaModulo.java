@@ -134,7 +134,7 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
     public List<ActividadPOJO> listarActividadesModulo(int idModulo) throws ExcepcionGenerica {
         try{    
                 List<ActividadPOJO> listaActividadesM = new ArrayList();
-                listaActividadesM = actividadDB.listarActividadesModulo(idModulo);
+                listaActividadesM = actividadDB.listarActividadesModulo(moduloDB.find(idModulo));
                 if(listaActividadesM.size() >=0 ){
                     
                   return listaActividadesM;   

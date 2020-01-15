@@ -8,6 +8,7 @@ package com.mycompany.superadministrador.ejb;
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.interfaces.ActividadFacadeLocal;
 import com.mycompany.superadministrador.entity.Actividad;
+import com.mycompany.superadministrador.entity.Modulo;
 import com.mycompany.superadministrador.entity.TipoDocumento;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ import javax.persistence.TypedQuery;
  */
 @Stateless
 public class ActividadFacade extends AbstractFacade<Actividad> implements ActividadFacadeLocal {
+
     @PersistenceContext(unitName = "conexionSuperadministrador")
     private EntityManager em;
 
@@ -33,7 +35,7 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
     public ActividadFacade() {
         super(Actividad.class);
     }
-    
+
     @Override
     public void create(Actividad documento) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -49,53 +51,64 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    /**Metodo que realiza la consulta de actividades del usuario especifico
-     * 
+    /**
+     * Metodo que realiza la consulta de actividades del usuario especifico
+     *
      * @param idUsuario
      * @return 
-       **/
+       *
+     */
     @Override
     public List<ActividadPOJO> listarActividadesUsuario(Integer idUsuario) {
-        
-        List<ActividadPOJO> listaFinalActividades= new ArrayList();
-        listaFinalActividades = em.createNativeQuery("SELECT TBL_ACTIVIDAD.ACT_NOMBREACTIVIDAD FROM TBL_USUARIOACTIVIDAD,TBL_ACTIVIDAD, TBL_USUARIO \n" +
-                                "WHERE tbl_actividad.pk_act_idactividad = tbl_usuarioactividad.fk_uac_idactividad \n" +
-                                "AND tbl_usuarioactividad.fk_uac_idusuario= tbl_usuario.pk_usr_idusuario \n" +
-                                "AND tbl_usuario.pk_usr_idusuario=?")
-                                .setParameter(1, idUsuario)
-                                .getResultList();
+
+        List<ActividadPOJO> listaFinalActividades = new ArrayList();
+        listaFinalActividades = em.createNativeQuery("SELECT TBL_ACTIVIDAD.ACT_NOMBREACTIVIDAD FROM TBL_USUARIOACTIVIDAD,TBL_ACTIVIDAD, TBL_USUARIO \n"
+                + "WHERE tbl_actividad.pk_act_idactividad = tbl_usuarioactividad.fk_uac_idactividad \n"
+                + "AND tbl_usuarioactividad.fk_uac_idusuario= tbl_usuario.pk_usr_idusuario \n"
+                + "AND tbl_usuario.pk_usr_idusuario=?")
+                .setParameter(1, idUsuario)
+                .getResultList();
         return listaFinalActividades;
     }
 
-     /**Metodo que realiza la consulta para eliminar actividad de usuario especifico
-     * 
+    /**
+     * Metodo que realiza la consulta para eliminar actividad de usuario
+     * especifico
+     *
      * @param idUsuario
      * @param idActividad
-     * 
-       **/
+     *
+     *
+     */
     @Override
     public void eliminarActividadUsuario(Integer idUsuario, Integer idActividad) {
-        
+
         em.createNativeQuery("DELETE FROM tbl_usuarioactividad WHERE fk_uac_idactividad = ? AND fk_uac_idusuario = ?")
-                                .setParameter(1, idActividad)
-                                .setParameter(2, idUsuario)
-                                .executeUpdate();
+                .setParameter(1, idActividad)
+                .setParameter(2, idUsuario)
+                .executeUpdate();
     }
 
-    /**Metodo que realiza la consulta de actividades de un modulo especifico
-     * 
+    /**
+     * Metodo que realiza la consulta de actividades de un modulo especifico
+     *
      * @param idModulo
      * @return 
-       **/
+       *
+     */
     @Override
-    public List<ActividadPOJO> listarActividadesModulo(Integer idModulo) {
-        
+    public List<ActividadPOJO> listarActividadesModulo(Modulo modulo) {
+        TypedQuery<Actividad> consultaActividadesModulo = em.createNamedQuery("consultaActividadesModulo", Actividad.class);
+        consultaActividadesModulo.setParameter("idModulo", modulo);
+
         List<ActividadPOJO> listaActividadesM = new ArrayList<>();
-        listaActividadesM= em.createNativeQuery("Select act_nombreactividad from tbl_actividad where fk_act_idmodulo=?")
-                                .setParameter(1, idModulo)
-                                .getResultList();
+        for (Actividad a : consultaActividadesModulo.getResultList()) {
+            ActividadPOJO actividad = new ActividadPOJO();
+            actividad.setIdActividad(a.getIdActividad());
+            actividad.setNombre(a.getNombreActividad());
+            listaActividadesM.add(actividad);
+        }
         return listaActividadesM;
     }
 
-    
 }

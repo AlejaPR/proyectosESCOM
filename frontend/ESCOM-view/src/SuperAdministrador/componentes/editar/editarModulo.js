@@ -14,11 +14,11 @@ import Barra from '../general/BarraDirecciones';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { withRouter } from 'react-router-dom';
 import { nombre, requerido, seleccione, apellido, fechaNacimiento, correo, contrasena, documentoIdentificacion } from '../../utilitario/validacionCampos.js';
-// import MaterialTable from 'material-table';
+import MaterialTable from 'material-table';
 import Alerta from '@icons/material/AlertIcon.js';
 
 //redux
-import { actionCargarInformacionDeModulo } from '../../actions/actionsModulo.js'
+import { actionCargarInformacionDeModulo, actionConsultarActividadesModulo } from '../../actions/actionsModulo.js'
 import { connect } from "react-redux";
 import { reduxForm, Field } from 'redux-form';
 
@@ -26,7 +26,8 @@ import { reduxForm, Field } from 'redux-form';
 class EditarModulo extends React.Component {
 
     state = {
-        habilitado: false
+        habilitado: false,
+        actividadesSeleccionadas:[]
     }
 
     componentDidUpdate() {
@@ -34,13 +35,15 @@ class EditarModulo extends React.Component {
             if (!this.state.habilitado) { this.setState({ habilitado: true }) };
             // this.props.history.push('/adminUsuario');
         }
+        console.log('props',this.props)
     }
 
     componentDidMount() {
         if (this.props.codigoModulo === undefined || this.props.codigoModulo.length === 0) {
             this.props.history.push('/adminModulo');
         } else {
-            this.props.actionCargarInformacionDeModulo(this.props.codigoModulo, localStorage.getItem('Token'), this.cambiarPermiso);
+            this.props.actionCargarInformacionDeModulo(this.props.codigoModulo, localStorage.getItem('Token'));
+            this.props.actionConsultarActividadesModulo(this.props.codigoModulo, localStorage.getItem('Token'));
             // this.props.actionConsultarActividadesUsuario(this.props.cedula,localStorage.getItem('Token'));
         }
     }
@@ -48,8 +51,8 @@ class EditarModulo extends React.Component {
 
     onClickCancelar = (event) => {
         event.preventDefault();
-          this.props.history.push('/adminModulo');
-      }
+        this.props.history.push('/adminModulo');
+    }
 
     handleSubmit = formValues => {
 
@@ -96,14 +99,14 @@ class EditarModulo extends React.Component {
                                         </div>
                                     </div>
                                     <br />
-                                    <label>Apellidos</label>
+                                    <label>Descripcion</label>
                                     <div className="row">
                                         <div className="col-sm-5">
-                                            <Field name="apellido" validate={[requerido, apellido]} component={generarInput} label="Apellido" />
+                                            <Field name="apellido" type="textarea" validate={[requerido, apellido]} component={generarInput} label="Apellido" />
                                         </div>
                                     </div>
                                     <br />
-                                    <label>Numero de documento</label>
+                                    <label>Imagen</label>
                                     <div className="row">
                                         <div className="col-sm-5">
                                             <Field name="numeroDocumento" validate={[requerido, documentoIdentificacion]} component={generarInput} label="Numero de documento" />
@@ -111,8 +114,44 @@ class EditarModulo extends React.Component {
                                     </div>
                                     <br />
                                     <div className="text-left titulo letra" style={estiloTitulo}>
-                                        <h4>Actividades actualmente asignadas al usuario</h4>
-
+                                        <MaterialTable
+                                            title="Actividades actualmente asignadas al modulo"
+                                            localization={{
+                                                header: {
+                                                    actions: ' '
+                                                },
+                                                pagination: {
+                                                    nextTooltip: 'Siguiente ',
+                                                    previousTooltip: 'Anterior',
+                                                    labelDisplayedRows: '{from}-{to} de {count}',
+                                                    lastTooltip: 'Ultima pagina',
+                                                    firstTooltip: 'Primera pagina',
+                                                    labelRowsSelect: 'Registros',
+                                                    firstAriaLabel: 'oooo'
+                                                },
+                                                body: {
+                                                    emptyDataSourceMessage: 'Aun no hay ningun modulo registrado'
+                                                },
+                                                toolbar: {
+                                                    searchTooltip: 'Buscar',
+                                                    searchPlaceholder: 'Buscar'
+                                                }
+                                            }}
+                                            columns={[
+                                                { title: 'Nombre de modulo', field: 'idActividad', headerStyle: estiloCabecera, cellStyle: estiloFila },
+                                                { title: 'Descripcion del modulo', field: 'nombre', headerStyle: estiloCabecera, cellStyle: estiloFila }
+                                            ]}
+                                            data={this.props.actividades}
+                                            options={{
+                                                search: true,
+                                                rowStyle: estiloFila,
+                                                selection:true
+                                            }}
+                                            onSelectionChange={(rows) => {
+                                                this.setState({actividadesSeleccionadas:rows});
+                                                console.log('You selected ' , rows)
+                                            }}
+                                        />
 
                                     </div>
                                     <div>
@@ -165,9 +204,21 @@ const fondoBarraSuperior = {
 
 }
 
-const fondoTabla = {
-    background: "#EAF2F2"
+
+const estiloCabecera = {
+    fontSize: '13px',
+    fontFamily: 'sans-serif',
+    padding: '8px',
+    background: '#e7ecf1'
+
 }
+
+const estiloFila = {
+    fontSize: '12px',
+    fontFamily: 'sans-serif',
+    padding: '8px',
+}
+
 
 
 const fondoBoton = {
@@ -187,6 +238,7 @@ const fondoBotonS = {
 function mapStateToProps(state) {
     return {
         codigoModulo: state.mod.codigoModulo,
+        actividades: state.mod.actividadesModulos,
         mensajeEditar: state.mod.mensajeEditarModulo,
         initialValues: {
             nombre: state.mod.moduloEditar.nombreModulo,
@@ -202,5 +254,5 @@ let formularioEditar = reduxForm({
     enableReinitialize: true
 })(EditarModulo)
 
-export default withRouter(connect(mapStateToProps, { actionCargarInformacionDeModulo })(formularioEditar));
+export default withRouter(connect(mapStateToProps, { actionCargarInformacionDeModulo, actionConsultarActividadesModulo })(formularioEditar));
 

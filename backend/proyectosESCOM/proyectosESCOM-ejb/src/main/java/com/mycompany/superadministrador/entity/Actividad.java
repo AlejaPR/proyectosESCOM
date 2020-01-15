@@ -31,7 +31,7 @@ import javax.validation.constraints.Size;
 @Table(name = "TBL_ACTIVIDAD")
 @NamedQueries({
     @NamedQuery(name = "consultaActividades", query = "SELECT a from Actividad a,Usuario u, UsuarioActividad ua WHERE a.pkActIdactividad = ua.fkUacIdactividad.pkActIdactividad AND u.idUsuario=ua.fkUacIdusuario.idUsuario AND u.idUsuario=:idUsuario"),
-    
+    @NamedQuery(name = "consultaActividadesModulo", query = "SELECT a from Actividad a WHERE a.fkActIdmodulo = :idModulo"),
 })
 
 public class Actividad implements Serializable{
