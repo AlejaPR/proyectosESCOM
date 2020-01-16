@@ -62,7 +62,7 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
     public List<ActividadPOJO> listarActividadesUsuario(Integer idUsuario) {
 
         List<ActividadPOJO> listaFinalActividades = new ArrayList();
-        listaFinalActividades = em.createNativeQuery("SELECT TBL_ACTIVIDAD.ACT_NOMBREACTIVIDAD FROM TBL_USUARIOACTIVIDAD,TBL_ACTIVIDAD, TBL_USUARIO \n"
+        listaFinalActividades = em.createNativeQuery("SELECT tbl_actividad.pk_act_idactividad,TBL_ACTIVIDAD.ACT_NOMBREACTIVIDAD FROM TBL_USUARIOACTIVIDAD,TBL_ACTIVIDAD, TBL_USUARIO \n"
                 + "WHERE tbl_actividad.pk_act_idactividad = tbl_usuarioactividad.fk_uac_idactividad \n"
                 + "AND tbl_usuarioactividad.fk_uac_idusuario= tbl_usuario.pk_usr_idusuario \n"
                 + "AND tbl_usuario.pk_usr_idusuario=?")
