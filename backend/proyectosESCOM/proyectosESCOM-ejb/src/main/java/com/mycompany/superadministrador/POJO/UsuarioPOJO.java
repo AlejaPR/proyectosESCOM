@@ -32,6 +32,8 @@ public class UsuarioPOJO {
    private int tipoDocumento;
    
    private String token;
+   
+   private String fechaDeNacimiento;
 
     public UsuarioPOJO() {
     }
@@ -125,6 +127,18 @@ public class UsuarioPOJO {
     public void setToken(String token) {
         this.token = token;
     }
+
+    public String getFechaDeNacimiento() {
+        return fechaDeNacimiento;
+    }
+
+    public void setFechaDeNacimiento(String fechaDeNacimiento) {
+        this.fechaDeNacimiento = fechaDeNacimiento;
+    }
+
+    
+
+    
    
    
 }

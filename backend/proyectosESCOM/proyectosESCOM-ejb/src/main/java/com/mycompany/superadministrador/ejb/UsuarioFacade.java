@@ -12,9 +12,15 @@ import com.mycompany.superadministrador.interfaces.UsuarioFacadeLocal;
 import com.mycompany.superadministrador.entity.Usuario;
 import com.mycompany.superadministrador.interfaces.SesionesFacadeLocal;
 import com.mycompany.superadministrador.seguridad.Seguridad;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -147,12 +153,28 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
     @Override
     public UsuarioPOJO buscarUsuarioEspecifico(int cedula) {
         TypedQuery<Usuario> consultaUsuarioEsp = em.createNamedQuery("consultaUsuarioEsp", Usuario.class);
-        consultaUsuarioEsp.setParameter("cedula", cedula);
+        consultaUsuarioEsp.setParameter("cedula", cedula);     
         Usuario usuarioEspDB = consultaUsuarioEsp.getSingleResult();
+
+        /**Conversion de fecha Oracle*/
+        SimpleDateFormat formatoOracle = new SimpleDateFormat("EE MMM dd HH:mm:ss z yyyy",Locale.ENGLISH);
+        SimpleDateFormat formatoUsuario = new SimpleDateFormat("yyyy-MM-dd");
+        Date fecha = null;
+        try {
+            fecha = formatoOracle.parse(usuarioEspDB.getFechaNacimiento().toString());
+        } catch (ParseException ex) {
+            Logger.getLogger(UsuarioFacade.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        String fechaN = null;
+        if (fecha != null) {
+            fechaN = formatoUsuario.format(fecha);
+        }
+ 
         UsuarioPOJO usuarioRespuesta = new UsuarioPOJO();
         usuarioRespuesta.setId(usuarioEspDB.getIdUsuario());
         usuarioRespuesta.setNombre(usuarioEspDB.getNombre());
         usuarioRespuesta.setApellido(usuarioEspDB.getApellido());
+        usuarioRespuesta.setFechaDeNacimiento(fechaN);
         usuarioRespuesta.setTipoDocumento(usuarioEspDB.getFkUsrIdtipodocumento().getIdTipodocumento());
         usuarioRespuesta.setNumeroDocumento(usuarioEspDB.getNumeroDocumento());
         usuarioRespuesta.setCorreoElectronico(usuarioEspDB.getCorreoElectronico());
