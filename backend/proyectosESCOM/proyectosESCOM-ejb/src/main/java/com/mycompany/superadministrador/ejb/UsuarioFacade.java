@@ -168,14 +168,13 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
        **/
     @Override
     public void editarUsuario(int cedula, UsuarioPOJO usuarioEditar) {
-        em.createNativeQuery("UPDATE TBL_USUARIO SET USR_NUMERODOCUMENTO=?, USR_APELLIDO=?, USR_FECHANACIMIENTO=?, USR_NOMBRE=?,USR_CORREOELECTRONICO=?,USR_CONTRASENA=? WHERE USR_NUMERODOCUMENTO=?")
+        em.createNativeQuery("UPDATE TBL_USUARIO SET USR_NUMERODOCUMENTO=?, USR_APELLIDO=?, USR_FECHANACIMIENTO=?, USR_NOMBRE=?,USR_CORREOELECTRONICO=? WHERE USR_NUMERODOCUMENTO=?")
                 .setParameter(1, usuarioEditar.getNumeroDocumento())
                 .setParameter(2, usuarioEditar.getApellido())
                 .setParameter(3, usuarioEditar.getFechaNacimiento())
                 .setParameter(4, usuarioEditar.getNombre())
                 .setParameter(5, usuarioEditar.getCorreoElectronico())
-                .setParameter(6, usuarioEditar.getContrasena())
-                .setParameter(7, cedula)
+                .setParameter(6, cedula)
                 .executeUpdate();
       
     }
