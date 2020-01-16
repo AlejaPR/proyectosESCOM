@@ -92,6 +92,13 @@ class EditarModulo extends React.Component {
                             </div> :
                                 <form className="letra" onSubmit={this.props.handleSubmit(this.handleSubmit)}>
                                     <br />
+                                    <label>Imagen</label>
+                                    <div className="row">
+                                        <div className="col-sm-5">
+                                            <Field name="numeroDocumento" validate={[requerido, documentoIdentificacion]} component={generarInput} label="Numero de documento" />
+                                        </div>
+                                    </div>
+                                    <br />
                                     <label>Nombre</label>
                                     <div className="row">
                                         <div className="col-sm-5">
@@ -102,14 +109,7 @@ class EditarModulo extends React.Component {
                                     <label>Descripcion</label>
                                     <div className="row">
                                         <div className="col-sm-5">
-                                            <Field name="apellido" type="textarea" validate={[requerido, apellido]} component={generarInput} label="Apellido" />
-                                        </div>
-                                    </div>
-                                    <br />
-                                    <label>Imagen</label>
-                                    <div className="row">
-                                        <div className="col-sm-5">
-                                            <Field name="numeroDocumento" validate={[requerido, documentoIdentificacion]} component={generarInput} label="Numero de documento" />
+                                            <Field name="apellido" validate={[requerido, apellido]} component={renderTextArea} label="Apellido" />
                                         </div>
                                     </div>
                                     <br />
@@ -182,6 +182,14 @@ const generarInput = ({ input, placeholder, label, type, meta: { touched, warnin
     </div>
 )
 
+const renderTextArea = ({input, meta: { touched, error, warning }}) => (
+    <div>
+        <div>
+            <textarea {...input} style={{ fontSize: "12px" }} className="form-control letra form-control-solid placeholder-no-fix" />
+            {touched && ((error && <span className="text-danger letra form-group">{error}</span>) || (warning && <span>{warning}</span>))}
+        </div>
+    </div>
+);
 
 const estiloTitulo = {
 

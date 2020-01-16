@@ -1,6 +1,6 @@
 import {
     ESTADO_MODULOS, MOSTRAR_MODULOS, ANADIR_CODIGO_EDITAR, INFORMACION_MODULO,
-    MENSAJE_EDITAR_MODULO, ACTIVIDADES_MODULO
+    MENSAJE_EDITAR_MODULO, ACTIVIDADES_MODULO, MENSAJE_SUSPENDER_MODULO, ACTUALIZAR_MODULOS
 } from '../actions/actionsModulo.js'
 
 
@@ -10,7 +10,8 @@ const initialState = {
     estadoModulos: false,
     codigoModulo: [],
     moduloEditar: [],
-    mensajeEditarModulo: ''
+    mensajeEditarModulo: '',
+    mensajeSuspenderModulo: ''
 }
 
 export function reducerModulo(state = initialState, action) {
@@ -27,6 +28,10 @@ export function reducerModulo(state = initialState, action) {
             return Object.assign({}, state, { moduloEditar: action.informacionModulo })
         case MENSAJE_EDITAR_MODULO:
             return Object.assign({}, state, { mensajeEditarModulo: action.mensaje })
+        case MENSAJE_SUSPENDER_MODULO:
+            return Object.assign({}, state, { mensajeSuspenderModulo: action.mensaje })
+        case ACTUALIZAR_MODULOS:
+            return Object.assign({}, state, { modulosRegistrados: action.modulo })
         default:
             return state
     }

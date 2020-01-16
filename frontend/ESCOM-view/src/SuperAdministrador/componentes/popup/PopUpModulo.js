@@ -10,9 +10,10 @@ import '../../css/business-casual.css'
 import '../../css/estilos.css'
 import '../../css/bootstrap.min.css'
 import '../../css/menu.css'
-
+import 'react-notifications/lib/notifications.css';
 
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { NotificationContainer } from 'react-notifications';
 
 class ModalExample extends React.Component {
   constructor(props) {
@@ -106,6 +107,7 @@ class ModalExample extends React.Component {
             <Button color="secondary" onClick={this.toggle}>Cancelar</Button>
           </ModalFooter>
         </Modal>
+        <NotificationContainer />
       </div>
     );
   }
