@@ -7,16 +7,18 @@ export const ESTADO_MODULOS = 'ESTADO_MODULOS';
 export const ANADIR_CODIGO_EDITAR = 'ANADIR_CODIGO_EDITAR';
 export const INFORMACION_MODULO='INFORMACION_MODULO';
 export const MENSAJE_EDITAR_MODULO='MENSAJE_EDITAR_MODULO';
+export const MENSAJE_SUSPENDER_MODULO='MENSAJE_SUSPENDER_MODULO';
 export const ACTIVIDADES_MODULO='ACTIVIDADES_MODULO';
+export const ACTUALIZAR_MODULOS='ACTUALIZAR_MODULOS';
 
-// export function actualizarMensajeSuspender(mensaje) {
-//     return (dispatch, getState) => {
-//         dispatch({
-//             type: MENSAJE_SUSPENDER,
-//             mensaje: mensaje
-//         });
-//     };
-// }
+export function actualizarMensajeSuspenderModulo(mensaje) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: MENSAJE_SUSPENDER_MODULO,
+            mensaje: mensaje
+        });
+    };
+}
 
 export function actionAsignarModulo(codigoModulo) {
     return (dispatch, getState) => {
@@ -115,7 +117,6 @@ export function actionConsultarActividadesModulo(codigoModulo, token) {
     return (dispatch, getState) => {
         axios.get("http://localhost:9090/proyectosESCOM-web/api/modulo/listarActividadesModulo/" + codigoModulo, { headers: headers })
             .then(response => {
-                console.log('respuesta',response.data);
                 dispatch({
                     type: ACTIVIDADES_MODULO,
                     actividades: response.data
@@ -145,4 +146,54 @@ export function actionConsultarActividadesModulo(codigoModulo, token) {
                 } 
             });
     };
+}
+
+export function actionSuspenderActivarModulo(codigoModulo, token,actualizados) {
+    var tokenRequest = desencriptar(token);
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': tokenRequest,
+        'Permiso': 'SA_CREAR USpUARIO'
+    }
+    return (dispatch, getState) => {
+        axios.get("http://localhost:9090/proyectosESCOM-web/api/modulo/cambiarEstadoModulo/"+codigoModulo, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: MENSAJE_SUSPENDER_MODULO,
+                    mensaje: 'Operacion hecha con exito'
+                });
+                dispatch({
+                    type: ACTUALIZAR_MODULOS,
+                    modulo: actualizados
+                });
+            }).catch((error) => {
+                console.log(error);
+
+                if (error.request.response === '') {
+                    dispatch({
+                        type: MENSAJE_SUSPENDER_MODULO,
+                        mensaje: 'Servidor fuera de servicio temporalmente'
+                    });
+                }else{
+                    if (error.request) {
+                        var o = JSON.parse(error.request.response);
+                        let respuesta=mensajesDeError(o.respuesta);
+                        console.log('respuesta',respuesta);
+                        if(respuesta!==''){
+                            dispatch({
+                                type: MENSAJE_SUSPENDER_MODULO,
+                                mensaje: respuesta
+                            });
+                        }else{
+                            dispatch({
+                                type: MENSAJE_SUSPENDER_MODULO,
+                                mensaje: 'Sin acceso al servicio'
+                            });
+                        }
+                    }
+                } 
+                
+            });
+
+    }
 }

@@ -5,66 +5,95 @@ import '../../css/business-casual.css'
 import '../../css/estilos.css'
 import '../../css/bootstrap.min.css'
 import '../../css/menu.css'
-
-import { Button } from 'reactstrap';
-
+import 'react-notifications/lib/notifications.css';
 
 //componentes
 import Barra from '../general/BarraDirecciones.js'
 import PopUpModulo from '../popup/PopUpModulo.js'
-import Fila from '../general/FilaTablaUsuario.js'
 import MaterialTable from 'material-table';
 import MTableToolbar from '../../utilitario/MTableToolbar.js';
 import { confirmAlert } from 'react-confirm-alert';
 import Alerta from '@icons/material/AlertIcon.js';
 import { NotificationManager } from 'react-notifications';
 
+
 //redux conexion
 import { connect } from 'react-redux';
-import { actionConsultarModulos ,actionAsignarModulo} from '../../actions/actionsModulo.js';
+import { actionConsultarModulos ,actionAsignarModulo,actionSuspenderActivarModulo} from '../../actions/actionsModulo.js';
 import { withRouter } from 'react-router-dom';
 
 class ContenidoAdminModulo extends React.Component {
 
-	eventoBorrado = (evento) => {
-		evento.preventDefault();
-		console.log(this.state.post)
+	state = {
+		codigoModulo: 0
+	}
+
+	actualizarModulos(idModulo) {
+		let nuevo = [];
+		this.props.modulosRegistrados.map(function (task, index, array) {
+			if (task.idModulo === idModulo) {
+				if (task.estadoModulo === "Suspendido") {
+					let modulo = {
+						idModulo: task.idModulo,
+						estadoModulo: "Activo",
+						nombreModulo: task.nombreModulo,
+						descripcionModulo: task.descripcionModulo,
+						acronimo:task.acronimo
+					}
+					nuevo.push(modulo);
+				} else {
+					let modulo = {
+						nombreModulo: task.nombreModulo,
+						idModulo: task.idModulo,
+						descripcionModulo: task.descripcionModulo,
+						estadoModulo: "Suspendido",
+						acronimo:task.acronimo
+					}
+					nuevo.push(modulo);
+				}
+			} else {
+				nuevo.push(task);
+			}
+		});
+		return nuevo;
 	}
 
 	componentWillMount(){
 		this.props.actionConsultarModulos(localStorage.getItem('Token'));
 	}
 
-	onChange = (evento) => {
-		this.setState({
-			[evento.target.name]: evento.target.value
-		});
-	}
-
-	 componentDidMount() {
-		
-	}
-
-
-	renderTableData() {
-		return this.state.post.map((post, index) => {
-			const { id } = post //destructuring
-			return (
-				<Fila modulo={post} key={id} />
-			)
-		})
-
-	}
-
-	anadirModulo = (logo, nombremodulo, descripcion) => {
-		const nuevoModulo = {
-			logo: logo,
-			nombremodulo: nombremodulo,
-			descripcion: descripcion
+	componentDidUpdate() {
+		console.log('msg suspender',this.props.mensajeSuspender);
+		switch (this.props.mensajeSuspender) {
+			case 'Sin permiso':
+				NotificationManager.warning('No tiene permisos para suspender/activar los usuarios')
+				break;
+			case 'Operacion hecha con exito':
+				NotificationManager.info('Operacion realizada con exito')
+				break;
 		}
-		this.setState({
-			post: [...this.state.post, nuevoModulo]
-		})
+		// this.props.actualizarMensajeSuspender('');
+	}
+
+
+	activarDesactivarModulo(codigoModulo) {
+		confirmAlert({
+			title: '',
+			message: '¿Esta seguro?',
+			buttons: [
+				{
+					label: 'Si',
+					onClick: () => {
+						this.props.actionSuspenderActivarModulo(codigoModulo, localStorage.getItem('Token'), this.actualizarModulos(codigoModulo));
+					}
+				},
+				{
+					label: 'No',
+					onClick: () => NotificationManager.info('Se cancelo la operacion')
+				}
+			]
+		});
+
 	}
 
 	render() {
@@ -178,7 +207,7 @@ class ContenidoAdminModulo extends React.Component {
 								{
 									icon: 'restore',
 									tooltip: 'Suspender / Activar',
-									onClick: (event, rowData) => this.activarDesactivarUsuario(rowData.numeroDocumento)
+									onClick: (event, rowData) => this.activarDesactivarModulo(rowData.idModulo)
 								},
 								{
 									icon: 'assignmentInd',
@@ -244,9 +273,10 @@ function mapStateToProps(state) {
 	return {
 		modulosRegistrados:state.mod.modulosRegistrados,
 		habilitado: state.mod.estadoModulos,
-		codigoModulo:state.mod.codigoModulo
+		codigoModulo:state.mod.codigoModulo,
+		mensajeSuspender:state.mod.mensajeSuspenderModulo
 	}
 }
 
-export default withRouter(connect(mapStateToProps, {actionConsultarModulos,actionAsignarModulo})(ContenidoAdminModulo));
+export default withRouter(connect(mapStateToProps, {actionConsultarModulos,actionAsignarModulo,actionSuspenderActivarModulo})(ContenidoAdminModulo));
 
