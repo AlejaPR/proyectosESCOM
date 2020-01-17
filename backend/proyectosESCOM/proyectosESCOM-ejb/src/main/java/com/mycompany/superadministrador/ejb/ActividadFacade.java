@@ -92,7 +92,7 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
     /**
      * Metodo que realiza la consulta de actividades de un modulo especifico
      *
-     * @param idModulo
+     * @param modulo
      * @return 
        *
      */

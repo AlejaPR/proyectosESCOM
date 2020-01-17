@@ -65,14 +65,13 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         consultaLogin.setParameter("contrasena", contrasena);
         return consultaLogin.getSingleResult();
     }
-    
+
     public List<Usuario> consultaDatosExistentes(String correo, int idDocumento) {
         TypedQuery<Usuario> consultaDatos = em.createNamedQuery("consultarExistencia", Usuario.class);
         consultaDatos.setParameter("correo", correo);
         consultaDatos.setParameter("numeroDocumento", idDocumento);
         return consultaDatos.getResultList();
     }
-    
 
     public int editarToken(String token, int idUsuario) {
         TypedQuery<Usuario> editarToken = em.createNamedQuery("editarToken", Usuario.class);
@@ -100,10 +99,12 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         return actividadesPOJO;
     }
 
-    /**Metodo que realiza el registro de usuarios
-     * 
+    /**
+     * Metodo que realiza el registro de usuarios
+     *
      * @param usuario
-       **/
+       *
+     */
     @Override
     public void registrarUsuario(UsuarioPOJO usuario) {
         String contrasena = Seguridad.generarHash(usuario.getContrasena());
@@ -125,69 +126,80 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
 
     }
 
-    /**Metodo que realiza la consulta a la tabla usuario
-       Devuelve una lista con los usuarios registrados
+    /**
+     * Metodo que realiza la consulta a la tabla usuario Devuelve una lista con
+     * los usuarios registrados
+     *
      * @return 
-       **/
+       *
+     */
     @Override
     public List<UsuarioPOJO> listarUsuarios() {
-        TypedQuery<Usuario> consultaUsuariosRegistrados = em.createNamedQuery("consultaUsuarios", Usuario.class);
+//        TypedQuery<Usuario> consultaUsuariosRegistrados = em.createNamedQuery("consultaUsuarios", Usuario.class);
+
         List<UsuarioPOJO> listaUsuarios = new ArrayList<>();
-        for (Usuario u : consultaUsuariosRegistrados.getResultList()) {
-            UsuarioPOJO usuario = new UsuarioPOJO();
-            usuario.setNombre(u.getNombre());
-            usuario.setApellido(u.getApellido());
-            usuario.setNumeroDocumento(u.getNumeroDocumento());
-            usuario.setCorreoElectronico(u.getCorreoElectronico());
-            usuario.setEstado(u.getEstado());
-            listaUsuarios.add(usuario);
-        }
+        listaUsuarios = em.createNativeQuery("select tbl_usuario.usr_nombre, tbl_usuario.usr_apellido, tbl_usuario.usr_numerodocumento,\n"
+                + "tbl_usuario.usr_correoelectronico, tbl_usuario.usr_estado from tbl_usuario").getResultList();
+
+//        for (Usuario u : consultaUsuariosRegistrados.getResultList()) {
+//            UsuarioPOJO usuario = new UsuarioPOJO();
+//            usuario.setNombre(u.getNombre());
+//            usuario.setApellido(u.getApellido());
+//            usuario.setNumeroDocumento(u.getNumeroDocumento());
+//            usuario.setCorreoElectronico(u.getCorreoElectronico());
+//            usuario.setEstado(u.getEstado());
+//            listaUsuarios.add(usuario);
+//        }
         return listaUsuarios;
     }
 
-    /**Metodo que realiza la consulta a la tabla usuario
-       Devuelve los datos de un usuario registrado con la cedula enviada 
+    /**
+     * Metodo que realiza la consulta a la tabla usuario Devuelve los datos de
+     * un usuario registrado con la cedula enviada
+     *
      * @param cedula
      * @return 
-       **/
+       *
+     */
     @Override
     public UsuarioPOJO buscarUsuarioEspecifico(int cedula) {
-        TypedQuery<Usuario> consultaUsuarioEsp = em.createNamedQuery("consultaUsuarioEsp", Usuario.class);
-        consultaUsuarioEsp.setParameter("cedula", cedula);     
-        Usuario usuarioEspDB = consultaUsuarioEsp.getSingleResult();
 
-        /**Conversion de fecha Oracle*/
-        SimpleDateFormat formatoOracle = new SimpleDateFormat("EE MMM dd HH:mm:ss z yyyy",Locale.ENGLISH);
+        Usuario lista = new Usuario();
+        TypedQuery<Usuario> usuarioEspDB = em.createQuery("select u from Usuario u where u.numeroDocumento= :cedula",Usuario.class);
+        usuarioEspDB.setParameter("cedula", cedula);
+        lista=usuarioEspDB.getSingleResult();
+        /**
+         * Conversion de fecha Oracle
+         */
         SimpleDateFormat formatoUsuario = new SimpleDateFormat("yyyy-MM-dd");
         Date fecha = null;
-        try {
-            fecha = formatoOracle.parse(usuarioEspDB.getFechaNacimiento().toString());
-        } catch (ParseException ex) {
-            Logger.getLogger(UsuarioFacade.class.getName()).log(Level.SEVERE, null, ex);
-        }
         String fechaN = null;
-        if (fecha != null) {
+        
+            UsuarioPOJO usuario=new UsuarioPOJO(); 
+            fecha=lista.getFechaNacimiento();
             fechaN = formatoUsuario.format(fecha);
-        }
- 
-        UsuarioPOJO usuarioRespuesta = new UsuarioPOJO();
-        usuarioRespuesta.setId(usuarioEspDB.getIdUsuario());
-        usuarioRespuesta.setNombre(usuarioEspDB.getNombre());
-        usuarioRespuesta.setApellido(usuarioEspDB.getApellido());
-        usuarioRespuesta.setFechaDeNacimiento(fechaN);
-        usuarioRespuesta.setTipoDocumento(usuarioEspDB.getFkUsrIdtipodocumento().getIdTipodocumento());
-        usuarioRespuesta.setNumeroDocumento(usuarioEspDB.getNumeroDocumento());
-        usuarioRespuesta.setCorreoElectronico(usuarioEspDB.getCorreoElectronico());
-        usuarioRespuesta.setEstado(usuarioEspDB.getEstado());
-        return usuarioRespuesta;
+            
+            usuario.setId(lista.getIdUsuario());
+            usuario.setNombre(lista.getNombre());
+            usuario.setApellido(lista.getApellido());
+            usuario.setFechaDeNacimiento(fechaN);
+            usuario.setTipoDocumento(lista.getFkUsrIdtipodocumento().getIdTipodocumento());
+            usuario.setNumeroDocumento(lista.getNumeroDocumento());
+            usuario.setCorreoElectronico(lista.getCorreoElectronico());
+            usuario.setEstado(lista.getEstado());
+            
+        return usuario;
     }
 
-     /**Metodo que realiza la modificacion de un usuario
-       Recibe cedula para filtrar la busqueda
+    /**
+     * Metodo que realiza la modificacion de un usuario Recibe cedula para
+     * filtrar la busqueda
+     *
      * @param cedula
      * @param usuarioEditar
-     * 
-       **/
+     *
+     *
+     */
     @Override
     public void editarUsuario(int cedula, UsuarioPOJO usuarioEditar) {
         em.createNativeQuery("UPDATE TBL_USUARIO SET USR_NUMERODOCUMENTO=?, USR_APELLIDO=?, USR_FECHANACIMIENTO=?, USR_NOMBRE=?,USR_CORREOELECTRONICO=? WHERE USR_NUMERODOCUMENTO=?")
@@ -198,22 +210,25 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
                 .setParameter(5, usuarioEditar.getCorreoElectronico())
                 .setParameter(6, cedula)
                 .executeUpdate();
-      
+
     }
 
-     /**Metodo que realiza el cambio de estado de un usuario
-       Recibe cedula para filtrar la busqueda y el valor del estado
+    /**
+     * Metodo que realiza el cambio de estado de un usuario Recibe cedula para
+     * filtrar la busqueda y el valor del estado
+     *
      * @param cedula
      * @param estado
-     * 
-       **/
+     *
+     *
+     */
     @Override
     public void cambiarEstadoUsuario(int cedula, String estado) {
-        
+
         em.createNativeQuery("UPDATE TBL_USUARIO SET USR_ESTADO=? WHERE USR_NUMERODOCUMENTO=?")
                 .setParameter(1, estado)
                 .setParameter(2, cedula)
                 .executeUpdate();
     }
-    
+
 }

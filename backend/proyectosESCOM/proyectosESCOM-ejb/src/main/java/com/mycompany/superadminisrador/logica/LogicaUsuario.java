@@ -255,11 +255,11 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         try{
           UsuarioPOJO usuarioResultado=usuarioDB.buscarUsuarioEspecifico(cedula);
             if(usuarioResultado != null){
-                if(usuarioResultado.getEstado().equals("Activo")){
+                    if(usuarioResultado.getEstado().equals("Activo")){
                     usuarioDB.cambiarEstadoUsuario(cedula, "Suspendido");
                 }else if(usuarioResultado.getEstado().equals("Suspendido")){
                     usuarioDB.cambiarEstadoUsuario(cedula, "Activo");
-                } 
+                }  
             }
             else{
                 throw new NoResultException("No se encontraron datos del usuario");
@@ -286,7 +286,7 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
           UsuarioPOJO usuarioResultado=usuarioDB.buscarUsuarioEspecifico(cedula);
             if(usuarioResultado != null){            
                 List<ActividadPOJO> listaActividades = new ArrayList();
-                listaActividades= actividadDB.listarActividadesUsuario(usuarioResultado.getId());
+                    listaActividades= actividadDB.listarActividadesUsuario(usuarioResultado.getId());
                 if(listaActividades.size() >=0 ){
                   return listaActividades;   
                 }else{
@@ -316,8 +316,9 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
     public void eliminarActividadUsuario(int cedula, int idActividad) throws ExcepcionGenerica {
         try{
           UsuarioPOJO usuarioResultado=usuarioDB.buscarUsuarioEspecifico(cedula);
-            if(usuarioResultado != null){            
-                actividadDB.eliminarActividadUsuario(usuarioResultado.getId(), idActividad);    
+            if(usuarioResultado != null){    
+                     actividadDB.eliminarActividadUsuario(usuarioResultado.getId(), idActividad); 
+                   
             }
             else{
                 throw new NoResultException("No se encontraron datos del usuario");
