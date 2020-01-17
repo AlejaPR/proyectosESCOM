@@ -10,6 +10,7 @@ import com.mycompany.superadministrador.interfaces.ActividadFacadeLocal;
 import com.mycompany.superadministrador.entity.Actividad;
 import com.mycompany.superadministrador.entity.Modulo;
 import com.mycompany.superadministrador.entity.TipoDocumento;
+import com.mycompany.superadministrador.entity.UsuarioActividad;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -55,20 +56,25 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
      * Metodo que realiza la consulta de actividades del usuario especifico
      *
      * @param idUsuario
-     * @return 
-       *
+     * @return
+     *
      */
     @Override
     public List<ActividadPOJO> listarActividadesUsuario(Integer idUsuario) {
 
-        List<ActividadPOJO> listaFinalActividades = new ArrayList();
-        listaFinalActividades = em.createNativeQuery("SELECT tbl_actividad.pk_act_idactividad,TBL_ACTIVIDAD.ACT_NOMBREACTIVIDAD FROM TBL_USUARIOACTIVIDAD,TBL_ACTIVIDAD, TBL_USUARIO \n"
-                + "WHERE tbl_actividad.pk_act_idactividad = tbl_usuarioactividad.fk_uac_idactividad \n"
-                + "AND tbl_usuarioactividad.fk_uac_idusuario= tbl_usuario.pk_usr_idusuario \n"
-                + "AND tbl_usuario.pk_usr_idusuario=?")
-                .setParameter(1, idUsuario)
-                .getResultList();
-        return listaFinalActividades;
+        List<ActividadPOJO> listaActividades = new ArrayList<>();
+        TypedQuery<Actividad> listaAct = em.createNamedQuery("consultaActividadesUsuario", Actividad.class);
+        listaAct.setParameter("idUsuario", idUsuario);
+
+        
+        for(int i=0;i<listaAct.getResultList().size();i++){
+            ActividadPOJO actividad = new ActividadPOJO();
+            actividad.setIdActividad(listaAct.getResultList().get(i).getIdActividad());
+            actividad.setNombre(listaAct.getResultList().get(i).getNombreActividad());
+            listaActividades.add(actividad);
+        }
+
+        return listaActividades;
     }
 
     /**
@@ -93,8 +99,8 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
      * Metodo que realiza la consulta de actividades de un modulo especifico
      *
      * @param modulo
-     * @return 
-       *
+     * @return
+     *
      */
     @Override
     public List<ActividadPOJO> listarActividadesModulo(Modulo modulo) {
