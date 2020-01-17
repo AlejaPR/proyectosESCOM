@@ -62,6 +62,7 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
        **/
     @Override
     public ModuloPOJO buscarModuloEspecifico(int idModulo) {
+        
         TypedQuery<Modulo> consultaModuloEsp = em.createNamedQuery("consultaModuloEsp", Modulo.class);
         consultaModuloEsp.setParameter("idModulo", idModulo);
         Modulo moduloEspDB = consultaModuloEsp.getSingleResult();
@@ -84,15 +85,14 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
        **/
     @Override
     public void editarModulo(int idModulo, ModuloPOJO moduloEditar) {
-        em.createNativeQuery("UPDATE TBL_MODULO SET MOD_ESTADO=?, MOD_IMAGEN=?, MOD_NOMBREMODULO=?, MOD_DESCRIPCIONMODULO=?,MOD_ACRONIMO=? WHERE PK_MOD_IDMODULO=?")
-                .setParameter(1, moduloEditar.getEstadoModulo())
-                .setParameter(2, moduloEditar.getImagenModulo())
-                .setParameter(3, moduloEditar.getNombreModulo())
-                .setParameter(4, moduloEditar.getDescripcionModulo())
-                .setParameter(5, moduloEditar.getAcronimo())
-                .setParameter(6, idModulo)
-                .executeUpdate();
-      
+        
+        Modulo modulo = em.find(Modulo.class, idModulo);
+        modulo.setEstado(moduloEditar.getEstadoModulo());
+        modulo.setImagen(moduloEditar.getImagenModulo());
+        modulo.setNombreModulo(moduloEditar.getNombreModulo());
+        modulo.setDescripcionModulo(moduloEditar.getDescripcionModulo());
+        modulo.setAcronimo(moduloEditar.getAcronimo());
+        em.merge(modulo);
     }
     
      /**Metodo que realiza el cambio de estado de un modulo
@@ -104,10 +104,9 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
     @Override
     public void cambiarEstadoModulo(int idModulo, String estado) {
         
-        em.createNativeQuery("UPDATE TBL_MODULO SET MOD_ESTADO=? WHERE PK_MOD_IDMODULO=?")
-                .setParameter(1, estado)
-                .setParameter(2, idModulo)
-                .executeUpdate();
+        Modulo modulo = em.find(Modulo.class, idModulo);
+        modulo.setEstado(estado);
+        em.merge(modulo);
     }
     
 

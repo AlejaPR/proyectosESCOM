@@ -12,15 +12,10 @@ import com.mycompany.superadministrador.interfaces.UsuarioFacadeLocal;
 import com.mycompany.superadministrador.entity.Usuario;
 import com.mycompany.superadministrador.interfaces.SesionesFacadeLocal;
 import com.mycompany.superadministrador.seguridad.Seguridad;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -36,9 +31,11 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
 
     @PersistenceContext(unitName = "conexionSuperadministrador")
     private EntityManager em;
+    
 
     @Override
     protected EntityManager getEntityManager() {
+        
         return em;
     }
 
@@ -123,7 +120,6 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
                 .setParameter(10, usuario.getTipoDocumento())
                 .setParameter(11, usuario.getContrasena())
                 .executeUpdate();
-
     }
 
     /**
@@ -135,21 +131,19 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
      */
     @Override
     public List<UsuarioPOJO> listarUsuarios() {
-//        TypedQuery<Usuario> consultaUsuariosRegistrados = em.createNamedQuery("consultaUsuarios", Usuario.class);
-
+        
         List<UsuarioPOJO> listaUsuarios = new ArrayList<>();
-        listaUsuarios = em.createNativeQuery("select tbl_usuario.usr_nombre, tbl_usuario.usr_apellido, tbl_usuario.usr_numerodocumento,\n"
-                + "tbl_usuario.usr_correoelectronico, tbl_usuario.usr_estado from tbl_usuario").getResultList();
-
-//        for (Usuario u : consultaUsuariosRegistrados.getResultList()) {
-//            UsuarioPOJO usuario = new UsuarioPOJO();
-//            usuario.setNombre(u.getNombre());
-//            usuario.setApellido(u.getApellido());
-//            usuario.setNumeroDocumento(u.getNumeroDocumento());
-//            usuario.setCorreoElectronico(u.getCorreoElectronico());
-//            usuario.setEstado(u.getEstado());
-//            listaUsuarios.add(usuario);
-//        }
+        TypedQuery<Usuario>consultaUsuariosRegistrados = em.createNamedQuery("consultaUsuarios", Usuario.class);
+        
+        for (Usuario u : consultaUsuariosRegistrados.getResultList()) {
+            UsuarioPOJO usuario = new UsuarioPOJO();
+            usuario.setNombre(u.getNombre());
+            usuario.setApellido(u.getApellido());
+            usuario.setNumeroDocumento(u.getNumeroDocumento());
+            usuario.setCorreoElectronico(u.getCorreoElectronico());
+            usuario.setEstado(u.getEstado());
+            listaUsuarios.add(usuario);
+        }
         return listaUsuarios;
     }
 
@@ -163,7 +157,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
      */
     @Override
     public UsuarioPOJO buscarUsuarioEspecifico(int cedula) {
-
+        
         Usuario lista = new Usuario();
         TypedQuery<Usuario> usuarioEspDB = em.createQuery("select u from Usuario u where u.numeroDocumento= :cedula",Usuario.class);
         usuarioEspDB.setParameter("cedula", cedula);
@@ -176,9 +170,12 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         String fechaN = null;
         
             UsuarioPOJO usuario=new UsuarioPOJO(); 
-            fecha=lista.getFechaNacimiento();
-            fechaN = formatoUsuario.format(fecha);
-            
+            if(lista.getFechaNacimiento()==null){
+                fecha=null;
+            }else{
+                fecha=lista.getFechaNacimiento();
+                fechaN = formatoUsuario.format(fecha);
+            }
             usuario.setId(lista.getIdUsuario());
             usuario.setNombre(lista.getNombre());
             usuario.setApellido(lista.getApellido());
@@ -195,21 +192,21 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
      * Metodo que realiza la modificacion de un usuario Recibe cedula para
      * filtrar la busqueda
      *
-     * @param cedula
+     * @param idUsuario
      * @param usuarioEditar
      *
      *
      */
     @Override
-    public void editarUsuario(int cedula, UsuarioPOJO usuarioEditar) {
-        em.createNativeQuery("UPDATE TBL_USUARIO SET USR_NUMERODOCUMENTO=?, USR_APELLIDO=?, USR_FECHANACIMIENTO=?, USR_NOMBRE=?,USR_CORREOELECTRONICO=? WHERE USR_NUMERODOCUMENTO=?")
-                .setParameter(1, usuarioEditar.getNumeroDocumento())
-                .setParameter(2, usuarioEditar.getApellido())
-                .setParameter(3, usuarioEditar.getFechaNacimiento())
-                .setParameter(4, usuarioEditar.getNombre())
-                .setParameter(5, usuarioEditar.getCorreoElectronico())
-                .setParameter(6, cedula)
-                .executeUpdate();
+    public void editarUsuario(int idUsuario, UsuarioPOJO usuarioEditar) {
+        
+        Usuario usuario = em.find(Usuario.class, idUsuario);
+        usuario.setNumeroDocumento(usuarioEditar.getNumeroDocumento());
+        usuario.setApellido(usuarioEditar.getApellido());
+        usuario.setFechaNacimiento(usuarioEditar.getFechaNacimiento());
+        usuario.setNombre(usuarioEditar.getNombre());
+        usuario.setCorreoElectronico(usuarioEditar.getCorreoElectronico());
+        em.merge(usuario);
 
     }
 
@@ -217,18 +214,17 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
      * Metodo que realiza el cambio de estado de un usuario Recibe cedula para
      * filtrar la busqueda y el valor del estado
      *
-     * @param cedula
+     * @param idUsuario
      * @param estado
      *
      *
      */
     @Override
-    public void cambiarEstadoUsuario(int cedula, String estado) {
+    public void cambiarEstadoUsuario(int idUsuario, String estado) {
 
-        em.createNativeQuery("UPDATE TBL_USUARIO SET USR_ESTADO=? WHERE USR_NUMERODOCUMENTO=?")
-                .setParameter(1, estado)
-                .setParameter(2, cedula)
-                .executeUpdate();
+        Usuario usuario = em.find(Usuario.class, idUsuario);
+        usuario.setEstado(estado);
+        em.merge(usuario);
     }
 
 }

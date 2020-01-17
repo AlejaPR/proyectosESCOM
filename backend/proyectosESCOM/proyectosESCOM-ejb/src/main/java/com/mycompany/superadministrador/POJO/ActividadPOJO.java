@@ -13,9 +13,18 @@ public class ActividadPOJO {
     
     private int idActividad;
     private String nombre;
+    
+    
 
     public ActividadPOJO() {
     }
+
+    public ActividadPOJO(int idActividad, String nombre) {
+        this.idActividad = idActividad;
+        this.nombre = nombre;
+    }
+    
+    
 
     public int getIdActividad() {
         return idActividad;

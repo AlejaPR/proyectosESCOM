@@ -233,7 +233,10 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
     @Override
     public void editarUsuario(int cedula, UsuarioPOJO usuarioEditar) throws ExcepcionGenerica {
          try{
-                usuarioDB.editarUsuario(cedula, usuarioEditar); 
+              UsuarioPOJO usuarioResultado=usuarioDB.buscarUsuarioEspecifico(cedula);
+            if(usuarioResultado != null){
+                usuarioDB.editarUsuario(usuarioResultado.getId(), usuarioEditar);
+            }
                 
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la modificacion del usuario ");
@@ -256,9 +259,9 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
           UsuarioPOJO usuarioResultado=usuarioDB.buscarUsuarioEspecifico(cedula);
             if(usuarioResultado != null){
                     if(usuarioResultado.getEstado().equals("Activo")){
-                    usuarioDB.cambiarEstadoUsuario(cedula, "Suspendido");
+                    usuarioDB.cambiarEstadoUsuario(usuarioResultado.getId(), "Suspendido");
                 }else if(usuarioResultado.getEstado().equals("Suspendido")){
-                    usuarioDB.cambiarEstadoUsuario(cedula, "Activo");
+                    usuarioDB.cambiarEstadoUsuario(usuarioResultado.getId(), "Activo");
                 }  
             }
             else{
