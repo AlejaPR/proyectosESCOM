@@ -26,21 +26,24 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
 
     @EJB
     ModuloFacadeLocal moduloDB;
-    
+
     @EJB
     ActividadFacadeLocal actividadDB;
-    
-     /**Metodo que llama a la consulta para obtener la lista de modulos
-     * @return 
+
+    /**
+     * Metodo que llama a la consulta para obtener la lista de modulos
+     *
+     * @return
      * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
-     **/
+     *
+     */
     @Override
     public List<ModuloPOJO> devolverModulos() throws ExcepcionGenerica {
-         try{
-          List<ModuloPOJO> modulosResultado=moduloDB.listarModulos();
-            if(!modulosResultado.isEmpty()){
+        try {
+            List<ModuloPOJO> modulosResultado = moduloDB.listarModulos();
+            if (!modulosResultado.isEmpty()) {
                 return modulosResultado;
-            }else{
+            } else {
                 throw new NoResultException("No se encontraron datos");
             }
         } catch (NullPointerException ex) {
@@ -49,23 +52,26 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
             throw new ExcepcionGenerica("Ocurrio una excepcion ");
         }
     }
-    
-    /**Metodo que llama a la consulta que devuelve los datos del modulo recibiendo el id
+
+    /**
+     * Metodo que llama a la consulta que devuelve los datos del modulo
+     * recibiendo el id
+     *
      * @param idModulo
-     * @return 
+     * @return
      * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
-     **/
+     *
+     */
     @Override
     public ModuloPOJO traerModuloId(int idModulo) throws ExcepcionGenerica {
-        try{
-          ModuloPOJO moduloResultado=moduloDB.buscarModuloEspecifico(idModulo);
-            if(moduloResultado != null){
+        try {
+            ModuloPOJO moduloResultado = moduloDB.buscarModuloEspecifico(idModulo);
+            if (moduloResultado != null) {
                 return moduloResultado;
-            }
-            else{
+            } else {
                 throw new NoResultException("No se encontraron datos del modulo");
             }
-        }catch (NoResultException ex) {
+        } catch (NoResultException ex) {
             throw new ExcepcionGenerica("No se encontraron datos del modulo");
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
@@ -73,18 +79,21 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
             throw new ExcepcionGenerica("Ocurrio una excepcion ");
         }
     }
-    
-     /**Metodo que llama a la consulta para editar modulo recibiendo como parametro el id
-     *  
+
+    /**
+     * Metodo que llama a la consulta para editar modulo recibiendo como
+     * parametro el id
+     *
      * @param idModulo
      * @param moduloEditar
      * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
-     **/
+     *
+     */
     @Override
     public void editarModulo(int idModulo, ModuloPOJO moduloEditar) throws ExcepcionGenerica {
-         try{
-                moduloDB.editarModulo(idModulo, moduloEditar);
-                
+        try {
+            moduloDB.editarModulo(idModulo, moduloEditar);
+
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la modificacion del usuario ");
         } catch (NoResultException ex) {
@@ -92,29 +101,31 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
         } catch (Exception ex) {
             throw new ExcepcionGenerica("Ocurrio una excepcion ");
         }
-        
+
     }
-    
-     /**Metodo que llama a la consulta para cambiar el estado del modulo recibiendo como parametro el id
-     *  
+
+    /**
+     * Metodo que llama a la consulta para cambiar el estado del modulo
+     * recibiendo como parametro el id
+     *
      * @param idModulo
      * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
-     **/
+     *
+     */
     @Override
     public void cambiarEstadoModulo(int idModulo) throws ExcepcionGenerica {
-        try{
-          ModuloPOJO moduloResultado=moduloDB.buscarModuloEspecifico(idModulo);
-            if(moduloResultado != null){
-                if(moduloResultado.getEstadoModulo().equals("Activo")){
+        try {
+            ModuloPOJO moduloResultado = moduloDB.buscarModuloEspecifico(idModulo);
+            if (moduloResultado != null) {
+                if (moduloResultado.getEstadoModulo().equals("Activo")) {
                     moduloDB.cambiarEstadoModulo(idModulo, "Suspendido");
-                }else if(moduloResultado.getEstadoModulo().equals("Suspendido")){
+                } else if (moduloResultado.getEstadoModulo().equals("Suspendido")) {
                     moduloDB.cambiarEstadoModulo(idModulo, "Activo");
-                } 
-            }
-            else{
+                }
+            } else {
                 throw new NoResultException("No se encontraron datos del usuario");
             }
-        }catch (NoResultException ex) {
+        } catch (NoResultException ex) {
             throw new ExcepcionGenerica("No se encontraron datos del usuario");
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
@@ -123,25 +134,27 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
         }
     }
 
-
-    /**Metodo que llama a la consulta para buscar la lista de actividades de un modulo
-     * 
+    /**
+     * Metodo que llama a la consulta para buscar la lista de actividades de un
+     * modulo
+     *
      * @param idModulo
-     * @return 
+     * @return
      * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
-     **/
+     *
+     */
     @Override
     public List<ActividadPOJO> listarActividadesModulo(int idModulo) throws ExcepcionGenerica {
-        try{    
-                List<ActividadPOJO> listaActividadesM = new ArrayList();
-                listaActividadesM = actividadDB.listarActividadesModulo(moduloDB.find(idModulo));
-                if(listaActividadesM.size() >=0 ){
-                    
-                  return listaActividadesM;   
-                }else{
-                     throw new NoResultException("Error en la consulta");
-                }  
-        }catch (NoResultException ex) {
+        try {
+            List<ActividadPOJO> listaActividadesM = new ArrayList();
+            listaActividadesM = actividadDB.listarActividadesModulo(moduloDB.find(idModulo));
+            if (listaActividadesM.size() >= 0) {
+
+                return listaActividadesM;
+            } else {
+                throw new NoResultException("Error en la consulta");
+            }
+        } catch (NoResultException ex) {
             throw new ExcepcionGenerica("No se encontraron datos del usuario");
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
@@ -150,5 +163,4 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
         }
     }
 
-    
 }

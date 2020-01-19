@@ -10,6 +10,7 @@ import com.mycompany.superadministrador.entity.Usuario;
 import java.util.List;
 import javax.ejb.Local;
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
+import com.mycompany.superadministrador.entity.TipoDocumento;
 
 /**
  *
@@ -50,7 +51,7 @@ public interface UsuarioFacadeLocal {
     
     public UsuarioPOJO buscarUsuarioEspecifico(int cedula);
     
-    public void editarUsuario(int cedula, UsuarioPOJO usuarioEditar);
+    public int editarUsuario(int cedula, UsuarioPOJO usuarioEditar,TipoDocumento tipo);
     
     public void cambiarEstadoUsuario(int cedula, String estado);
     

@@ -136,6 +136,7 @@ export function actionConsultarUsuarios(token) {
     return (dispatch, getState) => {
         axios.get("http://localhost:9090/proyectosESCOM-web/api/usuario/listarUsuarios", { headers: headers })
             .then(response => {
+                console.log('respuesta usuarios reg',response.data);
                 dispatch({
                     type: MOSTRAR_USUARIOS,
                     respuesta: response.data
@@ -359,6 +360,8 @@ export function actionEditarUsuario(usuario, cedula, token) {
         'TokenAuto': desencriptar(token),
         'Permiso': 'SA_CREAR USUARIO'
     }
+    console.log('usuario k llego',usuario);
+    console.log('cedula es',cedula);
 
     return (dispatch, getState) => {
         axios.put("http://localhost:9090/proyectosESCOM-web/api/usuario/editarUsuario/" + cedula, usuario, { headers: headers })

@@ -9,8 +9,6 @@ import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.interfaces.ActividadFacadeLocal;
 import com.mycompany.superadministrador.entity.Actividad;
 import com.mycompany.superadministrador.entity.Modulo;
-import com.mycompany.superadministrador.entity.TipoDocumento;
-import com.mycompany.superadministrador.entity.UsuarioActividad;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -61,20 +59,29 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
      */
     @Override
     public List<ActividadPOJO> listarActividadesUsuario(Integer idUsuario) {
-
-        List<ActividadPOJO> listaActividades = new ArrayList<>();
+        List<Actividad> listaActividades = new ArrayList<>();
         TypedQuery<Actividad> listaAct = em.createNamedQuery("consultaActividadesUsuario", Actividad.class);
-        listaAct.setParameter("idUsuario", idUsuario);
-
-        
-        for(int i=0;i<listaAct.getResultList().size();i++){
-            ActividadPOJO actividad = new ActividadPOJO();
-            actividad.setIdActividad(listaAct.getResultList().get(i).getIdActividad());
-            actividad.setNombre(listaAct.getResultList().get(i).getNombreActividad());
-            listaActividades.add(actividad);
+        listaAct.setParameter("numeroDocumento", idUsuario);
+        listaActividades=listaAct.getResultList();
+        List<ActividadPOJO> respuesta= new ArrayList<>();
+        for(Actividad act : listaActividades){
+            respuesta.add(new ActividadPOJO(act.getIdActividad(), act.getNombreActividad()));
         }
-
-        return listaActividades;
+        return respuesta;
+    }
+    
+    @Override
+    public List<ActividadPOJO> listarActividadesNoAsociadasUsuario(int idUsuario,int idModulo) {
+        List<Actividad> listaActividades = new ArrayList<>();
+        TypedQuery<Actividad> listaAct = em.createNamedQuery("consultaActividadesNoAsociadasUsuario", Actividad.class);
+        listaAct.setParameter("idModulo", idModulo);
+        listaAct.setParameter("numeroDocumento", idUsuario);
+        listaActividades=listaAct.getResultList();
+        List<ActividadPOJO> respuesta= new ArrayList<>();
+        for(Actividad act : listaActividades){
+            respuesta.add(new ActividadPOJO(act.getIdActividad(), act.getNombreActividad()));
+        }
+        return respuesta;
     }
 
     /**

@@ -71,7 +71,6 @@ class editar extends React.Component {
           numeroDocumento: formValues.numeroDocumento,
           nombre: formValues.nombre,
           apellido: formValues.apellido,
-          contrasena: formValues.contrasena,
           fechaNacimiento: date,
           tipoDocumento: formValues.tipoDocumento,
           token: ''
@@ -84,10 +83,10 @@ class editar extends React.Component {
         nuevo.push(post);
       }
     });
+
     NotificationManager.info('Informacion actualizada correctamente');
     console.log('actualizada', this.props.usuarios);
     this.props.actionActualizarUsuarios([]);
-    this.props.actionActualizarUsuarios(nuevo);
     this.props.history.push('/adminUsuario');
 
   }
@@ -290,7 +289,7 @@ function mapStateToProps(state) {
       numeroDocumento: state.user.usuarioEditar.numeroDocumento,
       correo: state.user.usuarioEditar.correoElectronico,
       tipoDocumento: state.user.usuarioEditar.tipoDocumento,
-      fechaNacimiento: '1990-12-19'
+      fechaNacimiento:  state.user.usuarioEditar.fechaDeNacimiento
     }
   }
 }

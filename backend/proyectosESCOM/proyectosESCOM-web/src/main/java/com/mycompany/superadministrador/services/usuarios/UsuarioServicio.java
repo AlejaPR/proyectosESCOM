@@ -196,6 +196,22 @@ public class UsuarioServicio {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/listarActividadesNoAsociadasUsuario/{numeroDocumento}/{codigoModulo}")
+    public Response listarActividadesNoAsociadasUsuario(@PathParam("numeroDocumento") int numeroDocumento,@PathParam("codigoModulo") int idModulo) {
+        try {
+            List<ActividadPOJO> listaActividades = usuarioLogica.listarActividadesNoAsociadasUsuario(numeroDocumento,idModulo);
+            return Response.status(Response.Status.OK).entity(listaActividades).build();
+        } catch (ExcepcionGenerica e) {
+            respuesta.setRespuesta("Sin acceso al servicio");
+            return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
+        } catch (Exception e) {
+            respuesta.setRespuesta("Ocurrio un error en el servidor ");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
+        }
+    }
 
     /**
      * Servicio que elimina actividad a un usuario, recibe como parametro la
@@ -221,5 +237,29 @@ public class UsuarioServicio {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }
+    
+    /**
+     * Servicio que registra usuarios
+     *
+     * @param usuario
+     * @return  *
+     */
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/asignarActividad/{numeroDocumento}/{codigoActividad}")
+    public Response registrarUsuario(@PathParam("numeroDocumento") int numeroDocumento,@PathParam("codigoActividad") int codigoActividad) {
+        try {
+            usuarioLogica.asignarActividadAUsuario(numeroDocumento, codigoActividad);
+            respuesta.setRespuesta("Actividad asignada");
+            return Response.status(Response.Status.OK).entity(respuesta).build();
+        } catch (ExcepcionGenerica e) {
+            respuesta.setRespuesta("Ya existen los datos registrados previamente");
+            return Response.status(Response.Status.NOT_ACCEPTABLE).entity(respuesta).build();
+        } catch (Exception e) {
+            respuesta.setRespuesta("Ocurrio un error interno del servidor");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
+        }
+    }
+
 
 }

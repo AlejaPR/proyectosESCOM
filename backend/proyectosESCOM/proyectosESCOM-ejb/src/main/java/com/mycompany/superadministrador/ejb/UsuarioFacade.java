@@ -8,6 +8,7 @@ package com.mycompany.superadministrador.ejb;
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
 import com.mycompany.superadministrador.entity.Actividad;
+import com.mycompany.superadministrador.entity.TipoDocumento;
 import com.mycompany.superadministrador.interfaces.UsuarioFacadeLocal;
 import com.mycompany.superadministrador.entity.Usuario;
 import com.mycompany.superadministrador.interfaces.SesionesFacadeLocal;
@@ -31,11 +32,10 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
 
     @PersistenceContext(unitName = "conexionSuperadministrador")
     private EntityManager em;
-    
 
     @Override
     protected EntityManager getEntityManager() {
-        
+
         return em;
     }
 
@@ -100,7 +100,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
      * Metodo que realiza el registro de usuarios
      *
      * @param usuario
-       *
+     *
      */
     @Override
     public void registrarUsuario(UsuarioPOJO usuario) {
@@ -126,15 +126,15 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
      * Metodo que realiza la consulta a la tabla usuario Devuelve una lista con
      * los usuarios registrados
      *
-     * @return 
-       *
+     * @return
+     *
      */
     @Override
     public List<UsuarioPOJO> listarUsuarios() {
-        
+
         List<UsuarioPOJO> listaUsuarios = new ArrayList<>();
-        TypedQuery<Usuario>consultaUsuariosRegistrados = em.createNamedQuery("consultaUsuarios", Usuario.class);
-        
+        TypedQuery<Usuario> consultaUsuariosRegistrados = em.createNamedQuery("consultaUsuarios", Usuario.class);
+
         for (Usuario u : consultaUsuariosRegistrados.getResultList()) {
             UsuarioPOJO usuario = new UsuarioPOJO();
             usuario.setNombre(u.getNombre());
@@ -152,39 +152,39 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
      * un usuario registrado con la cedula enviada
      *
      * @param cedula
-     * @return 
-       *
+     * @return
+     *
      */
     @Override
     public UsuarioPOJO buscarUsuarioEspecifico(int cedula) {
-        
+
         Usuario lista = new Usuario();
-        TypedQuery<Usuario> usuarioEspDB = em.createQuery("select u from Usuario u where u.numeroDocumento= :cedula",Usuario.class);
+        TypedQuery<Usuario> usuarioEspDB = em.createQuery("select u from Usuario u where u.numeroDocumento= :cedula", Usuario.class);
         usuarioEspDB.setParameter("cedula", cedula);
-        lista=usuarioEspDB.getSingleResult();
+        lista = usuarioEspDB.getSingleResult();
         /**
          * Conversion de fecha Oracle
          */
         SimpleDateFormat formatoUsuario = new SimpleDateFormat("yyyy-MM-dd");
         Date fecha = null;
         String fechaN = null;
-        
-            UsuarioPOJO usuario=new UsuarioPOJO(); 
-            if(lista.getFechaNacimiento()==null){
-                fecha=null;
-            }else{
-                fecha=lista.getFechaNacimiento();
-                fechaN = formatoUsuario.format(fecha);
-            }
-            usuario.setId(lista.getIdUsuario());
-            usuario.setNombre(lista.getNombre());
-            usuario.setApellido(lista.getApellido());
-            usuario.setFechaDeNacimiento(fechaN);
-            usuario.setTipoDocumento(lista.getFkUsrIdtipodocumento().getIdTipodocumento());
-            usuario.setNumeroDocumento(lista.getNumeroDocumento());
-            usuario.setCorreoElectronico(lista.getCorreoElectronico());
-            usuario.setEstado(lista.getEstado());
-            
+
+        UsuarioPOJO usuario = new UsuarioPOJO();
+        if (lista.getFechaNacimiento() == null) {
+            fecha = null;
+        } else {
+            fecha = lista.getFechaNacimiento();
+            fechaN = formatoUsuario.format(fecha);
+        }
+        usuario.setId(lista.getIdUsuario());
+        usuario.setNombre(lista.getNombre());
+        usuario.setApellido(lista.getApellido());
+        usuario.setFechaDeNacimiento(fechaN);
+        usuario.setTipoDocumento(lista.getFkUsrIdtipodocumento().getIdTipodocumento());
+        usuario.setNumeroDocumento(lista.getNumeroDocumento());
+        usuario.setCorreoElectronico(lista.getCorreoElectronico());
+        usuario.setEstado(lista.getEstado());
+
         return usuario;
     }
 
@@ -198,15 +198,25 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
      *
      */
     @Override
-    public void editarUsuario(int idUsuario, UsuarioPOJO usuarioEditar) {
+    public int editarUsuario(int idUsuario, UsuarioPOJO usuarioEditar,TipoDocumento tipo) {
         
-        Usuario usuario = em.find(Usuario.class, idUsuario);
-        usuario.setNumeroDocumento(usuarioEditar.getNumeroDocumento());
-        usuario.setApellido(usuarioEditar.getApellido());
-        usuario.setFechaNacimiento(usuarioEditar.getFechaNacimiento());
-        usuario.setNombre(usuarioEditar.getNombre());
-        usuario.setCorreoElectronico(usuarioEditar.getCorreoElectronico());
-        em.merge(usuario);
+        TypedQuery<Usuario> editarToken = em.createNamedQuery("editarUsuario", Usuario.class);
+        editarToken.setParameter("nombre", usuarioEditar.getNombre());
+        editarToken.setParameter("apellido", usuarioEditar.getApellido());
+        editarToken.setParameter("numeroDocumento", usuarioEditar.getNumeroDocumento());
+        editarToken.setParameter("fechaNacimiento", usuarioEditar.getFechaNacimiento());
+        editarToken.setParameter("correoElectronico", usuarioEditar.getCorreoElectronico());
+        editarToken.setParameter("tipoDocumento", tipo);
+        editarToken.setParameter("documento", idUsuario);
+        return editarToken.executeUpdate();
+//        System.out.println("numero de documento "+usuarioEditar.getNumeroDocumento());
+//        Usuario usuario = em.find(Usuario.class, idUsuario);
+//        usuario.setNumeroDocumento(usuarioEditar.getNumeroDocumento());
+//        usuario.setApellido(usuarioEditar.getApellido());
+//        usuario.setFechaNacimiento(usuarioEditar.getFechaNacimiento());
+//        usuario.setNombre(usuarioEditar.getNombre());
+//        usuario.setCorreoElectronico(usuarioEditar.getCorreoElectronico());
+//        em.merge(usuario);
 
     }
 

@@ -32,42 +32,41 @@ import javax.validation.constraints.Size;
 @NamedQueries({
     @NamedQuery(name = "consultaActividades", query = "SELECT a from Actividad a,Usuario u, UsuarioActividad ua WHERE a.pkActIdactividad = ua.fkUacIdactividad.pkActIdactividad AND u.idUsuario=ua.fkUacIdusuario.idUsuario AND u.idUsuario=:idUsuario"),
     @NamedQuery(name = "consultaActividadesModulo", query = "SELECT a from Actividad a WHERE a.fkActIdmodulo = :idModulo"),
-    @NamedQuery(name = "consultaActividadesUsuario", query = "SELECT act.pkActIdactividad, act.nombreActividad FROM UsuarioActividad uac,Actividad act, Usuario u "
-                                                        + "WHERE act.pkActIdactividad=uac.fkUacIdactividad.pkActIdactividad "
-                                                        + "AND uac.fkUacIdusuario.idUsuario=u.idUsuario AND u.idUsuario=:idUsuario")
+    @NamedQuery(name = "consultaActividadesUsuario", query = "SELECT ac from Actividad ac,Usuario us, UsuarioActividad ua WHERE us.idUsuario = ua.fkUacIdusuario.idUsuario AND ac.pkActIdactividad =ua.fkUacIdactividad.pkActIdactividad AND ac.estado='Activo' AND us.numeroDocumento=:numeroDocumento"),
+    @NamedQuery(name = "consultaActividadesNoAsociadasUsuario", query = "SELECT act FROM Actividad act WHERE act.estado='Activo' AND act.fkActIdmodulo.pkModIdmodulo=:idModulo  AND act NOT IN(SELECT ac from Actividad ac,Usuario us, UsuarioActividad ua WHERE us.idUsuario = ua.fkUacIdusuario.idUsuario AND ac.pkActIdactividad =ua.fkUacIdactividad.pkActIdactividad AND ac.estado='Activo' AND us.numeroDocumento=:numeroDocumento AND ac.fkActIdmodulo.pkModIdmodulo=:idModulo)")
 })
 
-public class Actividad implements Serializable{
-    
+public class Actividad implements Serializable {
+
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "PK_ACT_IDACTIVIDAD")
     private Integer pkActIdactividad;
-    
+
     @Column(name = "ACT_ESTADO")
     private String estado;
-    
+
     @Column(name = "ACT_DESCRIPCIONACTIVIDAD")
     private String descripcionActividad;
-    
+
     @Column(name = "ACT_ULTIMAMODIFICACION")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ultimaModificacion;
-    
+
     @Size(max = 20)
     @Column(name = "ACT_NOMBREACTIVIDAD")
     private String nombreActividad;
-    
+
     @JoinColumn(name = "FK_ACT_IDMODULO", referencedColumnName = "PK_MOD_IDMODULO")
     @ManyToOne
     private Modulo fkActIdmodulo;
-    
+
     @OneToMany(mappedBy = "fkUacIdactividad")
     private List<UsuarioActividad> usuarioActividadList;
-    
-    public Actividad(){
-        
+
+    public Actividad() {
+
     }
 
     public Actividad(String estado, String descripcionActividad, Date ultimaModificacion, String nombreActividad, Modulo fkActIdmodulo) {
@@ -133,9 +132,5 @@ public class Actividad implements Serializable{
     public void setUsuarioActividadList(List<UsuarioActividad> usuarioActividadList) {
         this.usuarioActividadList = usuarioActividadList;
     }
-    
-    
 
-    
-    
 }

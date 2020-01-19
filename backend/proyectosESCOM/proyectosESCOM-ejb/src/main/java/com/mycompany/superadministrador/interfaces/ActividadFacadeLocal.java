@@ -31,10 +31,13 @@ public interface ActividadFacadeLocal {
     List<Actividad> findRange(int[] range);
 
     int count();
-    
+
     List<ActividadPOJO> listarActividadesUsuario(Integer idUsuario);
-    
+
+    public List<ActividadPOJO> listarActividadesNoAsociadasUsuario(int idUsuario, int idModulo);
+
     void eliminarActividadUsuario(Integer idUsuario, Integer idActividad);
-    
+
     List<ActividadPOJO> listarActividadesModulo(Modulo modulo);
+
 }

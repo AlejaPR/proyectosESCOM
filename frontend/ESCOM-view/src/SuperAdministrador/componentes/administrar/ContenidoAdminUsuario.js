@@ -31,6 +31,8 @@ class ContenidoAdminUsuario extends React.Component {
 
 	componentWillMount() {
 		this.props.actionConsultarUsuarios(localStorage.getItem('Token'));
+		this.props.actionConsultarUsuarios(localStorage.getItem('Token'));
+
 	}
 
 	componentDidUpdate() {

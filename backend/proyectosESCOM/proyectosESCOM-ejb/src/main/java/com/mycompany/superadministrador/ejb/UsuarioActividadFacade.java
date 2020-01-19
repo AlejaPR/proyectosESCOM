@@ -30,22 +30,5 @@ public class UsuarioActividadFacade extends AbstractFacade<UsuarioActividad> imp
 
     public UsuarioActividadFacade() {
         super(UsuarioActividad.class);
-    }
-    
-    @Override
-    public void create(UsuarioActividad documento) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void edit(UsuarioActividad documento) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void remove(UsuarioActividad documento) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    
+    }   
 }
