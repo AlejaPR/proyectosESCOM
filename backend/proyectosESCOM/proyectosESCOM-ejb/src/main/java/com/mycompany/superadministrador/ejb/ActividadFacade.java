@@ -123,5 +123,22 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
         }
         return listaActividadesM;
     }
+    
+    /**
+     * Metodo que realiza el cambio de estado de una actividad 
+     * Recibe el valor del estado y el id de la actividad
+     *
+     * @param idActividad
+     * @param estado
+     *
+     *
+     */
+    @Override
+    public void cambiarEstadoActividad(int idActividad, String estado) {
+
+        Actividad actividad = em.find(Actividad.class, idActividad);
+        actividad.setEstado(estado);
+        em.merge(actividad);
+    }
 
 }

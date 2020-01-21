@@ -318,7 +318,7 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
      * Metodo que trae los datos del usuario con el parametro cedula para llamar
      * la consulta que busca la lista de actividades del usuario
      *
-     * @param cedula
+     * @param numeroDocumento
      * @return
      * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
      *
@@ -342,6 +342,16 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         }
     }
 
+     /**
+     * Metodo que trae los datos del usuario con el parametro cedula, llama
+     * la consulta que busca la lista de actividades no asociadas del usuario
+     *
+     * @param numeroDocumento
+     * @param idModulo
+     * @return 
+     * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
+     *
+     */
     @Override
     public List<ActividadPOJO> listarActividadesNoAsociadasUsuario(int numeroDocumento, int idModulo) throws ExcepcionGenerica {
         try {
@@ -390,6 +400,14 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         }
     }
     
+    /**
+     * Metodo que asigna actividades a los usuarios 
+     *
+     * @param numeroDocumento
+     * @param idActividad
+     * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
+     *
+     */
     @Override
     public void asignarActividadAUsuario(int numeroDocumento,int idActividad) throws ExcepcionGenerica {
         try {

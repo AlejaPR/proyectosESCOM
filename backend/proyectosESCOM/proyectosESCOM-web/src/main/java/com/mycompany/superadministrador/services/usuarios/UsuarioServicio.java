@@ -197,6 +197,15 @@ public class UsuarioServicio {
         }
     }
     
+    /**
+     * Servicio que lista las actividades no asosciadas de un usuario especifico, recibe como
+     * parametro la cedula y el codigo del modulo 
+     *
+     * @param numeroDocumento
+     * @param idModulo
+     * 
+     * @return  *
+     */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/listarActividadesNoAsociadasUsuario/{numeroDocumento}/{codigoModulo}")
@@ -239,15 +248,17 @@ public class UsuarioServicio {
     }
     
     /**
-     * Servicio que registra usuarios
+     * Servicio que asigna actividades a usuarios 
      *
-     * @param usuario
+     * @param numeroDocumento
+     * @param codigoActividad
+     * 
      * @return  *
      */
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/asignarActividad/{numeroDocumento}/{codigoActividad}")
-    public Response registrarUsuario(@PathParam("numeroDocumento") int numeroDocumento,@PathParam("codigoActividad") int codigoActividad) {
+    public Response asignarActividad(@PathParam("numeroDocumento") int numeroDocumento,@PathParam("codigoActividad") int codigoActividad) {
         try {
             usuarioLogica.asignarActividadAUsuario(numeroDocumento, codigoActividad);
             respuesta.setRespuesta("Actividad asignada");

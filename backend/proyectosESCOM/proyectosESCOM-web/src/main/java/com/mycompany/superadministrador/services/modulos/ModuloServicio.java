@@ -136,4 +136,27 @@ public class ModuloServicio {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }
+    
+     /**Servicio que permite la suspencion/habilitacion de una actividad 
+      * de un modulo en especifico
+     * 
+     * 
+     * @param idActividad
+     * @return  **/
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/cambiarEstadoActividadModulo/{idActividad}")
+    public Response cambiarEstadoActividadModulo(@PathParam("idActividad") int idActividad ) {
+        try {
+            moduloLogica.cambiarEstadoActividadModulo(idActividad);
+            respuesta.setRespuesta("Estado de actividad cambiado correctamente");
+            return Response.status(Response.Status.OK).entity(respuesta).build();
+        }catch (ExcepcionGenerica e) {
+            respuesta.setRespuesta("No se ha podido modificar la actividad");
+            return Response.status(Response.Status.NOT_ACCEPTABLE).entity(respuesta).build();
+        }catch (Exception e) {
+            respuesta.setRespuesta("Ocurrio un error interno del servidor");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
+        }
+    }
 }
