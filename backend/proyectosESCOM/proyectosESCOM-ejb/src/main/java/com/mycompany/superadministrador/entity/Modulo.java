@@ -13,6 +13,7 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -49,9 +50,9 @@ public class Modulo implements Serializable{
     @Column(name = "MOD_ESTADO")
     private String estado;
     
-    @Size(max = 100)
+    @Lob
     @Column(name = "MOD_IMAGEN")
-    private String imagen;
+    private byte[] imagen;
     
     @Size(max = 20)
     @Column(name = "MOD_NOMBREMODULO")
@@ -70,14 +71,14 @@ public class Modulo implements Serializable{
     public Modulo(){
         
     }
-    
-    public Modulo(Date ultimaModificacion, String estado, String imagen, String nombreModulo, String descripcionModulo,String acronimo) {
+
+    public Modulo(Date ultimaModificacion, String estado, byte[] imagen, String nombreModulo, String acronimo, String descripcionModulo) {
         this.ultimaModificacion = ultimaModificacion;
         this.estado = estado;
         this.imagen = imagen;
         this.nombreModulo = nombreModulo;
+        this.acronimo = acronimo;
         this.descripcionModulo = descripcionModulo;
-        this.acronimo=acronimo;
     }
 
     public Integer getIdModulo() {
@@ -104,13 +105,14 @@ public class Modulo implements Serializable{
         this.estado = estado;
     }
 
-    public String getImagen() {
+    public byte[] getImagen() {
         return imagen;
     }
 
-    public void setImagen(String imagen) {
+    public void setImagen(byte[] imagen) {
         this.imagen = imagen;
     }
+
 
     public String getNombreModulo() {
         return nombreModulo;

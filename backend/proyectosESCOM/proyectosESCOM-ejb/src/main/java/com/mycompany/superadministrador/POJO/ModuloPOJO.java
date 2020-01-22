@@ -15,7 +15,7 @@ public class ModuloPOJO {
     
     private String estadoModulo;
     
-    private String imagenModulo;
+    private byte[] imagenModulo;
     
     private String nombreModulo;
     
@@ -26,7 +26,7 @@ public class ModuloPOJO {
     public ModuloPOJO() {
     }
 
-    public ModuloPOJO(int idModulo, String estadoModulo, String imagenModulo, String nombreModulo, String descripcionModulo, String acronimo) {
+    public ModuloPOJO(int idModulo, String estadoModulo, byte[] imagenModulo, String nombreModulo, String descripcionModulo, String acronimo) {
         this.idModulo = idModulo;
         this.estadoModulo = estadoModulo;
         this.imagenModulo = imagenModulo;
@@ -51,11 +51,11 @@ public class ModuloPOJO {
         this.estadoModulo = estadoModulo;
     }
 
-    public String getImagenModulo() {
+    public byte[] getImagenModulo() {
         return imagenModulo;
     }
 
-    public void setImagenModulo(String imagenModulo) {
+    public void setImagenModulo(byte[] imagenModulo) {
         this.imagenModulo = imagenModulo;
     }
 

@@ -11,6 +11,7 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -28,18 +29,23 @@ public class Configuracion implements Serializable{
     @NotNull
     @Column(name = "PK_CONF_IDCONFIGURACION")
     private Integer idConfiguracion;
-    @Size(max = 50)
+    
+    @Lob
     @Column(name = "CONF_LOGO")
-    private String logo;
-    @Size(max = 50)
+    private byte[] logo;
+    
+    @Lob
     @Column(name = "CONF_IMAGENLOGIN")
-    private String imagenLogin;
+    private byte[] imagenLogin;
+    
     @Size(max = 20)
     @Column(name = "CONF_BARRASUPERIOR")
     private String barraSuperior;
+    
     @Size(max = 20)
     @Column(name = "CONF_BARRALATERAL")
     private String barraLateral;
+    
     @Size(max = 20)
     @Column(name = "CONF_BOTONES")
     private String botones;
@@ -48,7 +54,7 @@ public class Configuracion implements Serializable{
         
     }
     
-    public Configuracion(String logo, String imagenLogin, String barraSuperior, String barraLateral, String botones) {
+    public Configuracion(byte[] logo, byte[] imagenLogin, String barraSuperior, String barraLateral, String botones) {
         this.logo = logo;
         this.imagenLogin = imagenLogin;
         this.barraSuperior = barraSuperior;
@@ -64,19 +70,19 @@ public class Configuracion implements Serializable{
         this.idConfiguracion = idConfiguracion;
     }
 
-    public String getLogo() {
+    public byte[] getLogo() {
         return logo;
     }
 
-    public void setLogo(String logo) {
+    public void setLogo(byte[] logo) {
         this.logo = logo;
     }
 
-    public String getImagenLogin() {
+    public byte[] getImagenLogin() {
         return imagenLogin;
     }
 
-    public void setImagenLogin(String imagenLogin) {
+    public void setImagenLogin(byte[] imagenLogin) {
         this.imagenLogin = imagenLogin;
     }
 
