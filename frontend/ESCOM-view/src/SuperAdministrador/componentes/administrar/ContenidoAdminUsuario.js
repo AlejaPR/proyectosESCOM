@@ -229,6 +229,7 @@ class ContenidoAdminUsuario extends React.Component {
 												icon: 'assignmentInd',
 												tooltip: 'Asignar actividad',
 												onClick: (event, rowData) => {
+													this.props.actionAsignarCedula(rowData.numeroDocumento);
 													this.props.history.push('/asignarActividadUsuario')
 												}
 											}

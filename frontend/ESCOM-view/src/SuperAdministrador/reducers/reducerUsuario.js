@@ -10,14 +10,16 @@ import {
     ANADIR_CEDULA_EDITAR,
     EDITAR_USUARIO,
     ACTUALIZAR_USUARIOS,
+    ACTIVIDADES_SIN_ASIGNAR,
     MENSAJE_LOGIN,
-    MENSAJE_SUSPENDER
+    MENSAJE_SUSPENDER, MODULOS_REGISTRADOS, ESTADO_ASIGNAR
 } from '../actions/actionsUsuario.js'
 
 
 const initialState = {
     usuariosRegistrados: [],
     estadoUsuarios: false,
+    estadoAsignar: false,
     actividadesUsuario: [],
     tiposDocumento: [],
     usuarioEditar: [],
@@ -26,13 +28,20 @@ const initialState = {
     mensajeLogin: [],
     mensajeRegistrar: '',
     mensajeEditar: '',
-    mensajeSuspender:''
+    mensajeSuspender: '',
+    modulosAsignar: [],
+    actividadesSinAsignar: []
 }
+
 
 export function reducerUsuario(state = initialState, action) {
     switch (action.type) {
+        case MODULOS_REGISTRADOS:
+            return Object.assign({}, state, { modulosAsignar: action.respuesta })
         case MOSTRAR_USUARIOS:
             return Object.assign({}, state, { usuariosRegistrados: action.respuesta })
+        case ACTIVIDADES_SIN_ASIGNAR:
+            return Object.assign({}, state, { actividadesSinAsignar: action.respuesta })
         case MOSTRAR_ACTIVIDADES_USUARIO:
             return Object.assign({}, state, { actividadesUsuario: action.respuesta })
         case AGREGAR_USUARIO:
@@ -60,6 +69,8 @@ export function reducerUsuario(state = initialState, action) {
             return Object.assign({}, state, { tiposDocumento: action.respuesta })
         case ESTADO_USUARIOS:
             return Object.assign({}, state, { estadoUsuarios: action.estado })
+        case ESTADO_ASIGNAR:
+            return Object.assign({}, state, { estadoAsignar: action.estado })
         default:
             return state
     }
