@@ -39,5 +39,7 @@ public interface ActividadFacadeLocal {
     void eliminarActividadUsuario(Integer idUsuario, Integer idActividad);
 
     List<ActividadPOJO> listarActividadesModulo(Modulo modulo);
+    
+    void cambiarEstadoActividad(int idActividad, String estado);
 
 }

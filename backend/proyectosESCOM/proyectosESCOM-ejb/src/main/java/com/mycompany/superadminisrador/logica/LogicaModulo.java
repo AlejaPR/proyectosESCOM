@@ -7,6 +7,7 @@ package com.mycompany.superadminisrador.logica;
 
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.POJO.ModuloPOJO;
+import com.mycompany.superadministrador.entity.Actividad;
 import com.mycompany.superadministrador.interfaces.ActividadFacadeLocal;
 import com.mycompany.superadministrador.interfaces.LogicaModuloFacadeLocal;
 import com.mycompany.superadministrador.interfaces.ModuloFacadeLocal;
@@ -163,4 +164,32 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
         }
     }
 
+     /**
+     * Metodo que cambia el estado de una actividad de un modulo en especifico
+     *
+     * @param idActividad
+     * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
+     *
+     */
+    @Override
+    public void cambiarEstadoActividadModulo(int idActividad) throws ExcepcionGenerica {
+        try {
+            Actividad actividadResultado = actividadDB.find(idActividad);
+            if (actividadResultado != null) {
+                if (actividadResultado.getEstado().equals("Activo")) {
+                    actividadDB.cambiarEstadoActividad(idActividad, "Suspendido"); 
+                } else if (actividadResultado.getEstado().equals("Suspendido")) {
+                    actividadDB.cambiarEstadoActividad(idActividad, "Activo"); 
+                }
+            } else {
+                throw new NoResultException("No se encontraron datos de la actividad");
+            }
+        } catch (NoResultException ex) {
+            throw new ExcepcionGenerica("No se encontraron datos de la actividad");
+        } catch (NullPointerException ex) {
+            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
+        } catch (Exception ex) {
+            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+        }
+    }
 }
