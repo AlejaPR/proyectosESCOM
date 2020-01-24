@@ -8,12 +8,14 @@ export const MOSTRAR_DOCUMENTOS = 'MOSTRAR_DOCUMENTOS';
 export const ACTIVIDADES_SIN_ASIGNAR='ACTIVIDADES_SIN_ASIGNAR';
 export const MOSTRAR_ACTIVIDADES_USUARIO = 'MOSTRAR_ACTIVIDADES_USUARIO';
 export const AGREGAR_USUARIO = 'AGREGAR_USUARIO';
+export const AGREGAR_ACTIVIDAD = 'AGREGAR_ACTIVIDAD';
 export const INFORMACION_USUARIO = 'INFORMACION_USUARIO';
 export const ANADIR_CEDULA_EDITAR = "ANADIR_CEDULA_EDITAR";
 export const EDITAR_USUARIO = "EDITAR_USUARIO";
 export const ACTUALIZAR_USUARIOS = 'ACTUALIZAR_USUARIOS';
 export const MENSAJE_LOGIN = 'MENSAJE_LOGIN';
 export const MENSAJE_REGISTRAR = 'MENSAJE_REGISTRAR';
+export const MENSAJE_ASIGNAR = 'MENSAJE_ASIGNAR';
 export const MENSAJE_EDITAR = 'MENSAJE_EDITAR';
 export const MENSAJE_SUSPENDER = 'MENSAJE_SUSPENDER';
 export const REDIRECCIONAR_LOGIN = 'REDIRECCIONAR_LOGIN';
@@ -126,6 +128,14 @@ export function actualizarMensajeSuspender(mensaje) {
     };
 }
 
+export function actualizarMensajeAsignar(mensaje) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: MENSAJE_ASIGNAR,
+            mensaje: mensaje
+        });
+    };
+}
 
 
 export function actionConsultarUsuarios(token) {
@@ -238,6 +248,49 @@ export function actionAgregarUsuario(usuario, token) {
                         }else{
                             dispatch({
                                 type: MENSAJE_REGISTRAR,
+                                mensaje: 'Ya existen los datos registrados previamente'
+                            });
+                        }
+                    }
+                } 
+                
+            });
+
+    }
+}
+
+export function actionAsignarActividad(token,numeroDocumento,actividad) {
+    var tokenRequest = desencriptar(token);
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': tokenRequest,
+        'Permiso': 'SA_CREAR USUARIO'
+    }
+    return (dispatch, getState) => {
+        axios.post("http://localhost:9090/proyectosESCOM-web/api/usuario/asignarActividad/"+numeroDocumento,actividad, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: MENSAJE_ASIGNAR,
+                    mensaje: 'Actividad asignada'
+                });
+            }).catch((error) => {
+                if (error.request.response === '') {
+                    dispatch({
+                        type: MENSAJE_ASIGNAR,
+                        mensaje: 'Servidor fuera de servicio temporalmente'
+                    });
+                }else{
+                    if (error.request) {
+                        var o = JSON.parse(error.request.response);
+                        let respuesta=mensajesDeError(o.respuesta);
+                        if(respuesta!==''){
+                            dispatch({
+                                type: MENSAJE_ASIGNAR,
+                                mensaje: respuesta
+                            });
+                        }else{
+                            dispatch({
+                                type: MENSAJE_ASIGNAR,
                                 mensaje: 'Ya existen los datos registrados previamente'
                             });
                         }

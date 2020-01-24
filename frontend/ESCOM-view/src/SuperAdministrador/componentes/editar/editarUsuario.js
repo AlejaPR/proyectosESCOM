@@ -38,10 +38,17 @@ class editar extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.props.mensajeEditar === 'Sin permiso') {
-      if (!this.state.habilitado) { this.setState({ habilitado: true }) };
+    switch (this.props.mensajeEditar) {
+      case 'Sin permiso':
+        if (!this.state.habilitado) { this.setState({ habilitado: true }) };
+        break;
+      case 'Modificado':
+        NotificationManager.success('Informacion actualizada');
+        break;
+
       // this.props.history.push('/adminUsuario');
     }
+
   }
 
   componentDidMount() {
@@ -56,38 +63,22 @@ class editar extends React.Component {
 
   onClickCancelar = (event) => {
     event.preventDefault();
-      this.props.history.push('/adminUsuario');
+    this.props.history.push('/adminUsuario');
   }
 
   handleSubmit = formValues => {
-    let nuevo = [];
     let date = new Date(formValues.fechaNacimiento);
-    this.props.usuarios.map((post, index) => {
-      if (post.numeroDocumento === this.props.cedula) {
-        let usuario = {
-          id: 0,
-          correoElectronico: formValues.correo,
-          estado: post.estado,
-          numeroDocumento: formValues.numeroDocumento,
-          nombre: formValues.nombre,
-          apellido: formValues.apellido,
-          fechaNacimiento: date,
-          tipoDocumento: formValues.tipoDocumento,
-          token: ''
-        }
-        console.log('usuario es', usuario);
-        this.props.actionEditarUsuario(usuario, this.props.cedula, localStorage.getItem('Token'));
-        nuevo.push(usuario);
-        console.log('nuevo ', nuevo);
-      } else {
-        nuevo.push(post);
-      }
-    });
-
-    NotificationManager.info('Informacion actualizada correctamente');
-    console.log('actualizada', this.props.usuarios);
-    this.props.actionActualizarUsuarios([]);
-    this.props.history.push('/adminUsuario');
+    let usuario = {
+      id: 0,
+      correoElectronico: formValues.correo,
+      numeroDocumento: formValues.numeroDocumento,
+      nombre: formValues.nombre,
+      apellido: formValues.apellido,
+      fechaNacimiento: date,
+      tipoDocumento: formValues.tipoDocumento,
+      token: ''
+    }
+    this.props.actionEditarUsuario(usuario, this.props.cedula, localStorage.getItem('Token'));
 
   }
 
@@ -125,7 +116,7 @@ class editar extends React.Component {
                   color: "#fff",
                   background: "rgb(158, 35, 45)"
                 }}><Alerta />No tiene los permisos suficientes para administrar los usuarios</span>
-                  <div style={{padding:"25px 44px 25px 287px"}}>
+                  <div style={{ padding: "25px 44px 25px 287px" }}>
                     <Button style={fondoBoton} onClick={this.onClickCancelar} type="submit">Aceptar</Button>{''}
                   </div>
                 </div> :
@@ -176,40 +167,9 @@ class editar extends React.Component {
                       </div>
                     </div>
                     <br />
-                    <div className="text-left titulo letra" style={estiloTitulo}>
-                      <h4>Actividades actualmente asignadas al usuario</h4>
-                      {/* <MaterialTable
-              title="Actions On Selected Rows Preview"
-              columns={[
-                { title: 'Name', field: 'name' },
-                { title: 'Surname', field: 'surname' },
-                { title: 'Birth Year', field: 'birthYear', type: 'numeric' },
-                {
-                  title: 'Birth Place',
-                  field: 'birthCity',
-                  lookup: { 34: 'İstanbul', 63: 'Şanlıurfa' },
-                },
-              ]}
-              data={[
-                { name: 'Mehmet', surname: 'Baran', birthYear: 1987, birthCity: 63 },
-                { name: 'Zerya Betül', surname: 'Baran', birthYear: 2017, birthCity: 34 },
-              ]}
-              options={{
-                selection: true
-              }}
-              actions={[
-                {
-                  tooltip: 'Remove All Selected Users',
-                  icon: 'delete',
-                  onClick: (evt, data) => alert('You want to delete ' + data.length + ' rows')
-                }
-              ]}
-            /> */}
-
-                    </div>
                     <div>
                       <Button style={fondoBoton} type="submit">Guardar</Button>{''}
-                      <Button style={fondoBotonS} color="secondary" onClick={this.onClickCancelar}>Cancelar</Button>
+                      <Button style={fondoBotonS} color="secondary" onClick={this.onClickCancelar}>Salir</Button>
                     </div>
                     <br />
                     <br />
@@ -269,7 +229,7 @@ const generarSelect = ({ input, label, type, meta: { touched, error }, children 
 const generarInput = ({ input, placeholder, label, type, meta: { touched, warning, error } }) => (
   <div>
     <div>
-      <input {...input} type={type} style={{ fontSize: "12px" }} className="form-control letra form-control-solid placeholder-no-fix" />
+      <input {...input} type={type} style={{ fontSize: "13px" }} className="form-control letra form-control-solid placeholder-no-fix" />
       {touched && ((error && <span className="text-danger letra form-group">{error}</span>) || (warning && <span>{warning}</span>))}
     </div>
   </div>
@@ -289,7 +249,7 @@ function mapStateToProps(state) {
       numeroDocumento: state.user.usuarioEditar.numeroDocumento,
       correo: state.user.usuarioEditar.correoElectronico,
       tipoDocumento: state.user.usuarioEditar.tipoDocumento,
-      fechaNacimiento:  state.user.usuarioEditar.fechaDeNacimiento
+      fechaNacimiento: state.user.usuarioEditar.fechaDeNacimiento
     }
   }
 }

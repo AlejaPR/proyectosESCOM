@@ -5,8 +5,10 @@ import '../../css/business-casual.css'
 import '../../css/estilos.css'
 import '../../css/bootstrap.min.css'
 import '../../css/menu.css'
+import 'react-notifications/lib/notifications.css';
 
-
+//componentes
+import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { Button } from 'reactstrap';
 import Select from 'react-select'
 import { reduxForm, Field } from 'redux-form';
@@ -20,7 +22,7 @@ import Alerta from '@icons/material/AlertIcon.js';
 import Barra from '../general/BarraDirecciones.js';
 
 //redux
-import { actionConsultarModulos, actionConsultarActividadesSinAsignar, actionAsignarActividades, actionConsultarActividadesUsuario } from '../../actions/actionsUsuario.js'
+import { actionConsultarModulos, actionConsultarActividadesSinAsignar,actualizarMensajeAsignar, actionAsignarActividades, actionConsultarActividadesUsuario,actionAsignarActividad } from '../../actions/actionsUsuario.js'
 import { connect } from 'react-redux';
 
 class AsignarActividadUsuario extends React.Component {
@@ -33,7 +35,7 @@ class AsignarActividadUsuario extends React.Component {
         this.props.actionConsultarModulos(localStorage.getItem('Token'));
         this.props.actionConsultarActividadesUsuario(this.props.cedula, localStorage.getItem('Token'));
         if (this.state.selectedOption !== 0) {
-            this.props.actionConsultarActividadesSinAsignar(localStorage.getItem('Token'), this.props.cedula, this.state.selectedOption);
+            this.props.actionConsultarActividadesSinAsignar(localStorage.getItem('Token'), this.props.cedula, this.state.selectedOption.value);
         }
     }
 
@@ -43,6 +45,15 @@ class AsignarActividadUsuario extends React.Component {
         }
     }
     componentDidUpdate() {
+        switch (this.props.mensaje) {
+            case 'Actividad asignada':
+                NotificationManager.success('Actividad asignada');
+                this.props.actualizarMensajeAsignar('');
+                this.props.actionConsultarActividadesUsuario(this.props.cedula, localStorage.getItem('Token'));
+                this.props.actionConsultarActividadesSinAsignar(localStorage.getItem('Token'), this.props.cedula, this.state.selectedOption.value);
+                break;
+        }
+
     }
 
     opciones = () => {
@@ -80,18 +91,21 @@ class AsignarActividadUsuario extends React.Component {
 
 
     handleChange = selectedOption => {
-        console.log(selectedOption.value);
         this.setState({ selectedOption });
         this.props.actionConsultarActividadesSinAsignar(localStorage.getItem('Token'), this.props.cedula, selectedOption.value);
     };
 
     handleSubmit = formValues => {
-        console.log('form', formValues)
+        let actividad={
+            idActividad:formValues.actividad.value,
+            nombre:formValues.actividad.label
+        }
+        this.props.actionAsignarActividad(localStorage.getItem('Token'),this.props.cedula,actividad);
     }
     render() {
         return (
             <>
-                <div class="text-left titulo" style={estiloLetrero}>
+                <div className="text-left titulo" style={estiloLetrero}>
                     <h4>Asignar actividad a usuario</h4>
                 </div>
                 <Barra texto="Inicio > Administracion de usuarios > Asignación de actividad a usuario" />
@@ -124,10 +138,10 @@ class AsignarActividadUsuario extends React.Component {
                             }}><Alerta />No tiene los permisos suficientes para administrar las actividades de los usuarios</span></div> :
                                 <form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
                                     <br />
-                                    <label for="form_control_1">Seleccione el modulo que tiene asignada la actividad</label>
+                                    <label>Seleccione el modulo que tiene asignada la actividad</label>
                                     <div className="row">
                                         <div className="col-md-4">
-                                            <Field name="currentUser" validate={[seleccione]} onChange={this.handleChange} component={ReduxFormSelect} options={this.opciones()} />
+                                            <Field name="modulo" validate={[seleccione]} onChange={this.handleChange} component={ReduxFormSelect} options={this.opciones()} />
                                         </div>
                                     </div>
                                     <br />
@@ -187,6 +201,7 @@ class AsignarActividadUsuario extends React.Component {
                         <br />
                     </div>
                 </div>
+                <NotificationContainer />
             </>
 
         )
@@ -214,7 +229,6 @@ export const ReduxFormSelect = props => {
 export const ReduxFormSelectDos = props => {
     const { input, options } = props;
     const { touched, error } = props.meta;
-    { console.log('asnjsakska', props) }
     return (
         <>
             <Select
@@ -291,6 +305,7 @@ const fondoBotonS = {
 function mapStateToProps(state) {
     return {
         modulos: state.user.modulosAsignar,
+        mensaje: state.user.mensajeAsignar,
         habilitado: state.user.estadoAsignar,
         cedula: state.user.cedula,
         actividades: state.user.actividadesUsuario,
@@ -302,4 +317,4 @@ let asignarActividadUsuario = reduxForm({
     form: 'asignarActividadUsuario'
 })(AsignarActividadUsuario)
 
-export default withRouter(connect(mapStateToProps, { actionConsultarModulos, actionConsultarActividadesSinAsignar, actionAsignarActividades, actionConsultarActividadesUsuario })(asignarActividadUsuario));
+export default withRouter(connect(mapStateToProps, { actionConsultarModulos, actionConsultarActividadesSinAsignar,actualizarMensajeAsignar,actionAsignarActividad, actionAsignarActividades, actionConsultarActividadesUsuario })(asignarActividadUsuario));

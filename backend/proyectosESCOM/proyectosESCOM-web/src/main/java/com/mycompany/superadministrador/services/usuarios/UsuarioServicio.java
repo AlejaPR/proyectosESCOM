@@ -257,10 +257,10 @@ public class UsuarioServicio {
      */
     @POST
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/asignarActividad/{numeroDocumento}/{codigoActividad}")
-    public Response asignarActividad(@PathParam("numeroDocumento") int numeroDocumento,@PathParam("codigoActividad") int codigoActividad) {
+    @Path("/asignarActividad/{numeroDocumento}")
+    public Response asignarActividad(@PathParam("numeroDocumento") int numeroDocumento,ActividadPOJO actividad) {
         try {
-            usuarioLogica.asignarActividadAUsuario(numeroDocumento, codigoActividad);
+            usuarioLogica.asignarActividadAUsuario(numeroDocumento, actividad.getIdActividad());
             respuesta.setRespuesta("Actividad asignada");
             return Response.status(Response.Status.OK).entity(respuesta).build();
         } catch (ExcepcionGenerica e) {

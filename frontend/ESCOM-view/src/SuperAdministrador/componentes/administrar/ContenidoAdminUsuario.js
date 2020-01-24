@@ -31,8 +31,6 @@ class ContenidoAdminUsuario extends React.Component {
 
 	componentWillMount() {
 		this.props.actionConsultarUsuarios(localStorage.getItem('Token'));
-		this.props.actionConsultarUsuarios(localStorage.getItem('Token'));
-
 	}
 
 	componentDidUpdate() {
@@ -293,7 +291,6 @@ function mapStateToProps(state) {
 	return {
 		usuarios: state.user.usuariosRegistrados,
 		cedulaEditar: state.user.cedula,
-		mensajeEditar: state.user.mensajeEditar,
 		habilitado: state.user.estadoUsuarios,
 		mensajeSuspender: state.user.mensajeSuspender
 	}
