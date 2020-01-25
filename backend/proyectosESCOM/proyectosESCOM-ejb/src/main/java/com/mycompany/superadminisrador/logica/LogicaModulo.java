@@ -15,6 +15,7 @@ import com.mycompany.superadministrador.interfaces.ModuloFacadeLocal;
 import com.mycompany.superadministrador.utilitarios.ExcepcionGenerica;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringTokenizer;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
@@ -31,15 +32,49 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
 
     @EJB
     ActividadFacadeLocal actividadDB;
-    
-    
-    
-     @Override
+
+    @Override
     public void registrarModulo(ModuloPOJO modulo) throws ExcepcionGenerica {
         try {
             List<Modulo> moduloResultado = moduloDB.consultaDatosExistentes(modulo.getNombreModulo());
             if (moduloResultado.isEmpty()) {
-                moduloDB.registrarModulo(modulo);
+                String primeraLetra, segundaLetra, acronimo;
+                String nombre = modulo.getNombreModulo();
+                String[] partes = nombre.split(" ");
+                if (partes.length == 1) {
+                    String parte1 = partes[0];
+                    primeraLetra = parte1.substring(0, 1);
+                    segundaLetra = parte1.substring(1, 2);
+                    acronimo = primeraLetra + segundaLetra;
+                    List<Modulo> moduloAcronimo = moduloDB.consultaAcronimo(acronimo);
+                    if (moduloAcronimo.isEmpty()) {
+                        moduloDB.registrarModulo(modulo, acronimo);
+                    } else {
+                        primeraLetra = parte1.substring(1, 2);
+                        segundaLetra = parte1.substring(2, 3);
+                        acronimo = primeraLetra + segundaLetra;
+                        moduloDB.registrarModulo(modulo, acronimo);
+                    }
+
+                } else {
+                    String parte1 = partes[0];
+                    String parte2 = partes[1];
+
+                    primeraLetra = parte1.substring(0, 1);
+                    segundaLetra = parte2.substring(0, 1);
+                    acronimo = primeraLetra + segundaLetra;
+                    List<Modulo> moduloAcronimo = moduloDB.consultaAcronimo(acronimo);
+                    if (moduloAcronimo.isEmpty()) {
+                        moduloDB.registrarModulo(modulo, acronimo);
+                    } else {
+                        primeraLetra = parte1.substring(0, 1);
+                        segundaLetra = parte2.substring(1, 2);
+                        acronimo = primeraLetra + segundaLetra;
+                        moduloDB.registrarModulo(modulo, acronimo);
+                    }
+
+                }
+
             } else {
                 throw new NoResultException("El nombre de modulo ya esta registrado");
             }
@@ -185,7 +220,7 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
         }
     }
 
-     /**
+    /**
      * Metodo que cambia el estado de una actividad de un modulo en especifico
      *
      * @param idActividad
@@ -198,9 +233,9 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
             Actividad actividadResultado = actividadDB.find(idActividad);
             if (actividadResultado != null) {
                 if (actividadResultado.getEstado().equals("Activo")) {
-                    actividadDB.cambiarEstadoActividad(idActividad, "Suspendido"); 
+                    actividadDB.cambiarEstadoActividad(idActividad, "Suspendido");
                 } else if (actividadResultado.getEstado().equals("Suspendido")) {
-                    actividadDB.cambiarEstadoActividad(idActividad, "Activo"); 
+                    actividadDB.cambiarEstadoActividad(idActividad, "Activo");
                 }
             } else {
                 throw new NoResultException("No se encontraron datos de la actividad");
@@ -214,5 +249,4 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
         }
     }
 
-   
 }

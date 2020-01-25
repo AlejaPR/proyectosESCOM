@@ -33,7 +33,9 @@ public interface ModuloFacadeLocal {
     
     public List<Modulo> consultaDatosExistentes(String nombreModulo);
     
-    public void registrarModulo(ModuloPOJO modulo);
+     public List<Modulo> consultaAcronimo(String acronimo);
+    
+    public void registrarModulo(ModuloPOJO modulo, String acronimo);
     
     public List<ModuloPOJO> listarModulos();
     

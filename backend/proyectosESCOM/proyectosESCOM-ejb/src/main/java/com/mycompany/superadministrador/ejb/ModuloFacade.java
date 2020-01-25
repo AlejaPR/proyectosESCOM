@@ -42,11 +42,21 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
         return consultaDatosM.getResultList();
     }
     
+    @Override
+    public List<Modulo> consultaAcronimo(String acronimo) {
+        TypedQuery<Modulo> consultaAcronimo = em.createNamedQuery("consultarAcronimo", Modulo.class);
+        consultaAcronimo.setParameter("acronimo", acronimo);
+       
+        return consultaAcronimo.getResultList();
+    }
+
+   
+    
      @Override
-    public void registrarModulo(ModuloPOJO modulo) {
+    public void registrarModulo(ModuloPOJO modulo,String acronimo) {
         
         Modulo moduloN = new Modulo(new Date(), "Activo", modulo.getImagenModulo(), modulo.getNombreModulo(), 
-                                    "", modulo.getDescripcionModulo());
+                                    acronimo, modulo.getDescripcionModulo());
         
         em.persist(moduloN);
         
@@ -130,7 +140,7 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
         em.merge(modulo);
     }
 
-   
+    
 
     
 
