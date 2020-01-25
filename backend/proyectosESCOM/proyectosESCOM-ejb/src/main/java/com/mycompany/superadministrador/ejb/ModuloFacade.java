@@ -9,6 +9,7 @@ import com.mycompany.superadministrador.POJO.ModuloPOJO;
 import com.mycompany.superadministrador.interfaces.ModuloFacadeLocal;
 import com.mycompany.superadministrador.entity.Modulo;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -31,6 +32,26 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
 
     public ModuloFacade() {
         super(Modulo.class);
+    }
+    
+    @Override
+    public List<Modulo> consultaDatosExistentes(String nombreModulo) {
+        TypedQuery<Modulo> consultaDatosM = em.createNamedQuery("consultarExistenciaModulo", Modulo.class);
+        consultaDatosM.setParameter("nombreModulo", nombreModulo);
+       
+        return consultaDatosM.getResultList();
+    }
+    
+     @Override
+    public void registrarModulo(ModuloPOJO modulo) {
+        
+        Modulo moduloN = new Modulo(new Date(), "Activo", modulo.getImagenModulo(), modulo.getNombreModulo(), 
+                                    "", modulo.getDescripcionModulo());
+        
+        em.persist(moduloN);
+        
+        
+        
     }
 
     /**Metodo que realiza la consulta a la tabla modulo
@@ -108,6 +129,9 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
         modulo.setEstado(estado);
         em.merge(modulo);
     }
+
+   
+
     
 
 }

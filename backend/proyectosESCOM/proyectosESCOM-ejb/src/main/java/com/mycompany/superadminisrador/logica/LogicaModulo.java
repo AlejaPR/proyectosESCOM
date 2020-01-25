@@ -8,6 +8,7 @@ package com.mycompany.superadminisrador.logica;
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.POJO.ModuloPOJO;
 import com.mycompany.superadministrador.entity.Actividad;
+import com.mycompany.superadministrador.entity.Modulo;
 import com.mycompany.superadministrador.interfaces.ActividadFacadeLocal;
 import com.mycompany.superadministrador.interfaces.LogicaModuloFacadeLocal;
 import com.mycompany.superadministrador.interfaces.ModuloFacadeLocal;
@@ -30,6 +31,26 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
 
     @EJB
     ActividadFacadeLocal actividadDB;
+    
+    
+    
+     @Override
+    public void registrarModulo(ModuloPOJO modulo) throws ExcepcionGenerica {
+        try {
+            List<Modulo> moduloResultado = moduloDB.consultaDatosExistentes(modulo.getNombreModulo());
+            if (moduloResultado.isEmpty()) {
+                moduloDB.registrarModulo(modulo);
+            } else {
+                throw new NoResultException("El nombre de modulo ya esta registrado");
+            }
+        } catch (NullPointerException ex) {
+            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer el registro de modulo");
+        } catch (NoResultException ex) {
+            throw new ExcepcionGenerica("No se encontro ningun dato coincidente");
+        } catch (Exception ex) {
+            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+        }
+    }
 
     /**
      * Metodo que llama a la consulta para obtener la lista de modulos
@@ -192,4 +213,6 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
             throw new ExcepcionGenerica("Ocurrio una excepcion ");
         }
     }
+
+   
 }

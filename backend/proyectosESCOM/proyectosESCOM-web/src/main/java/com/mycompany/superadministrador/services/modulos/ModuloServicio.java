@@ -12,7 +12,9 @@ import com.mycompany.superadministrador.interfaces.LogicaModuloFacadeLocal;
 import com.mycompany.superadministrador.utilitarios.ExcepcionGenerica;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -34,6 +36,30 @@ public class ModuloServicio {
     private final Respuesta respuesta = new Respuesta();
 
     public ModuloServicio() {
+    }
+    
+     /**
+     * Servicio que registra modulos
+     *
+     * @param modulo
+     * @return  *
+     */
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/registrarModulo")
+    public Response registrarModulo(ModuloPOJO modulo) {
+        try {
+            moduloLogica.registrarModulo(modulo);
+            respuesta.setRespuesta("Modulo registrado");
+            return Response.status(Response.Status.OK).entity(respuesta).build();
+        } catch (ExcepcionGenerica e) {
+            respuesta.setRespuesta("Ya existen los datos registrados previamente");
+            return Response.status(Response.Status.NOT_ACCEPTABLE).entity(respuesta).build();
+        } catch (Exception e) {
+            respuesta.setRespuesta("Ocurrio un error interno del servidor");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
+        }
     }
     
     /**Servicio que lista los modulos registrados

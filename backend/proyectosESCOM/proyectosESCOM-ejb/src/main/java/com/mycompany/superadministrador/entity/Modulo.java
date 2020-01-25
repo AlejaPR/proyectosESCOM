@@ -31,14 +31,14 @@ import javax.validation.constraints.Size;
 @Table(name = "TBL_MODULO")
 @NamedQueries({
     @NamedQuery(name = "consultaModulos", query = "SELECT m FROM Modulo m"),
-    @NamedQuery(name = "consultaModuloEsp", query = "SELECT m from Modulo m WHERE m.pkModIdmodulo=:idModulo")
+    @NamedQuery(name = "consultaModuloEsp", query = "SELECT m from Modulo m WHERE m.pkModIdmodulo=:idModulo"),
+    @NamedQuery(name = "consultarExistenciaModulo", query = "SELECT m from Modulo m WHERE m.nombreModulo=:nombreModulo")
    
 })
 public class Modulo implements Serializable{
     
     @Id
     @Basic(optional = false)
-    @NotNull
     @Column(name = "PK_MOD_IDMODULO")
     private Integer pkModIdmodulo;
     

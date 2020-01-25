@@ -18,6 +18,8 @@ import javax.ejb.Local;
 @Local
 public interface LogicaModuloFacadeLocal {
     
+    public void registrarModulo(ModuloPOJO modulo)throws ExcepcionGenerica;
+    
     public List<ModuloPOJO> devolverModulos()throws ExcepcionGenerica;
     
     public ModuloPOJO traerModuloId(int idModulo) throws ExcepcionGenerica;

@@ -31,6 +31,10 @@ public interface ModuloFacadeLocal {
 
     int count();
     
+    public List<Modulo> consultaDatosExistentes(String nombreModulo);
+    
+    public void registrarModulo(ModuloPOJO modulo);
+    
     public List<ModuloPOJO> listarModulos();
     
     public ModuloPOJO buscarModuloEspecifico(int idModulo);
