@@ -148,7 +148,6 @@ export function actionConsultarUsuarios(token) {
     return (dispatch, getState) => {
         axios.get("http://localhost:9090/proyectosESCOM-web/api/usuario/listarUsuarios", { headers: headers })
             .then(response => {
-                console.log('respuesta usuarios reg',response.data);
                 dispatch({
                     type: MOSTRAR_USUARIOS,
                     respuesta: response.data
@@ -427,6 +426,14 @@ export function actionConsultarModulos(token) {
             });
     };
 }
+export function actionLimpiar() {
+    return (dispatch, getState) => {
+        dispatch({
+            type: ACTIVIDADES_SIN_ASIGNAR,
+            respuesta:undefined
+        });
+    };
+}
 
 export function actionConsultarActividadesSinAsignar(token,numeroDocumento,codigoModulo) {
     var tokenRequest = desencriptar(token);
@@ -503,9 +510,6 @@ export function actionEditarUsuario(usuario, cedula, token) {
         'TokenAuto': desencriptar(token),
         'Permiso': 'SA_CREAR USUARIO'
     }
-    console.log('usuario k llego',usuario);
-    console.log('cedula es',cedula);
-
     return (dispatch, getState) => {
         axios.put("http://localhost:9090/proyectosESCOM-web/api/usuario/editarUsuario/" + cedula, usuario, { headers: headers })
             .then(response => {
@@ -517,6 +521,30 @@ export function actionEditarUsuario(usuario, cedula, token) {
                     type: MENSAJE_EDITAR,
                     mensaje: 'Modificado'
                 });
+            }).catch((error) => {
+                if (error.request.response === '') {
+                    dispatch({
+                        type: MENSAJE_EDITAR,
+                        mensaje: 'Servidor fuera de servicio temporalmente'
+                    });
+                }else{
+                    if (error.request) {
+                        var o = JSON.parse(error.request.response);
+                        let respuesta=mensajesDeError(o.respuesta);
+                        if(respuesta!==''){
+                            dispatch({
+                                type: MENSAJE_EDITAR,
+                                mensaje: respuesta
+                            });
+                        }else{
+                            dispatch({
+                                type: MENSAJE_EDITAR,
+                                mensaje: 'Ya existen los datos registrados previamente'
+                            });
+                        }
+                    }
+                } 
+                
             });
     }
 }

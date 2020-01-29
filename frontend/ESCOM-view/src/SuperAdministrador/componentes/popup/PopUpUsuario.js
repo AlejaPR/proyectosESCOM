@@ -1,12 +1,6 @@
 import React from 'react';
 
 //estilos
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
-import '../../css/business-casual.css'
-import '../../css/estilos.css'
-import '../../css/bootstrap.min.css'
-import '../../css/menu.css'
 import 'react-notifications/lib/notifications.css';
 
 //componentes
@@ -14,7 +8,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
-
+import {generarInput,generarSelect} from '../../utilitario/GenerarInputs.js'
 
 //redux
 import { actionAgregarUsuario, actionConsultarDocumentos, actualizarMensajeRegistrar } from '../../actions/actionsUsuario.js'
@@ -29,6 +23,14 @@ class PopUpUsuario extends React.Component {
     }
     this.toggle = this.toggle.bind(this);
   }
+
+  toggle() {
+    this.setState(prevState => ({
+      modal: !prevState.modal
+    }));
+    this.props.reset();
+  }
+
 
   componentDidUpdate() {
     if (this.props.mensaje !== '') {
@@ -63,13 +65,7 @@ class PopUpUsuario extends React.Component {
     this.props.actionConsultarDocumentos(localStorage.getItem('Token'));
   }
 
-  toggle() {
-    this.setState(prevState => ({
-      modal: !prevState.modal
-    }));
-    this.props.reset();
-  }
-
+  
   handleSubmit = formValues => {
     try {
       var crypto = require('crypto');
@@ -90,17 +86,15 @@ class PopUpUsuario extends React.Component {
     } catch (error) {
       NotificationManager.error('Ingrese todos los datos');
     }
-
   }
 
   cargarDocumentos() {
     return this.props.documentos.map((documento, index) => {
-      const { idTipoDocumento, tipoDocumento } = documento //destructuring
+      const { idTipoDocumento, tipoDocumento } = documento
       return (
         <option className="letra" style={{ height: "35px", fontSize: "13px" }} value={idTipoDocumento}>{tipoDocumento}</option>
       )
     })
-
   }
 
 
@@ -110,8 +104,7 @@ class PopUpUsuario extends React.Component {
         <Button color="danger" className="btn btn-dark letra" style={fondoBoton} onClick={this.toggle}>Crear usuario +</Button>
         <Modal isOpen={this.state.modal}
           toggle={this.toggle}
-          style={{ width: "400px" }}
-        >
+          style={{ width: "400px" }}>
           <ModalHeader toggle={this.toggle} style={{ height: "50px", width: "400px" }} className="center">Crear usuario</ModalHeader>
           <ModalBody>
             <form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
@@ -172,27 +165,6 @@ class PopUpUsuario extends React.Component {
     );
   }
 }
-
-const generarSelect = ({ input, label, type, meta: { touched, error }, children }) => (
-  <div>
-    <div>
-      <select {...input} className="form-control letra" style={{ height: "35px", fontSize: "13px" }}>
-        {children}
-      </select>
-      {touched && ((error && <span className="text-danger letra form-group">{error}</span>))}
-    </div>
-  </div>
-)
-
-const generarInput = ({ input, label, type, meta: { touched, error, warning } }) => (
-  <div>
-    <div>
-      <input {...input} placeholder={label} type={type} style={{ height: "35px", fontSize: "12px" }} className="form-control letra placeholder-no-fix" />
-      {touched && ((error && <span className="text-danger letra form-group">{error}</span>) || (warning && <span>{warning}</span>))}
-    </div>
-  </div>
-)
-
 
 const fondoBoton = {
   background: "#ec671d",

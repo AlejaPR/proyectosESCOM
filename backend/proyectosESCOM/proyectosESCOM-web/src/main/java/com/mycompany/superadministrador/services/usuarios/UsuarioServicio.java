@@ -142,7 +142,7 @@ public class UsuarioServicio {
             respuesta.setRespuesta("Usuario modificado correctamente");
             return Response.status(Response.Status.OK).entity(respuesta).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("No se ha podido modificar el usuario");
+            respuesta.setRespuesta("Ya existen los datos registrados previamente");
             return Response.status(Response.Status.NOT_ACCEPTABLE).entity(respuesta).build();
         } catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error interno del servidor");

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { encriptar, desencriptar } from '../componentes/general/Encriptar.js';
+import { desencriptar } from '../componentes/general/Encriptar.js';
 import {mensajesDeError} from '../utilitario/MensajesError.js';
 
 export const MOSTRAR_MODULOS = 'MOSTRAR_USUARIOS';
@@ -10,6 +10,50 @@ export const MENSAJE_EDITAR_MODULO='MENSAJE_EDITAR_MODULO';
 export const MENSAJE_SUSPENDER_MODULO='MENSAJE_SUSPENDER_MODULO';
 export const ACTIVIDADES_MODULO='ACTIVIDADES_MODULO';
 export const ACTUALIZAR_MODULOS='ACTUALIZAR_MODULOS';
+export const AGREGAR_MODULO='AGREGAR_MODULO';
+export const MENSAJE_REGISTRAR_MODULO='MENSAJE_REGISTRAR_MODULO';
+
+export function actionAgregarModulo(modulo, token) {
+    var tokenRequest = desencriptar(token);
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': tokenRequest,
+        'Permiso': 'SA_CREAR USUARIO'
+    }
+    return (dispatch, getState) => {
+        axios.post("http://localhost:9090/proyectosESCOM-web/api/modulo/registrarModulo", modulo, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: AGREGAR_MODULO,
+                    moduloARegistrar: modulo
+                });
+                dispatch({
+                    type: MENSAJE_REGISTRAR_MODULO,
+                    mensaje: 'modulo registrado'
+                });
+            }).catch((error) => {
+                if (error.request.response === '') {
+                    dispatch({
+                        type: MENSAJE_REGISTRAR_MODULO,
+                        mensaje: 'Servidor fuera de servicio temporalmente'
+                    });
+                }else{
+                    if (error.request) {
+                        var o = JSON.parse(error.request.response);
+                        let respuesta=mensajesDeError(o.respuesta);
+                        if(respuesta!==''){
+                            dispatch({
+                                type: MENSAJE_REGISTRAR_MODULO,
+                                mensaje: respuesta
+                            });
+                        }
+                    }
+                } 
+                
+            });
+
+    }
+}
 
 export function actualizarMensajeSuspenderModulo(mensaje) {
     return (dispatch, getState) => {
@@ -153,7 +197,7 @@ export function actionSuspenderActivarModulo(codigoModulo, token,actualizados) {
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': tokenRequest,
-        'Permiso': 'SA_CREAR USpUARIO'
+        'Permiso': 'SA_CREAR USUARIO'
     }
     return (dispatch, getState) => {
         axios.get("http://localhost:9090/proyectosESCOM-web/api/modulo/cambiarEstadoModulo/"+codigoModulo, { headers: headers })

@@ -1,6 +1,6 @@
 export const requerido = value => {
     if (!value) {
-        return 'Requerido';
+        return 'Este campo es obligatorio *';
     }
 }
 

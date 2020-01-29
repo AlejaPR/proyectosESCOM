@@ -11,10 +11,9 @@ import { Button } from 'reactstrap';
 
 //componentes
 import Barra from '../general/BarraDirecciones';
-import { NotificationContainer, NotificationManager } from 'react-notifications';
+// import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { withRouter } from 'react-router-dom';
-import { nombre, requerido, seleccione, apellido, fechaNacimiento, correo, contrasena, documentoIdentificacion } from '../../utilitario/validacionCampos.js';
-import MaterialTable from 'material-table';
+import { nombre, requerido, apellido,documentoIdentificacion } from '../../utilitario/validacionCampos.js';
 import Alerta from '@icons/material/AlertIcon.js';
 
 //redux
@@ -113,47 +112,6 @@ class EditarModulo extends React.Component {
                                         </div>
                                     </div>
                                     <br />
-                                    <div className="text-left titulo letra" style={estiloTitulo}>
-                                        <MaterialTable
-                                            title="Actividades actualmente asignadas al modulo"
-                                            localization={{
-                                                header: {
-                                                    actions: ' '
-                                                },
-                                                pagination: {
-                                                    nextTooltip: 'Siguiente ',
-                                                    previousTooltip: 'Anterior',
-                                                    labelDisplayedRows: '{from}-{to} de {count}',
-                                                    lastTooltip: 'Ultima pagina',
-                                                    firstTooltip: 'Primera pagina',
-                                                    labelRowsSelect: 'Registros',
-                                                    firstAriaLabel: 'oooo'
-                                                },
-                                                body: {
-                                                    emptyDataSourceMessage: 'Aun no hay ningun modulo registrado'
-                                                },
-                                                toolbar: {
-                                                    searchTooltip: 'Buscar',
-                                                    searchPlaceholder: 'Buscar'
-                                                }
-                                            }}
-                                            columns={[
-                                                { title: 'Nombre de modulo', field: 'idActividad', headerStyle: estiloCabecera, cellStyle: estiloFila },
-                                                { title: 'Descripcion del modulo', field: 'nombre', headerStyle: estiloCabecera, cellStyle: estiloFila }
-                                            ]}
-                                            data={this.props.actividades}
-                                            options={{
-                                                search: true,
-                                                rowStyle: estiloFila,
-                                                selection:true
-                                            }}
-                                            onSelectionChange={(rows) => {
-                                                this.setState({actividadesSeleccionadas:rows});
-                                                console.log('You selected ' , rows)
-                                            }}
-                                        />
-
-                                    </div>
                                     <div>
                                         <Button style={fondoBoton} type="submit">Guardar</Button>{''}
                                         <Button style={fondoBotonS} color="secondary" onClick={this.onClickCancelar}>Cancelar</Button>

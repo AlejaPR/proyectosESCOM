@@ -22,27 +22,22 @@ import Alerta from '@icons/material/AlertIcon.js';
 import Barra from '../general/BarraDirecciones.js';
 
 //redux
-import { actionConsultarModulos, actionConsultarActividadesSinAsignar,actualizarMensajeAsignar, actionAsignarActividades, actionConsultarActividadesUsuario,actionAsignarActividad } from '../../actions/actionsUsuario.js'
+import { actionConsultarModulos, actionConsultarActividadesSinAsignar, actionLimpiar, actualizarMensajeAsignar, actionAsignarActividades, actionConsultarActividadesUsuario, actionAsignarActividad } from '../../actions/actionsUsuario.js'
 import { connect } from 'react-redux';
 
 class AsignarActividadUsuario extends React.Component {
 
     state = {
-        selectedOption: 0
-    }
-
-    componentWillMount() {
-        this.props.actionConsultarModulos(localStorage.getItem('Token'));
-        this.props.actionConsultarActividadesUsuario(this.props.cedula, localStorage.getItem('Token'));
-        if (this.state.selectedOption !== 0) {
-            this.props.actionConsultarActividadesSinAsignar(localStorage.getItem('Token'), this.props.cedula, this.state.selectedOption.value);
-        }
+        selectedOption: 0,
+        valor: null
     }
 
     componentDidMount() {
         if (this.props.cedula === undefined || this.props.cedula.length === 0) {
             this.props.history.push('/adminUsuario');
         }
+        this.props.actionConsultarModulos(localStorage.getItem('Token'));
+        this.props.actionConsultarActividadesUsuario(this.props.cedula, localStorage.getItem('Token'));
     }
     componentDidUpdate() {
         switch (this.props.mensaje) {
@@ -52,6 +47,8 @@ class AsignarActividadUsuario extends React.Component {
                 this.props.actionConsultarActividadesUsuario(this.props.cedula, localStorage.getItem('Token'));
                 this.props.actionConsultarActividadesSinAsignar(localStorage.getItem('Token'), this.props.cedula, this.state.selectedOption.value);
                 break;
+                default:
+                    break;
         }
 
     }
@@ -72,7 +69,7 @@ class AsignarActividadUsuario extends React.Component {
 
     actividades = () => {
         let respuesta = [];
-        if (this.props.actividadesSinAsignar !== null) {
+        if (this.props.actividadesSinAsignar !== null && this.props.actividadesSinAsignar !== undefined) {
             this.props.actividadesSinAsignar.map(
                 actividad => {
                     let objeto = {
@@ -82,25 +79,34 @@ class AsignarActividadUsuario extends React.Component {
                     respuesta.push(objeto);
                 }
             )
+            return respuesta;
         } else {
             return null;
         }
-        return respuesta;
     }
 
-
+    retornarValor = () => {
+        return this.state.valor;
+    }
 
     handleChange = selectedOption => {
         this.setState({ selectedOption });
+        this.setState({ valor: null });
         this.props.actionConsultarActividadesSinAsignar(localStorage.getItem('Token'), this.props.cedula, selectedOption.value);
     };
 
+    handleChangeDos = selectedOption => {
+        this.setState({ valor: selectedOption });
+    };
+
+
     handleSubmit = formValues => {
-        let actividad={
-            idActividad:formValues.actividad.value,
-            nombre:formValues.actividad.label
+        let actividad = {
+            idActividad: formValues.actividad.value,
+            nombre: formValues.actividad.label
         }
-        this.props.actionAsignarActividad(localStorage.getItem('Token'),this.props.cedula,actividad);
+        this.setState({ valor: null });
+        this.props.actionAsignarActividad(localStorage.getItem('Token'), this.props.cedula, actividad);
     }
     render() {
         return (
@@ -145,10 +151,10 @@ class AsignarActividadUsuario extends React.Component {
                                         </div>
                                     </div>
                                     <br />
-                                    <label for="form_control_1">Seleccione la actividad que quiere asignar al usuario</label>
+                                    <label>Seleccione la actividad que quiere asignar al usuario</label>
                                     <div className="row">
                                         <div className="col-md-4">
-                                            <Field name="actividad" validate={[seleccione]} component={ReduxFormSelectDos} options={this.actividades()} />
+                                            <Field name="actividad" validate={[seleccione]} valor={this.retornarValor()} onChange={this.handleChangeDos} component={ReduxFormSelectDos} options={this.actividades()} />
                                         </div>
                                     </div>
                                     <br />
@@ -178,7 +184,8 @@ class AsignarActividadUsuario extends React.Component {
                                             },
                                             toolbar: {
                                                 searchTooltip: 'Buscar',
-                                                searchPlaceholder: 'Buscar'
+                                                searchPlaceholder: 'Buscar',
+                                                nRowsSelected: '{0} actividades seleccionadas'
                                             }
                                         }}
                                         columns={[
@@ -195,6 +202,13 @@ class AsignarActividadUsuario extends React.Component {
                                             this.setState({ actividadesSeleccionadas: rows });
                                             console.log('You selected ', rows)
                                         }}
+                                        actions={[
+                                            {
+                                                tooltip: 'Remove All Selected Users',
+                                                icon: 'delete',
+                                                onClick: (evt, data) => console.log("You want to delete ", data)
+                                            }
+                                        ]}
                                     />
                                 </form>
                         }
@@ -219,6 +233,7 @@ export const ReduxFormSelect = props => {
                 placeholder='Seleccione un modulo'
                 onChange={value => input.onChange(value)}
                 onBlur={() => input.onBlur(input.value)}
+                noOptionsMessage={() => 'Aun no hay ningun modulo registrado'}
                 options={options}
             />
             {touched && ((error && <span className="text-danger letra form-group">{error}</span>))}
@@ -234,10 +249,12 @@ export const ReduxFormSelectDos = props => {
             <Select
                 {...input}
                 isSearchable={false}
-                placeholder='Seleccione un modulo'
+                value={props.valor}
+                placeholder='Seleccione una actividad'
                 onChange={value => input.onChange(value)}
                 onBlur={() => input.onBlur(input.value)}
                 options={options}
+                noOptionsMessage={() => 'No hay ninguna actividad que mostrar'}
             />
             {touched && ((error && <span className="text-danger letra form-group">{error}</span>))}
         </>
@@ -259,17 +276,6 @@ const estiloFila = {
 }
 
 
-
-
-
-const estiloTitulo = {
-
-    paddingTop: "7px",
-    paddingRight: "12px",
-    paddingLeft: "5px",
-    paddingBottom: "1px"
-}
-
 const estiloLetrero = {
     paddingTop: "20px",
     paddingRight: "12px",
@@ -277,15 +283,6 @@ const estiloLetrero = {
     paddingBottom: "1px"
 }
 
-
-const fondoBarraSuperior = {
-    background: "#FFFFFF"
-
-}
-
-const fondoTabla = {
-    background: "#EAF2F2"
-}
 
 
 const fondoBoton = {
@@ -295,12 +292,6 @@ const fondoBoton = {
 
 }
 
-const fondoBotonS = {
-    background: "secondary",
-    fontSize: "14px",
-    fontFamily: "Open sans, sans-serif"
-
-}
 
 function mapStateToProps(state) {
     return {
@@ -317,4 +308,4 @@ let asignarActividadUsuario = reduxForm({
     form: 'asignarActividadUsuario'
 })(AsignarActividadUsuario)
 
-export default withRouter(connect(mapStateToProps, { actionConsultarModulos, actionConsultarActividadesSinAsignar,actualizarMensajeAsignar,actionAsignarActividad, actionAsignarActividades, actionConsultarActividadesUsuario })(asignarActividadUsuario));
+export default withRouter(connect(mapStateToProps, { actionConsultarModulos, actionLimpiar, actionConsultarActividadesSinAsignar, actualizarMensajeAsignar, actionAsignarActividad, actionAsignarActividades, actionConsultarActividadesUsuario })(asignarActividadUsuario));

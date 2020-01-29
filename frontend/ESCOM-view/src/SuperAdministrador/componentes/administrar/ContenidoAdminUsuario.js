@@ -41,12 +41,9 @@ class ContenidoAdminUsuario extends React.Component {
 			case 'Operacion hecha con exito':
 				NotificationManager.info('Operacion realizada con exito')
 				break;
+			default:
+				break;
 		}
-	}
-
-	componentWillUpdate(){
-		// this.props.actualizarMensajeSuspender('');
-		
 	}
 
 	actualizarUsuarios(numeroDocumento) {

@@ -24,6 +24,8 @@ class Login extends React.Component {
 			case 'Login correcto':
 				this.props.history.push('/inicio');
 				break;
+			default:
+				break;
 		}
 	}
 

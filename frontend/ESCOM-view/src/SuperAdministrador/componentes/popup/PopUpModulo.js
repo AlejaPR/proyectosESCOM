@@ -13,10 +13,14 @@ import '../../css/menu.css'
 import 'react-notifications/lib/notifications.css';
 
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { NotificationContainer } from 'react-notifications';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
 import Defecto from '../../imagenes/defecto.jpg';
 import PropTypes from "prop-types";
+
+import { withRouter } from 'react-router-dom';
 import { Field, reduxForm } from "redux-form";
+import { actionAgregarModulo } from '../../actions/actionsModulo.js';
+import { connect } from 'react-redux';
 
 class PopUpModulo extends React.Component {
   constructor(props) {
@@ -26,11 +30,23 @@ class PopUpModulo extends React.Component {
     };
     this.toggle = this.toggle.bind(this);
   }
-
   toggle() {
     this.setState(prevState => ({
       modal: !prevState.modal
     }));
+  }
+
+  componentDidUpdate() {
+    console.log('mensaje', this.props.mensaje);
+    if (this.props.mensajeRegistrar !== '') {
+      switch (this.props.mensaje) {
+        case 'modulo registrado':
+          NotificationManager.info('Modulo registrado correctamente');
+          break;
+        default:
+          break;
+      }
+    }
   }
 
   static propTypes = {
@@ -78,8 +94,12 @@ class PopUpModulo extends React.Component {
       }
     }
   };
+
   validateImageFormat = imageFile => {
     if (imageFile) {
+
+      console.log('tipo', imageFile.type)
+
       const { mimeType } = this.props;
 
       if (!mimeType.includes(imageFile.type)) {
@@ -87,10 +107,12 @@ class PopUpModulo extends React.Component {
       }
     }
   };
+
   handlePreview = imageUrl => {
     const previewImageDom = document.querySelector(".preview-image");
     previewImageDom.src = imageUrl;
   };
+
   handleChange = (event, input) => {
     event.preventDefault();
     let imageFile = event.target.files[0];
@@ -108,9 +130,10 @@ class PopUpModulo extends React.Component {
       this.handlePreview(localImageUrl);
     }
   };
+
   renderFileInput = ({ input, type, meta }) => {
     const { mimeType } = this.props;
-    const { touched, error, warning }=meta;
+    const { touched, error, warning } = meta;
     return (
       <div>
         <input
@@ -119,21 +142,39 @@ class PopUpModulo extends React.Component {
           accept={mimeType}
           onChange={event => this.handleChange(event, input)}
         />
-         {touched && ((error && <span className="text-danger letra form-group">{error}</span>) || (warning && <span>{warning}</span>))}
+        {touched && ((error && <span className="text-danger letra form-group">{error}</span>) || (warning && <span>{warning}</span>))}
       </div>
     );
   };
+
+
   handleSubmitForm = values => {
-    console.log("Form Values: ", values);
+    this.getBase64(values.image, (result) => {
+      let modulo = {
+        nombreModulo: values.nombre,
+        descripcionModulo: values.descripcion,
+        imagenModulo: result,
+        estadoModulo: 'Activo'
+      }
+      this.props.actionAgregarModulo(modulo, localStorage.getItem('Token'));
+    });
   };
+
+
+
+
+  getBase64(file, cb) {
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+      cb(reader.result)
+    };
+    reader.onerror = function (error) {
+      console.log('Error: ', error);
+    };
+  }
+
   render() {
-    const {
-      previewLogoUrl,
-      maxWidth,
-      maxHeight,
-      maxWeight,
-      handleSubmit
-    } = this.props;
     return (
       <>
         <Button color="danger" className="btn btn-dark letra" style={fondoBoton} onClick={this.toggle}>Crear modulo +</Button>
@@ -143,11 +184,11 @@ class PopUpModulo extends React.Component {
         >
           <ModalHeader toggle={this.toggle} style={{ height: "50px", width: "400px" }} className="center">Crear modulo</ModalHeader>
           <ModalBody>
-            <div style={{padding:"30px 30px 30px 77px"}}>
-            <img src={Defecto} alt="preview"
-              className="preview-image"
-              style={{ height: "200px",width:"200px",borderRadius:"50%", objectFit: "cover" }} />
-              </div>
+            <div style={{ padding: "30px 30px 30px 77px" }}>
+              <img src={Defecto} alt="preview"
+                className="preview-image"
+                style={{ height: "200px", width: "200px", borderRadius: "50%", objectFit: "cover" }} />
+            </div>
             <form onSubmit={this.props.handleSubmit(this.handleSubmitForm)}>
 
               <Field
@@ -161,21 +202,21 @@ class PopUpModulo extends React.Component {
                 ]}
                 component={this.renderFileInput}
               />
-              <br/>
+              <br />
               <div className="row">
                 <div className="col-sm-12">
-                  <Field name="nombre"  component={generarInput} label="Nombre" />
+                  <Field name="nombre" component={generarInput} label="Nombre" />
                 </div>
               </div>
-              <br/>
+              <br />
               <div className="row">
                 <div className="col-sm-12">
-                  <Field name="descripcion"  component={renderTextArea} label="descripcion" />
+                  <Field name="descripcion" component={renderTextArea} label="descripcion" />
                 </div>
               </div>
               <ModalFooter>
                 <Button
-                  type="submit" 
+                  type="submit"
                   style={fondoBoton} >
                   Registrar
                 </Button>
@@ -184,6 +225,7 @@ class PopUpModulo extends React.Component {
             </form>
           </ModalBody>
         </Modal>
+        <NotificationContainer />
       </>
     );
   }
@@ -199,7 +241,8 @@ const generarInput = ({ input, label, type, meta: { touched, error, warning } })
   </div>
 )
 
-const renderTextArea = ({ input,label, meta: { touched, error, warning } }) => (
+
+const renderTextArea = ({ input, label, meta: { touched, error, warning } }) => (
   <div>
     <div>
       <textarea {...input} placeholder={label} style={{ fontSize: "12px" }} className="form-control letra form-control-solid placeholder-no-fix" />
@@ -222,7 +265,15 @@ const fondoBoton = {
 
 }
 
+function mapStateToProps(state) {
+  return {
+    mensaje: state.mod.mensajeRegistrarModulo
+  }
+}
 
-export default reduxForm({
+
+let formularioModulo = reduxForm({
   form: "formularioModulo"
 })(PopUpModulo);
+
+export default withRouter(connect(mapStateToProps, { actionAgregarModulo })(formularioModulo));

@@ -16,13 +16,13 @@ import 'react-notifications/lib/notifications.css';
 //componentes
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { withRouter } from 'react-router-dom';
-import { nombre, requerido, seleccione, apellido, fechaNacimiento, correo, contrasena, documentoIdentificacion } from '../../utilitario/validacionCampos.js';
+import { nombre, requerido, seleccione, apellido, fechaNacimiento, correo, documentoIdentificacion } from '../../utilitario/validacionCampos.js';
 // import MaterialTable from 'material-table';
 import Alerta from '@icons/material/AlertIcon.js';
 
 
 //redux
-import { actionCargarInformacionDeUsuario, actionEditarUsuario, actionConsultarDocumentos, actionConsultarActividadesUsuario, actionActualizarUsuarios } from '../../actions/actionsUsuario.js'
+import { actionCargarInformacionDeUsuario, actionEditarUsuario, actualizarMensajeEditar, actionConsultarDocumentos, actionConsultarActividadesUsuario, actionActualizarUsuarios } from '../../actions/actionsUsuario.js'
 import { connect } from "react-redux";
 import { reduxForm, Field } from 'redux-form';
 
@@ -44,8 +44,16 @@ class editar extends React.Component {
         break;
       case 'Modificado':
         NotificationManager.success('Informacion actualizada');
+        this.props.actionCargarInformacionDeUsuario(this.props.cedula, localStorage.getItem('Token'));
+        this.props.actualizarMensajeEditar('');
         break;
-
+      case 'Ya existen los datos registrados previamente':
+        this.props.actionCargarInformacionDeUsuario(this.props.cedula, localStorage.getItem('Token'));
+        NotificationManager.warning('El correo o numero de identificacion ya estan registrados');
+        this.props.actualizarMensajeEditar('');
+        break;
+      default:
+        break;
       // this.props.history.push('/adminUsuario');
     }
 
@@ -207,14 +215,6 @@ const fondoBotonS = {
 
 }
 
-const estiloTitulo = {
-
-  paddingTop: "7px",
-  paddingRight: "12px",
-  paddingLeft: "5px",
-  paddingBottom: "1px"
-}
-
 const generarSelect = ({ input, label, type, meta: { touched, error }, children }) => (
   <div>
     <div>
@@ -261,5 +261,5 @@ let formularioEditar = reduxForm({
   enableReinitialize: true
 })(editar)
 
-export default withRouter(connect(mapStateToProps, { actionCargarInformacionDeUsuario, actionEditarUsuario, actionActualizarUsuarios, actionConsultarDocumentos, actionConsultarActividadesUsuario })(formularioEditar));
+export default withRouter(connect(mapStateToProps, { actionCargarInformacionDeUsuario, actualizarMensajeEditar, actionEditarUsuario, actionActualizarUsuarios, actionConsultarDocumentos, actionConsultarActividadesUsuario })(formularioEditar));
 
