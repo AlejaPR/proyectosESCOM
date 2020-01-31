@@ -10,6 +10,7 @@ import com.mycompany.superadministrador.interfaces.ActividadFacadeLocal;
 import com.mycompany.superadministrador.entity.Actividad;
 import com.mycompany.superadministrador.entity.Modulo;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -62,23 +63,23 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
         List<Actividad> listaActividades = new ArrayList<>();
         TypedQuery<Actividad> listaAct = em.createNamedQuery("consultaActividadesUsuario", Actividad.class);
         listaAct.setParameter("numeroDocumento", idUsuario);
-        listaActividades=listaAct.getResultList();
-        List<ActividadPOJO> respuesta= new ArrayList<>();
-        for(Actividad act : listaActividades){
+        listaActividades = listaAct.getResultList();
+        List<ActividadPOJO> respuesta = new ArrayList<>();
+        for (Actividad act : listaActividades) {
             respuesta.add(new ActividadPOJO(act.getIdActividad(), act.getNombreActividad()));
         }
         return respuesta;
     }
-    
+
     @Override
-    public List<ActividadPOJO> listarActividadesNoAsociadasUsuario(int idUsuario,int idModulo) {
+    public List<ActividadPOJO> listarActividadesNoAsociadasUsuario(int idUsuario, int idModulo) {
         List<Actividad> listaActividades = new ArrayList<>();
         TypedQuery<Actividad> listaAct = em.createNamedQuery("consultaActividadesNoAsociadasUsuario", Actividad.class);
         listaAct.setParameter("idModulo", idModulo);
         listaAct.setParameter("numeroDocumento", idUsuario);
-        listaActividades=listaAct.getResultList();
-        List<ActividadPOJO> respuesta= new ArrayList<>();
-        for(Actividad act : listaActividades){
+        listaActividades = listaAct.getResultList();
+        List<ActividadPOJO> respuesta = new ArrayList<>();
+        for (Actividad act : listaActividades) {
             respuesta.add(new ActividadPOJO(act.getIdActividad(), act.getNombreActividad()));
         }
         return respuesta;
@@ -123,10 +124,10 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
         }
         return listaActividadesM;
     }
-    
+
     /**
-     * Metodo que realiza el cambio de estado de una actividad 
-     * Recibe el valor del estado y el id de la actividad
+     * Metodo que realiza el cambio de estado de una actividad Recibe el valor
+     * del estado y el id de la actividad
      *
      * @param idActividad
      * @param estado
@@ -134,11 +135,62 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
      *
      */
     @Override
-    public void cambiarEstadoActividad(int idActividad, String estado) {
+    public void cambiarEstadoActividadModulo(int idActividad, String estado) {
 
         Actividad actividad = em.find(Actividad.class, idActividad);
         actividad.setEstado(estado);
         em.merge(actividad);
     }
 
+    @Override
+    public List<Actividad> buscarActividadPorNombre(String nombreActividad) {
+
+        List<Actividad> actividadResultado = new ArrayList();
+        TypedQuery<Actividad> actividad = em.createNamedQuery("consultaActividadPorNombre", Actividad.class);
+        actividad.setParameter("nombreActividad", nombreActividad);
+
+        actividadResultado = actividad.getResultList();
+
+        return actividadResultado;
+    }
+
+    @Override
+    public void registrarActividad(ActividadPOJO actividad, String nombreActividad, Modulo modulo) {
+
+        em.createNativeQuery("INSERT INTO TBL_ACTIVIDAD (ACT_ESTADO,ACT_DESCRIPCIONACTIVIDAD,ACT_ULTIMAMODIFICACION,"
+                + "ACT_NOMBREACTIVIDAD,FK_ACT_IDMODULO) VALUES (?,?,?,?,?)")
+                .setParameter(1, "Activo")
+                .setParameter(2, actividad.getDescripcionActividad())
+                .setParameter(3, new Date())
+                .setParameter(4, nombreActividad)
+                .setParameter(5, modulo.getIdModulo())
+                .executeUpdate();
+    }
+
+     /**Metodo que realiza la modificacion de una actividad
+     * 
+     * @param actividadEditar
+     * 
+       **/
+    @Override
+    public void editarActividad(ActividadPOJO actividadEditar) {
+        
+        Actividad actividad = em.find(Actividad.class, actividadEditar.getIdActividad());
+        actividad.setDescripcionActividad(actividadEditar.getDescripcionActividad());  
+        em.merge(actividad);
+    }
+    
+    /**Metodo que realiza la modificacion del estado de una actividad
+     * 
+     * 
+     * @param idActividad
+     * @param estado
+       **/
+    @Override
+    public void cambiarEstadoActividad(int idActividad, String estado) {
+        
+        Actividad actividad= em.find(Actividad.class, idActividad);
+        actividad.setEstado(estado);
+        em.merge(actividad);
+    }
 }

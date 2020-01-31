@@ -40,6 +40,14 @@ public interface ActividadFacadeLocal {
 
     List<ActividadPOJO> listarActividadesModulo(Modulo modulo);
     
-    void cambiarEstadoActividad(int idActividad, String estado);
+    void cambiarEstadoActividadModulo(int idActividad, String estado);
+    
+    List<Actividad> buscarActividadPorNombre(String nombreActividad);
+    
+    void registrarActividad(ActividadPOJO actividad, String nombreActividad, Modulo modulo);
+    
+    public void editarActividad(ActividadPOJO actividadEditar);
+    
+    public void cambiarEstadoActividad(int idActividad, String estado);
 
 }

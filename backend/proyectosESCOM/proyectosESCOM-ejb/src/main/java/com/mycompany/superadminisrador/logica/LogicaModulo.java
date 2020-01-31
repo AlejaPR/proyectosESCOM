@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.superadminisrador.logica;
 
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
@@ -15,7 +10,6 @@ import com.mycompany.superadministrador.interfaces.ModuloFacadeLocal;
 import com.mycompany.superadministrador.utilitarios.ExcepcionGenerica;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.StringTokenizer;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
@@ -72,9 +66,7 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
                         acronimo = primeraLetra + segundaLetra;
                         moduloDB.registrarModulo(modulo, acronimo);
                     }
-
                 }
-
             } else {
                 throw new NoResultException("El nombre de modulo ya esta registrado");
             }
@@ -152,9 +144,9 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
             moduloDB.editarModulo(idModulo, moduloEditar);
 
         } catch (NullPointerException ex) {
-            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la modificacion del usuario ");
+            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la modificacion del modulo");
         } catch (NoResultException ex) {
-            throw new ExcepcionGenerica("El usuario no existe");
+            throw new ExcepcionGenerica("El modulo no existe");
         } catch (Exception ex) {
             throw new ExcepcionGenerica("Ocurrio una excepcion ");
         }
@@ -180,10 +172,10 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
                     moduloDB.cambiarEstadoModulo(idModulo, "Activo");
                 }
             } else {
-                throw new NoResultException("No se encontraron datos del usuario");
+                throw new NoResultException("No se encontraron datos del modulo");
             }
         } catch (NoResultException ex) {
-            throw new ExcepcionGenerica("No se encontraron datos del usuario");
+            throw new ExcepcionGenerica("No se encontraron datos del modulo");
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
@@ -212,7 +204,7 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
                 throw new NoResultException("Error en la consulta");
             }
         } catch (NoResultException ex) {
-            throw new ExcepcionGenerica("No se encontraron datos del usuario");
+            throw new ExcepcionGenerica("No se encontraron datos del modulo");
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
@@ -235,9 +227,9 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
                 Actividad actividadResultado = actividadDB.find(listaActividad.get(i).getIdActividad());
             if (actividadResultado != null) {
                 if (actividadResultado.getEstado().equals("Activo")) {
-                    actividadDB.cambiarEstadoActividad(listaActividad.get(i).getIdActividad(), "Suspendido");
+                    actividadDB.cambiarEstadoActividadModulo(listaActividad.get(i).getIdActividad(), "Suspendido");
                 } else if (actividadResultado.getEstado().equals("Suspendido")) {
-                    actividadDB.cambiarEstadoActividad(listaActividad.get(i).getIdActividad(), "Activo");
+                    actividadDB.cambiarEstadoActividadModulo(listaActividad.get(i).getIdActividad(), "Activo");
                 }
             } else {
                 throw new NoResultException("No se encontraron datos de la actividad");

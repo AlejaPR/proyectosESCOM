@@ -13,18 +13,27 @@ public class ActividadPOJO {
     
     private int idActividad;
     private String nombre;
+    private String descripcionActividad;
+    private String moduloActividad;
+    private int idModulo;
     
     
 
     public ActividadPOJO() {
     }
-
+    
     public ActividadPOJO(int idActividad, String nombre) {
         this.idActividad = idActividad;
         this.nombre = nombre;
+        
     }
-    
-    
+
+    public ActividadPOJO(int idActividad, String nombre, String descripcionActividad, String moduloActividad) {
+        this.idActividad = idActividad;
+        this.nombre = nombre;
+        this.descripcionActividad = descripcionActividad;
+        this.moduloActividad = moduloActividad;
+    }
 
     public int getIdActividad() {
         return idActividad;
@@ -41,6 +50,30 @@ public class ActividadPOJO {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public String getDescripcionActividad() {
+        return descripcionActividad;
+    }
+
+    public void setDescripcionActividad(String descripcionActividad) {
+        this.descripcionActividad = descripcionActividad;
+    }
+
+    public String getModuloActividad() {
+        return moduloActividad;
+    }
+
+    public void setModuloActividad(String moduloActividad) {
+        this.moduloActividad = moduloActividad;
+    }
+
+    public int getIdModulo() {
+        return idModulo;
+    }
+
+    public void setIdModulo(int idModulo) {
+        this.idModulo = idModulo;
     }
     
     
