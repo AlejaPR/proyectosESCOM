@@ -30,6 +30,6 @@ public interface LogicaModuloFacadeLocal {
     
     public void cambiarEstadoModulo(int idModulo) throws ExcepcionGenerica;
     
-    public void cambiarEstadoActividadModulo(int idActividad) throws ExcepcionGenerica;
+    public void cambiarEstadoActividadModulo(List<ActividadPOJO> idActividad) throws ExcepcionGenerica;
     
 }

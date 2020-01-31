@@ -223,23 +223,27 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
     /**
      * Metodo que cambia el estado de una actividad de un modulo en especifico
      *
-     * @param idActividad
+     * @param listaActividad
      * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
      *
      */
     @Override
-    public void cambiarEstadoActividadModulo(int idActividad) throws ExcepcionGenerica {
+    public void cambiarEstadoActividadModulo(List<ActividadPOJO> listaActividad) throws ExcepcionGenerica {
         try {
-            Actividad actividadResultado = actividadDB.find(idActividad);
+            
+            for(int i=0; i<listaActividad.size();i++){             
+                Actividad actividadResultado = actividadDB.find(listaActividad.get(i).getIdActividad());
             if (actividadResultado != null) {
                 if (actividadResultado.getEstado().equals("Activo")) {
-                    actividadDB.cambiarEstadoActividad(idActividad, "Suspendido");
+                    actividadDB.cambiarEstadoActividad(listaActividad.get(i).getIdActividad(), "Suspendido");
                 } else if (actividadResultado.getEstado().equals("Suspendido")) {
-                    actividadDB.cambiarEstadoActividad(idActividad, "Activo");
+                    actividadDB.cambiarEstadoActividad(listaActividad.get(i).getIdActividad(), "Activo");
                 }
             } else {
                 throw new NoResultException("No se encontraron datos de la actividad");
             }
+            }
+            
         } catch (NoResultException ex) {
             throw new ExcepcionGenerica("No se encontraron datos de la actividad");
         } catch (NullPointerException ex) {

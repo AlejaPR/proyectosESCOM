@@ -377,17 +377,18 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
      * parametro el id de la actividad
      *
      * @param cedula
-     * @param idActividad
+     * @param listaActividad
      * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
      *
      */
     @Override
-    public void eliminarActividadUsuario(int cedula, int idActividad) throws ExcepcionGenerica {
+    public void eliminarActividadUsuario(int cedula, List<ActividadPOJO> listaActividad) throws ExcepcionGenerica {
         try {
             UsuarioPOJO usuarioResultado = usuarioDB.buscarUsuarioEspecifico(cedula);
             if (usuarioResultado != null) {
-                actividadDB.eliminarActividadUsuario(usuarioResultado.getId(), idActividad);
-
+                 for(int i=0; i<listaActividad.size();i++){    
+                    actividadDB.eliminarActividadUsuario(usuarioResultado.getId(), listaActividad.get(i).getIdActividad());
+                 }
             } else {
                 throw new NoResultException("No se encontraron datos del usuario");
             }
