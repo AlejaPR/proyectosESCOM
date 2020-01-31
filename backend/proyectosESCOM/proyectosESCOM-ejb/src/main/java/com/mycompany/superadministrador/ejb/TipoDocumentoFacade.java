@@ -1,12 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.superadministrador.ejb;
 
 import com.mycompany.superadministrador.POJO.TipoDocumentoPOJO;
-import com.mycompany.superadministrador.entity.Actividad;
 import com.mycompany.superadministrador.interfaces.TipoDocumentoFacadeLocal;
 import com.mycompany.superadministrador.entity.TipoDocumento;
 import java.util.ArrayList;
@@ -18,7 +12,7 @@ import javax.persistence.TypedQuery;
 
 /**
  *
- * @author aleja
+ * @author jeison gaona - alejandra pabon
  */
 @Stateless
 public class TipoDocumentoFacade extends AbstractFacade<TipoDocumento> implements TipoDocumentoFacadeLocal {

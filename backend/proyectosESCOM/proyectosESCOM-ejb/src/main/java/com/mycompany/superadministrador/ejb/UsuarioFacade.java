@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.superadministrador.ejb;
 
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
@@ -25,7 +20,7 @@ import javax.persistence.TypedQuery;
 
 /**
  *
- * @author aleja
+ * @author jeison gaona - alejandra pabon
  */
 @Stateless
 public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFacadeLocal {
@@ -46,6 +41,14 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         super(Usuario.class);
     }
 
+    /**
+     * Metodo que realiza la consulta de token de usuario
+     *
+     * @param firma
+     * @return
+     *
+     */
+    @Override
     public UsuarioPOJO busquedaToken(String firma) {
         TypedQuery<Usuario> consulta = em.createNamedQuery("busquedaToken", Usuario.class);
         consulta.setParameter("token", firma);
@@ -56,6 +59,15 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         return usuarioRespuesta;
     }
 
+    /**
+     * Metodo que realiza la consulta de correo y contraseña para el login
+     *
+     * @param correo
+     * @param contrasena
+     * @return
+     *
+     */
+    @Override
     public Usuario consultaLogin(String correo, String contrasena) {
         TypedQuery<Usuario> consultaLogin = em.createNamedQuery("consultaLogin", Usuario.class);
         consultaLogin.setParameter("correo", correo);
@@ -63,6 +75,15 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         return consultaLogin.getSingleResult();
     }
 
+    /**
+     * Metodo que realiza la consulta de datos existentes de un usuario
+     *
+     * @param correo
+     * @param idDocumento
+     * @return
+     *
+     */
+    @Override
     public List<Usuario> consultaDatosExistentes(String correo, int idDocumento) {
         TypedQuery<Usuario> consultaDatos = em.createNamedQuery("consultarExistencia", Usuario.class);
         consultaDatos.setParameter("correo", correo);
@@ -70,6 +91,14 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         return consultaDatos.getResultList();
     }
 
+    /**
+     * Metodo que realiza la consulta para editar token
+     * @param token
+     * @param idUsuario
+     * @return
+     *
+     */
+    @Override
     public int editarToken(String token, int idUsuario) {
         TypedQuery<Usuario> editarToken = em.createNamedQuery("editarToken", Usuario.class);
         editarToken.setParameter("token", token);
@@ -77,6 +106,15 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         return editarToken.executeUpdate();
     }
 
+    /**
+     * Metodo que realiza la consulta para editar el token al cerrar sesion 
+     *
+     * @param firma
+     * @param correo
+     * @return
+     *
+     */
+    @Override
     public int editarTokenCerrarSesion(String firma, String correo) {
         TypedQuery<Usuario> editarToken = em.createNamedQuery("editarTokenCerrar", Usuario.class);
         editarToken.setParameter("token", firma);
@@ -84,6 +122,14 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         return editarToken.executeUpdate();
     }
 
+    /**
+     * Metodo que realiza la consulta de actividades del usuario especifico
+     *
+     * @param idUsuario
+     * @return
+     *
+     */
+    @Override
     public List<ActividadPOJO> consultarActividadesUsuario(int idUsuario) {
         TypedQuery<Actividad> consultaActividadesUsuario = em.createNamedQuery("consultaActividades", Actividad.class);
         consultaActividadesUsuario.setParameter("idUsuario", idUsuario);

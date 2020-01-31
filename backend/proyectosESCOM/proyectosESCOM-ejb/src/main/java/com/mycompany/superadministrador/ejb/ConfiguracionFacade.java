@@ -1,10 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.superadministrador.ejb;
 
+import com.mycompany.superadministrador.POJO.ConfiguracionPOJO;
 import com.mycompany.superadministrador.interfaces.ConfiguracionFacadeLocal;
 import com.mycompany.superadministrador.entity.Configuracion;
 import javax.ejb.Stateless;
@@ -13,7 +9,7 @@ import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author aleja
+ * @author jeison gaona-alejandra pabon
  */
 @Stateless
 public class ConfiguracionFacade extends AbstractFacade<Configuracion> implements ConfiguracionFacadeLocal {
@@ -44,5 +40,25 @@ public class ConfiguracionFacade extends AbstractFacade<Configuracion> implement
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    
+    /**
+     * Metodo que realiza la consulta para registrar la configuracion
+     *
+     * @param configuracion
+     *
+     */
+    @Override
+    public void registrarConfiguracion(ConfiguracionPOJO configuracion) {
+
+        em.createNativeQuery("INSERT INTO TBL_CONFIGURACION (CONF_BARRASUPERIOR,CONF_BARRALATERAL,CONF_BOTONES,"
+                + "CONF_LOGO,CONF_IMAGENLOGIN) VALUES (?,?,?,?,?)")
+                .setParameter(1, configuracion.getBarraSuperior())
+                .setParameter(2, configuracion.getBarraLateral())
+                .setParameter(3, configuracion.getBotones())
+                .setParameter(4, configuracion.getLogo())
+                .setParameter(5, configuracion.getImagenLogin())
+                .executeUpdate();
+        
+        
+        
+    }
 }

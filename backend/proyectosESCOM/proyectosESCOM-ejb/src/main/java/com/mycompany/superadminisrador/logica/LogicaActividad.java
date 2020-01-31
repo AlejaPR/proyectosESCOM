@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.superadminisrador.logica;
 
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
@@ -19,8 +14,8 @@ import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
 
 /**
- *
- * @author aleja
+ * Clase encargada de la logica de las actividades 
+ * @author jeison gaona - alejandra pabon
  */
 @Stateless
 public class LogicaActividad implements LogicaActividadFacadeLocal {

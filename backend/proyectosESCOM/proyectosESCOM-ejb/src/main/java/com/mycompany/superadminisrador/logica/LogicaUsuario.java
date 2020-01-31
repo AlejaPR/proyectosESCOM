@@ -28,8 +28,8 @@ import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
 
 /**
- *
- * @author jeiso
+ * Clase encargada de la logica de usuario
+ * @author jeison gaona - alejandra pabon
  */
 @Stateless
 public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
@@ -49,6 +49,14 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
     @EJB
     SesionesFacadeLocal sesiones;
 
+    /**
+     * Metodo encargado de la logica del login de usuario
+     *
+     * @param correo
+     * @param contrasena
+     * @return
+     * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
+     */
     @Override
     public UsuarioPOJO loginUsuario(String correo, String contrasena) throws ExcepcionGenerica {
         try {
@@ -75,6 +83,13 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         }
     }
 
+    /**
+     * Metodo encargado de la logica de cerrar sesion
+     *
+     * @param token
+     * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
+     * 
+     */
     @Override
     public void cerrarSesion(String token) throws ExcepcionGenerica {
         try {
@@ -86,6 +101,12 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         }
     }
 
+    /**
+     * Metodo encargado del registro de usuario
+     *
+     * @param usuario
+     * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
+     */
     @Override
     public void registrarUsuario(UsuarioPOJO usuario) throws ExcepcionGenerica {
         try {
@@ -96,7 +117,7 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
                 throw new NoResultException("El correo o numero de documento ya esta registrado");
             }
         } catch (NullPointerException ex) {
-            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer el login del usuario ");
+            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer el registro del usuario ");
         } catch (NoResultException ex) {
             throw new ExcepcionGenerica("No se encontro ningun dato coincidente");
         } catch (Exception ex) {
@@ -104,6 +125,11 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         }
     }
 
+    /**
+     * Metodo encargado de validar token
+     *
+     * @param tokencin
+     */
     public void validarTokens(String tokencin) {
         Token token = Seguridad.desencriptar(tokencin);
         Calendar FechaHoy = new GregorianCalendar();
@@ -125,6 +151,13 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         }
     }
 
+    /**
+     * Metodo encargado de devolver los datos de usuario
+     *
+     * @param token
+     * @return
+     */
+    @Override
     public UsuarioPOJO devolverDatosUsuario(String token) {
         try {
             if (validarToken(token)) {

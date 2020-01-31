@@ -1,13 +1,9 @@
 package com.mycompany.superadministrador.services;
 
-import com.mycompany.superadministrador.POJO.GestorBitacora;
 import com.mycompany.superadministrador.POJO.Respuesta;
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
 import com.mycompany.superadministrador.interfaces.LogicaUsuarioFacadeLocal;
-import com.mycompany.superadministrador.interfaces.UsuarioFacadeLocal;
 import com.mycompany.superadministrador.utilitarios.ExcepcionGenerica;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -18,8 +14,8 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
- *
- * @author Alejandra Pabon Rodriguez 461 215 234 Clase servicio del login
+ * Clase que administra el servicio para login
+ * @author jeison gaona - alejandra pabon
  */
 @javax.enterprise.context.RequestScoped
 @Path("login")
@@ -59,6 +55,12 @@ public class Login {
         }
     }
 
+    /**
+     * Servicio que realiza el cierre de sesion
+     *
+     * @param token
+     * @return
+     */
     @DELETE
     @Path("/{token}")
     public Response cerrarSesion(@PathParam("token") String token) {

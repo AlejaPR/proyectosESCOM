@@ -15,7 +15,8 @@ import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
 
 /**
- *
+ * Clase encarga de la logica de los modulos
+ * @author jeison gaona - alejandra pabon
  * @author aleja
  */
 @Stateless
@@ -27,6 +28,14 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
     @EJB
     ActividadFacadeLocal actividadDB;
 
+    /**
+     * Metodo que llama a la consulta para registrar el modulo
+     *
+     * 
+     * @param modulo
+     * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
+     *
+     */
     @Override
     public void registrarModulo(ModuloPOJO modulo) throws ExcepcionGenerica {
         try {

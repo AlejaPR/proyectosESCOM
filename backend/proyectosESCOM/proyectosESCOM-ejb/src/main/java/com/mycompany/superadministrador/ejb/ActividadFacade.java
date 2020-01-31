@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package com.mycompany.superadministrador.ejb;
 
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
@@ -19,7 +15,7 @@ import javax.persistence.TypedQuery;
 
 /**
  *
- * @author aleja
+ * @author jeison gaona- alejandra pabon
  */
 @Stateless
 public class ActividadFacade extends AbstractFacade<Actividad> implements ActividadFacadeLocal {
@@ -71,6 +67,14 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
         return respuesta;
     }
 
+    /**
+     * Metodo que realiza la consulta de actividades no asignadas al usuario
+     *
+     * @param idUsuario
+     * @param idModulo
+     * @return
+     *
+     */
     @Override
     public List<ActividadPOJO> listarActividadesNoAsociadasUsuario(int idUsuario, int idModulo) {
         List<Actividad> listaActividades = new ArrayList<>();
@@ -142,6 +146,13 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
         em.merge(actividad);
     }
 
+    /**
+     * Metodo que realiza la consulta de busqueda de actividad por nombre
+     *
+     * @param nombreActividad
+     * @return
+     *
+     */
     @Override
     public List<Actividad> buscarActividadPorNombre(String nombreActividad) {
 
@@ -154,6 +165,15 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
         return actividadResultado;
     }
 
+    /**
+     * Metodo que realiza la consulta para registrar actividad
+     *
+     * @param actividad
+     * @param nombreActividad
+     * @param modulo
+     * 
+     *
+     */
     @Override
     public void registrarActividad(ActividadPOJO actividad, String nombreActividad, Modulo modulo) {
 

@@ -5,6 +5,7 @@
  */
 package com.mycompany.superadministrador.interfaces;
 
+import com.mycompany.superadministrador.POJO.ConfiguracionPOJO;
 import com.mycompany.superadministrador.entity.Configuracion;
 import java.util.List;
 import javax.ejb.Local;
@@ -29,5 +30,7 @@ public interface ConfiguracionFacadeLocal {
     List<Configuracion> findRange(int[] range);
 
     int count();
+    
+    public void registrarConfiguracion(ConfiguracionPOJO configuracion);
     
 }

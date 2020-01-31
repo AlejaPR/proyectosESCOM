@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.superadministrador.ejb;
 
 import com.mycompany.superadministrador.POJO.ModuloPOJO;
@@ -18,7 +13,7 @@ import javax.persistence.TypedQuery;
 
 /**
  *
- * @author aleja
+ * @author jeison gaona - alejandra pabon
  */
 @Stateless
 public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacadeLocal {
@@ -34,6 +29,13 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
         super(Modulo.class);
     }
     
+    /**
+     * Metodo que realiza la consulta de datos de modulo segun el nombre
+     *
+     * @param nombreModulo
+     * @return
+     *
+     */
     @Override
     public List<Modulo> consultaDatosExistentes(String nombreModulo) {
         TypedQuery<Modulo> consultaDatosM = em.createNamedQuery("consultarExistenciaModulo", Modulo.class);
@@ -42,6 +44,14 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
         return consultaDatosM.getResultList();
     }
     
+    
+    /**
+     * Metodo que realiza la consulta de acronimo
+     *
+     * @param acronimo
+     * @return
+     *
+     */
     @Override
     public List<Modulo> consultaAcronimo(String acronimo) {
         TypedQuery<Modulo> consultaAcronimo = em.createNamedQuery("consultarAcronimo", Modulo.class);
@@ -51,7 +61,13 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
     }
 
    
-    
+    /**
+     * Metodo que realiza la consulta para registrar modulo
+     *
+     * @param modulo
+     * @param acronimo
+     *
+     */
      @Override
     public void registrarModulo(ModuloPOJO modulo,String acronimo) {
         
@@ -59,9 +75,6 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
                                     acronimo, modulo.getDescripcionModulo());
         
         em.persist(moduloN);
-        
-        
-        
     }
 
     /**Metodo que realiza la consulta a la tabla modulo
@@ -139,9 +152,4 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
         modulo.setEstado(estado);
         em.merge(modulo);
     }
-
-    
-
-    
-
 }

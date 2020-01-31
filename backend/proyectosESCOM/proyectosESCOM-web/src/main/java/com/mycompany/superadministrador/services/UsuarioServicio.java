@@ -5,12 +5,10 @@ import com.mycompany.superadministrador.POJO.Respuesta;
 import com.mycompany.superadministrador.POJO.TipoDocumentoPOJO;
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
 import com.mycompany.superadministrador.interfaces.LogicaUsuarioFacadeLocal;
-import com.mycompany.superadministrador.interfaces.SesionesFacadeLocal;
 import com.mycompany.superadministrador.utilitarios.ExcepcionGenerica;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -251,7 +249,7 @@ public class UsuarioServicio {
      * Servicio que asigna actividades a usuarios 
      *
      * @param numeroDocumento
-     * @param codigoActividad
+     * @param actividad
      * 
      * @return  *
      */
