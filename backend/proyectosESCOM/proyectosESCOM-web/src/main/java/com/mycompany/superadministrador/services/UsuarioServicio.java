@@ -196,7 +196,7 @@ public class UsuarioServicio {
     }
     
     /**
-     * Servicio que lista las actividades no asosciadas de un usuario especifico, recibe como
+     * Servicio que lista las actividades no asociadas de un usuario especifico, recibe como
      * parametro la cedula y el codigo del modulo 
      *
      * @param numeroDocumento
@@ -207,7 +207,7 @@ public class UsuarioServicio {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/listarActividadesNoAsociadasUsuario/{numeroDocumento}/{codigoModulo}")
-    public Response listarActividadesNoAsociadasUsuario(@PathParam("numeroDocumento") int numeroDocumento,@PathParam("codigoModulo") int idModulo) {
+    public Response listarActividadesNoAsociadasUsuario(@PathParam("numeroDocumento") int numeroDocumento, @PathParam("codigoModulo") int idModulo) {
         try {
             List<ActividadPOJO> listaActividades = usuarioLogica.listarActividadesNoAsociadasUsuario(numeroDocumento,idModulo);
             return Response.status(Response.Status.OK).entity(listaActividades).build();
