@@ -5,7 +5,7 @@ export const requerido = value => {
 }
 
 export const nombre = value => {
-    if (value !==  undefined) {
+    if (value !== undefined) {
         if (value.length < 3) {
             return 'ingrese mas de tres caracteres';
         }
@@ -13,7 +13,7 @@ export const nombre = value => {
 }
 
 export const apellido = value => {
-    if (value !==  undefined) {
+    if (value !== undefined) {
         if (value.length < 4) {
             return 'ingrese mas de dos caracteres';
         }

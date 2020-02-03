@@ -11,21 +11,23 @@ import '../../css/estilos.css'
 import '../../css/bootstrap.min.css'
 import '../../css/menu.css'
 
-
+import Select from 'react-select'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+import { reduxForm, Field } from 'redux-form';
+import { withRouter } from 'react-router-dom';
+import { generarInput, renderTextArea } from '../../utilitario/GenerarInputs.js'
+import { fechaNacimiento, seleccione, nombre, apellido, contrasena, correo, documentoIdentificacion, requerido } from '../../utilitario/validacionCampos.js';
 
-class ModalExample extends React.Component {
+import { actionConsultarModulos, actionAgregarActividad, actualizarMensajeRegistrar } from '../../actions/actionActividad.js'
+import { connect } from 'react-redux';
+
+class PopUpActividad extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            modal: false,
-            nombremodulo: '',
-            descripcion: '',
-            logo: ''
+            modal: false
         };
-
-
-
         this.toggle = this.toggle.bind(this);
     }
 
@@ -35,38 +37,37 @@ class ModalExample extends React.Component {
         }));
     }
 
-
-
-    onSubmit = () => {
-        //console.log(evento);
-        console.log('aqui');
-        console.log(this.props);
-
-        fetch('http://localhost:8080/SuperadminustradorESCOM-web/api/usu/', {
-            method: 'post',
-            headers: new Headers({
-                'Content-Type': 'application/json'
-            }),
-            body: JSON.stringify({
-                'nombremodulo': this.state.nombremodulo,
-                'descripcion': this.state.descripcion,
-                'logo': this.state.logo
-            })
-        });
-        this.props.funcion(this.state.nombremodulo, this.state.descripcion, this.state.logo);
-
+    componentWillMount() {
+        this.props.actionConsultarModulos(localStorage.getItem('Token'));
     }
 
+    opciones = () => {
+        let respuesta = [];
+        this.props.modulos.map(
+            modulo => {
+                let objeto = {
+                    label: modulo.nombreModulo,
+                    value: modulo.idModulo,
+                }
+                respuesta.push(objeto);
+            }
+        )
+        return respuesta;
+    }
 
-
-    onChange = (evento) => {
-        console.log([evento.target.name]);
-        this.setState({
-
-            [evento.target.name]: evento.target.value
-
-        });
-        console.log(this.state);
+    handleSubmit = formValues => {
+        try {
+            console.log('fofro',formValues)
+            let actividad = {
+                'nombre': formValues.nombre,
+                'descripcionActividad': formValues.descripcion,
+                'idModulo': formValues.modulo.value
+              };
+              this.props.actionAgregarActividad(actividad,localStorage.getItem('Token'));
+              this.props.reset();
+            } catch (error) {
+            NotificationManager.error('Ingrese todos los datos');
+        }
     }
 
 
@@ -81,40 +82,56 @@ class ModalExample extends React.Component {
                 >
                     <ModalHeader toggle={this.toggle} className="center">Crear actividad</ModalHeader>
                     <ModalBody>
-                        <form onSubmit={this.onSubmit}>
+                        <form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
                             <div className="contenedor-inputs">
                                 <div className="row">
                                     <div className="col-sm-12">
-                                        <input type="text" name="nombremodulo" id="inputNombreModulo" onChange={this.onChange} value={this.state.nombremodulo} className="form-control form-control-solid placeholder-no-fix form-group" placeholder="Nombre " />
-                                    </div>
-                                    <div className="col-sm-12">
-                                        <textarea type="text" name="descripcion" id="inputDescripcion" onChange={this.onChange} value={this.state.apellido} className="form-control form-control-solid placeholder-no-fix form-group" placeholder="Descripción " />
+                                        <Field name="nombre" validate={[requerido, nombre]} component={generarInput} label="Nombre" />
+                                        <br />
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <span> Modulo al que pertenece</span>
-                                        
+                                <div className="row">
+                                    <div className="col-sm-12">
+                                        <Field name="descripcion" component={renderTextArea} label="descripcion" />
                                     </div>
-                                    <div class="col-sm-6">
-                                        <select class="letra dropdown-toggle btn-sm" id="selectDDL" onChange={this.eventoBorrado} title="ACCIONES">
-                                            <option className="letra" value="0">Seleccione...</option>
-                                            
-                                        </select>
+                                </div>
+                                <br />
+                                <div className="row">
+                                    <div className="col-sm-12">
+                                        <Field name="modulo" validate={[seleccione]} component={ReduxFormSelect} options={this.opciones()} />
                                     </div>
                                 </div>
                             </div>
+                            <ModalFooter>
+                                <Button style={fondoBoton} type="submit">Registrar</Button>{''}
+                                <Button color="secondary" className="letra" onClick={this.toggle}>Cancelar</Button>
+                            </ModalFooter>
                         </form>
-
                     </ModalBody>
-                    <ModalFooter>
-                        <Button style={fondoBoton} onClick={this.onSubmit}>Registrar</Button>{''}
-                        <Button color="secondary"  className="letra" onClick={this.toggle}>Cancelar</Button>
-                    </ModalFooter>
+                    <NotificationContainer />
                 </Modal>
             </div>
         );
     }
+}
+
+export const ReduxFormSelect = props => {
+    const { input, options } = props;
+    const { touched, error } = props.meta;
+    return (
+        <>
+            <Select
+                {...input}
+                isSearchable={false}
+                placeholder='Seleccione un modulo'
+                onChange={value => input.onChange(value)}
+                onBlur={() => input.onBlur(input.value)}
+                noOptionsMessage={() => 'Aun no hay ningun modulo registrado'}
+                options={options}
+            />
+            {touched && ((error && <span className="text-danger letra form-group">{error}</span>))}
+        </>
+    )
 }
 
 const fondoBoton = {
@@ -124,6 +141,16 @@ const fondoBoton = {
 
 }
 
+function mapStateToProps(state) {
+    return {
+        modulos: state.act.modulosActividades,
+        mensaje: state.act.mensajeRegistrar
+    }
+}
 
+let formulario = reduxForm({
+    form: 'registrarActividad'
+})(PopUpActividad)
 
-export default ModalExample;
+export default withRouter(connect(mapStateToProps, { actionConsultarModulos, actionAgregarActividad, actualizarMensajeRegistrar })(formulario));
+

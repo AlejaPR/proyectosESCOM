@@ -214,7 +214,8 @@ class ContenidoAdminModulo extends React.Component {
 											icon: 'assignmentInd',
 											tooltip: 'Asignar actividad',
 											onClick: (event, rowData) => {
-												this.props.history.push('/asignarActividadUsuario')
+												this.props.actionAsignarModulo(rowData.idModulo);
+												this.props.history.push('/asignarActividadModulo')
 											}
 										}
 									]}

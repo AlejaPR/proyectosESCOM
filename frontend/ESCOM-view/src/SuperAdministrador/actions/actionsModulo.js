@@ -5,9 +5,11 @@ import {mensajesDeError} from '../utilitario/MensajesError.js';
 export const MOSTRAR_MODULOS = 'MOSTRAR_USUARIOS';
 export const ESTADO_MODULOS = 'ESTADO_MODULOS';
 export const ANADIR_CODIGO_EDITAR = 'ANADIR_CODIGO_EDITAR';
+
 export const INFORMACION_MODULO='INFORMACION_MODULO';
 export const MENSAJE_EDITAR_MODULO='MENSAJE_EDITAR_MODULO';
 export const MENSAJE_SUSPENDER_MODULO='MENSAJE_SUSPENDER_MODULO';
+export const MENSAJE_ACTIVIDADES='MENSAJE_ACTIVIDADES';
 export const ACTIVIDADES_MODULO='ACTIVIDADES_MODULO';
 export const ACTUALIZAR_MODULOS='ACTUALIZAR_MODULOS';
 export const AGREGAR_MODULO='AGREGAR_MODULO';
@@ -59,6 +61,15 @@ export function actualizarMensajeSuspenderModulo(mensaje) {
     return (dispatch, getState) => {
         dispatch({
             type: MENSAJE_SUSPENDER_MODULO,
+            mensaje: mensaje
+        });
+    };
+}
+
+export function actualizarMensajeActividades(mensaje) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: MENSAJE_ACTIVIDADES,
             mensaje: mensaje
         });
     };
@@ -168,7 +179,7 @@ export function actionConsultarActividadesModulo(codigoModulo, token) {
             }).catch((error) => {
                 if (error.request.response === '') {
                     dispatch({
-                        type: MENSAJE_EDITAR_MODULO,
+                        type: MENSAJE_ACTIVIDADES,
                         mensaje: 'Servidor fuera de servicio temporalmente'
                     });
                 }else{
@@ -177,12 +188,12 @@ export function actionConsultarActividadesModulo(codigoModulo, token) {
                         let respuesta=mensajesDeError(o.respuesta);
                         if(respuesta!==''){
                             dispatch({
-                                type: MENSAJE_EDITAR_MODULO,
+                                type: MENSAJE_ACTIVIDADES,
                                 mensaje: respuesta
                             });
                         }else{
                             dispatch({
-                                type: MENSAJE_EDITAR_MODULO,
+                                type: MENSAJE_ACTIVIDADES,
                                 mensaje: 'Sin acceso al servicio'
                             });
                         }
@@ -239,5 +250,92 @@ export function actionSuspenderActivarModulo(codigoModulo, token,actualizados) {
                 
             });
 
+    }
+}
+
+export function actionCambiarEstadoActividades(actividades, token) {
+    var tokenRequest = desencriptar(token);
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': tokenRequest,
+        'Permiso': 'SA_CREAR USUARIO'
+    }
+    return (dispatch, getState) => {
+        axios.put("http://localhost:9090/proyectosESCOM-web/api/modulo/cambiarEstadoActividadModulo/",actividades, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: MENSAJE_ACTIVIDADES,
+                    mensaje: 'Operacion hecha con exito'
+                });
+            }).catch((error) => {
+                console.log(error);
+
+                if (error.request.response === '') {
+                    dispatch({
+                        type: MENSAJE_ACTIVIDADES,
+                        mensaje: 'Servidor fuera de servicio temporalmente'
+                    });
+                }else{
+                    if (error.request) {
+                        var o = JSON.parse(error.request.response);
+                        let respuesta=mensajesDeError(o.respuesta);
+                        console.log('respuesta',respuesta);
+                        if(respuesta!==''){
+                            dispatch({
+                                type: MENSAJE_ACTIVIDADES,
+                                mensaje: respuesta
+                            });
+                        }else{
+                            dispatch({
+                                type: MENSAJE_ACTIVIDADES,
+                                mensaje: 'Sin acceso al servicio'
+                            });
+                        }
+                    }
+                } 
+                
+            });
+
+    }
+}
+
+export function actionEditarModulo(modulo, codigoModulo, token) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token),
+        'Permiso': 'SA_CREAR USUARIO'
+    }
+    return (dispatch, getState) => {
+        axios.put("http://localhost:9090/proyectosESCOM-web/api/modulo/editarModulo/" + codigoModulo, modulo, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: MENSAJE_EDITAR_MODULO,
+                    mensaje: 'modulo editado'
+                });
+            }).catch((error) => {
+                if (error.request.response === '') {
+                    dispatch({
+                        type: MENSAJE_EDITAR_MODULO,
+                        mensaje: 'Sin acceso al servicio'
+                    });
+                }else{
+                    if (error.request) {
+                        var o = JSON.parse(error.request.response);
+                        let respuesta=mensajesDeError(o.respuesta);
+                        if(respuesta!==''){
+                            dispatch({
+                                type: MENSAJE_EDITAR_MODULO,
+                                mensaje: 'Sin acceso al servicio'
+                            });
+                        }else{
+                            dispatch({
+                                type: MENSAJE_EDITAR_MODULO,
+                                mensaje: 'Sin acceso al servicio'
+                            });
+                        }
+                    }
+                } 
+                
+            });
     }
 }

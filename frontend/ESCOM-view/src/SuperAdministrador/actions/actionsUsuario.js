@@ -426,6 +426,7 @@ export function actionConsultarModulos(token) {
             });
     };
 }
+
 export function actionLimpiar() {
     return (dispatch, getState) => {
         dispatch({
@@ -433,6 +434,52 @@ export function actionLimpiar() {
             respuesta:undefined
         });
     };
+}
+
+export function actionEliminarActividades(actividades, token,numeroDocumento) {
+    var tokenRequest = desencriptar(token);
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': tokenRequest,
+        'Permiso': 'SA_CREAR USUARIO'
+    }
+    return (dispatch, getState) => {
+        axios.put("http://localhost:9090/proyectosESCOM-web/api/usuario/eliminarActividadUsuario/"+numeroDocumento,actividades, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: MENSAJE_ASIGNAR,
+                    mensaje: 'Actividades eliminadas'
+                });
+            }).catch((error) => {
+                console.log(error);
+
+                if (error.request.response === '') {
+                    dispatch({
+                        type: MENSAJE_ASIGNAR,
+                        mensaje: 'Servidor fuera de servicio temporalmente'
+                    });
+                }else{
+                    if (error.request) {
+                        var o = JSON.parse(error.request.response);
+                        let respuesta=mensajesDeError(o.respuesta);
+                        console.log('respuesta',respuesta);
+                        if(respuesta!==''){
+                            dispatch({
+                                type: MENSAJE_ASIGNAR,
+                                mensaje: respuesta
+                            });
+                        }else{
+                            dispatch({
+                                type: MENSAJE_ASIGNAR,
+                                mensaje: 'Sin acceso al servicio'
+                            });
+                        }
+                    }
+                } 
+                
+            });
+
+    }
 }
 
 export function actionConsultarActividadesSinAsignar(token,numeroDocumento,codigoModulo) {

@@ -21,7 +21,6 @@ export function reducerConfiguracion(state = initialState, action) {
             return Object.assign({}, state, { estilos: actualizaBarraLateral() })
         case ACTUALIZAR_BARRASUPERIOR:
             const actualizaBarraSuperior = () => {
-
                 return ({
                     fondoBarra: state.estilos.fondoBarra,
                     fondoSuperior: action.color,
@@ -31,7 +30,6 @@ export function reducerConfiguracion(state = initialState, action) {
             return Object.assign({}, state, { estilos: actualizaBarraSuperior() })
         case ACTUALIZAR_BOTONES:
             const actualizarBotones = () => {
-
                 return ({
                     fondoBarra: state.estilos.fondoBarra,
                     fondoSuperior: state.estilos.fondoSuperior,

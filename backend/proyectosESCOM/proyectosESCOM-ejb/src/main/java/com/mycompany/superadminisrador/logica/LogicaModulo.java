@@ -207,7 +207,6 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
             List<ActividadPOJO> listaActividadesM = new ArrayList();
             listaActividadesM = actividadDB.listarActividadesModulo(moduloDB.find(idModulo));
             if (listaActividadesM.size() >= 0) {
-
                 return listaActividadesM;
             } else {
                 throw new NoResultException("Error en la consulta");

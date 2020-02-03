@@ -35,3 +35,12 @@ export const campo = value => {
     }
   }
 };
+
+export const renderTextArea = ({ input, label, meta: { touched, error, warning } }) => (
+  <div>
+    <div>
+      <textarea {...input} placeholder={label} style={{ fontSize: "12px" }} className="form-control letra form-control-solid placeholder-no-fix" />
+      {touched && ((error && <span className="text-danger letra form-group">{error}</span>) || (warning && <span>{warning}</span>))}
+    </div>
+  </div>
+);
