@@ -16,6 +16,8 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import Defecto from '../../imagenes/defecto.jpg';
 import PropTypes from "prop-types";
+import {requerido,validacionCuarentaCaracteres,validacionDoscientosCaracteres} from '../../utilitario/validacionCampos.js';
+
 
 import { withRouter } from 'react-router-dom';
 import { Field, reduxForm } from "redux-form";
@@ -34,10 +36,10 @@ class PopUpModulo extends React.Component {
     this.setState(prevState => ({
       modal: !prevState.modal
     }));
+    this.props.reset();
   }
 
   componentDidUpdate() {
-    console.log('mensaje', this.props.mensaje);
     if (this.props.mensajeRegistrar !== '') {
       switch (this.props.mensaje) {
         case 'modulo registrado':
@@ -51,59 +53,53 @@ class PopUpModulo extends React.Component {
 
   static propTypes = {
     previewLogoUrl: PropTypes.string,
-    mimeType: PropTypes.string,
-    maxWeight: PropTypes.number,
-    maxWidth: PropTypes.number,
-    maxHeight: PropTypes.number,
-    // redux-form porps
+    tipoDeImagen: PropTypes.string,
+    pesoMaximo: PropTypes.number,
+    anchuraMaxima: PropTypes.number,
+    alturaMaxima: PropTypes.number,
     handleSubmit: PropTypes.func.isRequired
   };
+
   static defaultProps = {
     previewLogoUrl: "https://imgplaceholder.com/400x300",
-    mimeType: "image/jpeg, image/png",
-    maxWeight: 100,
-    maxWidth: 100,
-    maxHeight: 100
+    tipoDeImagen: "image/jpeg, image/png",
+    pesoMaximo: 100,
+    anchuraMaxima: 100,
+    alturaMaxima: 100
   };
   validateImageWeight = imageFile => {
     if (imageFile && imageFile.size) {
-      // Get image size in kilobytes
       const imageFileKb = imageFile.size / 1024;
-      const { maxWeight } = this.props;
+      const { pesoMaximo } = this.props;
 
-      if (imageFileKb > maxWeight) {
-        return `Image size must be less or equal to ${maxWeight}kb`;
+      if (imageFileKb > pesoMaximo) {
+        return `El tamaño de la imagen debe ser menor o igual a ${pesoMaximo}kb`;
       }
     }
   };
   validateImageWidth = imageFile => {
     if (imageFile) {
-      const { maxWidth } = this.props;
-
-      if (imageFile.width > maxWidth) {
-        return `Image width must be less or equal to ${maxWidth}px`;
+      const { anchuraMaxima } = this.props;
+      if (imageFile.width > anchuraMaxima) {
+        return `El ancho de la imagen debe ser menor o igual a ${anchuraMaxima}px`;
       }
     }
   };
   validateImageHeight = imageFile => {
     if (imageFile) {
-      const { maxHeight } = this.props;
+      const { alturaMaxima } = this.props;
 
-      if (imageFile.height > maxHeight) {
-        return `Image height must be less or equal to ${maxHeight}px`;
+      if (imageFile.height > alturaMaxima) {
+        return `La altura de la imagen debe ser menor o igual a ${alturaMaxima}px`;
       }
     }
   };
 
   validateImageFormat = imageFile => {
     if (imageFile) {
-
-      console.log('tipo', imageFile.type)
-
-      const { mimeType } = this.props;
-
-      if (!mimeType.includes(imageFile.type)) {
-        return `Image mime type must be ${mimeType}`;
+      const { tipoDeImagen } = this.props;
+      if (!tipoDeImagen.includes(imageFile.type)) {
+        return `El tipo de imagen debe ser ${tipoDeImagen}`;
       }
     }
   };
@@ -116,30 +112,37 @@ class PopUpModulo extends React.Component {
   handleChange = (event, input) => {
     event.preventDefault();
     let imageFile = event.target.files[0];
+    const { tipoDeImagen } = this.props;
     if (imageFile) {
-      const localImageUrl = URL.createObjectURL(imageFile);
-      const imageObject = new window.Image();
+      if (!tipoDeImagen.includes(imageFile.type)) {
+        NotificationManager.error('Seleccione un archivo de imagen .jpg o .png');
+        event.target.value = null;
+      } else {
 
-      imageObject.onload = () => {
-        imageFile.width = imageObject.naturalWidth;
-        imageFile.height = imageObject.naturalHeight;
-        input.onChange(imageFile);
-        URL.revokeObjectURL(imageFile);
-      };
-      imageObject.src = localImageUrl;
-      this.handlePreview(localImageUrl);
+        const localImageUrl = URL.createObjectURL(imageFile);
+        const imageObject = new window.Image();
+
+        imageObject.onload = () => {
+          imageFile.width = imageObject.naturalWidth;
+          imageFile.height = imageObject.naturalHeight;
+          input.onChange(imageFile);
+          URL.revokeObjectURL(imageFile);
+        };
+        imageObject.src = localImageUrl;
+        this.handlePreview(localImageUrl);
+      }
     }
   };
 
   renderFileInput = ({ input, type, meta }) => {
-    const { mimeType } = this.props;
+    const { tipoDeImagen } = this.props;
     const { touched, error, warning } = meta;
     return (
       <div>
         <input
           name={input.name}
           type={type}
-          accept={mimeType}
+          accept={tipoDeImagen}
           onChange={event => this.handleChange(event, input)}
         />
         {touched && ((error && <span className="text-danger letra form-group">{error}</span>) || (warning && <span>{warning}</span>))}
@@ -149,19 +152,21 @@ class PopUpModulo extends React.Component {
 
 
   handleSubmitForm = values => {
-    this.getBase64(values.image, (result) => {
-      let modulo = {
-        nombreModulo: values.nombre,
-        descripcionModulo: values.descripcion,
-        imagenModulo: result,
-        estadoModulo: 'Activo'
-      }
-      this.props.actionAgregarModulo(modulo, localStorage.getItem('Token'));
-    });
+    if (!(values.image === undefined | values.image === null)) {
+      this.getBase64(values.image, (result) => {
+        let modulo = {
+          nombreModulo: values.nombre,
+          descripcionModulo: values.descripcion,
+          imagenModulo: result,
+          estadoModulo: 'Activo'
+        }
+        debugger;
+        this.props.actionAgregarModulo(modulo, localStorage.getItem('Token'));
+      });
+    } else {
+      NotificationManager.error('Seleccione un archivo de imagen .jpg o .png');
+    }
   };
-
-
-
 
   getBase64(file, cb) {
     let reader = new FileReader();
@@ -205,13 +210,13 @@ class PopUpModulo extends React.Component {
               <br />
               <div className="row">
                 <div className="col-sm-12">
-                  <Field name="nombre" component={generarInput} label="Nombre" />
+                  <Field name="nombre" validate={[requerido,validacionCuarentaCaracteres]} component={generarInput} label="Nombre" />
                 </div>
               </div>
               <br />
               <div className="row">
                 <div className="col-sm-12">
-                  <Field name="descripcion" component={renderTextArea} label="descripcion" />
+                  <Field name="descripcion" validate={[requerido,validacionDoscientosCaracteres]} component={renderTextArea} label="descripcion" />
                 </div>
               </div>
               <ModalFooter>

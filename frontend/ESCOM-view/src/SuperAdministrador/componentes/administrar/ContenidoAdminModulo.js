@@ -60,11 +60,9 @@ class ContenidoAdminModulo extends React.Component {
 
 	componentWillMount() {
 		this.props.actionConsultarModulos(localStorage.getItem('Token'));
-		console.log('modulos registrados son', this.props.modulosRegistrados)
 	}
 
 	componentDidUpdate() {
-		console.log('msg suspender', this.props.modulosRegistrados);
 		if (this.props.mensajeSuspender !== '') {
 			switch (this.props.mensajeSuspender) {
 				case 'Sin permiso':

@@ -18,8 +18,26 @@ export const apellido = value => {
             return 'ingrese mas de dos caracteres';
         }
     }
+}
+
+export const validacionCuarentaCaracteres = value => {
+    if (value !== undefined) {
+        if (value.length > 40) {
+            return 'El limite es de 40 caracteres';
+        }
+    }
 
 }
+
+export const validacionDoscientosCaracteres = value => {
+    if (value !== undefined) {
+        if (value.length > 200) {
+            return 'El limite es de 200 caracteres';
+        }
+    }
+
+}
+
 
 export const documentoIdentificacion = value => {
     if (value !== undefined) {

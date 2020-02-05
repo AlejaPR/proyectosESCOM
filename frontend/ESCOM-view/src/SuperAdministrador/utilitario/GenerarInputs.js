@@ -23,15 +23,19 @@ export const generarInput = ({ input, label, type, meta: { touched, error, warni
 
 export const campo = value => {
 
-  if (value !== null&&value!==undefined) {
+  if (value !== null && value !== undefined) {
     var arrayDeCadenas = value.substr(0, 24);
     switch (arrayDeCadenas) {
+      case 'data:image/jpeg;base64,/':
+        return value;
+      case 'data:image/png;base64,iV':
+        return value;
       case 'dataimage/jpegbase64/9j/':
         var nuevaCadena = value.replace('dataimage/jpegbase64', 'data:image/jpeg;base64,');
         return nuevaCadena;
       default:
         let nuevaCadenadOs = value.replace('dataimage/pngbase64', 'data:image/png;base64,');
-        return nuevaCadenadOs+'g==';
+        return nuevaCadenadOs + 'g==';
     }
   }
 };

@@ -100,12 +100,9 @@ class ContenidoAdminActividad extends React.Component {
 									}
 								}}
 								columns={[
-									{
-										title: 'Codigo de actividad', field: 'idActividad', type: 'numeric',
-										headerStyle: estiloCabecera,
-										cellStyle: estiloFila
-									},
 									{ title: 'Nombre', field: 'nombre', headerStyle: estiloCabecera, cellStyle: estiloFila },
+									{ title: 'Modulo', field: 'moduloActividad', headerStyle: estiloCabecera, cellStyle: estiloFila },
+
 									{
 										title: 'Estado', field: 'estado',
 										render: rowData => {
@@ -155,14 +152,6 @@ class ContenidoAdminActividad extends React.Component {
 										icon: 'restore',
 										tooltip: 'Suspender / Activar',
 										onClick: (event, rowData) => this.activarDesactivarUsuario(rowData.numeroDocumento)
-									},
-									{
-										icon: 'assignmentInd',
-										tooltip: 'Asignar actividad',
-										onClick: (event, rowData) => {
-											this.props.actionAsignarCedula(rowData.numeroDocumento);
-											this.props.history.push('/asignarActividadUsuario')
-										}
 									}
 								]}
 

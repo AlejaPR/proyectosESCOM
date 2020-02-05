@@ -18,7 +18,7 @@ import Alerta from '@icons/material/AlertIcon.js';
 import { campo } from '../../utilitario/GenerarInputs.js';
 import PropTypes from "prop-types";
 //redux
-import { actionCargarInformacionDeModulo,actionEditarModulo, actionConsultarActividadesModulo } from '../../actions/actionsModulo.js'
+import { actionCargarInformacionDeModulo,actionEditarModulo, actionConsultarActividadesModulo,actualizarMensajeEditar } from '../../actions/actionsModulo.js'
 import { connect } from "react-redux";
 import { reduxForm, Field } from 'redux-form';
 
@@ -150,7 +150,6 @@ class EditarModulo extends React.Component {
                     estadoModulo: 'Activo'
                 }
                 this.props.actionEditarModulo(modulo,this.props.codigoModulo,localStorage.getItem('Token'));
-                // this.props.actionAgregarModulo(modulo, localStorage.getItem('Token'));
             });
         }
         
@@ -177,6 +176,7 @@ class EditarModulo extends React.Component {
         }
         if (this.props.mensajeEditar === 'modulo editado') {
             NotificationManager.success('Informacion actualizada correctamente');
+            this.props.actualizarMensajeEditar('');
             this.props.history.push('/adminModulo');
         }
     }
@@ -186,8 +186,6 @@ class EditarModulo extends React.Component {
             this.props.history.push('/adminModulo');
         } else {
             this.props.actionCargarInformacionDeModulo(this.props.codigoModulo, localStorage.getItem('Token'));
-            this.props.actionConsultarActividadesModulo(this.props.codigoModulo, localStorage.getItem('Token'));
-            // this.props.actionConsultarActividadesUsuario(this.props.cedula,localStorage.getItem('Token'));
         }
     }
 
@@ -350,5 +348,5 @@ let formularioEditar = reduxForm({
     enableReinitialize: true
 })(EditarModulo)
 
-export default withRouter(connect(mapStateToProps, { actionCargarInformacionDeModulo, actionEditarModulo,actionConsultarActividadesModulo })(formularioEditar));
+export default withRouter(connect(mapStateToProps, { actionCargarInformacionDeModulo, actionEditarModulo,actionConsultarActividadesModulo ,actualizarMensajeEditar})(formularioEditar));
 

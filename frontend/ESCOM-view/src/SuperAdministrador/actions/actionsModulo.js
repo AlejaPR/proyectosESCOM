@@ -299,6 +299,15 @@ export function actionCambiarEstadoActividades(actividades, token) {
     }
 }
 
+export function actualizarMensajeEditar(mensaje) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: MENSAJE_EDITAR_MODULO,
+            mensaje: mensaje
+        });
+    };
+}
+
 export function actionEditarModulo(modulo, codigoModulo, token) {
     const headers = {
         'Content-Type': 'application/json',
