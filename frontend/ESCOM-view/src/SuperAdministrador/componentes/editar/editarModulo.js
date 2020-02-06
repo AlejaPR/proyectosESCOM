@@ -13,12 +13,13 @@ import { Button } from 'reactstrap';
 import Barra from '../general/BarraDirecciones';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { withRouter } from 'react-router-dom';
-import { nombre, requerido, apellido} from '../../utilitario/validacionCampos.js';
 import Alerta from '@icons/material/AlertIcon.js';
 import { campo } from '../../utilitario/GenerarInputs.js';
 import PropTypes from "prop-types";
+import {requerido,validacionCuarentaCaracteres,validacionDoscientosCaracteres} from '../../utilitario/validacionCampos.js';
+
 //redux
-import { actionCargarInformacionDeModulo,actionEditarModulo, actionConsultarActividadesModulo,actualizarMensajeEditar } from '../../actions/actionsModulo.js'
+import { actionCargarInformacionDeModulo, actionEditarModulo, actionConsultarActividadesModulo, actualizarMensajeEditar } from '../../actions/actionsModulo.js'
 import { connect } from "react-redux";
 import { reduxForm, Field } from 'redux-form';
 
@@ -33,63 +34,54 @@ class EditarModulo extends React.Component {
 
     static propTypes = {
         previewLogoUrl: PropTypes.string,
-        mimeType: PropTypes.string,
-        maxWeight: PropTypes.number,
-        maxWidth: PropTypes.number,
-        maxHeight: PropTypes.number,
-        // redux-form porps
+        tipoDeImagen: PropTypes.string,
+        pesoMaximo: PropTypes.number,
+        anchuraMaxima: PropTypes.number,
+        alturaMaxima: PropTypes.number,
         handleSubmit: PropTypes.func.isRequired
     };
     static defaultProps = {
         previewLogoUrl: "https://imgplaceholder.com/400x300",
-        mimeType: "image/jpeg, image/png",
-        maxWeight: 100,
-        maxWidth: 100,
-        maxHeight: 100
+        tipoDeImagen: "image/jpeg, image/png",
+        pesoMaximo: 100,
+        anchuraMaxima: 100,
+        alturaMaxima: 100
     };
     validateImageWeight = imageFile => {
         if (imageFile && imageFile.size) {
-            // Get image size in kilobytes
             const imageFileKb = imageFile.size / 1024;
-            const { maxWeight } = this.props;
+            const { pesoMaximo } = this.props;
 
-            if (imageFileKb > maxWeight) {
-                return `Image size must be less or equal to ${maxWeight}kb`;
+            if (imageFileKb > pesoMaximo) {
+                return `El tamaño de la imagen debe ser menor o igual a ${pesoMaximo}kb`;
             }
         }
     };
     validateImageWidth = imageFile => {
         if (imageFile) {
-            const { maxWidth } = this.props;
-
-            if (imageFile.width > maxWidth) {
-                return `Image width must be less or equal to ${maxWidth}px`;
+            const { anchuraMaxima } = this.props;
+            if (imageFile.width > anchuraMaxima) {
+                return `El ancho de la imagen debe ser menor o igual a ${anchuraMaxima}px`;
             }
         }
     };
     validateImageHeight = imageFile => {
         if (imageFile) {
-            const { maxHeight } = this.props;
+            const { alturaMaxima } = this.props;
 
-            if (imageFile.height > maxHeight) {
-                return `Image height must be less or equal to ${maxHeight}px`;
+            if (imageFile.height > alturaMaxima) {
+                return `La altura de la imagen debe ser menor o igual a ${alturaMaxima}px`;
             }
         }
     };
-
     validateImageFormat = imageFile => {
         if (imageFile) {
-
-            console.log('tipo', imageFile.type)
-
-            const { mimeType } = this.props;
-
-            if (!mimeType.includes(imageFile.type)) {
-                return `Image mime type must be ${mimeType}`;
+            const { tipoDeImagen } = this.props;
+            if (!tipoDeImagen.includes(imageFile.type)) {
+                return `El tipo de imagen debe ser ${tipoDeImagen}`;
             }
         }
     };
-
     handlePreview = imageUrl => {
         const previewImageDom = document.querySelector(".preview-image");
         previewImageDom.src = imageUrl;
@@ -98,30 +90,36 @@ class EditarModulo extends React.Component {
     handleChange = (event, input) => {
         event.preventDefault();
         let imageFile = event.target.files[0];
+        const { tipoDeImagen } = this.props;
         if (imageFile) {
-            const localImageUrl = URL.createObjectURL(imageFile);
-            const imageObject = new window.Image();
+            if (!tipoDeImagen.includes(imageFile.type)) {
+                NotificationManager.error('Seleccione un archivo de imagen .jpg o .png');
+                event.target.value = null;
+            } else {
+                const localImageUrl = URL.createObjectURL(imageFile);
+                const imageObject = new window.Image();
 
-            imageObject.onload = () => {
-                imageFile.width = imageObject.naturalWidth;
-                imageFile.height = imageObject.naturalHeight;
-                input.onChange(imageFile);
-                URL.revokeObjectURL(imageFile);
-            };
-            imageObject.src = localImageUrl;
-            this.handlePreview(localImageUrl);
+                imageObject.onload = () => {
+                    imageFile.width = imageObject.naturalWidth;
+                    imageFile.height = imageObject.naturalHeight;
+                    input.onChange(imageFile);
+                    URL.revokeObjectURL(imageFile);
+                };
+                imageObject.src = localImageUrl;
+                this.handlePreview(localImageUrl);
+            }
         }
     };
 
     renderFileInput = ({ input, type, meta }) => {
-        const { mimeType } = this.props;
+        const { tipoDeImagen } = this.props;
         const { touched, error, warning } = meta;
         return (
             <div>
                 <input
                     name={input.name}
                     type={type}
-                    accept={mimeType}
+                    accept={tipoDeImagen}
                     onChange={event => this.handleChange(event, input)}
                 />
                 {touched && ((error && <span className="text-danger letra form-group">{error}</span>) || (warning && <span>{warning}</span>))}
@@ -131,8 +129,7 @@ class EditarModulo extends React.Component {
 
 
     handleSubmitForm = values => {
-        console.log('values image',values.image);
-        if(values.image===undefined){
+        if(values.image===undefined | values.image === null){
             let modulo = {
                 nombreModulo: values.nombre,
                 descripcionModulo: values.descripcion,
@@ -152,7 +149,6 @@ class EditarModulo extends React.Component {
                 this.props.actionEditarModulo(modulo,this.props.codigoModulo,localStorage.getItem('Token'));
             });
         }
-        
     };
 
 
@@ -198,7 +194,7 @@ class EditarModulo extends React.Component {
     render() {
         return (
             <div>
-                <div class="text-left titulo" style={estiloLetrero}>
+                <div className="text-left titulo" style={estiloLetrero}>
                     <h4>Editar modulo</h4>
                 </div>
                 <Barra texto="Inicio > Editar modulo" />
@@ -222,7 +218,7 @@ class EditarModulo extends React.Component {
                                 padding: "13px 122px",
                                 color: "#fff",
                                 background: "rgb(158, 35, 45)"
-                            }}><Alerta />No tiene los permisos suficientes para administrar los usuarios</span>
+                            }}><Alerta />No tiene los permisos suficientes para editar informacion del modulo</span>
                                 <div style={{ padding: "25px 44px 25px 287px" }}>
                                     <Button style={fondoBoton} onClick={this.onClickCancelar} type="submit">Aceptar</Button>{''}
                                 </div>
@@ -251,14 +247,14 @@ class EditarModulo extends React.Component {
                                         <label>Nombre</label>
                                         <div className="row">
                                             <div className="col-sm-5">
-                                                <Field name="nombre" validate={[requerido, nombre]} component={generarInput} label="Nombre" />
+                                                <Field name="nombre" validate={[requerido,validacionCuarentaCaracteres]} component={generarInput} label="Nombre" />
                                             </div>
                                         </div>
                                         <br />
                                         <label>Descripcion</label>
                                         <div className="row">
                                             <div className="col-sm-5">
-                                                <Field name="descripcion" validate={[requerido, apellido]} component={renderTextArea} label="Apellido" />
+                                                <Field name="descripcion" validate={[requerido,validacionDoscientosCaracteres]} component={renderTextArea} label="Apellido" />
                                             </div>
                                         </div>
                                         <br />
@@ -269,7 +265,7 @@ class EditarModulo extends React.Component {
                                         <br />
                                         <br />
                                     </form>
-                                    <NotificationContainer/>
+                                    <NotificationContainer />
                                 </>
                         }
                         <br />
@@ -348,5 +344,5 @@ let formularioEditar = reduxForm({
     enableReinitialize: true
 })(EditarModulo)
 
-export default withRouter(connect(mapStateToProps, { actionCargarInformacionDeModulo, actionEditarModulo,actionConsultarActividadesModulo ,actualizarMensajeEditar})(formularioEditar));
+export default withRouter(connect(mapStateToProps, { actionCargarInformacionDeModulo, actionEditarModulo, actionConsultarActividadesModulo, actualizarMensajeEditar })(formularioEditar));
 

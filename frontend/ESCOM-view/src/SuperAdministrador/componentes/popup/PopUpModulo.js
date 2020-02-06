@@ -160,7 +160,6 @@ class PopUpModulo extends React.Component {
           imagenModulo: result,
           estadoModulo: 'Activo'
         }
-        debugger;
         this.props.actionAgregarModulo(modulo, localStorage.getItem('Token'));
       });
     } else {

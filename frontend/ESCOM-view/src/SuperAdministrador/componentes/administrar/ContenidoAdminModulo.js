@@ -54,8 +54,9 @@ class ContenidoAdminModulo extends React.Component {
 			} else {
 				nuevo.push(task);
 			}
-			return nuevo;
 		});
+		return nuevo;
+
 	}
 
 	componentWillMount() {
@@ -102,7 +103,7 @@ class ContenidoAdminModulo extends React.Component {
 	render() {
 		return (
 			<div>
-				<div class="text-left titulo" style={estiloLetrero}>
+				<div className="text-left titulo" style={estiloLetrero}>
 					<h4>Administrar modulos</h4>
 				</div>
 				<Barra texto="Inicio > Administración de modulos" />

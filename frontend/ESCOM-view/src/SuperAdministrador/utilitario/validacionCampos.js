@@ -62,7 +62,7 @@ export const fechaNacimiento = value => {
 
 export const seleccione = value => {
     if (value === '0' || value === undefined) {
-        return 'Seleccione un tipo de documento';
+        return 'Seleccione una opcion';
     }
 };
 

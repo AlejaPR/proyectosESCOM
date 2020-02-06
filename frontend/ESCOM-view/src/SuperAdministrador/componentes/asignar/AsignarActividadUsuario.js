@@ -113,12 +113,14 @@ class AsignarActividadUsuario extends React.Component {
     }
 
     handleSubmit = formValues => {
-        let actividad = {
-            idActividad: formValues.actividad.value,
-            nombre: formValues.actividad.label
+        if(this.state.valor!==null){
+            let actividad = {
+                idActividad: this.state.valor.value,
+                nombre: this.state.valor.label
+            }
+            this.setState({ valor: null });
+            this.props.actionAsignarActividad(localStorage.getItem('Token'), this.props.cedula, actividad);
         }
-        this.setState({ valor: null });
-        this.props.actionAsignarActividad(localStorage.getItem('Token'), this.props.cedula, actividad);
     }
     render() {
         return (
