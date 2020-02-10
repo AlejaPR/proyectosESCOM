@@ -3,7 +3,9 @@ import {
     ESTADO_ACTIVIDADES,
     MOSTRAR_ACTIVIDADES,
     MENSAJE_REGISTRAR,
-    MODULOS_REGISTRADOS
+    MODULOS_REGISTRADOS,
+    MENSAJE_SUSPENDER,
+    ACTUALIZAR_ACTIVIDADES
 } from '../actions/actionActividad.js'
 
 
@@ -11,7 +13,8 @@ const initialState = {
     actividadesRegistradas: [],
     estadoActividades: false,
     mensajeRegistrar: '',
-    modulosActividades:[]
+    mensajeSuspender: '',
+    modulosActividades: []
 }
 
 
@@ -27,8 +30,12 @@ export function reducerActividad(state = initialState, action) {
                 ...state,
                 actividadesRegistradas: state.actividadesRegistradas.concat(action.actividadARegistrar)
             }
+            case ACTUALIZAR_ACTIVIDADES:
+            return Object.assign({}, state, { actividadesRegistradas: action.actividad })
         case MENSAJE_REGISTRAR:
             return Object.assign({}, state, { mensajeRegistrar: action.mensaje })
+        case MENSAJE_SUSPENDER:
+            return Object.assign({}, state, { mensajeSuspender: action.mensaje })
         case ESTADO_ACTIVIDADES:
             return Object.assign({}, state, { estadoUsuarios: action.estado })
         default:

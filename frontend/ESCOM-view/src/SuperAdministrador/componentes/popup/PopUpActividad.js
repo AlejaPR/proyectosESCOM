@@ -10,6 +10,8 @@ import '../../css/business-casual.css'
 import '../../css/estilos.css'
 import '../../css/bootstrap.min.css'
 import '../../css/menu.css'
+import 'react-notifications/lib/notifications.css';
+
 
 import Select from 'react-select'
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
@@ -17,9 +19,9 @@ import { NotificationContainer, NotificationManager } from 'react-notifications'
 import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
 import { generarInput, renderTextArea } from '../../utilitario/GenerarInputs.js'
-import { fechaNacimiento, seleccione, nombre, apellido, contrasena, correo, documentoIdentificacion, requerido } from '../../utilitario/validacionCampos.js';
+import { seleccione, validacionCuarentaCaracteres, validacionDoscientosCaracteres, requerido } from '../../utilitario/validacionCampos.js';
 
-import { actionConsultarModulos, actionAgregarActividad, actualizarMensajeRegistrar } from '../../actions/actionActividad.js'
+import { actionConsultarModulos, actionConsultarActividades,actionAgregarActividad, actualizarMensajeRegistrar } from '../../actions/actionActividad.js'
 import { connect } from 'react-redux';
 
 class PopUpActividad extends React.Component {
@@ -35,10 +37,26 @@ class PopUpActividad extends React.Component {
         this.setState(prevState => ({
             modal: !prevState.modal
         }));
+        this.props.reset();
     }
 
     componentWillMount() {
         this.props.actionConsultarModulos(localStorage.getItem('Token'));
+
+    }
+
+    componentDidUpdate() {
+        switch (this.props.mensaje) {
+            case 'actividad registrada':
+                NotificationManager.success('Actividad registrada correctamente');
+                this.props.actualizarMensajeRegistrar('');
+                break;
+            case 'Sin permiso':
+                break;
+            default:
+                break;
+        }
+
     }
 
     opciones = () => {
@@ -57,15 +75,16 @@ class PopUpActividad extends React.Component {
 
     handleSubmit = formValues => {
         try {
-            console.log('fofro',formValues)
             let actividad = {
                 'nombre': formValues.nombre,
                 'descripcionActividad': formValues.descripcion,
-                'idModulo': formValues.modulo.value
-              };
-              this.props.actionAgregarActividad(actividad,localStorage.getItem('Token'));
-              this.props.reset();
-            } catch (error) {
+                'idModulo': formValues.modulo.value,
+                'moduloActividad': formValues.modulo.label,
+                'estado': 'Activo'
+            };
+            this.props.actionAgregarActividad(actividad, localStorage.getItem('Token'));
+            this.props.reset();
+        } catch (error) {
             NotificationManager.error('Ingrese todos los datos');
         }
     }
@@ -86,13 +105,13 @@ class PopUpActividad extends React.Component {
                             <div className="contenedor-inputs">
                                 <div className="row">
                                     <div className="col-sm-12">
-                                        <Field name="nombre" validate={[requerido, nombre]} component={generarInput} label="Nombre" />
+                                        <Field name="nombre" validate={[requerido, validacionCuarentaCaracteres]} component={generarInput} label="Nombre" />
                                         <br />
                                     </div>
                                 </div>
                                 <div className="row">
                                     <div className="col-sm-12">
-                                        <Field name="descripcion" component={renderTextArea} label="descripcion" />
+                                        <Field name="descripcion" component={renderTextArea} validate={[requerido, validacionDoscientosCaracteres]} label="descripcion" />
                                     </div>
                                 </div>
                                 <br />
@@ -108,8 +127,8 @@ class PopUpActividad extends React.Component {
                             </ModalFooter>
                         </form>
                     </ModalBody>
-                    <NotificationContainer />
                 </Modal>
+                <NotificationContainer />
             </div>
         );
     }
@@ -152,5 +171,5 @@ let formulario = reduxForm({
     form: 'registrarActividad'
 })(PopUpActividad)
 
-export default withRouter(connect(mapStateToProps, { actionConsultarModulos, actionAgregarActividad, actualizarMensajeRegistrar })(formulario));
+export default withRouter(connect(mapStateToProps, { actionConsultarModulos,actionConsultarActividades, actionAgregarActividad, actualizarMensajeRegistrar })(formulario));
 

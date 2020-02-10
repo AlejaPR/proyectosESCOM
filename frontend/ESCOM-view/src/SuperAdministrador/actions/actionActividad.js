@@ -9,11 +9,23 @@ export const EDITAR_USUARIO = "EDITAR_USUARIO";
 export const MENSAJE_REGISTRAR = 'MENSAJE_REGISTRAR';
 export const MENSAJE_SUSPENDER = 'MENSAJE_SUSPENDER';
 export const MODULOS_REGISTRADOS='MODULOS_REGISTRADOS';
+export const ACTUALIZAR_ACTIVIDADES = 'ACTUALIZAR_ACTIVIDADES';
+
 
 export function actualizarMensajeRegistrar(mensaje) {
     return (dispatch, getState) => {
         dispatch({
             type: MENSAJE_REGISTRAR,
+            mensaje: mensaje
+        });
+    };
+}
+
+
+export function actualizarMensajeSuspender(mensaje) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: MENSAJE_SUSPENDER,
             mensaje: mensaje
         });
     };
@@ -64,14 +76,13 @@ export function actionAgregarActividad(actividad, token) {
     return (dispatch, getState) => {
         axios.post("http://localhost:9090/proyectosESCOM-web/api/actividad/registrarActividad", actividad, { headers: headers })
             .then(response => {
-                debugger;
                 dispatch({
                     type: AGREGAR_ACTIVIDAD,
                     actividadARegistrar: actividad
                 });
                 dispatch({
                     type: MENSAJE_REGISTRAR,
-                    mensaje: 'Usuario registrado'
+                    mensaje: 'actividad registrada'
                 });
             }).catch((error) => {
                 debugger;
@@ -138,4 +149,53 @@ export function actionConsultarModulos(token) {
                 } 
             });
     };
+}
+
+export function actionSuspenderActivarActividad(codigoActividad, token,actualizados) {
+    var tokenRequest = desencriptar(token);
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': tokenRequest,
+        'Permiso': 'SA_CREAR USUARIO'
+    }
+    return (dispatch, getState) => {
+        axios.get("http://localhost:9090/proyectosESCOM-web/api/actividad/cambiarEstadoActividad/"+codigoActividad, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: MENSAJE_SUSPENDER,
+                    mensaje: 'Operacion hecha con exito'
+                });
+                dispatch({
+                    type: ACTUALIZAR_ACTIVIDADES,
+                    actividad: actualizados
+                });
+            }).catch((error) => {
+                console.log(error);
+
+                if (error.request.response === '') {
+                    dispatch({
+                        type: MENSAJE_SUSPENDER,
+                        mensaje: 'Servidor fuera de servicio temporalmente'
+                    });
+                }else{
+                    if (error.request) {
+                        var o = JSON.parse(error.request.response);
+                        let respuesta=mensajesDeError(o.respuesta);
+                        if(respuesta!==''){
+                            dispatch({
+                                type: MENSAJE_SUSPENDER,
+                                mensaje: respuesta
+                            });
+                        }else{
+                            dispatch({
+                                type: MENSAJE_SUSPENDER,
+                                mensaje: 'Sin acceso al servicio'
+                            });
+                        }
+                    }
+                } 
+                
+            });
+
+    }
 }

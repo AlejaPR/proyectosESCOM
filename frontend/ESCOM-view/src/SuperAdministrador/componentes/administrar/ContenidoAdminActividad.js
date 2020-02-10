@@ -13,35 +13,73 @@ import MaterialTable from 'material-table';
 //componentes
 import Barra from '../general/BarraDirecciones.js'
 import PopUpActividad from '../popup/PopUpActividad.js'
-import Fila from '../general/FilaTablaUsuario.js'
 import MTableToolbar from '../../utilitario/MTableToolbar.js';
+import { NotificationManager } from 'react-notifications';
+import { confirmAlert } from 'react-confirm-alert';
 
 //redux conexion
 import { connect } from 'react-redux';
-import { actionConsultarActividades } from '../../actions/actionActividad.js'
+import { actionConsultarActividades ,actionSuspenderActivarActividad,actualizarMensajeSuspender} from '../../actions/actionActividad.js'
 import { withRouter } from 'react-router-dom';
 
 class ContenidoAdminActividad extends React.Component {
 
-	state = {
-		post: []
-	}
-
-	eventoBorrado = (evento) => {
-		evento.preventDefault();
-		console.log(this.state.post)
-	}
 
 	componentDidUpdate(){
 		console.log('Actividades son',this.props.actividades);
 	}
 
-	onChange = (evento) => {
-		this.setState({
-			[evento.target.name]: evento.target.value
+
+	activarDesactivarActividad(codigo) {
+		confirmAlert({
+			title: '',
+			message: '¿Esta seguro?',
+			buttons: [
+				{
+					label: 'Si',
+					onClick: () => {
+						this.props.actionSuspenderActivarActividad(codigo, localStorage.getItem('Token'), this.actualizarActividades(codigo));
+					}
+				},
+				{
+					label: 'No',
+					onClick: () => NotificationManager.info('Se cancelo la operacion')
+				}
+			]
 		});
+
 	}
 
+	actualizarActividades(codigoActividad) {
+		let nuevo = [];
+		this.props.actividades.map(function (task, index, array) {
+			if (task.idActividad === codigoActividad) {
+				if (task.estado === "Suspendido") {
+					let actividad = {
+						idActividad:task.idActividad,
+						nombre: task.nombre,
+						moduloActividad: task.moduloActividad,
+						estado: "Activo"
+					}
+					nuevo.push(actividad);
+				} else {
+					let actividad = {
+						idActividad:task.idActividad,
+
+						nombre: task.nombre,
+						moduloActividad: task.moduloActividad,
+						estado: "Suspendido"
+					}
+					nuevo.push(actividad);
+				}
+			} else {
+				nuevo.push(task);
+			}
+		});
+		return nuevo;
+	}
+
+	
 	componentDidMount() {
 		 this.props.actionConsultarActividades(localStorage.getItem('Token'));
 	}
@@ -73,7 +111,7 @@ class ContenidoAdminActividad extends React.Component {
 					paddingBottom: "20px",
 					margin: "0px 0px 32px"
 				}}>
-					<div className="container shadow" style={fondoBarraSuperior}>
+					<div className="container shadow" style={{background: "#FFFFFF",padding:"30px"}}>
 						<br />
 						<div className="jumbotron p-1 jumbotron-fluid" style={fondoTabla}>
 							<MaterialTable
@@ -151,7 +189,7 @@ class ContenidoAdminActividad extends React.Component {
 									{
 										icon: 'restore',
 										tooltip: 'Suspender / Activar',
-										onClick: (event, rowData) => this.activarDesactivarUsuario(rowData.numeroDocumento)
+										onClick: (event, rowData) =>  this.activarDesactivarActividad(rowData.idActividad)
 									}
 								]}
 
@@ -226,4 +264,4 @@ function mapStateToProps(state) {
 }
 
 
-export default withRouter(connect(mapStateToProps, { actionConsultarActividades })(ContenidoAdminActividad));
+export default withRouter(connect(mapStateToProps, { actionConsultarActividades,actionSuspenderActivarActividad,actualizarMensajeSuspender })(ContenidoAdminActividad));
