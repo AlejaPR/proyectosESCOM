@@ -55,7 +55,7 @@ public class Actividad implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date ultimaModificacion;
 
-    @Size(max = 20)
+    @Size(max = 43)
     @Column(name = "ACT_NOMBREACTIVIDAD")
     private String nombreActividad;
 

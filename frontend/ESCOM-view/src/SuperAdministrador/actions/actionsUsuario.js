@@ -143,7 +143,7 @@ export function actionConsultarUsuarios(token) {
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': tokenRequest,
-        'Permiso': 'SA_VER ICIONES'
+        'Permiso': 'dios'
     }
     return (dispatch, getState) => {
         axios.get("http://localhost:9090/proyectosESCOM-web/api/usuario/listarUsuarios", { headers: headers })
@@ -178,7 +178,7 @@ export function actionConsultarActividadesUsuario(numeroDocumento, token) {
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': tokenRequest,
-        'Permiso': 'SA_VER ICIONES'
+        'Permiso': 'dios'
     }
     return (dispatch, getState) => {
         axios.get("http://localhost:9090/proyectosESCOM-web/api/usuario/listarActividadesUsuario/" + numeroDocumento, { headers: headers })
@@ -198,7 +198,7 @@ export function actionConsultarDocumentos(token) {
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': tokenRequest,
-        'Permiso': 'SA_VER ICIONES'
+        'Permiso': 'dios'
     }
     return (dispatch, getState) => {
         axios.get("http://localhost:9090/proyectosESCOM-web/api/usuario/tipoDocumento", { headers: headers })
@@ -216,7 +216,7 @@ export function actionAgregarUsuario(usuario, token) {
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': tokenRequest,
-        'Permiso': 'SA_CREAR USUARIO'
+        'Permiso': 'dios'
     }
     return (dispatch, getState) => {
         axios.post("http://localhost:9090/proyectosESCOM-web/api/usuario/registrarUsuario", usuario, { headers: headers })
@@ -263,7 +263,7 @@ export function actionAsignarActividad(token,numeroDocumento,actividad) {
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': tokenRequest,
-        'Permiso': 'SA_CREAR USUARIO'
+        'Permiso': 'dios'
     }
     return (dispatch, getState) => {
         axios.post("http://localhost:9090/proyectosESCOM-web/api/usuario/asignarActividad/"+numeroDocumento,actividad, { headers: headers })
@@ -306,7 +306,7 @@ export function actionSuspenderActivarUsuario(cedula, token,actualizados) {
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': tokenRequest,
-        'Permiso': 'SA_CREAR USUARIO'
+        'Permiso': 'dios'
     }
     return (dispatch, getState) => {
         axios.get("http://localhost:9090/proyectosESCOM-web/api/usuario/cambiarEstadoUsuario/"+cedula, { headers: headers })
@@ -354,7 +354,7 @@ export function actionCargarInformacionDeUsuario(cedula, token) {
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': desencriptar(token),
-        'Permiso': 'SA_CREAR USUARIO'
+        'Permiso': 'dios'
     }
     return (dispatch, getState) => {
         axios.get("http://localhost:9090/proyectosESCOM-web/api/usuario/datosUsuario/" + cedula, { headers: headers })
@@ -395,7 +395,7 @@ export function actionConsultarModulos(token) {
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': tokenRequest,
-        'Permiso': 'SA_VER ICIONES'
+        'Permiso': 'dios'
     }
     return (dispatch, getState) => {
         axios.get("http://localhost:9090/proyectosESCOM-web/api/modulo/listarModulos", { headers: headers })
@@ -441,7 +441,7 @@ export function actionEliminarActividades(actividades, token,numeroDocumento) {
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': tokenRequest,
-        'Permiso': 'SA_CREAR USUARIO'
+        'Permiso': 'dios'
     }
     return (dispatch, getState) => {
         axios.put("http://localhost:9090/proyectosESCOM-web/api/usuario/eliminarActividadUsuario/"+numeroDocumento,actividades, { headers: headers })
@@ -487,7 +487,7 @@ export function actionConsultarActividadesSinAsignar(token,numeroDocumento,codig
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': tokenRequest,
-        'Permiso': 'SA_VER ICIONES'
+        'Permiso': 'dios'
     }
     return (dispatch, getState) => {
         axios.get("http://localhost:9090/proyectosESCOM-web/api/usuario/listarActividadesNoAsociadasUsuario/"+numeroDocumento+"/"+codigoModulo, { headers: headers })
@@ -555,7 +555,7 @@ export function actionEditarUsuario(usuario, cedula, token) {
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': desencriptar(token),
-        'Permiso': 'SA_CREAR USUARIO'
+        'Permiso': 'dios'
     }
     return (dispatch, getState) => {
         axios.put("http://localhost:9090/proyectosESCOM-web/api/usuario/editarUsuario/" + cedula, usuario, { headers: headers })

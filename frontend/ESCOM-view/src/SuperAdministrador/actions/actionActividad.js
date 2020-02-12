@@ -36,7 +36,7 @@ export function actionConsultarActividades(token) {
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': tokenRequest,
-        'Permiso': 'SA_VER ICIONES'
+        'Permiso': 'dios'
     }
     return (dispatch, getState) => {
         axios.get("http://localhost:9090/proyectosESCOM-web/api/actividad/listarActividades", { headers: headers })
@@ -71,7 +71,7 @@ export function actionAgregarActividad(actividad, token) {
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': tokenRequest,
-        'Permiso': 'SA_CREAR USUARIO'
+        'Permiso': 'dios'
     }
     return (dispatch, getState) => {
         axios.post("http://localhost:9090/proyectosESCOM-web/api/actividad/registrarActividad", actividad, { headers: headers })
@@ -119,7 +119,7 @@ export function actionConsultarModulos(token) {
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': tokenRequest,
-        'Permiso': 'SA_VER ICIONES'
+        'Permiso': 'dios'
     }
     return (dispatch, getState) => {
         axios.get("http://localhost:9090/proyectosESCOM-web/api/modulo/listarModulos", { headers: headers })
@@ -156,7 +156,7 @@ export function actionSuspenderActivarActividad(codigoActividad, token,actualiza
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': tokenRequest,
-        'Permiso': 'SA_CREAR USUARIO'
+        'Permiso': 'dios'
     }
     return (dispatch, getState) => {
         axios.get("http://localhost:9090/proyectosESCOM-web/api/actividad/cambiarEstadoActividad/"+codigoActividad, { headers: headers })

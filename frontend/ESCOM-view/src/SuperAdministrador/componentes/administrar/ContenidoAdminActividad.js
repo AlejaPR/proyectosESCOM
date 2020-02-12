@@ -97,12 +97,6 @@ class ContenidoAdminActividad extends React.Component {
 					paddingLeft: "40px",
 					paddingBottom: "7px"
 				}}>
-					<div className="input-group">
-						<input type="text" style={{ fontSize: "14px" }} className="form-control" placeholder="" />
-						<span className="input-group-btn">
-							<Button className="" style={fondoBoton}>Buscar</Button>
-						</span>
-					</div>
 				</div>
 				<div className="container" style={{
 					paddingTop: "7px",

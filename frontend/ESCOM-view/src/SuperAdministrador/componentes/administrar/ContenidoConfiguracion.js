@@ -17,7 +17,9 @@ class Configuracion extends React.Component {
 
     state = {
         activeStep: 0,
-        completed: {}
+        completed: {},
+        imagenLogin: null,
+        imagenLogo: null
     }
 
     getSteps() {
@@ -59,8 +61,8 @@ class Configuracion extends React.Component {
                         paddingBottom: '25px',
                         paddingLeft: '349px'
                     }}>
-                <SketchPicker disableAlpha={true} color={this.props.configuracion.fondoSuperior} onChangeComplete={this.handleChangeCompleteSuperior} />
-                </div>
+                        <SketchPicker disableAlpha={true} color={this.props.configuracion.fondoSuperior} onChangeComplete={this.handleChangeCompleteSuperior} />
+                    </div>
                 )
             case 2:
                 return (
@@ -69,8 +71,8 @@ class Configuracion extends React.Component {
                         paddingBottom: '25px',
                         paddingLeft: '349px'
                     }}>
-                <SketchPicker disableAlpha={true} color={this.props.configuracion.botones} onChangeComplete={this.handleChangeCompleteBotones} />
-                </div>
+                        <SketchPicker disableAlpha={true} color={this.props.configuracion.botones} onChangeComplete={this.handleChangeCompleteBotones} />
+                    </div>
                 );
             case 3:
                 return (<>
@@ -82,33 +84,8 @@ class Configuracion extends React.Component {
                         <img src={Defecto} alt="preview"
                             className="preview-image"
                             style={{ height: "200px", width: "200px", borderRadius: "50%", objectFit: "cover" }} />
-                    <Field
-                        name="image"
-                        type="file"
-                        validate={[
-                            this.validateImageWeight,
-                            this.validateImageWidth,
-                            this.validateImageHeight,
-                            this.validateImageFormat
-                        ]}
-                        component={this.renderFileInput}
-                    />
-                    </div>
-
-                </>);
-            case 4:
-                return (
-                    <>
-                        <div style={{
-                        paddingTop: '3px',
-                        paddingBottom: '25px',
-                        paddingLeft: '349px'
-                    }}>
-                            <img src={Defecto} alt="preview"
-                                className="preview-image"
-                                style={{ height: "200px", width: "200px", borderRadius: "50%", objectFit: "cover" }} />
                         <Field
-                            name="imagenDos"
+                            name="image"
                             type="file"
                             validate={[
                                 this.validateImageWeight,
@@ -118,6 +95,31 @@ class Configuracion extends React.Component {
                             ]}
                             component={this.renderFileInput}
                         />
+                    </div>
+
+                </>);
+            case 4:
+                return (
+                    <>
+                        <div style={{
+                            paddingTop: '3px',
+                            paddingBottom: '25px',
+                            paddingLeft: '349px'
+                        }}>
+                            <img src={Defecto} alt="preview"
+                                className="preview-image"
+                                style={{ height: "200px", width: "200px", borderRadius: "50%", objectFit: "cover" }} />
+                            <Field
+                                name="imagenDos"
+                                type="file"
+                                validate={[
+                                    this.validateImageWeight,
+                                    this.validateImageWidth,
+                                    this.validateImageHeight,
+                                    this.validateImageFormat
+                                ]}
+                                component={this.renderFileInput}
+                            />
                         </div>
 
                     </>)
@@ -285,7 +287,7 @@ class Configuracion extends React.Component {
     };
 
     handleSubmitForm = values => {
-        console.log('formvalues', values);
+        console.log('formvalues', this.completedSteps(),' values ',values);
     }
 
 
@@ -304,7 +306,7 @@ class Configuracion extends React.Component {
                 }}>
                     <div className="container shadow" style={{ background: "white" }} >
                         <div>
-                            <Stepper nonLinear activeStep={this.state.activeStep}>
+                            <Stepper activeStep={this.state.activeStep}>
                                 {this.getSteps().map((label, index) => (
                                     <Step key={label}>
                                         <StepButton onClick={this.handleStep(index)} completed={this.state.completed[index]}>
