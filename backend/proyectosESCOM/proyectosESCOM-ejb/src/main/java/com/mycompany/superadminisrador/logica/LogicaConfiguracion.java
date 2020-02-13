@@ -102,5 +102,35 @@ public class LogicaConfiguracion implements LogicaConfiguracionFacadeLocal {
             throw new ExcepcionGenerica("Ocurrio una excepcion ");
         }
     }
+    /**
+     * Metodo para obtener la configuracion completa de aspecto de la pagina web
+     * @return
+     * @throws ExcepcionGenerica 
+     */
+    @Override
+    public List<ConfiguracionPOJO> listarConfiguracionCompleta() throws ExcepcionGenerica {
+        try {
+            List<Configuracion> entornoResultado = configuracionDB.findAll();
+            if (!entornoResultado.isEmpty()) {
+                List<ConfiguracionPOJO> listaEntorno = new ArrayList<>();
+                for (Configuracion c : entornoResultado) {
+                    ConfiguracionPOJO configuracion = new ConfiguracionPOJO();
+                    configuracion.setBarraSuperior(c.getBarraSuperior());
+                    configuracion.setBarraLateral(c.getBarraLateral());
+                    configuracion.setBotones(c.getBotones());
+                    configuracion.setLogo(c.getLogo());  
+                    configuracion.setImagenLogin(c.getImagenLogin());
+                    listaEntorno.add(configuracion);
+                }
+                return listaEntorno;
+            } else {
+                throw new NoResultException("No se encontraron datos");
+            }
+        } catch (NullPointerException ex) {
+            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
+        } catch (Exception ex) {
+            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+        }
+    }
     
 }

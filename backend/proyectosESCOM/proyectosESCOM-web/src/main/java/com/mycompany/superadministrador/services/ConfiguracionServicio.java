@@ -97,4 +97,24 @@ public class ConfiguracionServicio {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }
+    
+    /**
+     * Servicio que lista la configuracion completa
+     * @return 
+     */
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/listarConfiguracionCompleta")
+    public Response configuracionCompleta() {
+        try {
+            List<ConfiguracionPOJO> listaEntorno = configuracionLogica.listarConfiguracionCompleta();
+            return Response.status(Response.Status.OK).entity(listaEntorno).build();
+        } catch (ExcepcionGenerica e) {
+            respuesta.setRespuesta("Sin acceso al servicio");
+            return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
+        } catch (Exception e) {
+            respuesta.setRespuesta("Ocurrio un error en el servidor ");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
+        }
+    }
 }

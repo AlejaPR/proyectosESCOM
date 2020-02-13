@@ -11,15 +11,25 @@ import PropTypes from "prop-types";
 import Defecto from '../../imagenes/defecto.jpg';
 import Barra from '../general/BarraDirecciones.js';
 import { connect } from 'react-redux';
-import { consultarConfiguracion, actionActualizarBarraLateral, actionActualizarBarraSuperior, actionActualizarBotones } from '../../actions/actionConfiguracion.js'
-
+import { consultarConfiguracion, actionActualizarBarraLateral, actionActualizarBarraSuperior, actionActualizarBotones,actionConsultarConfiguracionCompleta } from '../../actions/actionConfiguracion.js'
+import {campo} from '../../utilitario/GenerarInputs.js'
 class Configuracion extends React.Component {
 
     state = {
         activeStep: 0,
         completed: {},
+        configuracion:null,
         imagenLogin: null,
         imagenLogo: null
+    }
+
+    componentDidMount(){
+        this.props.actionConsultarConfiguracionCompleta(localStorage.getItem('Token'));
+    }
+    
+    componentDidUpdate(){
+        if(this.state.configuracion==!null)
+            this.setState({configuracion:this.props.configuracionCompleta[0]})
     }
 
     getSteps() {
@@ -81,7 +91,7 @@ class Configuracion extends React.Component {
                         paddingBottom: '25px',
                         paddingLeft: '349px'
                     }}>
-                        <img src={Defecto} alt="preview"
+                        <img src={campo(this.state.configuracion.imagenLogin)} alt="preview"
                             className="preview-image"
                             style={{ height: "200px", width: "200px", borderRadius: "50%", objectFit: "cover" }} />
                         <Field
@@ -327,16 +337,16 @@ class Configuracion extends React.Component {
                                     {this.allStepsCompleted() ? (
                                         <div>
                                             <Typography className={this.useStyles.instructions}>
-                                                All steps completed - you&apos;re finished
+                                                Todos los cambios han sido guardados
             </Typography>
-                                            <Button onClick={this.handleReset}>Reset</Button>
+                                            <Button onClick={this.handleReset}>Aceptar</Button>
                                         </div>
                                     ) : (
                                             <div>
                                                 <Typography className={this.useStyles.instructions}>{this.getStepContent(this.state.activeStep)}</Typography>
                                                 <div>
                                                     <Button disabled={this.state.activeStep === 0} onClick={this.handleBack} className={this.useStyles.button}>
-                                                        Back
+                                                        Volver
               </Button>
                                                     <Button
                                                         variant="contained"
@@ -344,17 +354,20 @@ class Configuracion extends React.Component {
                                                         onClick={this.handleNext}
                                                         className={this.useStyles.button}
                                                     >
-                                                        Next
+                                                        Siguiente
               </Button>
                                                     {this.state.activeStep !== this.getSteps().length &&
                                                         (this.state.completed[this.state.activeStep] ? (
                                                             <Typography variant="caption" className={this.useStyles.completed}>
-                                                                Step {this.state.activeStep + 1} already completed
-                  </Typography>
+                                                                Paso {this.state.activeStep + 1} ya ha sido completado
+                                                            </Typography>
                                                         ) : (
+                                                            <div>
                                                                 <Button variant="contained" type="submit" color="primary" onClick={this.handleComplete}>
-                                                                    {this.completedSteps() === this.totalSteps() - 1 ? 'Finish' : 'Complete Step'}
+                                                                    {this.completedSteps() === this.totalSteps() - 1 ? 'Confirmar cambios' : 'Guardar'}
                                                                 </Button>
+                                                            </div>
+
                                                             ))}
                                                 </div>
                                             </div>
@@ -378,7 +391,9 @@ const estiloLetrero = {
 
 function mapStateToProps(state) {
     return {
-        configuracion: state.conf.estilos
+        configuracion: state.conf.estilos,
+        configuracionCompleta:state.conf.configuracion,
+        mensaje:state.conf.mensaje
     }
 }
 
@@ -387,5 +402,5 @@ let formularioConfiguracion = reduxForm({
 })(Configuracion);
 
 
-export default connect(mapStateToProps, { consultarConfiguracion, actionActualizarBarraLateral, actionActualizarBarraSuperior, actionActualizarBotones })(formularioConfiguracion);
+export default connect(mapStateToProps, { consultarConfiguracion, actionActualizarBarraLateral, actionActualizarBarraSuperior, actionActualizarBotones ,actionConsultarConfiguracionCompleta})(formularioConfiguracion);
 

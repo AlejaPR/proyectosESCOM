@@ -23,4 +23,6 @@ public interface LogicaConfiguracionFacadeLocal {
     
     List<ConfiguracionPOJO> listarInicio() throws ExcepcionGenerica;
     
+    public List<ConfiguracionPOJO> listarConfiguracionCompleta() throws ExcepcionGenerica;
+    
 }
