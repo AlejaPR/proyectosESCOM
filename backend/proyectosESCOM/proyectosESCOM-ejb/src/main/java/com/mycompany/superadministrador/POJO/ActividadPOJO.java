@@ -34,6 +34,12 @@ public class ActividadPOJO {
         this.descripcionActividad = descripcionActividad;
         this.moduloActividad = moduloActividad;
     }
+    
+    public ActividadPOJO(int idActividad, String nombre,int idModulo) {
+        this.idActividad = idActividad;
+        this.nombre = nombre;
+       this.idModulo = idModulo;
+    }
 
     public int getIdActividad() {
         return idActividad;

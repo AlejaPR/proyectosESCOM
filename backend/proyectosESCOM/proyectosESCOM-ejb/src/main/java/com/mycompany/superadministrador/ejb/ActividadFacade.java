@@ -61,7 +61,7 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
         listaActividades = listaAct.getResultList();
         List<ActividadPOJO> respuesta = new ArrayList<>();
         for (Actividad act : listaActividades) {
-            respuesta.add(new ActividadPOJO(act.getIdActividad(), act.getNombreActividad()));
+            respuesta.add(new ActividadPOJO(act.getIdActividad(), act.getNombreActividad(),act.getFkActIdmodulo().getIdModulo()));
         }
         return respuesta;
     }

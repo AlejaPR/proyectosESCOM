@@ -56,6 +56,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         UsuarioPOJO usuarioRespuesta = new UsuarioPOJO();
         usuarioRespuesta.setId(usuarioDB.getIdUsuario());
         usuarioRespuesta.setCorreoElectronico(usuarioDB.getCorreoElectronico());
+        usuarioRespuesta.setNumeroDocumento(usuarioDB.getNumeroDocumento());
         return usuarioRespuesta;
     }
 

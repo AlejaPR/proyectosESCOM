@@ -2,6 +2,7 @@ package com.mycompany.superadminisrador.logica;
 
 import com.google.gson.Gson;
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
+import com.mycompany.superadministrador.POJO.ModuloPOJO;
 import com.mycompany.superadministrador.POJO.TipoDocumentoPOJO;
 import com.mycompany.superadministrador.POJO.Token;
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
@@ -10,6 +11,7 @@ import com.mycompany.superadministrador.entity.Usuario;
 import com.mycompany.superadministrador.entity.UsuarioActividad;
 import com.mycompany.superadministrador.interfaces.ActividadFacadeLocal;
 import com.mycompany.superadministrador.interfaces.LogicaUsuarioFacadeLocal;
+import com.mycompany.superadministrador.interfaces.ModuloFacadeLocal;
 import com.mycompany.superadministrador.interfaces.SesionesFacadeLocal;
 import com.mycompany.superadministrador.interfaces.TipoDocumentoFacadeLocal;
 import com.mycompany.superadministrador.interfaces.UsuarioActividadFacadeLocal;
@@ -29,6 +31,7 @@ import javax.persistence.NoResultException;
 
 /**
  * Clase encargada de la logica de usuario
+ *
  * @author jeison gaona - alejandra pabon
  */
 @Stateless
@@ -42,9 +45,12 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
 
     @EJB
     ActividadFacadeLocal actividadDB;
-    
+
     @EJB
     UsuarioActividadFacadeLocal usuarioActividadDB;
+
+    @EJB
+    ModuloFacadeLocal moduloDB;
 
     @EJB
     SesionesFacadeLocal sesiones;
@@ -88,7 +94,7 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
      *
      * @param token
      * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
-     * 
+     *
      */
     @Override
     public void cerrarSesion(String token) throws ExcepcionGenerica {
@@ -375,13 +381,13 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         }
     }
 
-     /**
-     * Metodo que trae los datos del usuario con el parametro cedula, llama
-     * la consulta que busca la lista de actividades no asociadas del usuario
+    /**
+     * Metodo que trae los datos del usuario con el parametro cedula, llama la
+     * consulta que busca la lista de actividades no asociadas del usuario
      *
      * @param numeroDocumento
      * @param idModulo
-     * @return 
+     * @return
      * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
      *
      */
@@ -419,9 +425,9 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         try {
             UsuarioPOJO usuarioResultado = usuarioDB.buscarUsuarioEspecifico(cedula);
             if (usuarioResultado != null) {
-                 for(int i=0; i<listaActividad.size();i++){    
+                for (int i = 0; i < listaActividad.size(); i++) {
                     actividadDB.eliminarActividadUsuario(usuarioResultado.getId(), listaActividad.get(i).getIdActividad());
-                 }
+                }
             } else {
                 throw new NoResultException("No se encontraron datos del usuario");
             }
@@ -433,9 +439,9 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             throw new ExcepcionGenerica("Ocurrio una excepcion ");
         }
     }
-    
+
     /**
-     * Metodo que asigna actividades a los usuarios 
+     * Metodo que asigna actividades a los usuarios
      *
      * @param numeroDocumento
      * @param idActividad
@@ -443,12 +449,12 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
      *
      */
     @Override
-    public void asignarActividadAUsuario(int numeroDocumento,int idActividad) throws ExcepcionGenerica {
+    public void asignarActividadAUsuario(int numeroDocumento, int idActividad) throws ExcepcionGenerica {
         try {
-            UsuarioPOJO usuario=usuarioDB.buscarUsuarioEspecifico(numeroDocumento);
-            Usuario usu=usuarioDB.find(usuario.getId());
-            Actividad act= actividadDB.find(idActividad);
-            UsuarioActividad usuarioActividad=new UsuarioActividad();
+            UsuarioPOJO usuario = usuarioDB.buscarUsuarioEspecifico(numeroDocumento);
+            Usuario usu = usuarioDB.find(usuario.getId());
+            Actividad act = actividadDB.find(idActividad);
+            UsuarioActividad usuarioActividad = new UsuarioActividad();
             usuarioActividad.setFkUacIdusuario(usu);
             usuarioActividad.setFkUacIdactividad(act);
             usuarioActividad.setUltimaModificacion(new Date());
@@ -460,6 +466,50 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         } catch (Exception ex) {
             throw new ExcepcionGenerica("Ocurrio una excepcion ");
         }
+    }
+
+    /**
+     * Metodo que realiza la logica para la redireccion de modulos
+     *
+     * @param token
+     * @return
+     * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
+     *
+     */
+    @Override
+    public List<ModuloPOJO> redireccionUsuario(String token) throws ExcepcionGenerica {
+        try {
+            List<ModuloPOJO> modulosResultado = new ArrayList();
+            int id=0;
+            Token tokenDevuelto = Seguridad.desencriptar(token);
+            String firma = tokenDevuelto.getFirma();
+            UsuarioPOJO usuario = usuarioDB.busquedaToken(firma);
+            List<ActividadPOJO> listaActividad = listarActividadesUsuario(usuario.getNumeroDocumento());
+            for (int i = 0; i < listaActividad.size(); i++) {
+                id = listaActividad.get(i).getIdModulo();
+                if(modulosResultado.isEmpty()){              
+                modulosResultado.add(moduloDB.buscarModuloEspecifico(id));
+                }else{
+                    for(int in=0; in<modulosResultado.size();in++){
+                        if(id!=modulosResultado.get(in).getIdModulo()){
+                            modulosResultado.add(moduloDB.buscarModuloEspecifico(id));
+                        }
+                    }
+                }
+            }
+            if (!modulosResultado.isEmpty()) {
+                    return modulosResultado;
+                } else {
+                    throw new ExcepcionGenerica("No hay permisos asociados");
+                }
+
+        } catch (NullPointerException ex) {
+            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
+        } catch (Exception ex) {
+            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+        }
+        
+    
     }
 
 }

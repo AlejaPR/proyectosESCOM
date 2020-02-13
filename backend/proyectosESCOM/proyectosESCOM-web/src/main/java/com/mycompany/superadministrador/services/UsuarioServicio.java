@@ -1,6 +1,7 @@
 package com.mycompany.superadministrador.services;
 
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
+import com.mycompany.superadministrador.POJO.ModuloPOJO;
 import com.mycompany.superadministrador.POJO.Respuesta;
 import com.mycompany.superadministrador.POJO.TipoDocumentoPOJO;
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
@@ -270,5 +271,28 @@ public class UsuarioServicio {
         }
     }
 
+    /**
+     * Servicio que sirve para la redireccion de permisos, devuelve lista de modulos 
+     * asignados a usuario y reciben token 
+     *
+     * @param token
+     * 
+     * @return  *
+     */
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/redireccionUsuario/{token}")
+    public Response redireccionUsuario(@PathParam("token") String token) {
+        try {
+           List<ModuloPOJO> listaModulo= usuarioLogica.redireccionUsuario(token);
+            return Response.status(Response.Status.OK).entity(listaModulo).build();
+        } catch (ExcepcionGenerica e) {
+            respuesta.setRespuesta("Sin acceso al servicio");
+            return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
+        } catch (Exception e) {
+            respuesta.setRespuesta("Ocurrio un error en el servidor ");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
+        }
+    }
 
 }
