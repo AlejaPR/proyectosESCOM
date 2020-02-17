@@ -171,11 +171,12 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
      * @param actividad
      * @param nombreActividad
      * @param modulo
+     * @return 
      *
      *
      */
     @Override
-    public void registrarActividad(ActividadPOJO actividad, String nombreActividad, Modulo modulo) {
+    public ActividadPOJO registrarActividad(ActividadPOJO actividad, String nombreActividad, Modulo modulo) {
         
         em.createNativeQuery("INSERT INTO TBL_ACTIVIDAD (ACT_ESTADO,ACT_DESCRIPCIONACTIVIDAD,ACT_ULTIMAMODIFICACION,"
                 + "ACT_NOMBREACTIVIDAD,FK_ACT_IDMODULO) VALUES (?,?,?,?,?)")
@@ -185,6 +186,9 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
                 .setParameter(4, nombreActividad)
                 .setParameter(5, modulo.getIdModulo())
                 .executeUpdate();
+        
+        ActividadPOJO actividadR = new ActividadPOJO(actividad.getIdActividad(), nombreActividad, modulo.getIdModulo());
+        return actividadR;
     }
 
     /**

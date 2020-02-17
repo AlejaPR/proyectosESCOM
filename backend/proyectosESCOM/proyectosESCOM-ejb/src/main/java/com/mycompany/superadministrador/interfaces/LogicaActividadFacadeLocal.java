@@ -19,7 +19,7 @@ public interface LogicaActividadFacadeLocal {
     
     public List<ActividadPOJO> devolverActividades()throws ExcepcionGenerica;
     
-    public void registrarActividad (ActividadPOJO actividad)throws ExcepcionGenerica;
+    public ActividadPOJO registrarActividad (ActividadPOJO actividad)throws ExcepcionGenerica;
      
     public void editarActividad(ActividadPOJO actividadEditar) throws ExcepcionGenerica;
     

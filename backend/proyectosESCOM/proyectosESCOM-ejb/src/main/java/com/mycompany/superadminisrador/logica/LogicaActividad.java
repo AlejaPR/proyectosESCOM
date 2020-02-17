@@ -68,7 +68,7 @@ public class LogicaActividad implements LogicaActividadFacadeLocal {
      *
      */
     @Override
-    public void registrarActividad (ActividadPOJO actividad) throws ExcepcionGenerica {
+    public ActividadPOJO registrarActividad (ActividadPOJO actividad) throws ExcepcionGenerica {
         try {
             Modulo moduloResultado = moduloDB.find(actividad.getIdModulo());
             if (moduloResultado != null) {
@@ -77,7 +77,9 @@ public class LogicaActividad implements LogicaActividadFacadeLocal {
                 
                 List<Actividad> actividadResultado = actividadDB.buscarActividadPorNombre(nombreActividadN);
                 if(actividadResultado.isEmpty()){
-                     actividadDB.registrarActividad(actividad, nombreActividadN, moduloResultado);
+                     ActividadPOJO actividadR = new ActividadPOJO();
+                     actividadR =actividadDB.registrarActividad(actividad, nombreActividadN, moduloResultado);
+                     return actividadR;
                 }else{
                     throw new NoResultException("La actividad ya se encuentra registrada");
                 }             

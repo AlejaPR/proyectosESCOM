@@ -66,9 +66,10 @@ public class ActividadServicio {
     @Path("/registrarActividad")
     public Response registrarActividad(ActividadPOJO actividad) {
         try {
-            actividadLogica.registrarActividad(actividad);
+            ActividadPOJO actividadR = new ActividadPOJO();
+            actividadR=actividadLogica.registrarActividad(actividad);
             respuesta.setRespuesta("Actividad registrada");
-            return Response.status(Response.Status.OK).entity(respuesta).build();
+            return Response.status(Response.Status.OK).entity(actividadR).build();
         } catch (ExcepcionGenerica e) {
             respuesta.setRespuesta("Ya existen los datos registrados previamente");
             return Response.status(Response.Status.NOT_ACCEPTABLE).entity(respuesta).build();

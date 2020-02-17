@@ -44,7 +44,7 @@ public interface ActividadFacadeLocal {
     
     List<Actividad> buscarActividadPorNombre(String nombreActividad);
     
-    void registrarActividad(ActividadPOJO actividad, String nombreActividad, Modulo modulo);
+    ActividadPOJO registrarActividad(ActividadPOJO actividad, String nombreActividad, Modulo modulo);
     
     public void editarActividad(ActividadPOJO actividadEditar);
     
