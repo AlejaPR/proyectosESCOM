@@ -9,7 +9,7 @@ import 'react-notifications/lib/notifications.css';
 
 //componentes
 import { NotificationContainer, NotificationManager } from 'react-notifications';
-import { Button } from 'reactstrap';
+import Button from '@material-ui/core/Button';
 import Select from 'react-select'
 import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
@@ -17,6 +17,8 @@ import { seleccione } from '../../utilitario/validacionCampos.js';
 import MaterialTable from 'material-table';
 import Divider from '@material-ui/core/Divider';
 import Alerta from '@icons/material/AlertIcon.js';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
 //componentes
 import Barra from '../general/BarraDirecciones.js';
@@ -53,7 +55,10 @@ class AsignarActividadUsuario extends React.Component {
                 NotificationManager.success('Actividades eliminadas');
                 this.props.actualizarMensajeAsignar('');
                 this.props.actionConsultarActividadesUsuario(this.props.cedula, localStorage.getItem('Token'));
-                this.props.actionConsultarActividadesSinAsignar(localStorage.getItem('Token'), this.props.cedula, this.state.selectedOption.value);
+                if (this.state.selectedOption.value != undefined) {
+                    debugger;
+                    this.props.actionConsultarActividadesSinAsignar(localStorage.getItem('Token'), this.props.cedula, this.state.selectedOption.value);
+                }
                 break;
             default:
                 break;
@@ -98,7 +103,7 @@ class AsignarActividadUsuario extends React.Component {
     }
 
     handleChange = selectedOption => {
-        this.setState({ selectedOption });
+        this.setState({ selectedOption: selectedOption });
         this.setState({ valor: null });
         this.props.actionConsultarActividadesSinAsignar(localStorage.getItem('Token'), this.props.cedula, selectedOption.value);
     };
@@ -113,7 +118,7 @@ class AsignarActividadUsuario extends React.Component {
     }
 
     handleSubmit = formValues => {
-        if(this.state.valor!==null){
+        if (this.state.valor !== null) {
             let actividad = {
                 idActividad: this.state.valor.value,
                 nombre: this.state.valor.label
@@ -156,74 +161,84 @@ class AsignarActividadUsuario extends React.Component {
                                 color: "#fff",
                                 background: "rgb(158, 35, 45)"
                             }}><Alerta />No tiene los permisos suficientes para administrar las actividades de los usuarios</span></div> :
-                                <form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
-                                    <br />
-                                    <label>Seleccione el modulo que tiene asignada la actividad</label>
-                                    <div className="row">
-                                        <div className="col-md-4">
-                                            <Field name="modulo" validate={[seleccione]} onChange={this.handleChange} component={ReduxFormSelect} options={this.opciones()} />
+                                <>
+                                    <form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
+                                        <br />
+                                        <div className="row">
+                                            <div className="col-md-6">
+                                                <Field name="modulo" validate={[seleccione]} onChange={this.handleChange} component={ReduxFormSelect} options={this.opciones()} />
+                                            </div>
+                                            <div className="col-md-6">
+                                                <Field name="actividad" validate={[seleccione]} valor={this.retornarValor()} onChange={this.handleChangeDos} component={ReduxFormSelectDos} options={this.actividades()} />
+                                            </div>
                                         </div>
+                                        <br />
+                                        <br />
+                                        <Button
+                                            type="submit"
+                                            variant="contained"
+                                            color="primary"
+                                            endIcon={<AddCircleOutlineIcon/>}
+                                        >Añadir</Button>
+                                        <Button
+                                            type="submit"
+                                            variant="contained"
+                                            color="secondary"
+                                            onClick={this.onClickCancelar}
+                                            endIcon={<ExitToAppIcon/>}
+                                        >Salir</Button>
+                                        <br />
+                                        <br />
+                                        <Divider variant="middle" />
+                                        <br />
+                                    </form>
+                                    <div>
+                                        <MaterialTable
+                                            title="Actividades actualmente asignadas al usuario"
+                                            localization={{
+                                                header: {
+                                                    actions: ' '
+                                                },
+                                                pagination: {
+                                                    nextTooltip: 'Siguiente ',
+                                                    previousTooltip: 'Anterior',
+                                                    labelDisplayedRows: '{from}-{to} de {count}',
+                                                    lastTooltip: 'Ultima pagina',
+                                                    firstTooltip: 'Primera pagina',
+                                                    labelRowsSelect: 'Registros',
+                                                    firstAriaLabel: 'oooo'
+                                                },
+                                                body: {
+                                                    emptyDataSourceMessage: 'Aun no hay ningun modulo registrado'
+                                                },
+                                                toolbar: {
+                                                    searchTooltip: 'Buscar',
+                                                    searchPlaceholder: 'Buscar',
+                                                    nRowsSelected: '{0} actividades seleccionadas'
+                                                }
+                                            }}
+                                            columns={[
+                                                { title: 'Nombre de la actividad', field: 'nombre', headerStyle: estiloCabecera, cellStyle: estiloFila }
+                                            ]}
+                                            data={this.props.actividades}
+                                            options={{
+                                                search: true,
+                                                rowStyle: estiloFila,
+                                                selection: true
+                                            }}
+                                            onSelectionChange={(rows) => {
+                                                this.setState({ actividadesSeleccionadas: rows });
+                                            }}
+                                            actions={[
+                                                {
+                                                    tooltip: 'Remove All Selected Users',
+                                                    icon: 'delete',
+                                                    onClick: (evt, data) => this.props.actionEliminarActividades(this.state.actividadesSeleccionadas, localStorage.getItem('Token'), this.props.cedula)
+                                                }
+                                            ]}
+                                        />
                                     </div>
-                                    <br />
-                                    <label>Seleccione la actividad que quiere asignar al usuario</label>
-                                    <div className="row">
-                                        <div className="col-md-4">
-                                            <Field name="actividad" validate={[seleccione]} valor={this.retornarValor()} onChange={this.handleChangeDos} component={ReduxFormSelectDos} options={this.actividades()} />
-                                        </div>
-                                    </div>
-                                    <br />
-                                    <Button style={fondoBoton} type="submit">Registrar</Button>{''}
-                                    <Button color="secondary" className="letra" onClick={this.onClickCancelar}>Cancelar</Button>
-                                    <br />
-                                    <br />
-                                    <Divider variant="middle" />
-                                    <br />
-                                    <MaterialTable
-                                        title="Actividades actualmente asignadas al usuario"
-                                        localization={{
-                                            header: {
-                                                actions: ' '
-                                            },
-                                            pagination: {
-                                                nextTooltip: 'Siguiente ',
-                                                previousTooltip: 'Anterior',
-                                                labelDisplayedRows: '{from}-{to} de {count}',
-                                                lastTooltip: 'Ultima pagina',
-                                                firstTooltip: 'Primera pagina',
-                                                labelRowsSelect: 'Registros',
-                                                firstAriaLabel: 'oooo'
-                                            },
-                                            body: {
-                                                emptyDataSourceMessage: 'Aun no hay ningun modulo registrado'
-                                            },
-                                            toolbar: {
-                                                searchTooltip: 'Buscar',
-                                                searchPlaceholder: 'Buscar',
-                                                nRowsSelected: '{0} actividades seleccionadas'
-                                            }
-                                        }}
-                                        columns={[
-                                            { title: 'Nombre de modulo', field: 'idActividad', headerStyle: estiloCabecera, cellStyle: estiloFila },
-                                            { title: 'Descripcion del modulo', field: 'nombre', headerStyle: estiloCabecera, cellStyle: estiloFila }
-                                        ]}
-                                        data={this.props.actividades}
-                                        options={{
-                                            search: true,
-                                            rowStyle: estiloFila,
-                                            selection: true
-                                        }}
-                                        onSelectionChange={(rows) => {
-                                            this.setState({ actividadesSeleccionadas: rows });
-                                        }}
-                                        actions={[
-                                            {
-                                                tooltip: 'Remove All Selected Users',
-                                                icon: 'delete',
-                                                onClick: (evt, data) => this.props.actionEliminarActividades(this.state.actividadesSeleccionadas, localStorage.getItem('Token'), this.props.cedula)
-                                            }
-                                        ]}
-                                    />
-                                </form>
+                                </>
                         }
                         <br />
                     </div>
@@ -242,7 +257,8 @@ export const ReduxFormSelect = props => {
         <>
             <Select
                 {...input}
-                isSearchable={false}
+                maxMenuHeight={185}
+                isSearchable={true}
                 placeholder='Seleccione un modulo'
                 onChange={value => input.onChange(value)}
                 onBlur={() => input.onBlur(input.value)}
@@ -258,10 +274,11 @@ export const ReduxFormSelectDos = props => {
     const { input, options } = props;
     const { touched, error } = props.meta;
     return (
-        <>
+        <div>
             <Select
                 {...input}
-                isSearchable={false}
+                maxMenuHeight={185}
+                isSearchable={true}
                 value={props.valor}
                 placeholder='Seleccione una actividad'
                 onChange={value => input.onChange(value)}
@@ -270,7 +287,7 @@ export const ReduxFormSelectDos = props => {
                 noOptionsMessage={() => 'No hay ninguna actividad que mostrar'}
             />
             {touched && ((error && <span className="text-danger letra form-group">{error}</span>))}
-        </>
+        </div>
     )
 }
 
