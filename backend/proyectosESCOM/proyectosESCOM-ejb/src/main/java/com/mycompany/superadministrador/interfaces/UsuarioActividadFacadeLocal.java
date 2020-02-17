@@ -5,6 +5,8 @@
  */
 package com.mycompany.superadministrador.interfaces;
 
+import com.mycompany.superadministrador.entity.Actividad;
+import com.mycompany.superadministrador.entity.Usuario;
 import com.mycompany.superadministrador.entity.UsuarioActividad;
 import java.util.List;
 import javax.ejb.Local;
@@ -30,5 +32,5 @@ public interface UsuarioActividadFacadeLocal {
 
     int count();
     
-    
+     public void eliminarActividadUsuario(Usuario usuario, Actividad actividad);
 }

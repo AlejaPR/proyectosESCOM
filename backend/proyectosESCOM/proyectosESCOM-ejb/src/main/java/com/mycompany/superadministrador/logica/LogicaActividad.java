@@ -1,4 +1,4 @@
-package com.mycompany.superadminisrador.logica;
+package com.mycompany.superadministrador.logica;
 
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.entity.Actividad;

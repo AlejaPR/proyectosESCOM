@@ -1,4 +1,4 @@
-package com.mycompany.superadminisrador.logica;
+package com.mycompany.superadministrador.logica;
 
 import com.google.gson.Gson;
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
@@ -425,9 +425,9 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         try {
             UsuarioPOJO usuarioResultado = usuarioDB.buscarUsuarioEspecifico(cedula);
             if (usuarioResultado != null) {
-                for (int i = 0; i < listaActividad.size(); i++) {
-                    actividadDB.eliminarActividadUsuario(usuarioResultado.getId(), listaActividad.get(i).getIdActividad());
-                }
+                 for(int i=0; i<listaActividad.size();i++){    
+                    usuarioActividadDB.eliminarActividadUsuario(usuarioDB.find(usuarioResultado.getId()),actividadDB.find(listaActividad.get(i).getIdActividad()));
+                 }
             } else {
                 throw new NoResultException("No se encontraron datos del usuario");
             }
