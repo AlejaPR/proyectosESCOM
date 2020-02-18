@@ -43,22 +43,20 @@ public class ConfiguracionFacade extends AbstractFacade<Configuracion> implement
     /**
      * Metodo que realiza la consulta para registrar la configuracion
      *
+     * @param idConfiguracion
      * @param configuracion
      *
      */
     @Override
-    public void registrarConfiguracion(ConfiguracionPOJO configuracion) {
+    public void registrarConfiguracion(int idConfiguracion, ConfiguracionPOJO configuracion) {
 
-        em.createNativeQuery("INSERT INTO TBL_CONFIGURACION (CONF_BARRASUPERIOR,CONF_BARRALATERAL,CONF_BOTONES,"
-                + "CONF_LOGO,CONF_IMAGENLOGIN) VALUES (?,?,?,?,?)")
-                .setParameter(1, configuracion.getBarraSuperior())
-                .setParameter(2, configuracion.getBarraLateral())
-                .setParameter(3, configuracion.getBotones())
-                .setParameter(4, configuracion.getLogo())
-                .setParameter(5, configuracion.getImagenLogin())
-                .executeUpdate();
-        
-        
-        
+        Configuracion configuracionE = em.find(Configuracion.class, idConfiguracion);
+        configuracionE.setBarraLateral(configuracion.getBarraLateral());
+        configuracionE.setBarraSuperior(configuracion.getBarraSuperior());
+        configuracionE.setBotones(configuracion.getBotones());
+        configuracion.setImagenLogin(configuracion.getImagenLogin());
+        configuracion.setLogo(configuracion.getLogo());
+        em.merge(configuracionE);
+
     }
 }

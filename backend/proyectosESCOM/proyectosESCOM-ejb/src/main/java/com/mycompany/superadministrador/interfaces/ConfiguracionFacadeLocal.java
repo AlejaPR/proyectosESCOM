@@ -31,6 +31,6 @@ public interface ConfiguracionFacadeLocal {
 
     int count();
     
-    public void registrarConfiguracion(ConfiguracionPOJO configuracion);
+    public void registrarConfiguracion(int idConfiguracion,ConfiguracionPOJO configuracion);
     
 }
