@@ -6,11 +6,13 @@ import {mensajesDeError} from '../utilitario/MensajesError.js';
 export const MOSTRAR_CONFIGURACION = 'MOSTRAR_CONFIGURACION'
 export const ACTUALIZAR_BARRALATERAL= 'ACTUALIZAR_BARRALATERAL'
 export const ACTUALIZAR_BARRASUPERIOR= 'ACTUALIZAR_BARRASUPERIOR'
+export const ACTUALIZAR_FOTO_LOGIN= 'ACTUALIZAR_FOTO_LOGIN'
+export const ACTUALIZAR_FOTO_LOGO= 'ACTUALIZAR_FOTO_LOGO'
 export const ACTUALIZAR_BOTONES='ACTUALIZAR_BOTONES';
 export const MENSAJE_CONFIGURACION='MENSAJE_CONFIGURACION';
 export const CARGAR_CONFIGURACION='CARGAR_CONFIGURACION';
 
-export function actionAgregarUsuario(configuracion, token) {
+export function actionAgregarConfiguracion(configuracion, token) {
     var tokenRequest = desencriptar(token);
     const headers = {
         'Content-Type': 'application/json',
@@ -168,6 +170,24 @@ export function actionActualizarBarraSuperior(color) {
         dispatch({
             type: ACTUALIZAR_BARRASUPERIOR,
             color:color
+        });
+    }
+}
+
+export function actualizarFotoLogin(foto) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: ACTUALIZAR_FOTO_LOGIN,
+            fotoLogin:foto
+        });
+    }
+}
+
+export function actualizarFotoLogo(foto) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: ACTUALIZAR_FOTO_LOGO,
+            fotoLogo:foto
         });
     }
 }

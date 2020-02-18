@@ -12,14 +12,13 @@ import { Field, reduxForm } from "redux-form";
 import PropTypes from "prop-types";
 import Barra from '../general/BarraDirecciones.js';
 import { connect } from 'react-redux';
-import { consultarConfiguracion, actionActualizarBarraLateral, actionActualizarBarraSuperior, actionActualizarBotones, actionConsultarConfiguracionCompleta } from '../../actions/actionConfiguracion.js'
+import { consultarConfiguracion, actionActualizarBarraLateral,actualizarFotoLogin,actualizarFotoLogo, actionAgregarConfiguracion, actionActualizarBarraSuperior, actionActualizarBotones, actionConsultarConfiguracionCompleta } from '../../actions/actionConfiguracion.js'
 import { campo } from '../../utilitario/GenerarInputs.js'
 
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import SaveIcon from '@material-ui/icons/Save';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
-import DoneIcon from '@material-ui/icons/Done';
 import Alert from '@material-ui/lab/Alert';
 
 class Configuracion extends React.Component {
@@ -106,7 +105,7 @@ class Configuracion extends React.Component {
                     }}>
                         <img src={campo(this.props.configuracionCompleta.imagenLogin)} alt="preview"
                             className="preview-image"
-                            style={{ height: "780px", width: "750px", objectFit: "cover" }} />
+                            style={{ height: "780px",borderRadius: "2%", width: "750px", objectFit: "cover" }} />
                         <Field
                             name="image"
                             type="file"
@@ -131,7 +130,7 @@ class Configuracion extends React.Component {
                         }}>
                             <img src={campo(this.props.configuracionCompleta.logo)} alt="preview"
                                 className="preview-image-dos"
-                                style={{ height: "170px", width: "400px", borderRadius: "50%", objectFit: "cover" }} />
+                                style={{ height: "170px", width: "400px", borderRadius: "2%", objectFit: "cover" }} />
                             <Field
                                 name="imagenDos"
                                 type="file"
@@ -188,6 +187,17 @@ class Configuracion extends React.Component {
         const newCompleted = this.state.completed;
         newCompleted[this.state.activeStep] = true;
         this.setState({ completed: newCompleted })
+        if (this.allStepsCompleted()) {
+            let configuracion = {
+                logo:this.props.configuracionCompleta.logo,
+                imagenLogin:this.props.configuracionCompleta.imagenLogin,
+                barraLateral: this.props.configuracionCompleta.barraLateral,
+                barraSuperior: this.props.configuracionCompleta.barraSuperior,
+                botones: this.props.configuracionCompleta.botones
+            }
+            console.log('obj conf ', configuracion);
+            this.props.actionAgregarConfiguracion(configuracion,localStorage.getItem('Token'));
+        }
         this.handleNext();
     };
 
@@ -306,7 +316,7 @@ class Configuracion extends React.Component {
         const { tipoDeImagen } = this.props;
         if (imageFile) {
             if (!tipoDeImagen.includes(imageFile.type)) {
-                // NotificationManager.error('Seleccione un archivo de imagen .jpg o .png');
+                //  NotificationManager.error('Seleccione un archivo de imagen .jpg o .png');
                 event.target.value = null;
             } else {
 
@@ -320,6 +330,10 @@ class Configuracion extends React.Component {
                     URL.revokeObjectURL(imageFile);
                 };
                 imageObject.src = localImageUrl;
+                this.getBase64(imageFile, (result) => {
+                    this.props.actualizarFotoLogin(result);
+                });
+                
                 this.handlePreview(localImageUrl);
             }
         }
@@ -350,6 +364,9 @@ class Configuracion extends React.Component {
                     URL.revokeObjectURL(imageFile);
                 };
                 imageObject.src = localImageUrl;
+                this.getBase64(imageFile, (result) => {
+                    this.props.actualizarFotoLogo(result);
+                });
                 this.handlePreviewLogo(localImageUrl);
             }
         }
@@ -399,11 +416,23 @@ class Configuracion extends React.Component {
         );
     };
 
+    getBase64(file, cb) {
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            cb(reader.result)
+        };
+        reader.onerror = function (error) {
+            console.log('Error: ', error);
+        };
+    }
+
+
     handleSubmitForm = values => {
-        if(this.completedSteps()+1===6){
-            debugger;
-        }
-        // console.log('formvalues', this.completedSteps(), ' values ', values);
+        // if(this.completedSteps() === this.totalSteps() - 1){
+        //     debugger;
+        // }
+        console.log(this.state.completed);
     }
 
 
@@ -476,7 +505,7 @@ class Configuracion extends React.Component {
                                                             </div>
                                                         ) : (
                                                                 <div className="col-md-4">
-                                                                    <Button variant="contained" 
+                                                                    <Button variant="contained"
                                                                         type="submit"
                                                                         startIcon={<SaveIcon />}
                                                                         color="primary" onClick={this.handleComplete}>
@@ -517,5 +546,5 @@ let formularioConfiguracion = reduxForm({
 })(Configuracion);
 
 
-export default connect(mapStateToProps, { consultarConfiguracion, actionActualizarBarraLateral, actionActualizarBarraSuperior, actionActualizarBotones, actionConsultarConfiguracionCompleta })(formularioConfiguracion);
+export default connect(mapStateToProps, { consultarConfiguracion,actionActualizarBarraLateral,actualizarFotoLogin,actualizarFotoLogo, actionAgregarConfiguracion, actionActualizarBarraSuperior, actionActualizarBotones, actionConsultarConfiguracionCompleta })(formularioConfiguracion);
 

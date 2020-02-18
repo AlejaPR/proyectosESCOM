@@ -60,7 +60,7 @@ class MenuLateral extends React.Component {
 			<div  id="sidebar-wrapper" className="toggled" style={this.fondoBarr()}>
 				<div className="col-sm" style={this.fondoBarr()}>
 					<div className="container text-center" style={this.fondoBarr()}>
-						<img src={logo} alt="" width="130" height="50" />
+						<img src={this.props.configuracion.logo} alt="" width="130" height="50" />
 					</div>
 				</div>
 				<li className="nav-item" style={{height:"65px"}}>
