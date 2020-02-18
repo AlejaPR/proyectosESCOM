@@ -89,7 +89,7 @@ public class ActividadServicio {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/editarActividad")
-    public Response editarUsuario(ActividadPOJO actividadEditar) {
+    public Response editarActividad(ActividadPOJO actividadEditar) {
         try {
             actividadLogica.editarActividad(actividadEditar);
             respuesta.setRespuesta("Actividad modificada correctamente");
@@ -123,6 +123,29 @@ public class ActividadServicio {
             return Response.status(Response.Status.NOT_ACCEPTABLE).entity(respuesta).build();
         } catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error interno del servidor");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
+        }
+    }
+    
+    /**
+     * Servicio que lista los datos de un usuario especifico consultado con la
+     * cedula
+     *
+     * @param idActividad
+     * @return  *
+     */
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/listarActividadEspecifica/{idActividad}")
+    public Response listarActividadEspecifica(@PathParam("idActividad") int idActividad) {
+        try {
+            ActividadPOJO actividadDatos = actividadLogica.traerActividadEspecifica(idActividad);
+            return Response.status(Response.Status.OK).entity(actividadDatos).build();
+        } catch (ExcepcionGenerica e) {
+            respuesta.setRespuesta("Sin acceso al servicio");
+            return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
+        } catch (Exception e) {
+            respuesta.setRespuesta("Ocurrio un error en el servidor");
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }

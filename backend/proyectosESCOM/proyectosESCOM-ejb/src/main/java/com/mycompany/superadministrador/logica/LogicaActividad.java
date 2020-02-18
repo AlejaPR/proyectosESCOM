@@ -146,4 +146,31 @@ public class LogicaActividad implements LogicaActividadFacadeLocal {
         }
 
     }
+    
+     /**
+     * Metodo que llama a la consulta que devuelve los datos del usuario
+     * recibiendo la cedula
+     *
+     * @param idActividad
+     * @return
+     * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
+     *
+     */
+    @Override
+    public ActividadPOJO traerActividadEspecifica(int idActividad) throws ExcepcionGenerica {
+        try {
+            ActividadPOJO actividadResultado = actividadDB.buscarActividadEspecifica(idActividad);
+            if (actividadResultado != null) {
+                return actividadResultado;
+            } else {
+                throw new NoResultException("No se encontraron datos del usuario");
+            }
+        } catch (NoResultException ex) {
+            throw new ExcepcionGenerica("No se encontraron datos del usuario");
+        } catch (NullPointerException ex) {
+            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
+        } catch (Exception ex) {
+            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+        }
+    }
 }

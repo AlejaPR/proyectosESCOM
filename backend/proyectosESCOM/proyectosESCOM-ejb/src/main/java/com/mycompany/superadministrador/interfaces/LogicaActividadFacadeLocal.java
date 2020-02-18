@@ -25,4 +25,6 @@ public interface LogicaActividadFacadeLocal {
     
     public void cambiarEstadoActividad(int idActividad) throws ExcepcionGenerica;
     
+    public ActividadPOJO traerActividadEspecifica(int idActividad) throws ExcepcionGenerica;
+    
 }

@@ -221,4 +221,31 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
         actividad.setEstado(estado);
         em.merge(actividad);
     }
+    
+    /**
+     * Metodo que realiza la consulta a la tabla usuario Devuelve los datos de
+     * un usuario registrado con la cedula enviada
+     *
+     * @param idActividad
+     * @return
+     *
+     */
+    @Override
+    public ActividadPOJO buscarActividadEspecifica(int idActividad) {
+
+        Actividad lista = new Actividad();
+        TypedQuery<Actividad> actividadEspDB = em.createQuery("select a from Actividad a where a.pkActIdactividad=:idActividad", Actividad.class);
+        actividadEspDB.setParameter("idActividad", idActividad);
+        lista = actividadEspDB.getSingleResult();
+        
+        ActividadPOJO actividad = new ActividadPOJO();
+        actividad.setIdActividad(lista.getIdActividad());
+        actividad.setNombre(lista.getNombreActividad());
+        actividad.setDescripcionActividad(lista.getDescripcionActividad());
+        actividad.setEstado(lista.getEstado());
+        actividad.setModuloActividad(lista.getFkActIdmodulo().getNombreModulo());
+        
+        return actividad;
+    }
+
 }

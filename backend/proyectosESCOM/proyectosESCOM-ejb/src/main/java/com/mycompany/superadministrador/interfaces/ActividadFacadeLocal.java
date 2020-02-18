@@ -49,5 +49,7 @@ public interface ActividadFacadeLocal {
     public void editarActividad(ActividadPOJO actividadEditar);
     
     public void cambiarEstadoActividad(int idActividad, String estado);
+    
+    public ActividadPOJO buscarActividadEspecifica(int idActividad);
 
 }
