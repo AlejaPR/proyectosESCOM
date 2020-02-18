@@ -34,9 +34,10 @@ class MenuLateral extends React.Component {
 		hoverReportes:false
 	}
 
-	componentWillMount() {
+	componentDidMount() {
 		this.props.consultarConfiguracion();
 	}
+
 
 	hoverOn=(evento)=>{
 		this.setState({ [evento.target.name]: true });
@@ -48,7 +49,7 @@ class MenuLateral extends React.Component {
 
 	fondoBarr=()=>{
 		return( {
-			background:this.props.configuracion.fondoBarra,
+			background:this.props.configuracion.barraLateral,
 			fontSize: "14px",
 			fontFamily: "Open sans, sans-serif"
 		})
@@ -118,7 +119,7 @@ class MenuLateral extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        configuracion:state.conf.estilos
+        configuracion:state.conf.configuracion
     }
 }
 

@@ -26,7 +26,7 @@ class Configuracion extends React.Component {
 	};
 
 	handleChangeComplete = (color) => {
-        this.props.actionActualizarBarraLateral(color.hex);
+        // this.props.actionActualizarBarraLateral(color.hex);
     };
 
     handleChangeCompleteSuperior = (color) => {
@@ -254,56 +254,9 @@ class Configuracion extends React.Component {
 
 	render() {
 		return (
-			<div className={this.useStyles.root}>
-				<Stepper nonLinear activeStep={this.state.activeStep}>
-					{this.getSteps().map((label, index) => (
-						<Step key={label}>
-							<StepButton onClick={this.handleStep(index)} completed={this.state.completed[index]}>
-								{label}
-							</StepButton>
-						</Step>
-					))}
-				</Stepper>
-				<div>
-					<form onSubmit={this.props.handleSubmit(this.handleSubmitForm)}>
-					{this.allStepsCompleted() ? (
-						<div>
-							<Typography className={this.useStyles.instructions}>
-								All steps completed - you&apos;re finished
-            </Typography>
-							<Button onClick={this.handleReset}>Reset</Button>
-						</div>
-					) : (
-							<div>
-								<Typography className={this.useStyles.instructions}>{this.getStepContent(this.state.activeStep)}</Typography>
-								<div>
-									<Button disabled={this.state.activeStep === 0} onClick={this.handleBack} className={this.useStyles.button}>
-										Back
-              </Button>
-									<Button
-										variant="contained"
-										color="primary"
-										onClick={this.handleNext}
-										className={this.useStyles.button}
-									>
-										Next
-              </Button>
-									{this.state.activeStep !== this.getSteps().length &&
-										(this.state.completed[this.state.activeStep] ? (
-											<Typography variant="caption" className={this.useStyles.completed}>
-												Step {this.state.activeStep + 1} already completed
-                  </Typography>
-										) : (
-												<Button variant="contained" type="submit" color="primary" onClick={this.handleComplete}>
-													{this.completedSteps() === this.totalSteps() - 1 ? 'Finish' : 'Complete Step'}
-												</Button>
-											))}
-								</div>
-							</div>
-						)}
-						</form>
-				</div>
-			</div>
+			<>
+			{this.getStepContent(0)}
+			</>
 		);
 	}
 }

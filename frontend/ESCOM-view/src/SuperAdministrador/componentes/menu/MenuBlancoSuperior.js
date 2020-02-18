@@ -25,21 +25,16 @@ class BarraSuperior extends React.Component {
 		// this.props.actionCerrarSesion(token);
 	}
 
-	componentWillMount() {
-		this.props.consultarConfiguracion();
-		
-	}
-
 	fondobotoon=()=>{
 		return({
-			// background: this.props.configuracion.fondoSuperior,
+			background: this.props.configuracion.barraSuperior,
 			height: "48px",
 			padding: ".1rem"
 		})
 	}
 	fondoPerfil=()=>{
 		return({
-			// background: this.props.configuracion.fondoSuperior,
+			background: this.props.configuracion.barraSuperior,
 			height: "48px",
 			padding: ".5rem"
 		})
@@ -49,7 +44,7 @@ class BarraSuperior extends React.Component {
 		return (
 			<div>
 				<div>
-					<div className="jumbotron p-1 jumbotron-fluid shadow" style={{background:"white"}} >
+					<div className="jumbotron p-1 jumbotron-fluid shadow" style={{background:this.props.configuracion.barraSuperior}} >
 						<nav className="navbar navbar-expand" style={this.fondoPerfil()}>
 							<div className="collapse navbar-collapse" id="navbarSupportedContent">
 								<ul className="navbar-nav ml-auto mt-2 mt-lg-1 ">
@@ -103,7 +98,7 @@ const botones = {
 
 function mapStateToProps(state) {
     return {
-        configuracion:state.conf.estilos
+        configuracion:state.conf.configuracion
     }
 }
 

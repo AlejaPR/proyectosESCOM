@@ -27,7 +27,7 @@ public class Filtro implements ContainerRequestFilter {
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
         String url = requestContext.getUriInfo().getAbsolutePath().toString();
-        if (url.contains("api/login")) {
+        if (url.contains("api/login")|url.contains("api/configuracion/listarEntorno")|url.contains("api/configuracion/listarInicio")) {
             return;
         }
         String token = requestContext.getHeaderString("TokenAuto");

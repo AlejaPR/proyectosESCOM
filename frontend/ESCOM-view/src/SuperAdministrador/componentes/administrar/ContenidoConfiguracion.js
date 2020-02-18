@@ -1,4 +1,6 @@
 import React from 'react';
+
+
 import { makeStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -8,32 +10,43 @@ import Typography from '@material-ui/core/Typography';
 import { SketchPicker } from 'react-color';
 import { Field, reduxForm } from "redux-form";
 import PropTypes from "prop-types";
-import Defecto from '../../imagenes/defecto.jpg';
 import Barra from '../general/BarraDirecciones.js';
 import { connect } from 'react-redux';
-import { consultarConfiguracion, actionActualizarBarraLateral, actionActualizarBarraSuperior, actionActualizarBotones,actionConsultarConfiguracionCompleta } from '../../actions/actionConfiguracion.js'
-import {campo} from '../../utilitario/GenerarInputs.js'
+import { consultarConfiguracion, actionActualizarBarraLateral, actionActualizarBarraSuperior, actionActualizarBotones, actionConsultarConfiguracionCompleta } from '../../actions/actionConfiguracion.js'
+import { campo } from '../../utilitario/GenerarInputs.js'
+
+import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
+import NavigateNextIcon from '@material-ui/icons/NavigateNext';
+import SaveIcon from '@material-ui/icons/Save';
+import PhotoCamera from '@material-ui/icons/PhotoCamera';
+import DoneIcon from '@material-ui/icons/Done';
+import Alert from '@material-ui/lab/Alert';
+
 class Configuracion extends React.Component {
 
     state = {
         activeStep: 0,
         completed: {},
-        configuracion:null,
+        configuracion: null,
         imagenLogin: null,
         imagenLogo: null
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.props.actionConsultarConfiguracionCompleta(localStorage.getItem('Token'));
     }
-    
-    componentDidUpdate(){
-        if(this.state.configuracion==!null)
-            this.setState({configuracion:this.props.configuracionCompleta[0]})
+
+    componentDidUpdate() {
+        if (this.state.configuracion === null & this.props.configuracionCompleta[0] == !undefined) {
+            console.log('props', this.props.configuracionCompleta[0]);
+
+            // this.setState({ configuracion: this.props.configuracionCompleta[0] })
+        }
+
     }
 
     getSteps() {
-        return ['Color barra superior', 'Color barra lateral', 'Color de botones', 'Imagen del login', 'Imagen del logo'];
+        return ['Color barra lateral', 'Color barra superior', 'Color de botones', 'Imagen del login', 'Imagen del logo'];
     }
 
     completedSteps = () => {
@@ -59,9 +72,9 @@ class Configuracion extends React.Component {
                     <div style={{
                         paddingTop: '3px',
                         paddingBottom: '25px',
-                        paddingLeft: '349px'
+                        paddingLeft: '267px'
                     }}>
-                        <SketchPicker disableAlpha={true} color={this.props.configuracion.fondoBarra} onChangeComplete={this.handleChangeComplete} />
+                        <SketchPicker disableAlpha={true} color={this.props.configuracionCompleta.barraLateral} onChangeComplete={this.handleChangeComplete} />
                     </div>
                 )
             case 1:
@@ -69,9 +82,9 @@ class Configuracion extends React.Component {
                     <div style={{
                         paddingTop: '3px',
                         paddingBottom: '25px',
-                        paddingLeft: '349px'
+                        paddingLeft: '267px'
                     }}>
-                        <SketchPicker disableAlpha={true} color={this.props.configuracion.fondoSuperior} onChangeComplete={this.handleChangeCompleteSuperior} />
+                        <SketchPicker disableAlpha={true} color={this.props.configuracionCompleta.barraSuperior} onChangeComplete={this.handleChangeCompleteSuperior} />
                     </div>
                 )
             case 2:
@@ -79,9 +92,9 @@ class Configuracion extends React.Component {
                     <div style={{
                         paddingTop: '3px',
                         paddingBottom: '25px',
-                        paddingLeft: '349px'
+                        paddingLeft: '267px'
                     }}>
-                        <SketchPicker disableAlpha={true} color={this.props.configuracion.botones} onChangeComplete={this.handleChangeCompleteBotones} />
+                        <SketchPicker disableAlpha={true} color={this.props.configuracionCompleta.botones} onChangeComplete={this.handleChangeCompleteBotones} />
                     </div>
                 );
             case 3:
@@ -89,18 +102,18 @@ class Configuracion extends React.Component {
                     <div style={{
                         paddingTop: '3px',
                         paddingBottom: '25px',
-                        paddingLeft: '349px'
+                        paddingLeft: '57px'
                     }}>
-                        <img src={campo(this.state.configuracion.imagenLogin)} alt="preview"
+                        <img src={campo(this.props.configuracionCompleta.imagenLogin)} alt="preview"
                             className="preview-image"
-                            style={{ height: "200px", width: "200px", borderRadius: "50%", objectFit: "cover" }} />
+                            style={{ height: "780px", width: "750px", objectFit: "cover" }} />
                         <Field
                             name="image"
                             type="file"
                             validate={[
                                 this.validateImageWeight,
-                                this.validateImageWidth,
-                                this.validateImageHeight,
+                                this.validarAnchoImagenLogin,
+                                this.validarAltoImagenLogin,
                                 this.validateImageFormat
                             ]}
                             component={this.renderFileInput}
@@ -114,21 +127,21 @@ class Configuracion extends React.Component {
                         <div style={{
                             paddingTop: '3px',
                             paddingBottom: '25px',
-                            paddingLeft: '349px'
+                            paddingLeft: '241px'
                         }}>
-                            <img src={Defecto} alt="preview"
-                                className="preview-image"
-                                style={{ height: "200px", width: "200px", borderRadius: "50%", objectFit: "cover" }} />
+                            <img src={campo(this.props.configuracionCompleta.logo)} alt="preview"
+                                className="preview-image-dos"
+                                style={{ height: "170px", width: "400px", borderRadius: "50%", objectFit: "cover" }} />
                             <Field
                                 name="imagenDos"
                                 type="file"
                                 validate={[
                                     this.validateImageWeight,
-                                    this.validateImageWidth,
-                                    this.validateImageHeight,
+                                    this.validarAnchoImagenLogo,
+                                    this.validarAltoImagenLogo,
                                     this.validateImageFormat
                                 ]}
-                                component={this.renderFileInput}
+                                component={this.renderFileInputLogo}
                             />
                         </div>
 
@@ -219,10 +232,42 @@ class Configuracion extends React.Component {
             const { pesoMaximo } = this.props;
 
             if (imageFileKb > pesoMaximo) {
-                return `El tamaño de la imagen debe ser menor o igual a ${pesoMaximo}kb`;
+                return `El peso de la imagen debe ser menor o igual a ${pesoMaximo}kb`;
             }
         }
     };
+    validarAnchoImagenLogin = imageFile => {
+        if (imageFile) {
+            if (imageFile.width > 750) {
+                return `El ancho de la imagen debe ser menor o igual a 750px`;
+            }
+        }
+    };
+
+    validarAltoImagenLogin = imageFile => {
+        if (imageFile) {
+            if (imageFile.height > 780) {
+                return `La altura de la imagen debe ser menor o igual a 780px`;
+            }
+        }
+    };
+
+    validarAnchoImagenLogo = imageFile => {
+        if (imageFile) {
+            if (imageFile.width > 400) {
+                return `El ancho de la imagen debe ser menor o igual a 400px`;
+            }
+        }
+    };
+
+    validarAltoImagenLogo = imageFile => {
+        if (imageFile) {
+            if (imageFile.height > 170) {
+                return `La altura de la imagen debe ser menor o igual a 170px`;
+            }
+        }
+    };
+
     validateImageWidth = imageFile => {
         if (imageFile) {
             const { anchuraMaxima } = this.props;
@@ -280,24 +325,85 @@ class Configuracion extends React.Component {
         }
     };
 
+    handlePreviewLogo = imageUrl => {
+        const previewImageDom = document.querySelector(".preview-image-dos");
+        previewImageDom.src = imageUrl;
+    };
+
+    handleChangeLogo = (event, input) => {
+        event.preventDefault();
+        let imageFile = event.target.files[0];
+        const { tipoDeImagen } = this.props;
+        if (imageFile) {
+            if (!tipoDeImagen.includes(imageFile.type)) {
+                // NotificationManager.error('Seleccione un archivo de imagen .jpg o .png');
+                event.target.value = null;
+            } else {
+
+                const localImageUrl = URL.createObjectURL(imageFile);
+                const imageObject = new window.Image();
+
+                imageObject.onload = () => {
+                    imageFile.width = imageObject.naturalWidth;
+                    imageFile.height = imageObject.naturalHeight;
+                    input.onChange(imageFile);
+                    URL.revokeObjectURL(imageFile);
+                };
+                imageObject.src = localImageUrl;
+                this.handlePreviewLogo(localImageUrl);
+            }
+        }
+    };
+
+
     renderFileInput = ({ input, type, meta }) => {
         const { tipoDeImagen } = this.props;
         const { touched, error, warning } = meta;
         return (
             <div>
+
                 <input
+                    id="numeroUno"
+                    style={{ display: 'none' }}
                     name={input.name}
                     type={type}
                     accept={tipoDeImagen}
                     onChange={event => this.handleChange(event, input)}
                 />
+                <label htmlFor="numeroUno">
+                    <Button component="span" startIcon={<PhotoCamera />}>Seleccionar imagen</Button>
+                </label>
+                {touched && ((error && <span className="text-danger letra form-group">{error}</span>) || (warning && <span>{warning}</span>))}
+            </div>
+        );
+    };
+
+    renderFileInputLogo = ({ input, type, meta }) => {
+        const { tipoDeImagen } = this.props;
+        const { touched, error, warning } = meta;
+        return (
+            <div>
+                <input
+                    id="numeroDos"
+                    style={{ display: 'none' }}
+                    name={input.name}
+                    type={type}
+                    accept={tipoDeImagen}
+                    onChange={event => this.handleChangeLogo(event, input)}
+                />
+                <label htmlFor="numeroDos">
+                    <Button component="span" startIcon={<PhotoCamera />}>Seleccionar imagen</Button>
+                </label>
                 {touched && ((error && <span className="text-danger letra form-group">{error}</span>) || (warning && <span>{warning}</span>))}
             </div>
         );
     };
 
     handleSubmitForm = values => {
-        console.log('formvalues', this.completedSteps(),' values ',values);
+        if(this.completedSteps()+1===6){
+            debugger;
+        }
+        // console.log('formvalues', this.completedSteps(), ' values ', values);
     }
 
 
@@ -344,29 +450,39 @@ class Configuracion extends React.Component {
                                     ) : (
                                             <div>
                                                 <Typography className={this.useStyles.instructions}>{this.getStepContent(this.state.activeStep)}</Typography>
-                                                <div>
-                                                    <Button disabled={this.state.activeStep === 0} onClick={this.handleBack} className={this.useStyles.button}>
-                                                        Volver
-              </Button>
-                                                    <Button
-                                                        variant="contained"
-                                                        color="primary"
-                                                        onClick={this.handleNext}
-                                                        className={this.useStyles.button}
-                                                    >
-                                                        Siguiente
-              </Button>
+                                                <div className="row">
+                                                    <div className="col-md-4">
+                                                        <Button disabled={this.state.activeStep === 0} startIcon={<ArrowBackIosIcon />} onClick={this.handleBack} className={this.useStyles.button}>
+                                                            Volver
+                                                        </Button>
+                                                    </div>
+                                                    <div className="col-md-4">
+                                                        <Button
+                                                            variant="contained"
+                                                            color="primary"
+                                                            onClick={this.handleNext}
+                                                            startIcon={<NavigateNextIcon />}
+                                                            className={this.useStyles.button}>
+                                                            Siguiente
+                                                        </Button>
+                                                    </div>
                                                     {this.state.activeStep !== this.getSteps().length &&
                                                         (this.state.completed[this.state.activeStep] ? (
-                                                            <Typography variant="caption" className={this.useStyles.completed}>
-                                                                Paso {this.state.activeStep + 1} ya ha sido completado
-                                                            </Typography>
-                                                        ) : (
-                                                            <div>
-                                                                <Button variant="contained" type="submit" color="primary" onClick={this.handleComplete}>
-                                                                    {this.completedSteps() === this.totalSteps() - 1 ? 'Confirmar cambios' : 'Guardar'}
-                                                                </Button>
+                                                            <div className="col-md-4">
+                                                                <Alert severity="success">Paso {this.state.activeStep + 1} guardado</Alert>
+                                                                {/* <Typography variant="caption" className={this.useStyles.completed}>
+                                                                <DoneIcon/>Paso {this.state.activeStep + 1} guardado
+                                                            </Typography> */}
                                                             </div>
+                                                        ) : (
+                                                                <div className="col-md-4">
+                                                                    <Button variant="contained" 
+                                                                        type="submit"
+                                                                        startIcon={<SaveIcon />}
+                                                                        color="primary" onClick={this.handleComplete}>
+                                                                        {this.completedSteps() === this.totalSteps() - 1 ? 'Confirmar cambios' : 'Guardar'}
+                                                                    </Button>
+                                                                </div>
 
                                                             ))}
                                                 </div>
@@ -391,9 +507,8 @@ const estiloLetrero = {
 
 function mapStateToProps(state) {
     return {
-        configuracion: state.conf.estilos,
-        configuracionCompleta:state.conf.configuracion,
-        mensaje:state.conf.mensaje
+        configuracionCompleta: state.conf.configuracion,
+        mensaje: state.conf.mensaje
     }
 }
 
@@ -402,5 +517,5 @@ let formularioConfiguracion = reduxForm({
 })(Configuracion);
 
 
-export default connect(mapStateToProps, { consultarConfiguracion, actionActualizarBarraLateral, actionActualizarBarraSuperior, actionActualizarBotones ,actionConsultarConfiguracionCompleta})(formularioConfiguracion);
+export default connect(mapStateToProps, { consultarConfiguracion, actionActualizarBarraLateral, actionActualizarBarraSuperior, actionActualizarBotones, actionConsultarConfiguracionCompleta })(formularioConfiguracion);
 
