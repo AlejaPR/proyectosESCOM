@@ -11,7 +11,7 @@ package com.mycompany.superadministrador.POJO;
  */
 public class ConfiguracionPOJO {
     
-
+    private int idConfiguracion;
     private byte[] logo;
     private byte[] imagenLogin;
     private String barraSuperior;
@@ -21,13 +21,23 @@ public class ConfiguracionPOJO {
     public ConfiguracionPOJO() {
     }
 
-    public ConfiguracionPOJO(byte[] logo, byte[] imagenLogin, String barraSuperior, String barraLateral, String botones) {
+    public ConfiguracionPOJO(int idConfiguracion,byte[] logo, byte[] imagenLogin, String barraSuperior, String barraLateral, String botones) {
+        this.idConfiguracion = idConfiguracion;
         this.logo = logo;
         this.imagenLogin = imagenLogin;
         this.barraSuperior = barraSuperior;
         this.barraLateral = barraLateral;
         this.botones = botones;
     }
+
+    public int getIdConfiguracion() {
+        return idConfiguracion;
+    }
+
+    public void setIdConfiguracion(int idConfiguracion) {
+        this.idConfiguracion = idConfiguracion;
+    }
+    
 
     public byte[] getLogo() {
         return logo;

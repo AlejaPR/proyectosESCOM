@@ -33,7 +33,12 @@ public class LogicaConfiguracion implements LogicaConfiguracionFacadeLocal {
     @Override
     public void registrarConfiguracion (ConfiguracionPOJO configuracion) throws ExcepcionGenerica {
         try {
-                     configuracionDB.registrarConfiguracion(configuracion); 
+                    List<ConfiguracionPOJO> listaConfiguracion = new ArrayList();
+                    listaConfiguracion= listarConfiguracionCompleta();
+                    for(int i=0; i<listaConfiguracion.size();i++){
+                        configuracionDB.registrarConfiguracion(listaConfiguracion.get(i).getIdConfiguracion(),configuracion); 
+                    }
+                    
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de registrar la configuracion");
         } catch (Exception ex) {
@@ -115,6 +120,7 @@ public class LogicaConfiguracion implements LogicaConfiguracionFacadeLocal {
                 List<ConfiguracionPOJO> listaEntorno = new ArrayList<>();
                 for (Configuracion c : entornoResultado) {
                     ConfiguracionPOJO configuracion = new ConfiguracionPOJO();
+                    configuracion.setIdConfiguracion(c.getIdConfiguracion());
                     configuracion.setBarraSuperior(c.getBarraSuperior());
                     configuracion.setBarraLateral(c.getBarraLateral());
                     configuracion.setBotones(c.getBotones());
