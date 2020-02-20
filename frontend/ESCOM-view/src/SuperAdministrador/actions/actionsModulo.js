@@ -20,7 +20,7 @@ export function actionAgregarModulo(modulo, token) {
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': tokenRequest,
-        'Permiso': 'dios'
+        'Permiso': 'sa_Registrar modulos'
     }
     return (dispatch, getState) => {
         axios.post("http://localhost:9090/proyectosESCOM-web/api/modulo/registrarModulo", modulo, { headers: headers })
@@ -89,7 +89,7 @@ export function actionConsultarModulos(token) {
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': tokenRequest,
-        'Permiso': 'dios'
+        'Permiso': 'sa_Consultar modulos registrados'
     }
     return (dispatch, getState) => {
         axios.get("http://localhost:9090/proyectosESCOM-web/api/modulo/listarModulos", { headers: headers })
@@ -125,7 +125,7 @@ export function actionCargarInformacionDeModulo(codigoModulo, token) {
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': desencriptar(token),
-        'Permiso': 'dios'
+        'Permiso': 'sa_Editar informacion de los modulos'
     }
 
     return (dispatch, getState) => {
@@ -166,7 +166,7 @@ export function actionConsultarActividadesModulo(codigoModulo, token) {
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': desencriptar(token),
-        'Permiso': 'dios'
+        'Permiso': 'sa_Editar informacion de los modulos'
     }
 
     return (dispatch, getState) => {
@@ -208,7 +208,7 @@ export function actionSuspenderActivarModulo(codigoModulo, token,actualizados) {
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': tokenRequest,
-        'Permiso': 'dios'
+        'Permiso': 'sa_Suspender/activar modulos'
     }
     return (dispatch, getState) => {
         axios.get("http://localhost:9090/proyectosESCOM-web/api/modulo/cambiarEstadoModulo/"+codigoModulo, { headers: headers })
@@ -258,7 +258,7 @@ export function actionCambiarEstadoActividades(actividades, token) {
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': tokenRequest,
-        'Permiso': 'dios'
+        'Permiso': 'sa_Suspender/activar actividades de modulos'
     }
     return (dispatch, getState) => {
         axios.put("http://localhost:9090/proyectosESCOM-web/api/modulo/cambiarEstadoActividadModulo/",actividades, { headers: headers })
@@ -308,11 +308,21 @@ export function actualizarMensajeEditar(mensaje) {
     };
 }
 
+
+export function actualizarMensajeRegistrar(mensaje) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: MENSAJE_REGISTRAR_MODULO,
+            mensaje: mensaje
+        });
+    };
+}
+
 export function actionEditarModulo(modulo, codigoModulo, token) {
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': desencriptar(token),
-        'Permiso': 'dios'
+        'Permiso': 'sa_Editar informacion de los modulos'
     }
     return (dispatch, getState) => {
         axios.put("http://localhost:9090/proyectosESCOM-web/api/modulo/editarModulo/" + codigoModulo, modulo, { headers: headers })

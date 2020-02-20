@@ -36,7 +36,7 @@ class Configuracion extends React.Component {
     }
 
     componentDidUpdate() {
-        if (this.state.configuracion === null & this.props.configuracionCompleta[0] == !undefined) {
+        if (this.state.configuracion === null & this.props.configuracionCompleta[0] !== undefined) {
             console.log('props', this.props.configuracionCompleta[0]);
 
             // this.setState({ configuracion: this.props.configuracionCompleta[0] })

@@ -1,26 +1,19 @@
 import React from 'react';
 
-//estilos
-import '../../css/business-casual.css'
-import '../../css/estilos.css'
-import '../../css/bootstrap.min.css'
-import '../../css/menu.css'
-
-
 //componentes
 import Barra from '../general/BarraDirecciones.js'
 import PopUpUsuario from '../popup/PopUpUsuario.js'
-import Fila from '../general/FilaTablaUsuario.js'
 import MaterialTable from 'material-table';
 import MTableToolbar from '../../utilitario/MTableToolbar.js';
 import { confirmAlert } from 'react-confirm-alert';
-import Alerta from '@icons/material/AlertIcon.js';
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
 
 import { NotificationManager } from 'react-notifications';
 
 //redux conexion
 import { connect } from 'react-redux';
-import { actionConsultarUsuarios, actionAsignarCedula, actualizarMensajeEditar, actualizarMensajeSuspender, actionActualizarUsuarios, actionSuspenderActivarUsuario } from '../../actions/actionsUsuario.js'
+import { actionConsultarUsuarios, actualizarMensajeSuspender, actionAsignarCedula, actualizarMensajeEditar, actionActualizarUsuarios, actionSuspenderActivarUsuario } from '../../actions/actionsUsuario.js'
 import { withRouter } from 'react-router-dom';
 
 class ContenidoAdminUsuario extends React.Component {
@@ -34,21 +27,23 @@ class ContenidoAdminUsuario extends React.Component {
 	}
 
 	componentDidUpdate() {
-		switch (this.props.mensajeSuspender) {
-			case 'Sin permiso':
-				NotificationManager.warning('No tiene permisos para suspender/activar los usuarios')
-				break;
-			case 'Operacion hecha con exito':
-				NotificationManager.info('Operacion realizada con exito')
-				break;
-			default:
-				break;
+		if (this.props.mensajeSuspender !== '') {
+			switch (this.props.mensajeSuspender) {
+				case 'Sin permiso':
+					NotificationManager.error('No tiene permisos para suspender/activar los usuarios');
+					break;
+				case 'Operacion hecha con exito':
+					NotificationManager.success('Operacion realizada con exito');
+					break;
+				default:
+					break;
+			}
 		}
 	}
 
 	actualizarUsuarios(numeroDocumento) {
 		let nuevo = [];
-		this.props.usuarios.map(function (task, index, array) {
+		this.props.usuarios.forEach(function (task, index, array) {
 			if (task.numeroDocumento === numeroDocumento) {
 				if (task.estado === "Suspendido") {
 					let usuario = {
@@ -74,17 +69,6 @@ class ContenidoAdminUsuario extends React.Component {
 		return nuevo;
 	}
 
-
-	renderTableData() {
-		return this.props.usuarios.map((usuario, index) => {
-			const { cedula } = usuario //destructuring
-			return (
-				<Fila usuario={usuario} cambiar={this.props.cambiar} key={cedula} />
-			)
-		})
-
-	}
-
 	activarDesactivarUsuario(cedula) {
 		confirmAlert({
 			title: '',
@@ -94,7 +78,8 @@ class ContenidoAdminUsuario extends React.Component {
 					label: 'Si',
 					onClick: () => {
 						if (this.state.cedula === 0) { this.setState({ cedula: cedula }) };
-						this.props.actionSuspenderActivarUsuario(cedula, localStorage.getItem('Token'), this.actualizarUsuarios(cedula));
+						this.props.actualizarMensajeSuspender('');
+						this.props.actionSuspenderActivarUsuario(cedula, localStorage.getItem('Token'), this.actualizarUsuarios(cedula), this.props.usuarios);
 					}
 				},
 				{
@@ -130,15 +115,11 @@ class ContenidoAdminUsuario extends React.Component {
 					<div className="container shadow" style={fondoBarraSuperior}>
 						<div>
 							{
-								this.props.habilitado ? <div className="col-sm-12"> <span className="col-sm-2 center" style={{
-									textShadow: "none!important",
-									fontSize: "16px",
-									fontFamily: "Open Sans,sans-serif",
-									fontWeight: "300",
-									padding: "13px 122px",
-									color: "#fff",
-									background: "rgb(158, 35, 45)"
-								}}><Alerta />No tiene los permisos suficientes para administrar los usuarios</span></div> :
+								this.props.habilitado ? <div className="col-sm-12">
+									<Alert severity="error" variant="outlined">
+										<AlertTitle>Sin permiso</AlertTitle>
+										No tiene permisos suficientes para consultar los usuarios registrados</Alert>
+								</div> :
 									<MaterialTable
 										title=""
 										localization={{
@@ -155,7 +136,7 @@ class ContenidoAdminUsuario extends React.Component {
 												firstAriaLabel: 'oooo'
 											},
 											body: {
-												emptyDataSourceMessage: 'Aun no hay ningun usuario registrado'
+												emptyDataSourceMessage: 'Ningun registro de usuarios encontrado'
 											},
 											toolbar: {
 												searchTooltip: 'Buscar',
@@ -211,6 +192,7 @@ class ContenidoAdminUsuario extends React.Component {
 												icon: 'edit',
 												tooltip: 'Editar informacion',
 												onClick: (event, rowData) => {
+													this.props.actualizarMensajeSuspender('');
 													this.props.actionAsignarCedula(rowData.numeroDocumento);
 													this.props.history.push('/editarUsuario');
 												}
@@ -222,10 +204,11 @@ class ContenidoAdminUsuario extends React.Component {
 											},
 											{
 												icon: 'assignmentInd',
-												tooltip: 'Asignar actividad',
+												tooltip: 'Administrar actividades',
 												onClick: (event, rowData) => {
+													this.props.actualizarMensajeSuspender('');
 													this.props.actionAsignarCedula(rowData.numeroDocumento);
-													this.props.history.push('/asignarActividadUsuario')
+													this.props.history.push('/asignarActividadUsuario');
 												}
 											}
 										]}
@@ -258,7 +241,7 @@ class ContenidoAdminUsuario extends React.Component {
 }
 
 const estiloCabecera = {
-	fontSize: '13px',
+	fontSize: '14px',
 	fontFamily: 'sans-serif',
 	padding: '8px',
 	background: '#e7ecf1'
@@ -266,7 +249,7 @@ const estiloCabecera = {
 }
 
 const estiloFila = {
-	fontSize: '12px',
+	fontSize: '13px',
 	fontFamily: 'sans-serif',
 	padding: '8px',
 }

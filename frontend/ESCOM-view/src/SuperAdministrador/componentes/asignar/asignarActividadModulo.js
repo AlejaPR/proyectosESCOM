@@ -6,12 +6,9 @@ import '../../css/estilos.css'
 import '../../css/bootstrap.min.css'
 import '../../css/menu.css'
 
-import { Button } from 'reactstrap';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { withRouter } from 'react-router-dom';
 import MaterialTable from 'material-table';
-import Divider from '@material-ui/core/Divider';
-import Alerta from '@icons/material/AlertIcon.js';
 
 //componentes
 import Barra from '../general/BarraDirecciones.js';
@@ -153,13 +150,6 @@ class AsignarActividadModulo extends React.Component {
     }
 }
 
-const estiloTitulo = {
-
-    paddingTop: "7px",
-    paddingRight: "12px",
-    paddingLeft: "5px",
-    paddingBottom: "1px"
-}
 
 const estiloLetrero = {
     paddingTop: "20px",
@@ -191,20 +181,6 @@ const fondoTabla = {
     background: "#EAF2F2"
 }
 
-
-const fondoBoton = {
-    background: "#ec671d",
-    fontSize: "14px",
-    fontFamily: "Open sans, sans-serif"
-
-}
-
-const fondoBotonS = {
-    background: "secondary",
-    fontSize: "14px",
-    fontFamily: "Open sans, sans-serif"
-
-}
 
 function mapStateToProps(state) {
     return {

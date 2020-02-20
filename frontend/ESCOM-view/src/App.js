@@ -24,7 +24,7 @@ import Actividad from './SuperAdministrador/componentes/administrar/ContenidoAdm
 
 import RedireccionarUsuario from './SuperAdministrador/componentes/redirecciones/RedireccionarUsuario.js';
 import ContenidoReportes from './SuperAdministrador/componentes/reportes/ContenidoReportes.js';
-import Color from './SuperAdministrador/componentes/color.js';
+// import Color from './SuperAdministrador/componentes/color.js';
 
 //estilos
 import './SuperAdministrador/css/business-casual.css'

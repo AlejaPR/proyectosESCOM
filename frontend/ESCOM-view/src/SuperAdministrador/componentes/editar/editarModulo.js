@@ -1,23 +1,16 @@
 import React from 'react';
 
-//estilos
-import '../../css/business-casual.css'
-import '../../css/estilos.css'
-import '../../css/bootstrap.min.css'
-import '../../css/menu.css'
-
-import { Button } from 'reactstrap';
-
-
 //componentes
 import Barra from '../general/BarraDirecciones';
+import Button from '@material-ui/core/Button';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { withRouter } from 'react-router-dom';
-import Alerta from '@icons/material/AlertIcon.js';
 import { campo } from '../../utilitario/GenerarInputs.js';
 import PropTypes from "prop-types";
-import {requerido,validacionCuarentaCaracteres,validacionDoscientosCaracteres} from '../../utilitario/validacionCampos.js';
-
+import { requerido, validacionCuarentaCaracteres, validacionDoscientosCaracteres } from '../../utilitario/validacionCampos.js';
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
+import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
 //redux
 import { actionCargarInformacionDeModulo, actionEditarModulo, actionConsultarActividadesModulo, actualizarMensajeEditar } from '../../actions/actionsModulo.js'
 import { connect } from "react-redux";
@@ -129,16 +122,16 @@ class EditarModulo extends React.Component {
 
 
     handleSubmitForm = values => {
-        if(values.image===undefined | values.image === null){
+        if (values.image === undefined | values.image === null) {
             let modulo = {
                 nombreModulo: values.nombre,
                 descripcionModulo: values.descripcion,
                 imagenModulo: campo(this.props.initialValues.imagen),
                 estadoModulo: 'Activo'
             }
-            this.props.actionEditarModulo(modulo,this.props.codigoModulo,localStorage.getItem('Token'));
+            this.props.actionEditarModulo(modulo, this.props.codigoModulo, localStorage.getItem('Token'));
             // this.props.actionAgregarModulo(modulo, localStorage.getItem('Token'));
-        }else{
+        } else {
             this.getBase64(values.image, (result) => {
                 let modulo = {
                     nombreModulo: values.nombre,
@@ -146,7 +139,7 @@ class EditarModulo extends React.Component {
                     imagenModulo: result,
                     estadoModulo: 'Activo'
                 }
-                this.props.actionEditarModulo(modulo,this.props.codigoModulo,localStorage.getItem('Token'));
+                this.props.actionEditarModulo(modulo, this.props.codigoModulo, localStorage.getItem('Token'));
             });
         }
     };
@@ -198,6 +191,7 @@ class EditarModulo extends React.Component {
                     <h4>Editar modulo</h4>
                 </div>
                 <Barra texto="Inicio > Editar modulo" />
+                <br />
                 <div className="col-sm-12" style={{
                     paddingTop: "0px",
                     paddingRight: "40px",
@@ -210,60 +204,62 @@ class EditarModulo extends React.Component {
                     <div className="container shadow" style={fondoBarraSuperior}>
                         <br />
                         {
-                            this.state.habilitado ? <div className="col-sm-12"> <span className="col-sm-2 center" style={{
-                                textShadow: "none!important",
-                                fontSize: "16px",
-                                fontFamily: "Open Sans,sans-serif",
-                                fontWeight: "300",
-                                padding: "13px 122px",
-                                color: "#fff",
-                                background: "rgb(158, 35, 45)"
-                            }}><Alerta />No tiene los permisos suficientes para editar informacion del modulo</span>
-                                <div style={{ padding: "25px 44px 25px 287px" }}>
-                                    <Button style={fondoBoton} onClick={this.onClickCancelar} type="submit">Aceptar</Button>{''}
+                            this.state.habilitado ? <div className="col-sm-12">
+                                <Alert severity="error" variant="outlined">
+                                    <AlertTitle>Sin permiso</AlertTitle>
+                                    No tiene permisos suficientes para editar la informacion de los modulos
+                                </Alert>
+                                <div style={{ padding: "25px 44px 25px 395px" }}>
+                                    <Button style={{ background: this.props.configuracion.botones, fontSize: "14px", fontFamily: "sans-serif", textTransform: "none" }} className="btn btn-dark" variant="contained" onClick={this.onClickCancelar} startIcon={<DoneOutlineIcon />} type="submit">Aceptar</Button>{''}
                                 </div>
                             </div> :
                                 <>
-                                    <div style={{ padding: "30px 30px 30px 77px" }}>
-                                        <img src={campo(this.props.initialValues.imagen)} alt="preview"
-                                            className="preview-image"
-                                            style={{ height: "200px", width: "200px", borderRadius: "50%", objectFit: "cover" }} />
-                                    </div>
                                     <form className="letra" onSubmit={this.props.handleSubmit(this.handleSubmitForm)}>
-                                        <br />
-                                        <label>Imagen</label>
-                                        <Field
-                                            name="image"
-                                            type="file"
-                                            validate={[
-                                                this.validateImageWeight,
-                                                this.validateImageWidth,
-                                                this.validateImageHeight,
-                                                this.validateImageFormat
-                                            ]}
-                                            component={this.renderFileInput}
-                                        />
-                                        <br />
-                                        <label>Nombre</label>
-                                        <div className="row">
-                                            <div className="col-sm-5">
-                                                <Field name="nombre" validate={[requerido,validacionCuarentaCaracteres]} component={generarInput} label="Nombre" />
-                                            </div>
-                                        </div>
-                                        <br />
-                                        <label>Descripcion</label>
-                                        <div className="row">
-                                            <div className="col-sm-5">
-                                                <Field name="descripcion" validate={[requerido,validacionDoscientosCaracteres]} component={renderTextArea} label="Apellido" />
-                                            </div>
-                                        </div>
-                                        <br />
-                                        <div>
-                                            <Button style={fondoBoton} type="submit">Guardar</Button>{''}
-                                            <Button style={fondoBotonS} color="secondary" onClick={this.onClickCancelar}>Cancelar</Button>
-                                        </div>
-                                        <br />
-                                        <br />
+                                        <table border="0px" style={{width:"100%"}}>
+                                            <tr>
+                                                <td colspan="2" style={{width:"65%" ,paddingRight:"39px",paddingLeft:"39px"}}>
+                                                    <div className="row">
+                                                        <div className="col-sm-12">
+                                                            <label>Nombre</label>
+                                                            <Field name="nombre" validate={[requerido, validacionCuarentaCaracteres]} component={generarInput} label="Nombre" />
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td colspan="2" rowspan="2">
+                                                    <label>Imagen</label>
+                                                    <div style={{ padding: "30px 30px 30px 77px" }}>
+                                                        <img src={campo(this.props.initialValues.imagen)} alt="preview"
+                                                            className="preview-image"
+                                                            style={{ height: "200px", width: "200px", borderRadius: "50%", objectFit: "cover" }} />
+                                                    </div>
+                                                    <Field
+                                                        name="image"
+                                                        type="file"
+                                                        validate={[
+                                                            this.validateImageWeight,
+                                                            this.validateImageWidth,
+                                                            this.validateImageHeight,
+                                                            this.validateImageFormat
+                                                        ]}
+                                                        component={this.renderFileInput}
+                                                    />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" style={{width:"65%" ,paddingRight:"39px",paddingLeft:"39px"}}>
+                                                    <div className="row">
+                                                        <div className="col-sm-12">
+                                                        <label>Descripcion</label>
+                                                            <Field name="descripcion" validate={[requerido, validacionDoscientosCaracteres]} component={renderTextArea} label="Apellido" />
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2"><Button style={fondoBoton} type="submit">Guardar</Button></td>
+                                                <td colspan="2"><Button style={fondoBotonS} color="secondary" onClick={this.onClickCancelar}>Cancelar</Button></td>
+                                            </tr>
+                                        </table>
                                     </form>
                                     <NotificationContainer />
                                 </>
@@ -330,6 +326,7 @@ function mapStateToProps(state) {
     return {
         codigoModulo: state.mod.codigoModulo,
         mensajeEditar: state.mod.mensajeEditarModulo,
+        configuracion: state.conf.configuracion,
         initialValues: {
             nombre: state.mod.moduloEditar.nombreModulo,
             descripcion: state.mod.moduloEditar.descripcionModulo,

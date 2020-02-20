@@ -1,11 +1,5 @@
 import React from 'react';
 
-//estilos
-import '../../css/business-casual.css'
-import '../../css/estilos.css'
-import '../../css/bootstrap.min.css'
-import '../../css/menu.css'
-import 'react-notifications/lib/notifications.css';
 
 //componentes
 import Barra from '../general/BarraDirecciones.js'
@@ -13,10 +7,11 @@ import PopUpModulo from '../popup/PopUpModulo.js'
 import MaterialTable from 'material-table';
 import MTableToolbar from '../../utilitario/MTableToolbar.js';
 import { confirmAlert } from 'react-confirm-alert';
-import Alerta from '@icons/material/AlertIcon.js';
 import { NotificationManager } from 'react-notifications';
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
+import { campo } from '../../utilitario/GenerarInputs.js';
 
-import { campo } from '../../utilitario/GenerarInputs.js'
 //redux conexion
 import { connect } from 'react-redux';
 import { actionConsultarModulos, actionAsignarModulo, actionSuspenderActivarModulo, actualizarMensajeSuspenderModulo } from '../../actions/actionsModulo.js';
@@ -30,7 +25,7 @@ class ContenidoAdminModulo extends React.Component {
 
 	actualizarModulos(idModulo) {
 		let nuevo = [];
-		this.props.modulosRegistrados.map(function (task, index, array) {
+		this.props.modulosRegistrados.forEach(function (task, index, array) {
 			if (task.idModulo === idModulo) {
 				if (task.estadoModulo === "Suspendido") {
 					let modulo = {
@@ -123,15 +118,11 @@ class ContenidoAdminModulo extends React.Component {
 				}}>
 					<div className="container shadow" style={{ background: "#FFFFFF", padding: "30px" }}>
 						{
-							this.props.habilitado ? <div className="col-sm-12"> <span className="col-sm-2 center" style={{
-								textShadow: "none!important",
-								fontSize: "16px",
-								fontFamily: "Open Sans,sans-serif",
-								fontWeight: "300",
-								padding: "13px 248px",
-								color: "#fff",
-								background: "rgb(158, 35, 45)"
-							}}><Alerta />No tiene los permisos suficientes para administrar los usuarios</span></div> :
+							this.props.habilitado ? <div className="col-sm-12">
+								<Alert severity="error" variant="outlined">
+									<AlertTitle>Sin permiso</AlertTitle>
+									No tiene permisos suficientes para consultar los modulos registrados</Alert>
+							</div> :
 								<MaterialTable
 									title=""
 									localization={{
@@ -156,7 +147,7 @@ class ContenidoAdminModulo extends React.Component {
 										}
 									}}
 									columns={[
-										{ title: '', field: 'imagenModulo', render: rowData => { return <img src={campo(rowData.imagenModulo)} alt='' style={{ width: 40, borderRadius: '50%' }} /> } },
+										{ title: '', field: 'imagenModulo', render: rowData => { return <img src={campo(rowData.imagenModulo)} alt='' style={{ width: 60, borderRadius: '50%' }} /> } },
 										{ title: 'Nombre de modulo', field: 'nombreModulo', headerStyle: estiloCabecera, cellStyle: estiloFila },
 										{ title: 'Descripcion del modulo', field: 'descripcionModulo', headerStyle: estiloCabecera, cellStyle: estiloFila },
 										{
@@ -248,7 +239,7 @@ class ContenidoAdminModulo extends React.Component {
 
 
 const estiloCabecera = {
-	fontSize: '13px',
+	fontSize: '14px',
 	fontFamily: 'sans-serif',
 	padding: '8px',
 	background: '#e7ecf1'
@@ -256,7 +247,7 @@ const estiloCabecera = {
 }
 
 const estiloFila = {
-	fontSize: '12px',
+	fontSize: '14px',
 	fontFamily: 'sans-serif',
 	padding: '8px',
 }

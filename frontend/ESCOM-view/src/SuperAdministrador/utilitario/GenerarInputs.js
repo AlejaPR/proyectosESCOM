@@ -4,10 +4,10 @@ import React from 'react';
 export const generarSelect = ({ input, label, type, meta: { touched, error }, children }) => (
   <div>
     <div>
-      <select {...input} className="form-control letra" style={{ height: "35px", fontSize: "13px" }}>
+      <select {...input} className="form-control letra" style={{ height: "32px", fontSize: "13px" }}>
         {children}
       </select>
-      {touched && ((error && <span className="text-danger letra form-group">{error}</span>))}
+      {touched && ((error && <span className="text-danger form-group" style={{fontSize: '12px',fontFamily: 'sans-serif'}}>{error}</span>))}
     </div>
   </div>
 )
@@ -15,8 +15,8 @@ export const generarSelect = ({ input, label, type, meta: { touched, error }, ch
 export const generarInput = ({ input, label, type, meta: { touched, error, warning } }) => (
   <div>
     <div>
-      <input {...input} placeholder={label} type={type} style={{ height: "35px", fontSize: "12px" }} className="form-control letra placeholder-no-fix" />
-      {touched && ((error && <span className="text-danger letra form-group">{error}</span>) || (warning && <span>{warning}</span>))}
+      <input {...input} placeholder={label} type={type} style={{ height: "35px", fontSize: "13px" ,fontFamily: 'sans-serif'}} className="form-control placeholder-no-fix" />
+      {touched && ((error && <span className="text-danger form-group" style={{fontSize: '12px',fontFamily: 'sans-serif'}}>{error}</span>) || (warning && <span>{warning}</span>))}
     </div>
   </div>
 )
@@ -40,11 +40,11 @@ export const campo = value => {
   }
 };
 
-export const renderTextArea = ({ input, label, meta: { touched, error, warning } }) => (
+export const generarTextArea = ({ input, label, meta: { touched, error, warning } }) => (
   <div>
     <div>
-      <textarea {...input} placeholder={label} style={{ fontSize: "12px" }} className="form-control letra form-control-solid placeholder-no-fix" />
-      {touched && ((error && <span className="text-danger letra form-group">{error}</span>) || (warning && <span>{warning}</span>))}
+      <textarea {...input} placeholder={label} style={{ fontSize: "13px",heigth:"204px" }} className="form-control letra form-control-solid placeholder-no-fix" />
+      {touched && ((error && <span className="text-danger form-group" style={{fontSize: '12px',fontFamily: 'sans-serif'}}>{error}</span>) || (warning && <span>{warning}</span>))}
     </div>
   </div>
 );

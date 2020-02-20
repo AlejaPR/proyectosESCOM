@@ -12,11 +12,11 @@ class BarraDeDireccion extends React.Component {
         return (
             <div style={{
                 paddingTop: "5px",
-                paddingRight: "46px",
+                paddingRight: "73px",
                 paddingLeft: "40px",
                 paddingBottom: "1px"
             }}>
-                <div className="col-md-12 alert" style={fondoBoton}>
+                <div className="col-md-12 alert shadow" style={fondoBoton}>
                     {this.props.texto}
                 </div>
             </div>

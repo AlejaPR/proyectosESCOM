@@ -1,11 +1,5 @@
 import React from 'react';
 
-//estilos
-import '../../css/business-casual.css'
-import '../../css/estilos.css'
-import '../../css/bootstrap.min.css'
-import '../../css/menu.css'
-
 //iconos
 import Home from '@icons/material/HomeIcon.js';
 import Persona from '@icons/material/AccountIcon.js';
@@ -13,13 +7,7 @@ import Folder from '@icons/material/LibraryIcon';
 import Bombillo from '@icons/material/LightbulbOnIcon';
 import Libro from  '@icons/material/FileIcon';
 import Configuracion from '@icons/material/PaletteIcon';
-//asignar una actividad import Libro from  '@icons/material/ClipboardAccountIcon';
-//suspender import Libro from  '@icons/material/ClockAlertIcon';
-// import Libro from  '@icons/material/FileIcon';
-//lapiz @icons/material/PencilIcon';
 
-
-import logo from '../../imagenes/logo.png'
 
 import { connect } from 'react-redux';
 import { consultarConfiguracion } from '../../actions/actionConfiguracion.js'

@@ -47,9 +47,9 @@ export const documentoIdentificacion = value => {
     }
 }
 
-export const correo = value => value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? 'Invalid email address' : undefined;
+export const correo = value => value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? 'Correo electronico en formato incorrecto' : undefined;
 
-export const contrasena = value => value && !/^(?=\w*\d)(?=\w*[A-Z])(?=\w*[a-z])\S{8,16}$/i.test(value) ? 'Invalid format password' : undefined;
+export const contrasena = value => value && !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/i.test(value) ? 'La contraseña debe tener minimo ocho caracteres, al menos una letra mayúscula, una letra minuscula y un numero' : undefined;
 
 export const fechaNacimiento = value => {
     var x = new Date(value);

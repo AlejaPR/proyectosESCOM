@@ -55,14 +55,14 @@ public class Modulo implements Serializable{
     @Column(name = "MOD_IMAGEN")
     private byte[] imagen;
     
-    @Size(max = 20)
+    
     @Column(name = "MOD_NOMBREMODULO")
     private String nombreModulo;
     
     @Column(name = "MOD_ACRONIMO")
     private String acronimo;
     
-    @Size(max = 120)
+
     @Column(name = "MOD_DESCRIPCIONMODULO")
     private String descripcionModulo;
     

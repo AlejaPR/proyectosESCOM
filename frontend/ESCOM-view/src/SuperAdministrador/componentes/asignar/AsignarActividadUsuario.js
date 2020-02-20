@@ -15,13 +15,18 @@ import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
 import { seleccione } from '../../utilitario/validacionCampos.js';
 import MaterialTable from 'material-table';
+import Barra from '../general/BarraDirecciones.js';
+
+
 import Divider from '@material-ui/core/Divider';
-import Alerta from '@icons/material/AlertIcon.js';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import CancelIcon from '@material-ui/icons/Cancel';
+
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
+import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
 
 //componentes
-import Barra from '../general/BarraDirecciones.js';
 
 //redux
 import { actionConsultarModulos, actionConsultarActividadesSinAsignar, actionEliminarActividades, actionLimpiar, actualizarMensajeAsignar, actionAsignarActividades, actionConsultarActividadesUsuario, actionAsignarActividad } from '../../actions/actionsUsuario.js'
@@ -55,7 +60,7 @@ class AsignarActividadUsuario extends React.Component {
                 NotificationManager.success('Actividades eliminadas');
                 this.props.actualizarMensajeAsignar('');
                 this.props.actionConsultarActividadesUsuario(this.props.cedula, localStorage.getItem('Token'));
-                if (this.state.selectedOption.value != undefined) {
+                if (this.state.selectedOption.value !== undefined) {
                     debugger;
                     this.props.actionConsultarActividadesSinAsignar(localStorage.getItem('Token'), this.props.cedula, this.state.selectedOption.value);
                 }
@@ -68,7 +73,7 @@ class AsignarActividadUsuario extends React.Component {
 
     opciones = () => {
         let respuesta = [];
-        this.props.modulos.map(
+        this.props.modulos.forEach(
             modulo => {
                 let objeto = {
                     label: modulo.nombreModulo,
@@ -83,7 +88,7 @@ class AsignarActividadUsuario extends React.Component {
     actividades = () => {
         let respuesta = [];
         if (this.props.actividadesSinAsignar !== null && this.props.actividadesSinAsignar !== undefined) {
-            this.props.actividadesSinAsignar.map(
+            this.props.actividadesSinAsignar.forEach(
                 actividad => {
                     let objeto = {
                         label: actividad.nombre,
@@ -152,15 +157,15 @@ class AsignarActividadUsuario extends React.Component {
                             paddingBottom: "21px"
                         }} >
                         {
-                            this.props.habilitado ? <div className="col-sm-12"> <span className="col-sm-2 center" style={{
-                                textShadow: "none!important",
-                                fontSize: "16px",
-                                fontFamily: "Open Sans,sans-serif",
-                                fontWeight: "300",
-                                padding: "13px 122px",
-                                color: "#fff",
-                                background: "rgb(158, 35, 45)"
-                            }}><Alerta />No tiene los permisos suficientes para administrar las actividades de los usuarios</span></div> :
+                            this.props.habilitado ? <div className="col-sm-12">
+                                <Alert severity="error" variant="outlined">
+                                    <AlertTitle>Sin permiso</AlertTitle>
+                                    No tiene permisos suficientes para administrar las actividades de los usuarios
+                                </Alert>
+                                <div style={{ padding: "25px 44px 25px 395px" }}>
+                                    <Button style={{ background: this.props.configuracion.botones, fontSize: "14px", fontFamily: "sans-serif", textTransform: "none" }} className="btn btn-dark" variant="contained" onClick={this.onClickCancelar} startIcon={<DoneOutlineIcon />} type="submit">Aceptar</Button>{''}
+                                </div>
+                            </div> :
                                 <>
                                     <form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
                                         <br />
@@ -174,19 +179,27 @@ class AsignarActividadUsuario extends React.Component {
                                         </div>
                                         <br />
                                         <br />
-                                        <Button
-                                            type="submit"
-                                            variant="contained"
-                                            color="primary"
-                                            endIcon={<AddCircleOutlineIcon/>}
-                                        >Añadir</Button>
-                                        <Button
-                                            type="submit"
-                                            variant="contained"
-                                            color="secondary"
-                                            onClick={this.onClickCancelar}
-                                            endIcon={<ExitToAppIcon/>}
-                                        >Salir</Button>
+                                        <div className="row">
+                                            <div className="col-md-6" style={{paddingLeft:"350px"}}>
+                                                <Button
+                                                    style={{ background: this.props.configuracion.botones, fontSize: "14px", fontFamily: "sans-serif", textTransform: "none" }}
+                                                    className="btn btn-dark"
+                                                    type="submit"
+                                                    variant="contained"
+                                                    startIcon={<AddCircleOutlineIcon />}
+                                                >Añadir</Button>
+                                            </div>
+                                            <div className="col-md-6" style={{paddingLeft:"39px"}}>
+                                                <Button
+                                                    type="submit"
+                                                    variant="contained"
+                                                    className="btn btn-dark"
+                                                    style={fondoBotonCancelar}
+                                                    onClick={this.onClickCancelar}
+                                                    startIcon={<CancelIcon />}
+                                                >Salir</Button>
+                                            </div>
+                                        </div>
                                         <br />
                                         <br />
                                         <Divider variant="middle" />
@@ -209,12 +222,12 @@ class AsignarActividadUsuario extends React.Component {
                                                     firstAriaLabel: 'oooo'
                                                 },
                                                 body: {
-                                                    emptyDataSourceMessage: 'Aun no hay ningun modulo registrado'
+                                                    emptyDataSourceMessage: 'Ningun registro de actividad encontrado'
                                                 },
                                                 toolbar: {
                                                     searchTooltip: 'Buscar',
                                                     searchPlaceholder: 'Buscar',
-                                                    nRowsSelected: '{0} actividades seleccionadas'
+                                                    nRowsSelected: '{0} actividades seleccionadas',
                                                 }
                                             }}
                                             columns={[
@@ -231,7 +244,7 @@ class AsignarActividadUsuario extends React.Component {
                                             }}
                                             actions={[
                                                 {
-                                                    tooltip: 'Remove All Selected Users',
+                                                    tooltip: 'Eliminar actividades seleccionadas',
                                                     icon: 'delete',
                                                     onClick: (evt, data) => this.props.actionEliminarActividades(this.state.actividadesSeleccionadas, localStorage.getItem('Token'), this.props.cedula)
                                                 }
@@ -292,7 +305,7 @@ export const ReduxFormSelectDos = props => {
 }
 
 const estiloCabecera = {
-    fontSize: '13px',
+    fontSize: '14px',
     fontFamily: 'sans-serif',
     padding: '8px',
     background: '#e7ecf1'
@@ -300,9 +313,16 @@ const estiloCabecera = {
 }
 
 const estiloFila = {
-    fontSize: '12px',
+    fontSize: '13px',
     fontFamily: 'sans-serif',
     padding: '8px',
+}
+
+const fondoBotonCancelar = {
+    background: "gray",
+    fontSize: "14px",
+    fontFamily: "sans-serif",
+    textTransform: "none"
 }
 
 
@@ -315,14 +335,6 @@ const estiloLetrero = {
 
 
 
-const fondoBoton = {
-    background: "#ec671d",
-    fontSize: "14px",
-    fontFamily: "Open sans, sans-serif"
-
-}
-
-
 function mapStateToProps(state) {
     return {
         modulos: state.user.modulosAsignar,
@@ -330,7 +342,8 @@ function mapStateToProps(state) {
         habilitado: state.user.estadoAsignar,
         cedula: state.user.cedula,
         actividades: state.user.actividadesUsuario,
-        actividadesSinAsignar: state.user.actividadesSinAsignar
+        actividadesSinAsignar: state.user.actividadesSinAsignar,
+        configuracion: state.conf.configuracion
     }
 }
 

@@ -3,24 +3,19 @@ import React from 'react';
 
 //componentes
 import Barra from '../general/BarraDirecciones.js'
-
-import { Button } from 'reactstrap';
-
-//estilos
-import '../../css/business-casual.css'
-import '../../css/estilos.css'
-import '../../css/bootstrap.min.css'
-import '../../css/menu.css'
-import 'react-notifications/lib/notifications.css';
-
-//componentes
+import Button from '@material-ui/core/Button';
+import Divider from '@material-ui/core/Divider';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { withRouter } from 'react-router-dom';
+import { generarInput, generarSelect } from '../../utilitario/GenerarInputs.js'
 import { nombre, requerido, seleccione, apellido, fechaNacimiento, correo, documentoIdentificacion } from '../../utilitario/validacionCampos.js';
-// import MaterialTable from 'material-table';
-import Alerta from '@icons/material/AlertIcon.js';
 
-
+//iconos
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
+import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
+import SaveIcon from '@material-ui/icons/Save';
+import CancelIcon from '@material-ui/icons/Cancel';
 //redux
 import { actionCargarInformacionDeUsuario, actionEditarUsuario, actualizarMensajeEditar, actionConsultarDocumentos, actionConsultarActividadesUsuario, actionActualizarUsuarios } from '../../actions/actionsUsuario.js'
 import { connect } from "react-redux";
@@ -49,7 +44,7 @@ class editar extends React.Component {
         break;
       case 'Ya existen los datos registrados previamente':
         this.props.actionCargarInformacionDeUsuario(this.props.cedula, localStorage.getItem('Token'));
-        NotificationManager.warning('El correo o numero de identificacion ya estan registrados');
+        NotificationManager.error('El correo o numero de identificacion ya estan registrados');
         this.props.actualizarMensajeEditar('');
         break;
       default:
@@ -115,69 +110,62 @@ class editar extends React.Component {
             }}>
             <div>
               {
-                this.state.habilitado ? <div className="col-sm-12"> <span className="col-sm-2 center" style={{
-                  textShadow: "none!important",
-                  fontSize: "16px",
-                  fontFamily: "Open Sans,sans-serif",
-                  fontWeight: "300",
-                  padding: "13px 122px",
-                  color: "#fff",
-                  background: "rgb(158, 35, 45)"
-                }}><Alerta />No tiene los permisos suficientes para administrar los usuarios</span>
-                  <div style={{ padding: "25px 44px 25px 287px" }}>
-                    <Button style={fondoBoton} onClick={this.onClickCancelar} type="submit">Aceptar</Button>{''}
+                this.state.habilitado ? <div className="col-sm-12">
+                  <Alert severity="error" variant="outlined">
+                    <AlertTitle>Sin permiso</AlertTitle>
+                    No tiene permisos suficientes para editar la informacion de los usuarios</Alert>
+                  <div style={{ padding: "25px 44px 25px 395px" }}>
+                    <Button style={{ background: this.props.configuracion.botones, fontSize: "14px", fontFamily: "sans-serif", textTransform: "none" }} className="btn btn-dark" variant="contained" onClick={this.onClickCancelar} startIcon={<DoneOutlineIcon />} type="submit">Aceptar</Button>{''}
                   </div>
                 </div> :
                   <form className="letra" onSubmit={this.props.handleSubmit(this.handleSubmit)}>
                     <br />
-                    <label>Nombre</label>
+
                     <div className="row">
-                      <div className="col-sm-5">
+                      <div className="col-sm-6">
+                        <label>Nombre</label>
                         <Field name="nombre" validate={[requerido, nombre]} component={generarInput} label="Nombre" />
                       </div>
-                    </div>
-                    <br />
-                    <label>Apellidos</label>
-                    <div className="row">
-                      <div className="col-sm-5">
+                      <div className="col-sm-6">
+                        <label>Apellidos</label>
                         <Field name="apellido" validate={[requerido, apellido]} component={generarInput} label="Apellido" />
                       </div>
                     </div>
                     <br />
-                    <label>Tipo de documento</label>
                     <div className="row">
-                      <div className="col-sm-5">
+                      <div className="col-sm-6">
+                        <label>Tipo de documento</label>
                         <Field name="tipoDocumento" validate={[seleccione]} style={{ height: "35px", fontSize: "13px" }} className="form-control" component={generarSelect} label="Username">
                           <option className="letra" style={{ height: "35px", fontSize: "13px" }} value="0">Seleccione</option>
                           {this.props.documentos.map(documento => <option key={documento.idTipoDocumento} className="letra" style={{ height: "35px", fontSize: "13px" }} value={documento.idTipoDocumento}>{documento.tipoDocumento}</option>)}
                         </Field>
                       </div>
-                    </div>
-                    <br />
-                    <label>Numero de documento</label>
-                    <div className="row">
-                      <div className="col-sm-5">
+                      <div className="col-sm-6">
+                        <label>Numero de documento</label>
                         <Field name="numeroDocumento" type="number" validate={[requerido, documentoIdentificacion]} component={generarInput} label="Numero de documento" />
                       </div>
                     </div>
                     <br />
-                    <label>Fecha de nacimiento</label>
                     <div className="row">
-                      <div className="col-sm-5">
+                      <div className="col-sm-6">
+                        <label>Correo</label>
+                        <Field name="correo" validate={[requerido, correo]} component={generarInput} label="Correo electronico" />
+                      </div>
+                      <div className="col-sm-6">
+                        <label>Fecha de nacimiento</label>
                         <Field name="fechaNacimiento" type="date" validate={[requerido, fechaNacimiento]} component={generarInput} label="Fecha de nacimiento" />
                       </div>
                     </div>
                     <br />
-                    <label>Correo</label>
+                    <Divider variant="middle" />
+                    <br/>
                     <div className="row">
-                      <div className="col-sm-5">
-                        <Field name="correo" validate={[requerido, correo]} component={generarInput} label="Correo electronico" />
+                      <div  className="col-sm-6" style={{paddingLeft:"350px"}}>
+                        <Button style={{ background: this.props.configuracion.botones, fontSize: "14px", fontFamily: "sans-serif", textTransform: "none" }} startIcon={<SaveIcon />} className="btn btn-dark" variant="contained" type="submit">Guardar</Button>{''}
                       </div>
-                    </div>
-                    <br />
-                    <div>
-                      <Button style={fondoBoton} type="submit">Guardar</Button>{''}
-                      <Button style={fondoBotonS} color="secondary" onClick={this.onClickCancelar}>Salir</Button>
+                      <div  className="col-sm-6">
+                        <Button style={fondoBotonCancelar} variant="contained" className="btn btn-dark" startIcon={<CancelIcon />} onClick={this.onClickCancelar}>Salir</Button>
+                      </div>
                     </div>
                     <br />
                     <br />
@@ -201,44 +189,18 @@ const estiloLetrero = {
   paddingBottom: "1px"
 }
 
-const fondoBoton = {
-  background: "#ec671d",
+const fondoBotonCancelar = {
+  background: "gray",
   fontSize: "14px",
-  fontFamily: "Open sans, sans-serif"
-
+  fontFamily: "sans-serif",
+  textTransform: "none"
 }
-
-const fondoBotonS = {
-  background: "secondary",
-  fontSize: "14px",
-  fontFamily: "Open sans, sans-serif"
-
-}
-
-const generarSelect = ({ input, label, type, meta: { touched, error }, children }) => (
-  <div>
-    <div>
-      <select {...input} className="form-control letra" style={{ height: "35px", fontSize: "13px" }}>
-        {children}
-      </select>
-      {touched && ((error && <span className="text-danger letra form-group">{error}</span>))}
-    </div>
-  </div>
-)
-
-const generarInput = ({ input, placeholder, label, type, meta: { touched, warning, error } }) => (
-  <div>
-    <div>
-      <input {...input} type={type} style={{ fontSize: "13px" }} className="form-control letra form-control-solid placeholder-no-fix" />
-      {touched && ((error && <span className="text-danger letra form-group">{error}</span>) || (warning && <span>{warning}</span>))}
-    </div>
-  </div>
-)
 
 
 function mapStateToProps(state) {
   return {
     cedula: state.user.cedula,
+    configuracion: state.conf.configuracion,
     mensajeEditar: state.user.mensajeEditar,
     usuarios: state.user.usuariosRegistrados,
     documentos: state.user.tiposDocumento,

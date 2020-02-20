@@ -4,11 +4,15 @@ import React from 'react';
 import 'react-notifications/lib/notifications.css';
 
 //componentes
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import Button from '@material-ui/core/Button';
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
 import {generarInput,generarSelect} from '../../utilitario/GenerarInputs.js'
+import AddIcon from '@material-ui/icons/Add';
+import SaveAltIcon from '@material-ui/icons/SaveAlt';
+import CancelIcon from '@material-ui/icons/Cancel';
 
 //redux
 import { actionAgregarUsuario, actionConsultarDocumentos, actualizarMensajeRegistrar } from '../../actions/actionsUsuario.js'
@@ -36,7 +40,7 @@ class PopUpUsuario extends React.Component {
     if (this.props.mensaje !== '') {
       switch (this.props.mensaje) {
         case 'Usuario registrado':
-          NotificationManager.info('Usuario registrado correctamente');
+          NotificationManager.success('Usuario registrado correctamente');
           this.props.actualizarMensajeRegistrar('');
           break;
         case 'Sin permiso':
@@ -45,7 +49,7 @@ class PopUpUsuario extends React.Component {
           this.props.actualizarMensajeRegistrar('');
           break;
         case 'Ya existen los datos registrados previamente':
-          NotificationManager.warning('El correo o numero de identificacion ya estan registrados');
+          NotificationManager.error('El correo o numero de identificacion ya estan registrados');
           this.props.reset();
           this.props.actualizarMensajeRegistrar('');
           break;
@@ -101,7 +105,7 @@ class PopUpUsuario extends React.Component {
   render() {
     return (
       <div>
-        <Button color="danger" className="btn btn-dark letra" style={fondoBoton} onClick={this.toggle}>Crear usuario +</Button>
+        <Button style={{background:this.props.configuracion.botones,fontSize:"14px",textTransform:"none"}} startIcon={<AddIcon/>} className="btn btn-dark" variant="contained" onClick={this.toggle}>Registrar usuario</Button>
         <Modal isOpen={this.state.modal}
           toggle={this.toggle}
           style={{ width: "400px" }}>
@@ -119,7 +123,7 @@ class PopUpUsuario extends React.Component {
                 </div>
                 <div className="row">
                   <div className="col-sm-5">
-                    <span className="letra">Tipo de documento </span>
+                    <span style={{fontSize:"13px"}}>Tipo de documento </span>
                   </div>
                   <div className="col-sm-7">
                     <Field name="tipoDocumento" validate={[seleccione]} style={{ height: "35px", fontSize: "13px" }} className="form-control" component={generarSelect} label="Username">
@@ -154,8 +158,8 @@ class PopUpUsuario extends React.Component {
                 </div>
               </div>
               <ModalFooter>
-                <Button style={fondoBoton} type="submit">Registrar</Button>{''}
-                <Button color="secondary" style={fondoBotonCancelar} className="letra" onClick={this.toggle}>Cancelar</Button>
+                <Button style={{background: this.props.configuracion.botones,fontSize: "13px",fontFamily: "sans-serif",textTransform:"none"}} className="btn btn-dark" variant="contained"  startIcon={<SaveAltIcon/>} type="submit">Registrar</Button>{''}
+                <Button style={fondoBotonCancelar} className="btn btn-dark" variant="contained" startIcon={<CancelIcon/>} onClick={this.toggle}>Cancelar</Button>
               </ModalFooter>
             </form>
           </ModalBody>
@@ -166,18 +170,12 @@ class PopUpUsuario extends React.Component {
   }
 }
 
-const fondoBoton = {
-  background: "#ec671d",
-  fontSize: "12px",
-  fontFamily: "Open sans, sans-serif"
-
-}
 
 const fondoBotonCancelar = {
   background: "gray",
-  fontSize: "12px",
-  fontFamily: "Open sans, sans-serif"
-
+  fontSize: "13px",
+  fontFamily: "sans-serif",
+  textTransform:"none"
 }
 
 function mapStateToProps(state) {
@@ -185,7 +183,8 @@ function mapStateToProps(state) {
     users: state.user.list,
     token: state.user.token,
     documentos: state.user.tiposDocumento,
-    mensaje: state.user.mensajeRegistrar
+    mensaje: state.user.mensajeRegistrar,
+    configuracion:state.conf.configuracion
   }
 }
 

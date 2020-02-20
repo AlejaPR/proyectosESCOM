@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { encriptar, desencriptar } from '../componentes/general/Encriptar.js';
+import {desencriptar } from '../componentes/general/Encriptar.js';
 import {mensajesDeError} from '../utilitario/MensajesError.js';
 
 export const MOSTRAR_ACTIVIDADES = 'MOSTRAR_ACTIVIDADES';

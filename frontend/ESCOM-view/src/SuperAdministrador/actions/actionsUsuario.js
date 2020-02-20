@@ -301,7 +301,7 @@ export function actionAsignarActividad(token,numeroDocumento,actividad) {
     }
 }
 
-export function actionSuspenderActivarUsuario(cedula, token,actualizados) {
+export function actionSuspenderActivarUsuario(cedula, token,actualizados,registrados) {
     var tokenRequest = desencriptar(token);
     const headers = {
         'Content-Type': 'application/json',
@@ -320,8 +320,6 @@ export function actionSuspenderActivarUsuario(cedula, token,actualizados) {
                     usuario: actualizados
                 });
             }).catch((error) => {
-                console.log(error);
-
                 if (error.request.response === '') {
                     dispatch({
                         type: MENSAJE_SUSPENDER,

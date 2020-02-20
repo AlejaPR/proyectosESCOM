@@ -6,8 +6,6 @@ import '../../css/estilos.css'
 import '../../css/bootstrap.min.css'
 import '../../css/menu.css'
 
-import { Button } from 'reactstrap';
-
 import MaterialTable from 'material-table';
 
 //componentes
@@ -52,7 +50,7 @@ class ContenidoAdminActividad extends React.Component {
 
 	actualizarActividades(codigoActividad) {
 		let nuevo = [];
-		this.props.actividades.map(function (task, index, array) {
+		this.props.actividades.forEach(function (task, index, array) {
 			if (task.idActividad === codigoActividad) {
 				if (task.estado === "Suspendido") {
 					let actividad = {
@@ -227,14 +225,6 @@ const estiloFila = {
 	padding: '8px',
 }
 
-
-const fondoBoton = {
-	background: "#ec671d",
-	fontSize: "14px",
-	fontFamily: "Open sans, sans-serif"
-
-}
-
 const estiloLetrero = {
 	paddingTop: "20px",
 	paddingRight: "12px",
@@ -242,10 +232,6 @@ const estiloLetrero = {
 	paddingBottom: "1px"
 }
 
-const fondoBarraSuperior = {
-	background: "#FFFFFF"
-
-}
 
 const fondoTabla = {
 	background: "#EAF2F2"

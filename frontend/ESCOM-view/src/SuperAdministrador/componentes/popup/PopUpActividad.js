@@ -18,7 +18,7 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
-import { generarInput, renderTextArea } from '../../utilitario/GenerarInputs.js'
+import { generarInput, generarTextArea } from '../../utilitario/GenerarInputs.js'
 import { seleccione, validacionCuarentaCaracteres, validacionDoscientosCaracteres, requerido } from '../../utilitario/validacionCampos.js';
 
 import { actionConsultarModulos, actionConsultarActividades,actionAgregarActividad, actualizarMensajeRegistrar } from '../../actions/actionActividad.js'
@@ -61,7 +61,7 @@ class PopUpActividad extends React.Component {
 
     opciones = () => {
         let respuesta = [];
-        this.props.modulos.map(
+        this.props.modulos.forEach(
             modulo => {
                 let objeto = {
                     label: modulo.nombreModulo,
@@ -111,7 +111,7 @@ class PopUpActividad extends React.Component {
                                 </div>
                                 <div className="row">
                                     <div className="col-sm-12">
-                                        <Field name="descripcion" component={renderTextArea} validate={[requerido, validacionDoscientosCaracteres]} label="descripcion" />
+                                        <Field name="descripcion" component={generarTextArea} validate={[requerido, validacionDoscientosCaracteres]} label="descripcion" />
                                     </div>
                                 </div>
                                 <br />

@@ -1,27 +1,22 @@
 import React from 'react';
 
-
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
-
-
-//estilos
-import '../../css/business-casual.css'
-import '../../css/estilos.css'
-import '../../css/bootstrap.min.css'
-import '../../css/menu.css'
 import 'react-notifications/lib/notifications.css';
 
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import Button from '@material-ui/core/Button';
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import Defecto from '../../imagenes/defecto.jpg';
 import PropTypes from "prop-types";
-import {requerido,validacionCuarentaCaracteres,validacionDoscientosCaracteres} from '../../utilitario/validacionCampos.js';
-
+import { requerido, validacionCuarentaCaracteres, validacionDoscientosCaracteres } from '../../utilitario/validacionCampos.js';
+import AddIcon from '@material-ui/icons/Add';
+import PhotoCamera from '@material-ui/icons/PhotoCamera';
+import { generarInput, generarTextArea } from '../../utilitario/GenerarInputs.js'
+import SaveAltIcon from '@material-ui/icons/SaveAlt';
+import CancelIcon from '@material-ui/icons/Cancel';
 
 import { withRouter } from 'react-router-dom';
 import { Field, reduxForm } from "redux-form";
-import { actionAgregarModulo } from '../../actions/actionsModulo.js';
+import { actionAgregarModulo,actualizarMensajeRegistrar } from '../../actions/actionsModulo.js';
 import { connect } from 'react-redux';
 
 class PopUpModulo extends React.Component {
@@ -43,7 +38,12 @@ class PopUpModulo extends React.Component {
     if (this.props.mensajeRegistrar !== '') {
       switch (this.props.mensaje) {
         case 'modulo registrado':
-          NotificationManager.info('Modulo registrado correctamente');
+          NotificationManager.success('Modulo registrado correctamente');
+          break;
+        case 'Sin permiso':
+          NotificationManager.error('No tiene los permisos suficientes para registrar un modulo');
+          this.props.reset();
+          this.props.actualizarMensajeRegistrar('');
           break;
         default:
           break;
@@ -140,11 +140,16 @@ class PopUpModulo extends React.Component {
     return (
       <div>
         <input
+          id="numeroUno"
+          style={{ display: 'none' }}
           name={input.name}
           type={type}
           accept={tipoDeImagen}
           onChange={event => this.handleChange(event, input)}
         />
+        <label htmlFor="numeroUno">
+          <Button component="span" startIcon={<PhotoCamera />}>Seleccionar imagen</Button>
+        </label>
         {touched && ((error && <span className="text-danger letra form-group">{error}</span>) || (warning && <span>{warning}</span>))}
       </div>
     );
@@ -181,12 +186,12 @@ class PopUpModulo extends React.Component {
   render() {
     return (
       <>
-        <Button color="danger" className="btn btn-dark letra" style={fondoBoton} onClick={this.toggle}>Crear modulo +</Button>
+        <Button style={{ background: this.props.configuracion.botones, fontSize: "14px", textTransform: "none" }} variant="contained" startIcon={<AddIcon />} className="btn btn-dark" onClick={this.toggle}>Registrar modulo</Button>
         <Modal isOpen={this.state.modal}
           toggle={this.toggle}
           style={{ width: "400px" }}
         >
-          <ModalHeader toggle={this.toggle} style={{ height: "50px", width: "400px" }} className="center">Crear modulo</ModalHeader>
+          <ModalHeader toggle={this.toggle} style={{ height: "50px", width: "400px" }} className="center">Registrar modulo</ModalHeader>
           <ModalBody>
             <div style={{ padding: "30px 30px 30px 77px" }}>
               <img src={Defecto} alt="preview"
@@ -200,8 +205,6 @@ class PopUpModulo extends React.Component {
                 type="file"
                 validate={[
                   this.validateImageWeight,
-                  this.validateImageWidth,
-                  this.validateImageHeight,
                   this.validateImageFormat
                 ]}
                 component={this.renderFileInput}
@@ -209,22 +212,31 @@ class PopUpModulo extends React.Component {
               <br />
               <div className="row">
                 <div className="col-sm-12">
-                  <Field name="nombre" validate={[requerido,validacionCuarentaCaracteres]} component={generarInput} label="Nombre" />
+                  <Field name="nombre" validate={[requerido, validacionCuarentaCaracteres]} component={generarInput} label="Nombre" />
                 </div>
               </div>
               <br />
               <div className="row">
                 <div className="col-sm-12">
-                  <Field name="descripcion" validate={[requerido,validacionDoscientosCaracteres]} component={renderTextArea} label="descripcion" />
+                  <Field name="descripcion" validate={[requerido, validacionDoscientosCaracteres]} component={generarTextArea} label="Descripcion" />
                 </div>
               </div>
               <ModalFooter>
                 <Button
                   type="submit"
-                  style={fondoBoton} >
+                  startIcon={<SaveAltIcon />}
+                  className="btn btn-dark"
+                  style={{ background: this.props.configuracion.botones, fontSize: "13px", textTransform: "none" }}
+                  variant="contained">
                   Registrar
                 </Button>
-                <Button color="secondary" style={fondoBotonCancelar} className="letra" onClick={this.toggle}>Cancelar</Button>
+                <Button
+                  startIcon={<CancelIcon />}
+                  style={fondoBotonCancelar}
+                  className="btn btn-dark"
+                  variant="contained"
+                  onClick={this.toggle}>
+                  Cancelar</Button>
               </ModalFooter>
             </form>
           </ModalBody>
@@ -236,42 +248,19 @@ class PopUpModulo extends React.Component {
 }
 
 
-const generarInput = ({ input, label, type, meta: { touched, error, warning } }) => (
-  <div>
-    <div>
-      <input {...input} placeholder={label} type={type} style={{ height: "35px", fontSize: "12px" }} className="form-control letra placeholder-no-fix" />
-      {touched && ((error && <span className="text-danger letra form-group">{error}</span>) || (warning && <span>{warning}</span>))}
-    </div>
-  </div>
-)
-
-
-const renderTextArea = ({ input, label, meta: { touched, error, warning } }) => (
-  <div>
-    <div>
-      <textarea {...input} placeholder={label} style={{ fontSize: "12px" }} className="form-control letra form-control-solid placeholder-no-fix" />
-      {touched && ((error && <span className="text-danger letra form-group">{error}</span>) || (warning && <span>{warning}</span>))}
-    </div>
-  </div>
-);
-
 const fondoBotonCancelar = {
   background: "gray",
-  fontSize: "12px",
-  fontFamily: "Open sans, sans-serif"
-
-}
-
-const fondoBoton = {
-  background: "#ec671d",
+  fontFamily: "sans-serif",
   fontSize: "13px",
-  fontFamily: "sans-serif"
-
+  textTransform: "none"
 }
+
 
 function mapStateToProps(state) {
   return {
-    mensaje: state.mod.mensajeRegistrarModulo
+    mensaje: state.mod.mensajeRegistrarModulo,
+    configuracion: state.conf.configuracion
+
   }
 }
 
@@ -280,4 +269,4 @@ let formularioModulo = reduxForm({
   form: "formularioModulo"
 })(PopUpModulo);
 
-export default withRouter(connect(mapStateToProps, { actionAgregarModulo })(formularioModulo));
+export default withRouter(connect(mapStateToProps, { actionAgregarModulo ,actualizarMensajeRegistrar})(formularioModulo));
