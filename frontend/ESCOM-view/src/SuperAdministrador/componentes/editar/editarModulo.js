@@ -5,12 +5,18 @@ import Barra from '../general/BarraDirecciones';
 import Button from '@material-ui/core/Button';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { withRouter } from 'react-router-dom';
-import { campo } from '../../utilitario/GenerarInputs.js';
+import { campo, generarInput } from '../../utilitario/GenerarInputs.js';
 import PropTypes from "prop-types";
 import { requerido, validacionCuarentaCaracteres, validacionDoscientosCaracteres } from '../../utilitario/validacionCampos.js';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
+import PhotoCamera from '@material-ui/icons/PhotoCamera';
+import SaveAltIcon from '@material-ui/icons/SaveAlt';
+import CancelIcon from '@material-ui/icons/Cancel';
+import Divider from '@material-ui/core/Divider';
+
+
 //redux
 import { actionCargarInformacionDeModulo, actionEditarModulo, actionConsultarActividadesModulo, actualizarMensajeEditar } from '../../actions/actionsModulo.js'
 import { connect } from "react-redux";
@@ -110,11 +116,16 @@ class EditarModulo extends React.Component {
         return (
             <div>
                 <input
+                    id="numeroUno"
+                    style={{ display: 'none' }}
                     name={input.name}
                     type={type}
                     accept={tipoDeImagen}
                     onChange={event => this.handleChange(event, input)}
                 />
+                <label htmlFor="numeroUno">
+                    <Button component="span" startIcon={<PhotoCamera />}>Seleccionar imagen</Button>
+                </label>
                 {touched && ((error && <span className="text-danger letra form-group">{error}</span>) || (warning && <span>{warning}</span>))}
             </div>
         );
@@ -159,14 +170,17 @@ class EditarModulo extends React.Component {
     }
 
     componentDidUpdate() {
-        if (this.props.mensajeEditar === 'Sin permiso') {
-            if (!this.state.habilitado) { this.setState({ habilitado: true }) };
-            // this.props.history.push('/adminUsuario');
-        }
-        if (this.props.mensajeEditar === 'modulo editado') {
-            NotificationManager.success('Informacion actualizada correctamente');
-            this.props.actualizarMensajeEditar('');
-            this.props.history.push('/adminModulo');
+        switch (this.props.mensajeEditar) {
+            case 'Sin permiso':
+                if (!this.state.habilitado) { this.setState({ habilitado: true }) };
+                break;
+            case 'modulo editado':
+                NotificationManager.success('Informacion actualizada correctamente');
+                this.props.actionCargarInformacionDeModulo(this.props.codigoModulo, localStorage.getItem('Token'));
+                this.props.actualizarMensajeEditar('');
+                break;
+            default:
+                break;
         }
     }
 
@@ -187,7 +201,7 @@ class EditarModulo extends React.Component {
     render() {
         return (
             <div>
-                <div className="text-left titulo" style={estiloLetrero}>
+                <div className="text-left titulo">
                     <h4>Editar modulo</h4>
                 </div>
                 <Barra texto="Inicio > Editar modulo" />
@@ -201,7 +215,7 @@ class EditarModulo extends React.Component {
 
                 }}>
 
-                    <div className="container shadow" style={fondoBarraSuperior}>
+                    <div className="container shadow" style={{ background: "white" }}>
                         <br />
                         {
                             this.state.habilitado ? <div className="col-sm-12">
@@ -215,9 +229,9 @@ class EditarModulo extends React.Component {
                             </div> :
                                 <>
                                     <form className="letra" onSubmit={this.props.handleSubmit(this.handleSubmitForm)}>
-                                        <table border="0px" style={{width:"100%"}}>
+                                        <table border="0px" style={{ width: "100%" }}>
                                             <tr>
-                                                <td colspan="2" style={{width:"65%" ,paddingRight:"39px",paddingLeft:"39px"}}>
+                                                <td colspan="2" style={{ width: "65%", paddingRight: "39px", paddingLeft: "39px" }}>
                                                     <div className="row">
                                                         <div className="col-sm-12">
                                                             <label>Nombre</label>
@@ -236,30 +250,45 @@ class EditarModulo extends React.Component {
                                                         name="image"
                                                         type="file"
                                                         validate={[
-                                                            this.validateImageWeight,
-                                                            this.validateImageWidth,
-                                                            this.validateImageHeight,
-                                                            this.validateImageFormat
+                                                            this.validateImageWeight
                                                         ]}
                                                         component={this.renderFileInput}
                                                     />
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td colspan="2" style={{width:"65%" ,paddingRight:"39px",paddingLeft:"39px"}}>
+                                                <td colspan="2" style={{ width: "65%", paddingRight: "39px", paddingLeft: "39px" }}>
                                                     <div className="row">
                                                         <div className="col-sm-12">
-                                                        <label>Descripcion</label>
+                                                            <label>Descripcion</label>
                                                             <Field name="descripcion" validate={[requerido, validacionDoscientosCaracteres]} component={renderTextArea} label="Apellido" />
                                                         </div>
                                                     </div>
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                <td colspan="2"><Button style={fondoBoton} type="submit">Guardar</Button></td>
-                                                <td colspan="2"><Button style={fondoBotonS} color="secondary" onClick={this.onClickCancelar}>Cancelar</Button></td>
-                                            </tr>
                                         </table>
+                                        <br />
+                                        <Divider variant="middle" />
+                                        <br />
+                                        <div className="row">
+                                            <div className="col-md-6" style={{ paddingLeft: "334px" }}>
+                                                <Button
+                                                    type="submit"
+                                                    startIcon={<SaveAltIcon />}
+                                                    className="btn btn-dark"
+                                                    style={{ background: this.props.configuracion.botones, fontSize: "14px", textTransform: "none" }}
+                                                    variant="contained">
+                                                    Guardar
+                                        </Button>
+                                            </div>
+                                            <div className="col-md-6" style={{ paddingLeft: "0px" }}>
+                                                <Button startIcon={<CancelIcon />}
+                                                    style={fondoBotonCancelar}
+                                                    variant="contained"
+                                                    className="btn btn-dark"
+                                                    onClick={this.onClickCancelar}>Salir</Button>
+                                            </div>
+                                        </div>
                                     </form>
                                     <NotificationContainer />
                                 </>
@@ -274,51 +303,21 @@ class EditarModulo extends React.Component {
     }
 }
 
-
-const generarInput = ({ input, placeholder, label, type, meta: { touched, warning, error } }) => (
-    <div>
-        <div>
-            <input {...input} type={type} style={{ fontSize: "12px" }} className="form-control letra form-control-solid placeholder-no-fix" />
-            {touched && ((error && <span className="text-danger letra form-group">{error}</span>) || (warning && <span>{warning}</span>))}
-        </div>
-    </div>
-)
-
 const renderTextArea = ({ input, meta: { touched, error, warning } }) => (
     <div>
         <div>
-            <textarea {...input} style={{ fontSize: "12px" }} className="form-control letra form-control-solid placeholder-no-fix" />
+            <textarea {...input} style={{ fontSize: "12px" }} rows="10" className="form-control letra form-control-solid placeholder-no-fix" />
             {touched && ((error && <span className="text-danger letra form-group">{error}</span>) || (warning && <span>{warning}</span>))}
         </div>
     </div>
 );
 
-const estiloLetrero = {
-    paddingTop: "20px",
-    paddingRight: "12px",
-    paddingLeft: "40px",
-    paddingBottom: "1px"
-}
 
-
-const fondoBarraSuperior = {
-    background: "#FFFFFF"
-
-}
-
-
-
-const fondoBoton = {
-    background: "#ec671d",
+const fondoBotonCancelar = {
+    background: "gray",
     fontSize: "14px",
-    fontFamily: "Open sans, sans-serif"
-
-}
-
-const fondoBotonS = {
-    background: "secondary",
-    fontSize: "14px",
-    fontFamily: "Open sans, sans-serif"
+    fontFamily: "sans-serif",
+    textTransform: "none"
 
 }
 

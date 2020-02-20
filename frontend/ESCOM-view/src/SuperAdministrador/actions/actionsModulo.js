@@ -166,7 +166,7 @@ export function actionConsultarActividadesModulo(codigoModulo, token) {
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': desencriptar(token),
-        'Permiso': 'sa_Editar informacion de los modulos'
+        'Permiso': 'sa_Suspender/activar actividades de modulos'
     }
 
     return (dispatch, getState) => {

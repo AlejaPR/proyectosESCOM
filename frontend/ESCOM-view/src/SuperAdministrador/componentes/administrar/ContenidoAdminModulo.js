@@ -62,10 +62,10 @@ class ContenidoAdminModulo extends React.Component {
 		if (this.props.mensajeSuspender !== '') {
 			switch (this.props.mensajeSuspender) {
 				case 'Sin permiso':
-					NotificationManager.warning('No tiene permisos para suspender/activar los usuarios')
+					NotificationManager.error('No tiene permisos para suspender/activar los usuarios');
 					break;
 				case 'Operacion hecha con exito':
-					NotificationManager.info('Operacion realizada con exito')
+					NotificationManager.success('Operacion realizada con exito');
 					break;
 				default:
 					break;
@@ -83,6 +83,7 @@ class ContenidoAdminModulo extends React.Component {
 				{
 					label: 'Si',
 					onClick: () => {
+						this.props.actualizarMensajeSuspenderModulo('');
 						this.props.actionSuspenderActivarModulo(codigoModulo, localStorage.getItem('Token'), this.actualizarModulos(codigoModulo));
 					}
 				},
@@ -202,7 +203,7 @@ class ContenidoAdminModulo extends React.Component {
 										},
 										{
 											icon: 'assignmentInd',
-											tooltip: 'Asignar actividad',
+											tooltip: 'Administrar actividades',
 											onClick: (event, rowData) => {
 												this.props.actionAsignarModulo(rowData.idModulo);
 												this.props.history.push('/asignarActividadModulo')

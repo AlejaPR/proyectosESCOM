@@ -43,7 +43,7 @@ export const campo = value => {
 export const generarTextArea = ({ input, label, meta: { touched, error, warning } }) => (
   <div>
     <div>
-      <textarea {...input} placeholder={label} style={{ fontSize: "13px",heigth:"204px" }} className="form-control letra form-control-solid placeholder-no-fix" />
+      <textarea {...input} placeholder={label} style={{ fontSize: "13px"}} className="form-control letra form-control-solid placeholder-no-fix" />
       {touched && ((error && <span className="text-danger form-group" style={{fontSize: '12px',fontFamily: 'sans-serif'}}>{error}</span>) || (warning && <span>{warning}</span>))}
     </div>
   </div>

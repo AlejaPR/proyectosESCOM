@@ -1,10 +1,5 @@
 import React from 'react';
 
-//estilos
-import '../../css/business-casual.css'
-import '../../css/estilos.css'
-import '../../css/bootstrap.min.css'
-import '../../css/menu.css'
 
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { withRouter } from 'react-router-dom';
@@ -12,15 +7,23 @@ import MaterialTable from 'material-table';
 
 //componentes
 import Barra from '../general/BarraDirecciones.js';
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
+import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
+import Button from '@material-ui/core/Button';
+import CancelIcon from '@material-ui/icons/Cancel';
+import Divider from '@material-ui/core/Divider';
+
 
 //redux
-import { actionConsultarActividadesModulo ,actionCambiarEstadoActividades,actualizarMensajeActividades} from '../../actions/actionsModulo'
+import { actionConsultarActividadesModulo, actionCambiarEstadoActividades, actualizarMensajeActividades } from '../../actions/actionsModulo'
 import { connect } from 'react-redux';
 
 class AsignarActividadModulo extends React.Component {
 
     state = {
-        actividadesSeleccionadas: []
+        actividadesSeleccionadas: [],
+        habilitado: false
     }
     componentDidMount() {
         if (this.props.codigoModulo === undefined || this.props.codigoModulo.length === 0) {
@@ -31,19 +34,26 @@ class AsignarActividadModulo extends React.Component {
     }
 
     componentDidUpdate() {
+        console.log('permiso modulo',this.props.mensaje);
         switch (this.props.mensaje) {
             case 'Operacion hecha con exito':
-                NotificationManager.success('Hecho');
+                NotificationManager.success('Operacion hecha con exito');
                 this.props.actionConsultarActividadesModulo(this.props.codigoModulo, localStorage.getItem('Token'));
                 this.props.actualizarMensajeActividades('');
                 break;
             case 'Sin permiso':
-
+                if (!this.state.habilitado) { this.setState({ habilitado: true }) };
                 break;
             default:
                 break;
         }
     }
+
+    onClickCancelar = (event) => {
+        event.preventDefault();
+        this.props.history.push('/adminModulo');
+    }
+
 
     render() {
         return (
@@ -66,88 +76,121 @@ class AsignarActividadModulo extends React.Component {
                     <div className="container shadow" style={fondoBarraSuperior}>
                         <br />
                         <div className="jumbotron p-1 jumbotron-fluid" style={fondoTabla}>
-                            <MaterialTable
-                                title="Actividades actualmente asociadas al modulo"
-                                localization={{
-                                    header: {
-                                        actions: ' '
-                                    },
-                                    pagination: {
-                                        nextTooltip: 'Siguiente ',
-                                        previousTooltip: 'Anterior',
-                                        labelDisplayedRows: '{from}-{to} de {count}',
-                                        lastTooltip: 'Ultima pagina',
-                                        firstTooltip: 'Primera pagina',
-                                        labelRowsSelect: 'Registros',
-                                        firstAriaLabel: 'oooo'
-                                    },
-                                    body: {
-                                        emptyDataSourceMessage: 'Aun no hay ningun modulo registrado'
-                                    },
-                                    toolbar: {
-                                        searchTooltip: 'Buscar',
-                                        searchPlaceholder: 'Buscar',
-                                        nRowsSelected: '{0} actividades seleccionadas'
-                                    }
-                                }}
-                                columns={[
-                                    { title: 'Nombre de modulo', field: 'idActividad', headerStyle: estiloCabecera, cellStyle: estiloFila },
-                                    { title: 'Descripcion del modulo', field: 'nombre', headerStyle: estiloCabecera, cellStyle: estiloFila },
-                                    {
-                                        title: 'Estado', field: 'estado',
-                                        render: rowData => {
-                                            if (rowData.estado === 'Suspendido') {
-                                                return <span className="label label-sm letra"
-                                                    style={{
-                                                        textShadow: "none!important",
-                                                        fontSize: "12px",
-                                                        fontFamily: "Open Sans,sans-serif",
-                                                        fontWeight: "300",
-                                                        padding: "3px 6px",
-                                                        color: "#fff",
-                                                        background: "#ED6B75"
-                                                    }}>{rowData.estado}</span>
-                                            } else {
-                                                return <span className="label label-sm letra"
-                                                    style={{
-                                                        textShadow: "none!important",
-                                                        fontSize: "12px",
-                                                        fontFamily: "Open Sans,sans-serif",
-                                                        fontWeight: "300",
-                                                        padding: "3px 6px",
-                                                        color: "#fff",
-                                                        background: "#408725"
-                                                    }}>{rowData.estado}</span>
-                                            }
-                                        }, headerStyle: estiloCabecera, cellStyle: estiloFila
-                                    }
+                            {
+                                this.state.habilitado ? <div className="col-sm-12">
+                                    <Alert severity="error" variant="outlined">
+                                        <AlertTitle>Sin permiso</AlertTitle>
+                                        No tiene permisos suficientes para administrar las actividades de los modulos</Alert>
+                                    <div style={{ padding: "25px 44px 25px 395px" }}>
+                                        <Button style={{ background: this.props.configuracion.botones, fontSize: "14px", fontFamily: "sans-serif", textTransform: "none" }} className="btn btn-dark" variant="contained" onClick={this.onClickCancelar} startIcon={<DoneOutlineIcon />} type="submit">Aceptar</Button>{''}
+                                    </div>
+                                </div> :
+                                    <>
+                                        <MaterialTable
+                                            title="Actividades actualmente asociadas al modulo"
+                                            localization={{
+                                                header: {
+                                                    actions: ' '
+                                                },
+                                                pagination: {
+                                                    nextTooltip: 'Siguiente ',
+                                                    previousTooltip: 'Anterior',
+                                                    labelDisplayedRows: '{from}-{to} de {count}',
+                                                    lastTooltip: 'Ultima pagina',
+                                                    firstTooltip: 'Primera pagina',
+                                                    labelRowsSelect: 'Registros',
+                                                    firstAriaLabel: 'oooo'
+                                                },
+                                                body: {
+                                                    emptyDataSourceMessage: 'Ningun registro de actividad encontrada'
+                                                },
+                                                toolbar: {
+                                                    searchTooltip: 'Buscar',
+                                                    searchPlaceholder: 'Buscar',
+                                                    nRowsSelected: '{0} actividades seleccionadas'
+                                                }
+                                            }}
+                                            columns={[
+                                                { title: 'Nombre de modulo', field: 'idActividad', headerStyle: estiloCabecera, cellStyle: estiloFila },
+                                                { title: 'Descripcion del modulo', field: 'nombre', headerStyle: estiloCabecera, cellStyle: estiloFila },
+                                                {
+                                                    title: 'Estado', field: 'estado',
+                                                    render: rowData => {
+                                                        if (rowData.estado === 'Suspendido') {
+                                                            return <span className="label label-sm letra"
+                                                                style={{
+                                                                    textShadow: "none!important",
+                                                                    fontSize: "12px",
+                                                                    fontFamily: "Open Sans,sans-serif",
+                                                                    fontWeight: "300",
+                                                                    padding: "3px 6px",
+                                                                    color: "#fff",
+                                                                    background: "#ED6B75"
+                                                                }}>{rowData.estado}</span>
+                                                        } else {
+                                                            return <span className="label label-sm letra"
+                                                                style={{
+                                                                    textShadow: "none!important",
+                                                                    fontSize: "12px",
+                                                                    fontFamily: "Open Sans,sans-serif",
+                                                                    fontWeight: "300",
+                                                                    padding: "3px 6px",
+                                                                    color: "#fff",
+                                                                    background: "#408725"
+                                                                }}>{rowData.estado}</span>
+                                                        }
+                                                    }, headerStyle: estiloCabecera, cellStyle: estiloFila
+                                                }
 
-                                ]}
-                                data={this.props.actividades}
-                                options={{
-                                    search: true,
-                                    rowStyle: estiloFila,
-                                    selection: true
-                                }}
-                                onSelectionChange={(rows) => {
-                                    this.setState({ actividadesSeleccionadas: rows });
-                                }}
-                                actions={[
-                                    {
-                                        tooltip: 'Remove All Selected Users',
-                                        icon: 'delete',
-                                        onClick: (evt, data) => this.props.actionCambiarEstadoActividades(this.state.actividadesSeleccionadas,localStorage.getItem('Token'))
-                                    }
-                                ]}
-                            />
+                                            ]}
+                                            data={this.props.actividades}
+                                            options={{
+                                                search: true,
+                                                rowStyle: estiloFila,
+                                                selection: true
+                                            }}
+                                            onSelectionChange={(rows) => {
+                                                this.setState({ actividadesSeleccionadas: rows });
+                                            }}
+                                            actions={[
+                                                {
+                                                    tooltip: 'Activar/Suspender actividades seleccionadas',
+                                                    icon: 'restore',
+                                                    onClick: (evt, data) => this.props.actionCambiarEstadoActividades(this.state.actividadesSeleccionadas, localStorage.getItem('Token'))
+                                                }
+                                            ]}
+                                        />
+                                        <br/>
+                                        <Divider variant="middle" />
+                                        <br/>
+                                        <div style={{paddingLeft:"415px"}}>
+                                            <Button
+                                                startIcon={<CancelIcon />}
+                                                style={fondoBotonCancelar}
+                                                className="btn btn-dark"
+                                                variant="contained"
+                                                onClick={this.onClickCancelar}>
+                                                Salir</Button>
+                                        </div>
+                                    </>
+                            }
                         </div>
                     </div>
                     <br />
                 </div>
-                <NotificationContainer/>
+                <NotificationContainer />
             </div>
         )
     }
+}
+
+
+const fondoBotonCancelar = {
+    background: "gray",
+    fontSize: "14px",
+    fontFamily: "sans-serif",
+    textTransform: "none"
+
 }
 
 
@@ -173,12 +216,13 @@ const estiloFila = {
 }
 
 const fondoBarraSuperior = {
-    background: "#FFFFFF"
+    background: "#FFFFFF",
+    padding: "25px"
 
 }
 
 const fondoTabla = {
-    background: "#EAF2F2"
+    background: "white"
 }
 
 
@@ -186,9 +230,10 @@ function mapStateToProps(state) {
     return {
         codigoModulo: state.mod.codigoModulo,
         actividades: state.mod.actividadesModulos,
-        mensaje: state.mod.mensajeActividadesModulo
+        mensaje: state.mod.mensajeActividadesModulo,
+        configuracion: state.conf.configuracion
     }
 }
 
-export default withRouter(connect(mapStateToProps, { actionConsultarActividadesModulo,actionCambiarEstadoActividades,actualizarMensajeActividades })(AsignarActividadModulo));
+export default withRouter(connect(mapStateToProps, { actionConsultarActividadesModulo, actionCambiarEstadoActividades, actualizarMensajeActividades })(AsignarActividadModulo));
 
