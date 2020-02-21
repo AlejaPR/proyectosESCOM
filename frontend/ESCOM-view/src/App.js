@@ -17,6 +17,7 @@ import AsignarActividadUsuario from './SuperAdministrador/componentes/asignar/As
 import AdminModulo from './SuperAdministrador/componentes/administrar/ContenidoAdminModulo.js'
 import EditarModulo from './SuperAdministrador/componentes/editar/editarModulo.js';
 import AsignarActividadModulo from './SuperAdministrador/componentes/asignar/asignarActividadModulo.js';
+import EditarActividad from './SuperAdministrador/componentes/editar/editarActividad.js';
 
 import Configuracion from './SuperAdministrador/componentes/administrar/ContenidoConfiguracion.js';
 //Administrar actividad
@@ -152,7 +153,16 @@ class App extends React.Component {
 								</div>
 							</>
 						</RutaProtegida>
-						<RutaProtegida path="reportes">
+						<RutaProtegida path="/editarActividad">
+							<>
+								<MenuLateral />
+								<MenuSuperior />
+								<div id="wrapper">
+									<EditarActividad />
+								</div>
+							</>
+						</RutaProtegida>
+						<RutaProtegida path="/reportes">
 							<>
 								<MenuLateral />
 								<MenuSuperior />

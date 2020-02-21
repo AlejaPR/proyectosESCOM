@@ -12,10 +12,11 @@ export const generarSelect = ({ input, label, type, meta: { touched, error }, ch
   </div>
 )
 
-export const generarInput = ({ input, label, type, meta: { touched, error, warning } }) => (
+export const generarInput = ({ input,disabled, label, type, meta: { touched, error, warning } }) => (
   <div>
     <div>
-      <input {...input} placeholder={label} type={type} style={{ height: "35px", fontSize: "13px" ,fontFamily: 'sans-serif'}} className="form-control placeholder-no-fix" />
+      
+      <input {...input} disabled={disabled} placeholder={label} type={type} style={{ height: "35px", fontSize: "13px" ,fontFamily: 'sans-serif'}} className="form-control placeholder-no-fix" />
       {touched && ((error && <span className="text-danger form-group" style={{fontSize: '12px',fontFamily: 'sans-serif'}}>{error}</span>) || (warning && <span>{warning}</span>))}
     </div>
   </div>

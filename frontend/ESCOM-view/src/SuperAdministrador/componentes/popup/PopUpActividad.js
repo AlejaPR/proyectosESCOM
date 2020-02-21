@@ -1,27 +1,21 @@
 import React from 'react';
 
-
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
-
-
-//estilos
-import '../../css/business-casual.css'
-import '../../css/estilos.css'
-import '../../css/bootstrap.min.css'
-import '../../css/menu.css'
 import 'react-notifications/lib/notifications.css';
 
 
-import Select from 'react-select'
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import Select from 'react-select';
+import Button from '@material-ui/core/Button';
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
 import { generarInput, generarTextArea } from '../../utilitario/GenerarInputs.js'
 import { seleccione, validacionCuarentaCaracteres, validacionDoscientosCaracteres, requerido } from '../../utilitario/validacionCampos.js';
+import AddIcon from '@material-ui/icons/Add';
+import SaveAltIcon from '@material-ui/icons/SaveAlt';
+import CancelIcon from '@material-ui/icons/Cancel';
 
-import { actionConsultarModulos, actionConsultarActividades,actionAgregarActividad, actualizarMensajeRegistrar } from '../../actions/actionActividad.js'
+import { actionConsultarModulos, actionConsultarActividades, actionAgregarActividad, actualizarMensajeRegistrar } from '../../actions/actionActividad.js'
 import { connect } from 'react-redux';
 
 class PopUpActividad extends React.Component {
@@ -52,6 +46,8 @@ class PopUpActividad extends React.Component {
                 this.props.actualizarMensajeRegistrar('');
                 break;
             case 'Sin permiso':
+                NotificationManager.error('No tiene permisos sucifientes para registrar una actividad');
+                this.props.actualizarMensajeRegistrar('');
                 break;
             default:
                 break;
@@ -93,7 +89,7 @@ class PopUpActividad extends React.Component {
     render() {
         return (
             <div>
-                <Button color="danger" className="btn btn-dark" style={fondoBoton} onClick={this.toggle}>Crear actividad +</Button>
+                <Button style={{ background: this.props.configuracion.botones, fontSize: "14px", textTransform: "none" }} startIcon={<AddIcon />} className="btn btn-dark" variant="contained" onClick={this.toggle}>Registrar actividad</Button>
                 <Modal isOpen={this.state.modal}
                     toggle={this.toggle}
                     className={this.props.className}
@@ -122,8 +118,8 @@ class PopUpActividad extends React.Component {
                                 </div>
                             </div>
                             <ModalFooter>
-                                <Button style={fondoBoton} type="submit">Registrar</Button>{''}
-                                <Button color="secondary" className="letra" onClick={this.toggle}>Cancelar</Button>
+                                <Button style={{ background: this.props.configuracion.botones, fontSize: "13px", fontFamily: "sans-serif", textTransform: "none" }} className="btn btn-dark" variant="contained" startIcon={<SaveAltIcon />} type="submit">Registrar</Button>{''}
+                                <Button style={fondoBotonCancelar} className="btn btn-dark" variant="contained" startIcon={<CancelIcon />} onClick={this.toggle}>Cancelar</Button>
                             </ModalFooter>
                         </form>
                     </ModalBody>
@@ -135,12 +131,26 @@ class PopUpActividad extends React.Component {
 }
 
 export const ReduxFormSelect = props => {
+    const customStyles = {
+        option: (provided, state) => ({
+            ...provided,
+            fontSize: 13
+        }),
+        control: styles => ({ ...styles, backgroundColor: 'white', fontSize: 13, fontFamily: 'sans-serif' }),
+        singleValue: (provided, state) => {
+            const opacity = state.isDisabled ? 0.5 : 1;
+            const transition = 'opacity 300ms';
+            return { ...provided, opacity, transition };
+        }
+    }
     const { input, options } = props;
     const { touched, error } = props.meta;
     return (
         <>
             <Select
                 {...input}
+
+                styles={customStyles}
                 isSearchable={false}
                 placeholder='Seleccione un modulo'
                 onChange={value => input.onChange(value)}
@@ -148,22 +158,22 @@ export const ReduxFormSelect = props => {
                 noOptionsMessage={() => 'Aun no hay ningun modulo registrado'}
                 options={options}
             />
-            {touched && ((error && <span className="text-danger letra form-group">{error}</span>))}
+            {touched && ((error && <span className="text-danger form-group" style={{ fontSize: '12px', fontFamily: 'sans-serif' }}>{error}</span>))}
         </>
     )
 }
-
-const fondoBoton = {
-    background: "#ec671d",
+const fondoBotonCancelar = {
+    background: "gray",
     fontSize: "13px",
-    fontFamily: "sans-serif"
-
+    fontFamily: "sans-serif",
+    textTransform: "none"
 }
 
 function mapStateToProps(state) {
     return {
         modulos: state.act.modulosActividades,
-        mensaje: state.act.mensajeRegistrar
+        mensaje: state.act.mensajeRegistrar,
+        configuracion: state.conf.configuracion
     }
 }
 
@@ -171,5 +181,5 @@ let formulario = reduxForm({
     form: 'registrarActividad'
 })(PopUpActividad)
 
-export default withRouter(connect(mapStateToProps, { actionConsultarModulos,actionConsultarActividades, actionAgregarActividad, actualizarMensajeRegistrar })(formulario));
+export default withRouter(connect(mapStateToProps, { actionConsultarModulos, actionConsultarActividades, actionAgregarActividad, actualizarMensajeRegistrar })(formulario));
 

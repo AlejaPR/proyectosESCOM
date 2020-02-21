@@ -1,10 +1,6 @@
 import React from 'react';
 
-//estilos
-import '../../css/business-casual.css'
-import '../../css/estilos.css'
-import '../../css/bootstrap.min.css'
-import '../../css/menu.css'
+
 
 import MaterialTable from 'material-table';
 
@@ -14,17 +10,30 @@ import PopUpActividad from '../popup/PopUpActividad.js'
 import MTableToolbar from '../../utilitario/MTableToolbar.js';
 import { NotificationManager } from 'react-notifications';
 import { confirmAlert } from 'react-confirm-alert';
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
 
 //redux conexion
 import { connect } from 'react-redux';
-import { actionConsultarActividades ,actionSuspenderActivarActividad,actualizarMensajeSuspender} from '../../actions/actionActividad.js'
+import { actionConsultarActividades,actionSuspenderActivarActividad,actionAsignarCodigoActividad, actualizarMensajeSuspender } from '../../actions/actionActividad.js'
 import { withRouter } from 'react-router-dom';
 
 class ContenidoAdminActividad extends React.Component {
 
 
-	componentDidUpdate(){
-		console.log('Actividades son',this.props.actividades);
+	componentDidUpdate() {
+		if (this.props.mensajeSuspender !== '') {
+			switch (this.props.mensajeSuspender) {
+				case 'Sin permiso':
+					NotificationManager.error('No tiene permisos para suspender/activar los usuarios');
+					break;
+				case 'Operacion hecha con exito':
+					NotificationManager.success('Operacion realizada con exito');
+					break;
+				default:
+					break;
+			}
+		}
 	}
 
 
@@ -36,6 +45,7 @@ class ContenidoAdminActividad extends React.Component {
 				{
 					label: 'Si',
 					onClick: () => {
+						this.props.actualizarMensajeSuspender('');
 						this.props.actionSuspenderActivarActividad(codigo, localStorage.getItem('Token'), this.actualizarActividades(codigo));
 					}
 				},
@@ -54,7 +64,7 @@ class ContenidoAdminActividad extends React.Component {
 			if (task.idActividad === codigoActividad) {
 				if (task.estado === "Suspendido") {
 					let actividad = {
-						idActividad:task.idActividad,
+						idActividad: task.idActividad,
 						nombre: task.nombre,
 						moduloActividad: task.moduloActividad,
 						estado: "Activo"
@@ -62,7 +72,7 @@ class ContenidoAdminActividad extends React.Component {
 					nuevo.push(actividad);
 				} else {
 					let actividad = {
-						idActividad:task.idActividad,
+						idActividad: task.idActividad,
 
 						nombre: task.nombre,
 						moduloActividad: task.moduloActividad,
@@ -77,9 +87,9 @@ class ContenidoAdminActividad extends React.Component {
 		return nuevo;
 	}
 
-	
+
 	componentDidMount() {
-		 this.props.actionConsultarActividades(localStorage.getItem('Token'));
+		this.props.actionConsultarActividades(localStorage.getItem('Token'));
 	}
 
 	render() {
@@ -103,104 +113,111 @@ class ContenidoAdminActividad extends React.Component {
 					paddingBottom: "20px",
 					margin: "0px 0px 32px"
 				}}>
-					<div className="container shadow" style={{background: "#FFFFFF",padding:"30px"}}>
+					<div className="container shadow" style={{ background: "#FFFFFF", padding: "30px" }}>
 						<br />
-						<div className="jumbotron p-1 jumbotron-fluid" style={fondoTabla}>
-							<MaterialTable
-								title=""
-								localization={{
-									header: {
-										actions: ' '
-									},
-									pagination: {
-										nextTooltip: 'Siguiente ',
-										previousTooltip: 'Anterior',
-										labelDisplayedRows: '{from}-{to} de {count}',
-										lastTooltip: 'Ultima pagina',
-										firstTooltip: 'Primera pagina',
-										labelRowsSelect: 'Registros',
-										firstAriaLabel: 'oooo'
-									},
-									body: {
-										emptyDataSourceMessage: 'Aun no hay ningun usuario registrado'
-									},
-									toolbar: {
-										searchTooltip: 'Buscar',
-										searchPlaceholder: 'Buscar'
-									}
-								}}
-								columns={[
-									{ title: 'Nombre', field: 'nombre', headerStyle: estiloCabecera, cellStyle: estiloFila },
-									{ title: 'Modulo', field: 'moduloActividad', headerStyle: estiloCabecera, cellStyle: estiloFila },
-
-									{
-										title: 'Estado', field: 'estado',
-										render: rowData => {
-											if (rowData.estado === 'Suspendido') {
-												return <span className="label label-sm letra"
-													style={{
-														textShadow: "none!important",
-														fontSize: "12px",
-														fontFamily: "Open Sans,sans-serif",
-														fontWeight: "300",
-														padding: "3px 6px",
-														color: "#fff",
-														background: "#ED6B75"
-													}}>{rowData.estado}</span>
-											} else {
-												return <span className="label label-sm letra"
-													style={{
-														textShadow: "none!important",
-														fontSize: "12px",
-														fontFamily: "Open Sans,sans-serif",
-														fontWeight: "300",
-														padding: "3px 6px",
-														color: "#fff",
-														background: "#408725"
-													}}>{rowData.estado}</span>
+						<div className="jumbotron p-1 jumbotron-fluid" style={{background:"white"}}>
+							{
+								this.props.habilitado ? <div className="col-sm-12">
+									<Alert severity="error" variant="outlined">
+										<AlertTitle>Sin permiso</AlertTitle>
+										No tiene permisos suficientes para administrar las actividades</Alert>
+								</div> :
+									<MaterialTable
+										title=""
+										localization={{
+											header: {
+												actions: ' '
+											},
+											pagination: {
+												nextTooltip: 'Siguiente ',
+												previousTooltip: 'Anterior',
+												labelDisplayedRows: '{from}-{to} de {count}',
+												lastTooltip: 'Ultima pagina',
+												firstTooltip: 'Primera pagina',
+												labelRowsSelect: 'Registros',
+												firstAriaLabel: 'oooo'
+											},
+											body: {
+												emptyDataSourceMessage: 'Aun no hay ningun usuario registrado'
+											},
+											toolbar: {
+												searchTooltip: 'Buscar',
+												searchPlaceholder: 'Buscar'
 											}
-										},
-										headerStyle: estiloCabecera, cellStyle: estiloFila
-									},
-								]}
-								data={this.props.actividades}
-								options={{
-									search: true,
-									rowStyle: estiloFila
+										}}
+										columns={[
+											{ title: 'Nombre', field: 'nombre', headerStyle: estiloCabecera, cellStyle: estiloFila },
+											{ title: 'Modulo', field: 'moduloActividad', headerStyle: estiloCabecera, cellStyle: estiloFila },
 
-								}}
-								actions={[
-									{
-										icon: 'edit',
-										tooltip: 'Editar informacion',
-										onClick: (event, rowData) => {
-											this.props.actionAsignarCedula(rowData.numeroDocumento);
-											this.props.history.push('/editarUsuario');
-										}
-									},
-									{
-										icon: 'restore',
-										tooltip: 'Suspender / Activar',
-										onClick: (event, rowData) =>  this.activarDesactivarActividad(rowData.idActividad)
-									}
-								]}
+											{
+												title: 'Estado', field: 'estado',
+												render: rowData => {
+													if (rowData.estado === 'Suspendido') {
+														return <span className="label label-sm letra"
+															style={{
+																textShadow: "none!important",
+																fontSize: "12px",
+																fontFamily: "Open Sans,sans-serif",
+																fontWeight: "300",
+																padding: "3px 6px",
+																color: "#fff",
+																background: "#ED6B75"
+															}}>{rowData.estado}</span>
+													} else {
+														return <span className="label label-sm letra"
+															style={{
+																textShadow: "none!important",
+																fontSize: "12px",
+																fontFamily: "Open Sans,sans-serif",
+																fontWeight: "300",
+																padding: "3px 6px",
+																color: "#fff",
+																background: "#408725"
+															}}>{rowData.estado}</span>
+													}
+												},
+												headerStyle: estiloCabecera, cellStyle: estiloFila
+											},
+										]}
+										data={this.props.actividades}
+										options={{
+											search: true,
+											rowStyle: estiloFila
 
-								components={{
-									Toolbar: props => (
-										<div className="row">
-											<div className="col-sm-4">
-												<div style={{ padding: '16px' }}>
-													<PopUpActividad/>
+										}}
+										actions={[
+											{
+												icon: 'edit',
+												tooltip: 'Editar informacion',
+												onClick: (event, rowData) => {
+													this.props.actionAsignarCodigoActividad(rowData.idActividad);
+													this.props.history.push('/editarActividad');
+												}
+											},
+											{
+												icon: 'restore',
+												tooltip: 'Suspender / Activar',
+												onClick: (event, rowData) => this.activarDesactivarActividad(rowData.idActividad)
+											}
+										]}
+
+										components={{
+											Toolbar: props => (
+												<div className="row">
+													<div className="col-sm-4">
+														<div style={{ padding: '16px' }}>
+															<PopUpActividad />
+														</div>
+													</div>
+													<div className="col-sm-8">
+														<MTableToolbar {...props} />
+													</div>
 												</div>
-											</div>
-											<div className="col-sm-8">
-												<MTableToolbar {...props} />
-											</div>
-										</div>
-									),
-								}}
+											),
+										}}
 
-							/>
+									/>
+							}
 						</div>
 					</div>
 				</div>
@@ -233,15 +250,15 @@ const estiloLetrero = {
 }
 
 
-const fondoTabla = {
-	background: "#EAF2F2"
-}
-
 function mapStateToProps(state) {
 	return {
-		actividades: state.act.actividadesRegistradas
+		actividades: state.act.actividadesRegistradas,
+		habilitado: state.act.estadoActividades,
+		configuracion: state.conf.configuracion,
+		codigoActividad:state.act.codigoActividad,
+		mensajeSuspender:state.act.mensajeSuspender
 	}
 }
 
 
-export default withRouter(connect(mapStateToProps, { actionConsultarActividades,actionSuspenderActivarActividad,actualizarMensajeSuspender })(ContenidoAdminActividad));
+export default withRouter(connect(mapStateToProps, { actionConsultarActividades, actionSuspenderActivarActividad,actionAsignarCodigoActividad, actualizarMensajeSuspender })(ContenidoAdminActividad));

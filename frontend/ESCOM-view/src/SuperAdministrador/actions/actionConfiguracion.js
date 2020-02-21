@@ -2,7 +2,7 @@ import axios from 'axios';
 import {desencriptar } from '../componentes/general/Encriptar.js';
 import {mensajesDeError} from '../utilitario/MensajesError.js';
 
-
+export const ESTADO_CONFIGURACION = 'ESTADO_CONFIGURACION';
 export const MOSTRAR_CONFIGURACION = 'MOSTRAR_CONFIGURACION'
 export const ACTUALIZAR_BARRALATERAL= 'ACTUALIZAR_BARRALATERAL'
 export const ACTUALIZAR_BARRASUPERIOR= 'ACTUALIZAR_BARRASUPERIOR'
@@ -12,7 +12,7 @@ export const ACTUALIZAR_BOTONES='ACTUALIZAR_BOTONES';
 export const MENSAJE_CONFIGURACION='MENSAJE_CONFIGURACION';
 export const CARGAR_CONFIGURACION='CARGAR_CONFIGURACION';
 
-export function actionAgregarConfiguracion(configuracion, token) {
+export function actionActualizarConfiguracion(configuracion, token) {
     var tokenRequest = desencriptar(token);
     const headers = {
         'Content-Type': 'application/json',
@@ -20,11 +20,11 @@ export function actionAgregarConfiguracion(configuracion, token) {
         'Permiso': 'sa_Administrar configuracion de aspecto'
     }
     return (dispatch, getState) => {
-        axios.post("http://localhost:9090/proyectosESCOM-web/api/configuracion/registrarConfiguracion", configuracion, { headers: headers })
+        axios.put("http://localhost:9090/proyectosESCOM-web/api/configuracion/registrarConfiguracion", configuracion, { headers: headers })
             .then(response => {
                 dispatch({
                     type: MENSAJE_CONFIGURACION,
-                    mensaje: 'Usuario registrado'
+                    mensaje: 'Configuracion actualizada'
                 });
                 dispatch({
                     type: CARGAR_CONFIGURACION,
@@ -121,27 +121,20 @@ export function actionConsultarConfiguracionCompleta(token) {
         axios.get("http://localhost:9090/proyectosESCOM-web/api/configuracion/listarConfiguracionCompleta", { headers: headers })
             .then(response => {
                 dispatch({
-                    type: MENSAJE_CONFIGURACION,
-                    mensaje: 'Operacion hecha con exito'
-                });
-                dispatch({
                     type: CARGAR_CONFIGURACION,
                     configuracion: response.data[0]
                 });
             }).catch((error) => {
-                if (error.request.response === '') {
-                    dispatch({
-                        type: MENSAJE_CONFIGURACION,
-                        mensaje: 'Servidor fuera de servicio temporalmente'
-                    });
+                if (error.request.response === ''){
+
                 }else{
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
                         let respuesta=mensajesDeError(o.respuesta);
-                        if(respuesta!==''){
+                        if(respuesta==='Sin permiso'){
                             dispatch({
-                                type: MENSAJE_CONFIGURACION,
-                                mensaje: respuesta
+                                type: ESTADO_CONFIGURACION,
+                                estado: true
                             });
                         }else{
                             dispatch({

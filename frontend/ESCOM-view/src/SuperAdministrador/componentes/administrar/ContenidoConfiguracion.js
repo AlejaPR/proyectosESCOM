@@ -1,5 +1,6 @@
 import React from 'react';
 
+import 'react-notifications/lib/notifications.css';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
@@ -12,14 +13,16 @@ import { Field, reduxForm } from "redux-form";
 import PropTypes from "prop-types";
 import Barra from '../general/BarraDirecciones.js';
 import { connect } from 'react-redux';
-import { consultarConfiguracion, actionActualizarBarraLateral,actualizarFotoLogin,actualizarFotoLogo, actionAgregarConfiguracion, actionActualizarBarraSuperior, actionActualizarBotones, actionConsultarConfiguracionCompleta } from '../../actions/actionConfiguracion.js'
+import { consultarConfiguracion, actionActualizarBarraLateral, actualizarFotoLogin, actualizarFotoLogo, actionActualizarConfiguracion, actionActualizarBarraSuperior, actionActualizarBotones, actionConsultarConfiguracionCompleta } from '../../actions/actionConfiguracion.js'
 import { campo } from '../../utilitario/GenerarInputs.js'
+import { NotificationContainer, NotificationManager } from 'react-notifications';
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
 
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import SaveIcon from '@material-ui/icons/Save';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
-import Alert from '@material-ui/lab/Alert';
 
 class Configuracion extends React.Component {
 
@@ -36,12 +39,15 @@ class Configuracion extends React.Component {
     }
 
     componentDidUpdate() {
-        if (this.state.configuracion === null & this.props.configuracionCompleta[0] !== undefined) {
-            console.log('props', this.props.configuracionCompleta[0]);
-
-            // this.setState({ configuracion: this.props.configuracionCompleta[0] })
+        switch (this.props.mensaje) {
+            case 'Configuracion actualizada':
+                NotificationManager.success('Configuracion de aspecto actualizada');
+                break;
+            case '':
+                break;
+            default:
+                break;
         }
-
     }
 
     getSteps() {
@@ -105,7 +111,7 @@ class Configuracion extends React.Component {
                     }}>
                         <img src={campo(this.props.configuracionCompleta.imagenLogin)} alt="preview"
                             className="preview-image"
-                            style={{ height: "780px",borderRadius: "2%", width: "750px", objectFit: "cover" }} />
+                            style={{ height: "780px", borderRadius: "2%", width: "750px", objectFit: "cover" }} />
                         <Field
                             name="image"
                             type="file"
@@ -189,14 +195,13 @@ class Configuracion extends React.Component {
         this.setState({ completed: newCompleted })
         if (this.allStepsCompleted()) {
             let configuracion = {
-                logo:this.props.configuracionCompleta.logo,
-                imagenLogin:this.props.configuracionCompleta.imagenLogin,
+                logo: this.props.configuracionCompleta.logo,
+                imagenLogin: this.props.configuracionCompleta.imagenLogin,
                 barraLateral: this.props.configuracionCompleta.barraLateral,
                 barraSuperior: this.props.configuracionCompleta.barraSuperior,
                 botones: this.props.configuracionCompleta.botones
             }
-            console.log('obj conf ', configuracion);
-            this.props.actionAgregarConfiguracion(configuracion,localStorage.getItem('Token'));
+            this.props.actionActualizarConfiguracion(configuracion, localStorage.getItem('Token'));
         }
         this.handleNext();
     };
@@ -333,7 +338,7 @@ class Configuracion extends React.Component {
                 this.getBase64(imageFile, (result) => {
                     this.props.actualizarFotoLogin(result);
                 });
-                
+
                 this.handlePreview(localImageUrl);
             }
         }
@@ -450,79 +455,88 @@ class Configuracion extends React.Component {
                     paddingBottom: "7px"
                 }}>
                     <div className="container shadow" style={{ background: "white" }} >
-                        <div>
-                            <Stepper activeStep={this.state.activeStep}>
-                                {this.getSteps().map((label, index) => (
-                                    <Step key={label}>
-                                        <StepButton onClick={this.handleStep(index)} completed={this.state.completed[index]}>
-                                            {label}
-                                        </StepButton>
-                                    </Step>
-                                ))}
-                            </Stepper>
+                        {
+                            this.props.habilitado ? <div className="col-sm-12" style={{padding:"50px"}}>
+                                <Alert severity="error" variant="outlined">
+                                    <AlertTitle>Sin permiso</AlertTitle>
+                                    No tiene permisos suficientes para configurar el aspecto</Alert>
+                            </div> :
+                                <div>
+                                    <Stepper activeStep={this.state.activeStep}>
+                                        {this.getSteps().map((label, index) => (
+                                            <Step key={label}>
+                                                <StepButton onClick={this.handleStep(index)} completed={this.state.completed[index]}>
+                                                    {label}
+                                                </StepButton>
+                                            </Step>
+                                        ))}
+                                    </Stepper>
 
-                            <div className="container" style={{
-                                paddingTop: "7px",
-                                paddingRight: "12px",
-                                paddingLeft: "40px",
-                                paddingBottom: "20px",
-                                margin: "0px 0px 32px"
-                            }}>
-                                <form onSubmit={this.props.handleSubmit(this.handleSubmitForm)}>
-                                    {this.allStepsCompleted() ? (
-                                        <div>
-                                            <Typography className={this.useStyles.instructions}>
-                                                Todos los cambios han sido guardados
-            </Typography>
-                                            <Button onClick={this.handleReset}>Aceptar</Button>
-                                        </div>
-                                    ) : (
-                                            <div>
-                                                <Typography className={this.useStyles.instructions}>{this.getStepContent(this.state.activeStep)}</Typography>
-                                                <div className="row">
-                                                    <div className="col-md-4">
-                                                        <Button disabled={this.state.activeStep === 0} startIcon={<ArrowBackIosIcon />} onClick={this.handleBack} className={this.useStyles.button}>
-                                                            Volver
-                                                        </Button>
-                                                    </div>
-                                                    <div className="col-md-4">
-                                                        <Button
-                                                            variant="contained"
-                                                            color="primary"
-                                                            onClick={this.handleNext}
-                                                            startIcon={<NavigateNextIcon />}
-                                                            className={this.useStyles.button}>
-                                                            Siguiente
-                                                        </Button>
-                                                    </div>
-                                                    {this.state.activeStep !== this.getSteps().length &&
-                                                        (this.state.completed[this.state.activeStep] ? (
+                                    <div className="container" style={{
+                                        paddingTop: "7px",
+                                        paddingRight: "12px",
+                                        paddingLeft: "40px",
+                                        paddingBottom: "20px",
+                                        margin: "0px 0px 32px"
+                                    }}>
+                                        <form onSubmit={this.props.handleSubmit(this.handleSubmitForm)}>
+                                            {this.allStepsCompleted() ? (
+                                                <div>
+                                                    <Typography className={this.useStyles.instructions}>
+                                                        Todos los cambios han sido guardados
+                                                    </Typography>
+                                                    <Button onClick={this.handleReset}>Aceptar</Button>
+                                                </div>
+                                            ) : (
+                                                    <div>
+                                                        <Typography className={this.useStyles.instructions}>{this.getStepContent(this.state.activeStep)}</Typography>
+                                                        <div className="row">
                                                             <div className="col-md-4">
-                                                                <Alert severity="success">Paso {this.state.activeStep + 1} guardado</Alert>
-                                                                {/* <Typography variant="caption" className={this.useStyles.completed}>
+                                                                <Button disabled={this.state.activeStep === 0} startIcon={<ArrowBackIosIcon />} onClick={this.handleBack} className={this.useStyles.button}>
+                                                                    Volver
+                                                        </Button>
+                                                            </div>
+                                                            <div className="col-md-4">
+                                                                <Button
+                                                                    variant="contained"
+                                                                    onClick={this.handleNext}
+                                                                    startIcon={<NavigateNextIcon />}
+                                                                    className="btn btn-dark"
+                                                                    style={{ background: this.props.configuracionCompleta.botones, fontSize: "13px" }}>
+                                                                    Siguiente
+                                                        </Button>
+                                                            </div>
+                                                            {this.state.activeStep !== this.getSteps().length &&
+                                                                (this.state.completed[this.state.activeStep] ? (
+                                                                    <div className="col-md-4">
+                                                                        <Alert severity="success">Paso {this.state.activeStep + 1} guardado</Alert>
+                                                                        {/* <Typography variant="caption" className={this.useStyles.completed}>
                                                                 <DoneIcon/>Paso {this.state.activeStep + 1} guardado
                                                             </Typography> */}
-                                                            </div>
-                                                        ) : (
-                                                                <div className="col-md-4">
-                                                                    <Button variant="contained"
-                                                                        type="submit"
-                                                                        startIcon={<SaveIcon />}
-                                                                        color="primary" onClick={this.handleComplete}>
-                                                                        {this.completedSteps() === this.totalSteps() - 1 ? 'Confirmar cambios' : 'Guardar'}
-                                                                    </Button>
-                                                                </div>
+                                                                    </div>
+                                                                ) : (
+                                                                        <div className="col-md-4">
+                                                                            <Button variant="contained"
+                                                                                type="submit"
+                                                                                startIcon={<SaveIcon />}
+                                                                                className="btn btn-dark"
+                                                                                style={{ background: this.props.configuracionCompleta.botones, fontSize: "13px" }}
+                                                                                onClick={this.handleComplete}>
+                                                                                {this.completedSteps() === this.totalSteps() - 1 ? 'Confirmar cambios' : 'Guardar'}
+                                                                            </Button>
+                                                                        </div>
 
-                                                            ))}
-                                                </div>
-                                            </div>
-                                        )}
-                                </form>
-                            </div>
-                        </div>
-
+                                                                    ))}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                        </form>
+                                    </div>
+                                </div>
+                        }
                     </div >
                 </div>
+                <NotificationContainer />
             </>
         );
     }
@@ -537,7 +551,8 @@ const estiloLetrero = {
 function mapStateToProps(state) {
     return {
         configuracionCompleta: state.conf.configuracion,
-        mensaje: state.conf.mensaje
+        mensaje: state.conf.mensaje,
+        habilitado: state.conf.estadoConfiguracion
     }
 }
 
@@ -546,5 +561,5 @@ let formularioConfiguracion = reduxForm({
 })(Configuracion);
 
 
-export default connect(mapStateToProps, { consultarConfiguracion,actionActualizarBarraLateral,actualizarFotoLogin,actualizarFotoLogo, actionAgregarConfiguracion, actionActualizarBarraSuperior, actionActualizarBotones, actionConsultarConfiguracionCompleta })(formularioConfiguracion);
+export default connect(mapStateToProps, { consultarConfiguracion, actionActualizarBarraLateral, actualizarFotoLogin, actualizarFotoLogo, actionActualizarConfiguracion, actionActualizarBarraSuperior, actionActualizarBotones, actionConsultarConfiguracionCompleta })(formularioConfiguracion);
 

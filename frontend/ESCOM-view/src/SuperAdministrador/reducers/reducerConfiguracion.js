@@ -1,15 +1,16 @@
 
-import {campo } from '../utilitario/GenerarInputs.js';
+import { campo } from '../utilitario/GenerarInputs.js';
 
 import {
     MOSTRAR_CONFIGURACION, CARGAR_CONFIGURACION, MENSAJE_CONFIGURACION,
-    ACTUALIZAR_BARRALATERAL, ACTUALIZAR_BARRASUPERIOR, ACTUALIZAR_BOTONES, ACTUALIZAR_FOTO_LOGIN,ACTUALIZAR_FOTO_LOGO
+    ACTUALIZAR_BARRALATERAL, ACTUALIZAR_BARRASUPERIOR, ACTUALIZAR_BOTONES, ACTUALIZAR_FOTO_LOGIN, ACTUALIZAR_FOTO_LOGO,ESTADO_CONFIGURACION
 } from '../actions/actionConfiguracion.js'
 
 
 const initialState = {
     configuracion: [],
-    mensaje: ''
+    mensaje: '',
+    estadoConfiguracion:false
 }
 
 export function reducerConfiguracion(state = initialState, action) {
@@ -92,6 +93,8 @@ export function reducerConfiguracion(state = initialState, action) {
                 })
             }
             return Object.assign({}, state, { configuracion: actualizarFotoLogo() })
+        case ESTADO_CONFIGURACION:
+            return Object.assign({}, state, { estadoConfiguracion: action.estado })
         default:
             return state
     }
