@@ -12,7 +12,8 @@ import {
     ACTUALIZAR_USUARIOS,
     ACTIVIDADES_SIN_ASIGNAR,
     MENSAJE_LOGIN,
-    MENSAJE_SUSPENDER, MODULOS_REGISTRADOS, ESTADO_ASIGNAR, MENSAJE_ASIGNAR
+    MENSAJE_SUSPENDER, MODULOS_REGISTRADOS, ESTADO_ASIGNAR, MENSAJE_ASIGNAR,
+    MENSAJE_CERRAR_SESION
 } from '../actions/actionsUsuario.js'
 
 
@@ -30,6 +31,7 @@ const initialState = {
     mensajeEditar: '',
     mensajeSuspender: '',
     mensajeAsignar: '',
+    mensajeCerrarSesion:'',
     modulosAsignar: [],
     actividadesSinAsignar: []
 }
@@ -58,6 +60,8 @@ export function reducerUsuario(state = initialState, action) {
             return Object.assign({}, state, { mensajeSuspender: action.mensaje })
         case MENSAJE_ASIGNAR:
             return Object.assign({}, state, { mensajeAsignar: action.mensaje })
+        case MENSAJE_CERRAR_SESION:
+            return Object.assign({}, state, { mensajeCerrarSesion: action.mensaje })
         case INFORMACION_USUARIO:
             return Object.assign({}, state, { usuarioEditar: action.informacionUsuario })
         case ANADIR_CEDULA_EDITAR:

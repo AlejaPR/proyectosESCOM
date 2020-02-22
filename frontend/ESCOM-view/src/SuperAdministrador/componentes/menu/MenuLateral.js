@@ -1,7 +1,6 @@
 import React from 'react';
 
 //iconos
-import Home from '@icons/material/HomeIcon.js';
 import Persona from '@icons/material/AccountIcon.js';
 import Folder from '@icons/material/LibraryIcon';
 import Bombillo from '@icons/material/LightbulbOnIcon';
@@ -51,14 +50,6 @@ class MenuLateral extends React.Component {
 						<img src={this.props.configuracion.logo} alt="" width="130" height="50" />
 					</div>
 				</div>
-				<li className="nav-item" style={{height:"65px"}}>
-					<a href="/inicio" name="hoverInicio" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
-					 style={this.fondoBarr()} >
-						<Home color="#CBC7C7" width="22px"/>
-						<br />
-						<span className="title letra">Inicio</span>
-					</a>
-				</li>
 				<li className="nav-item"  style={{height:"65px"}}>
 					<a href="/AdminUsuario" name="hoverUsuario" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
 					 style={this.fondoBarr()}>

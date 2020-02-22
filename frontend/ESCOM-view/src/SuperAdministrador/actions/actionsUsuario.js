@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { encriptar, desencriptar } from '../componentes/general/Encriptar.js';
-import {mensajesDeError} from '../utilitario/MensajesError.js';
+import { mensajesDeError } from '../utilitario/MensajesError.js';
 
 export const MOSTRAR_USUARIOS = 'MOSTRAR_USUARIOS';
 export const ESTADO_USUARIOS = 'ESTADO_USUARIOS';
 export const MOSTRAR_DOCUMENTOS = 'MOSTRAR_DOCUMENTOS';
-export const ACTIVIDADES_SIN_ASIGNAR='ACTIVIDADES_SIN_ASIGNAR';
+export const ACTIVIDADES_SIN_ASIGNAR = 'ACTIVIDADES_SIN_ASIGNAR';
 export const MOSTRAR_ACTIVIDADES_USUARIO = 'MOSTRAR_ACTIVIDADES_USUARIO';
 export const AGREGAR_USUARIO = 'AGREGAR_USUARIO';
 export const AGREGAR_ACTIVIDAD = 'AGREGAR_ACTIVIDAD';
@@ -17,10 +17,11 @@ export const MENSAJE_LOGIN = 'MENSAJE_LOGIN';
 export const MENSAJE_REGISTRAR = 'MENSAJE_REGISTRAR';
 export const MENSAJE_ASIGNAR = 'MENSAJE_ASIGNAR';
 export const MENSAJE_EDITAR = 'MENSAJE_EDITAR';
+export const MENSAJE_CERRAR_SESION = 'MENSAJE_CERRAR_SESION';
 export const MENSAJE_SUSPENDER = 'MENSAJE_SUSPENDER';
 export const REDIRECCIONAR_LOGIN = 'REDIRECCIONAR_LOGIN';
-export const ESTADO_ASIGNAR='ESTADO_ASIGNAR';
-export const MODULOS_REGISTRADOS='MODULOS_REGISTRADOS';
+export const ESTADO_ASIGNAR = 'ESTADO_ASIGNAR';
+export const MODULOS_REGISTRADOS = 'MODULOS_REGISTRADOS';
 
 export function actionLoginUsuario(correo, contrasena, cambiar) {
     var crypto = require('crypto');
@@ -80,16 +81,21 @@ export function actionCerrarSesion(token) {
         'Content-Type': 'application/json',
         'TokenAuto': tokenlim
     }
-
-    axios.delete("http://localhost:9090/SuperadministradorESCOM-web/api/usuario/" + tokenlim, { headers: headers })
-        .then(response => {
-            if (response.status === 200) {
-                console.log('cerrada')
-            }
-        }).catch(function (error) {
-            // handle error
-            console.log('error es: ', error)
-        });
+    return (dispatch, getState) => {
+        axios.delete("http://localhost:9090/proyectosESCOM-web/api/login/cerrarSesion/" + tokenlim, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: MENSAJE_CERRAR_SESION,
+                    mensaje: 'cerrada'
+                });
+            }).catch(function (error) {
+                console.log('error', error);
+                dispatch({
+                    type: MENSAJE_CERRAR_SESION,
+                    mensaje: 'cerrada'
+                });
+            });
+    }
 }
 
 export function actualizarMensajeEditar(mensaje) {
@@ -154,21 +160,21 @@ export function actionConsultarUsuarios(token) {
                 });
             }).catch((error) => {
                 if (error.request.response === '') {
-                    
-                }else{
+
+                } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta=mensajesDeError(o.respuesta);
-                        if(respuesta==='Sin permiso'){
+                        let respuesta = mensajesDeError(o.respuesta);
+                        if (respuesta === 'Sin permiso') {
                             dispatch({
                                 type: ESTADO_USUARIOS,
                                 estado: true
                             });
-                        }else{
+                        } else {
                             //
                         }
                     }
-                } 
+                }
             });
     };
 }
@@ -235,30 +241,30 @@ export function actionAgregarUsuario(usuario, token) {
                         type: MENSAJE_REGISTRAR,
                         mensaje: 'Servidor fuera de servicio temporalmente'
                     });
-                }else{
+                } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta=mensajesDeError(o.respuesta);
-                        if(respuesta!==''){
+                        let respuesta = mensajesDeError(o.respuesta);
+                        if (respuesta !== '') {
                             dispatch({
                                 type: MENSAJE_REGISTRAR,
                                 mensaje: respuesta
                             });
-                        }else{
+                        } else {
                             dispatch({
                                 type: MENSAJE_REGISTRAR,
                                 mensaje: 'Ya existen los datos registrados previamente'
                             });
                         }
                     }
-                } 
-                
+                }
+
             });
 
     }
 }
 
-export function actionAsignarActividad(token,numeroDocumento,actividad) {
+export function actionAsignarActividad(token, numeroDocumento, actividad) {
     var tokenRequest = desencriptar(token);
     const headers = {
         'Content-Type': 'application/json',
@@ -266,7 +272,7 @@ export function actionAsignarActividad(token,numeroDocumento,actividad) {
         'Permiso': 'sa_Asignacion de actividades a los usuarios'
     }
     return (dispatch, getState) => {
-        axios.post("http://localhost:9090/proyectosESCOM-web/api/usuario/asignarActividad/"+numeroDocumento,actividad, { headers: headers })
+        axios.post("http://localhost:9090/proyectosESCOM-web/api/usuario/asignarActividad/" + numeroDocumento, actividad, { headers: headers })
             .then(response => {
                 dispatch({
                     type: MENSAJE_ASIGNAR,
@@ -278,30 +284,30 @@ export function actionAsignarActividad(token,numeroDocumento,actividad) {
                         type: MENSAJE_ASIGNAR,
                         mensaje: 'Servidor fuera de servicio temporalmente'
                     });
-                }else{
+                } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta=mensajesDeError(o.respuesta);
-                        if(respuesta!==''){
+                        let respuesta = mensajesDeError(o.respuesta);
+                        if (respuesta !== '') {
                             dispatch({
                                 type: MENSAJE_ASIGNAR,
                                 mensaje: respuesta
                             });
-                        }else{
+                        } else {
                             dispatch({
                                 type: MENSAJE_ASIGNAR,
                                 mensaje: 'Ya existen los datos registrados previamente'
                             });
                         }
                     }
-                } 
-                
+                }
+
             });
 
     }
 }
 
-export function actionSuspenderActivarUsuario(cedula, token,actualizados,registrados) {
+export function actionSuspenderActivarUsuario(cedula, token, actualizados, registrados) {
     var tokenRequest = desencriptar(token);
     const headers = {
         'Content-Type': 'application/json',
@@ -309,7 +315,7 @@ export function actionSuspenderActivarUsuario(cedula, token,actualizados,registr
         'Permiso': 'sa_Suspender/activar usuarios'
     }
     return (dispatch, getState) => {
-        axios.get("http://localhost:9090/proyectosESCOM-web/api/usuario/cambiarEstadoUsuario/"+cedula, { headers: headers })
+        axios.get("http://localhost:9090/proyectosESCOM-web/api/usuario/cambiarEstadoUsuario/" + cedula, { headers: headers })
             .then(response => {
                 dispatch({
                     type: MENSAJE_SUSPENDER,
@@ -325,24 +331,24 @@ export function actionSuspenderActivarUsuario(cedula, token,actualizados,registr
                         type: MENSAJE_SUSPENDER,
                         mensaje: 'Servidor fuera de servicio temporalmente'
                     });
-                }else{
+                } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta=mensajesDeError(o.respuesta);
-                        if(respuesta!==''){
+                        let respuesta = mensajesDeError(o.respuesta);
+                        if (respuesta !== '') {
                             dispatch({
                                 type: MENSAJE_SUSPENDER,
                                 mensaje: respuesta
                             });
-                        }else{
+                        } else {
                             dispatch({
                                 type: MENSAJE_SUSPENDER,
                                 mensaje: 'Sin acceso al servicio'
                             });
                         }
                     }
-                } 
-                
+                }
+
             });
 
     }
@@ -367,23 +373,23 @@ export function actionCargarInformacionDeUsuario(cedula, token) {
                         type: MENSAJE_EDITAR,
                         mensaje: 'Servidor fuera de servicio temporalmente'
                     });
-                }else{
+                } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta=mensajesDeError(o.respuesta);
-                        if(respuesta!==''){
+                        let respuesta = mensajesDeError(o.respuesta);
+                        if (respuesta !== '') {
                             dispatch({
                                 type: MENSAJE_EDITAR,
                                 mensaje: respuesta
                             });
-                        }else{
+                        } else {
                             dispatch({
                                 type: MENSAJE_EDITAR,
                                 mensaje: 'Sin acceso al servicio'
                             });
                         }
                     }
-                } 
+                }
             });
     };
 }
@@ -402,25 +408,25 @@ export function actionConsultarModulos(token) {
                     type: MODULOS_REGISTRADOS,
                     respuesta: response.data
                 });
-                
+
             }).catch((error) => {
                 if (error.request.response === '') {
-                    
 
-                }else{
+
+                } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta=mensajesDeError(o.respuesta);
-                        if(respuesta==='Sin permiso'){
+                        let respuesta = mensajesDeError(o.respuesta);
+                        if (respuesta === 'Sin permiso') {
                             dispatch({
                                 type: ESTADO_ASIGNAR,
                                 estado: true
                             });
-                        }else{
+                        } else {
                             //
                         }
                     }
-                } 
+                }
             });
     };
 }
@@ -429,12 +435,12 @@ export function actionLimpiar() {
     return (dispatch, getState) => {
         dispatch({
             type: ACTIVIDADES_SIN_ASIGNAR,
-            respuesta:undefined
+            respuesta: undefined
         });
     };
 }
 
-export function actionEliminarActividades(actividades, token,numeroDocumento) {
+export function actionEliminarActividades(actividades, token, numeroDocumento) {
     var tokenRequest = desencriptar(token);
     const headers = {
         'Content-Type': 'application/json',
@@ -442,7 +448,7 @@ export function actionEliminarActividades(actividades, token,numeroDocumento) {
         'Permiso': 'sa_Asignacion de actividades a los usuarios'
     }
     return (dispatch, getState) => {
-        axios.put("http://localhost:9090/proyectosESCOM-web/api/usuario/eliminarActividadUsuario/"+numeroDocumento,actividades, { headers: headers })
+        axios.put("http://localhost:9090/proyectosESCOM-web/api/usuario/eliminarActividadUsuario/" + numeroDocumento, actividades, { headers: headers })
             .then(response => {
                 dispatch({
                     type: MENSAJE_ASIGNAR,
@@ -456,31 +462,31 @@ export function actionEliminarActividades(actividades, token,numeroDocumento) {
                         type: MENSAJE_ASIGNAR,
                         mensaje: 'Servidor fuera de servicio temporalmente'
                     });
-                }else{
+                } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta=mensajesDeError(o.respuesta);
-                        console.log('respuesta',respuesta);
-                        if(respuesta!==''){
+                        let respuesta = mensajesDeError(o.respuesta);
+                        console.log('respuesta', respuesta);
+                        if (respuesta !== '') {
                             dispatch({
                                 type: MENSAJE_ASIGNAR,
                                 mensaje: respuesta
                             });
-                        }else{
+                        } else {
                             dispatch({
                                 type: MENSAJE_ASIGNAR,
                                 mensaje: 'Sin acceso al servicio'
                             });
                         }
                     }
-                } 
-                
+                }
+
             });
 
     }
 }
 
-export function actionConsultarActividadesSinAsignar(token,numeroDocumento,codigoModulo) {
+export function actionConsultarActividadesSinAsignar(token, numeroDocumento, codigoModulo) {
     var tokenRequest = desencriptar(token);
     const headers = {
         'Content-Type': 'application/json',
@@ -488,31 +494,31 @@ export function actionConsultarActividadesSinAsignar(token,numeroDocumento,codig
         'Permiso': 'sa_Asignacion de actividades a los usuarios'
     }
     return (dispatch, getState) => {
-        axios.get("http://localhost:9090/proyectosESCOM-web/api/usuario/listarActividadesNoAsociadasUsuario/"+numeroDocumento+"/"+codigoModulo, { headers: headers })
+        axios.get("http://localhost:9090/proyectosESCOM-web/api/usuario/listarActividadesNoAsociadasUsuario/" + numeroDocumento + "/" + codigoModulo, { headers: headers })
             .then(response => {
                 dispatch({
                     type: ACTIVIDADES_SIN_ASIGNAR,
                     respuesta: response.data
                 });
-                
+
             }).catch((error) => {
                 if (error.request.response === '') {
-                    
 
-                }else{
+
+                } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta=mensajesDeError(o.respuesta);
-                        if(respuesta==='Sin permiso'){
+                        let respuesta = mensajesDeError(o.respuesta);
+                        if (respuesta === 'Sin permiso') {
                             dispatch({
                                 type: ESTADO_ASIGNAR,
                                 estado: true
                             });
-                        }else{
+                        } else {
                             //
                         }
                     }
-                } 
+                }
             });
     };
 }
@@ -572,24 +578,24 @@ export function actionEditarUsuario(usuario, cedula, token) {
                         type: MENSAJE_EDITAR,
                         mensaje: 'Servidor fuera de servicio temporalmente'
                     });
-                }else{
+                } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta=mensajesDeError(o.respuesta);
-                        if(respuesta!==''){
+                        let respuesta = mensajesDeError(o.respuesta);
+                        if (respuesta !== '') {
                             dispatch({
                                 type: MENSAJE_EDITAR,
                                 mensaje: respuesta
                             });
-                        }else{
+                        } else {
                             dispatch({
                                 type: MENSAJE_EDITAR,
                                 mensaje: 'Ya existen los datos registrados previamente'
                             });
                         }
                     }
-                } 
-                
+                }
+
             });
     }
 }

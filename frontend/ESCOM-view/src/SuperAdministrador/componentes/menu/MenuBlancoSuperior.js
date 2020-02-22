@@ -1,39 +1,45 @@
 import React from 'react';
 
-//Archivos css necesarios
-import '../../css/business-casual.css'
-import '../../css/estilos.css'
-import '../../css/bootstrap.min.css'
-import '../../css/menu.css'
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min';
-
 
 //reactstrap
 import { Button, UncontrolledPopover, PopoverBody } from 'reactstrap';
 
 //imagenes
 import persona from '../../imagenes/icono-persona.png'
+import { withRouter } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 import { consultarConfiguracion } from '../../actions/actionConfiguracion.js'
-import {actionCerrarSesion} from '../../actions/actionsUsuario.js'
+import { actionCerrarSesion } from '../../actions/actionsUsuario.js'
 
 class BarraSuperior extends React.Component {
 	mensaje = () => {
-		// var token=localStorage.getItem('Token');
-		// this.props.actionCerrarSesion(token);
+		var token = localStorage.getItem('Token');
+		this.props.actionCerrarSesion(token);
 	}
 
-	fondobotoon=()=>{
-		return({
+	componentDidUpdate() {
+		switch (this.props.mensaje) {
+			case 'cerrada':
+				localStorage.setItem('TokenAuto',' ');
+				this.props.history.push('/');
+				break;
+			default:
+				// localStorage.setItem('TokenAuto',' ');
+				// this.props.history.push('/');
+				break;
+		}
+	}
+
+	fondobotoon = () => {
+		return ({
 			background: this.props.configuracion.barraSuperior,
 			height: "48px",
 			padding: ".1rem"
 		})
 	}
-	fondoPerfil=()=>{
-		return({
+	fondoPerfil = () => {
+		return ({
 			background: this.props.configuracion.barraSuperior,
 			height: "48px",
 			padding: ".5rem"
@@ -44,7 +50,7 @@ class BarraSuperior extends React.Component {
 		return (
 			<div>
 				<div>
-					<div className="jumbotron p-1 jumbotron-fluid shadow" style={{background:this.props.configuracion.barraSuperior}} >
+					<div className="jumbotron p-1 jumbotron-fluid shadow" style={{ background: this.props.configuracion.barraSuperior }} >
 						<nav className="navbar navbar-expand" style={this.fondoPerfil()}>
 							<div className="collapse navbar-collapse" id="navbarSupportedContent">
 								<ul className="navbar-nav ml-auto mt-2 mt-lg-1 ">
@@ -53,16 +59,16 @@ class BarraSuperior extends React.Component {
 											<UncontrolledPopover trigger="focus" placement="bottom" target="PopoverFocus">
 												<PopoverBody>
 													<Button id="cambiarContra" type="button" style={botones} >Cambiar contraseña</Button>
-													<br/>
-													<Button id="cerrarSesion"  type="button" onClick={this.mensaje} style={botones}>Cerrar sesion</Button>
+													<br />
+													<Button id="cerrarSesion" type="button" onClick={this.mensaje} style={botones}>Cerrar sesion</Button>
 												</PopoverBody>
 											</UncontrolledPopover>
 											{/* <img src={persona} alt="" width="30" height="30" /> */}
-											
-											<Button id="PopoverFocus" className="dropdown-toggle text-dark" type="button" style={{ background: "none", border: "none",boxShadow:"0px 0px 0px 0px" }}>
-											<img src={persona} alt="" width="30" height="30" />
-											<span className="username username-hide-on-mobile text-dark letra"> Pepito perez </span>
-												</Button>
+
+											<Button id="PopoverFocus" className="dropdown-toggle text-dark" type="button" style={{ background: "none", border: "none", boxShadow: "0px 0px 0px 0px" }}>
+												<img src={persona} alt="" width="30" height="30" />
+												<span className="username username-hide-on-mobile text-dark letra"> Pepito perez </span>
+											</Button>
 
 										</li>
 										<ul className="dropdown-menu dropdown-menu-default">
@@ -87,22 +93,23 @@ class BarraSuperior extends React.Component {
 }
 
 const botones = {
-	padding:"3px",
-	color:"black",
-	width:"150px",
-	fontSize:"13px",
-	background:"white",
-	border:"none"
+	padding: "3px",
+	color: "black",
+	width: "150px",
+	fontSize: "13px",
+	background: "white",
+	border: "none"
 }
 
 
 function mapStateToProps(state) {
-    return {
-        configuracion:state.conf.configuracion
-    }
+	return {
+		configuracion: state.conf.configuracion,
+		mensaje: state.user.mensajeCerrarSesion
+	}
 }
 
-  
 
-export default connect(mapStateToProps, { consultarConfiguracion,actionCerrarSesion })(BarraSuperior);
+
+export default withRouter(connect(mapStateToProps, { consultarConfiguracion, actionCerrarSesion })(BarraSuperior));
 

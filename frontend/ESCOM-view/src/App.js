@@ -79,8 +79,6 @@ class App extends React.Component {
 
 						<RutaProtegida path="/inicio">
 							<>
-								<MenuLateral />
-								<MenuSuperior />
 								<div id="wrapper">
 									<Inicio />
 								</div>

@@ -42,6 +42,9 @@ public class Filtro implements ContainerRequestFilter {
             try {
                 if (sesionesFacade.getMapaSesiones().containsKey(token)) {
                     if (sesionesFacade.modificarVencimiento(token)) {
+                        if(url.contains("api/login/cerrarSesion")){
+                            return;
+                        }
                         if (!sesionesFacade.validarPermiso(token, permiso)) {
                             Respuesta respuesta = new Respuesta("Sin permiso");
                             requestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED)

@@ -62,7 +62,7 @@ public class Login {
      * @return
      */
     @DELETE
-    @Path("/{token}")
+    @Path("/cerrarSesion/{token}")
     public Response cerrarSesion(@PathParam("token") String token) {
         try {
             usuarioLogica.cerrarSesion(token);
