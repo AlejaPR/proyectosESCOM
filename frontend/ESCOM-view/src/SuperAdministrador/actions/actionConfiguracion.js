@@ -210,6 +210,16 @@ export function actionActualizarBarraLateral(color) {
     }
 }
 
+
+export function actualizarMensaje(mensaje) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: MENSAJE_CONFIGURACION,
+            mensaje: mensaje
+        });
+    };
+}
+
 export function actionActualizarBarraSuperior(color) {
     return (dispatch, getState) => {
         dispatch({

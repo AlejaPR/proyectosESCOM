@@ -13,7 +13,7 @@ const initialState = {
     configuracion: [],
     mensaje: '',
     estadoConfiguracion: false,
-    configuracionLogin:[]
+    configuracionLogin: []
 }
 
 export function reducerConfiguracion(state = initialState, action) {
@@ -106,6 +106,8 @@ export function reducerConfiguracion(state = initialState, action) {
                 })
             }
             return Object.assign({}, state, { configuracionLogin: configuracionLogin() })
+        case MENSAJE_CONFIGURACION:
+            return Object.assign({}, state, { mensaje: action.mensaje })
         default:
             return state
     }

@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 class ContenidoInicio extends React.Component {
 
 	componentDidUpdate() {
+		console.log('modiulos',this.props.modulosAcceso);
 	}
 
 	componentDidMount() {
@@ -19,7 +20,7 @@ class ContenidoInicio extends React.Component {
 	onClickCancelar = (event) => {
 		event.preventDefault();
 		console.log('history', this.props.history);
-		this.props.history.push('/adminUsuario');
+		this.props.history.push(this.props.modulosAcceso.url);
 	}
 
 	render() {

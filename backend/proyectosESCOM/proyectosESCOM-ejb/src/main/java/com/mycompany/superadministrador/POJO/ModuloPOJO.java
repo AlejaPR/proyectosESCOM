@@ -22,6 +22,8 @@ public class ModuloPOJO {
     private String descripcionModulo;
     
     private String acronimo;
+    
+    private String url;
 
     public ModuloPOJO() {
     }
@@ -82,7 +84,13 @@ public class ModuloPOJO {
     public void setAcronimo(String acronimo) {
         this.acronimo = acronimo;
     }
-    
-    
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
     
 }

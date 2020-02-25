@@ -54,8 +54,8 @@ public class ConfiguracionFacade extends AbstractFacade<Configuracion> implement
         configuracionE.setBarraLateral(configuracion.getBarraLateral());
         configuracionE.setBarraSuperior(configuracion.getBarraSuperior());
         configuracionE.setBotones(configuracion.getBotones());
-        configuracion.setImagenLogin(configuracion.getImagenLogin());
-        configuracion.setLogo(configuracion.getLogo());
+        configuracionE.setImagenLogin(configuracion.getImagenLogin());
+        configuracionE.setLogo(configuracion.getLogo());
         em.merge(configuracionE);
 
     }

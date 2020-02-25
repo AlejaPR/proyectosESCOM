@@ -6,7 +6,6 @@
 package com.mycompany.superadministrador.entity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -20,7 +19,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 /**
@@ -61,6 +59,9 @@ public class Modulo implements Serializable{
     
     @Column(name = "MOD_ACRONIMO")
     private String acronimo;
+    
+    @Column(name = "MOD_URL")
+    private String url;
     
 
     @Column(name = "MOD_DESCRIPCIONMODULO")
@@ -145,6 +146,14 @@ public class Modulo implements Serializable{
 
     public void setAcronimo(String acronimo) {
         this.acronimo = acronimo;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     

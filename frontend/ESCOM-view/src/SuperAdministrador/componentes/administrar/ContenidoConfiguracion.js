@@ -13,7 +13,7 @@ import { Field, reduxForm } from "redux-form";
 import PropTypes from "prop-types";
 import Barra from '../general/BarraDirecciones.js';
 import { connect } from 'react-redux';
-import { consultarConfiguracion, actionActualizarBarraLateral, actualizarFotoLogin, actualizarFotoLogo, actionActualizarConfiguracion, actionActualizarBarraSuperior, actionActualizarBotones, actionConsultarConfiguracionCompleta } from '../../actions/actionConfiguracion.js'
+import { consultarConfiguracion, actionActualizarBarraLateral,actualizarMensaje, actualizarFotoLogin, actualizarFotoLogo, actionActualizarConfiguracion, actionActualizarBarraSuperior, actionActualizarBotones, actionConsultarConfiguracionCompleta } from '../../actions/actionConfiguracion.js'
 import { campo } from '../../utilitario/GenerarInputs.js'
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import Alert from '@material-ui/lab/Alert';
@@ -48,6 +48,7 @@ class Configuracion extends React.Component {
             default:
                 break;
         }
+        this.props.actualizarMensaje('');
     }
 
     getSteps() {
@@ -370,7 +371,7 @@ class Configuracion extends React.Component {
                 };
                 imageObject.src = localImageUrl;
                 this.getBase64(imageFile, (result) => {
-                    this.props.actualizarFotoLogo(result);
+                    this.props.actualizarFotoLogo(result);                   
                 });
                 this.handlePreviewLogo(localImageUrl);
             }
@@ -561,5 +562,5 @@ let formularioConfiguracion = reduxForm({
 })(Configuracion);
 
 
-export default connect(mapStateToProps, { consultarConfiguracion, actionActualizarBarraLateral, actualizarFotoLogin, actualizarFotoLogo, actionActualizarConfiguracion, actionActualizarBarraSuperior, actionActualizarBotones, actionConsultarConfiguracionCompleta })(formularioConfiguracion);
+export default connect(mapStateToProps, { consultarConfiguracion,actualizarMensaje, actionActualizarBarraLateral, actualizarFotoLogin, actualizarFotoLogo, actionActualizarConfiguracion, actionActualizarBarraSuperior, actionActualizarBotones, actionConsultarConfiguracionCompleta })(formularioConfiguracion);
 

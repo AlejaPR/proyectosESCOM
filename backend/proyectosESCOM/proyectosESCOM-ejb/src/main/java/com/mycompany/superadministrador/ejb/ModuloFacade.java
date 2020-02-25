@@ -111,13 +111,10 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
         consultaModuloEsp.setParameter("idModulo", idModulo);
         Modulo moduloEspDB = consultaModuloEsp.getSingleResult();
         ModuloPOJO moduloRespuesta = new ModuloPOJO();
-        moduloRespuesta.setIdModulo(moduloEspDB.getIdModulo());
         moduloRespuesta.setImagenModulo(moduloEspDB.getImagen());
         moduloRespuesta.setNombreModulo(moduloEspDB.getNombreModulo());
         moduloRespuesta.setDescripcionModulo(moduloEspDB.getDescripcionModulo());
-        moduloRespuesta.setAcronimo(moduloEspDB.getAcronimo());
-        moduloRespuesta.setEstadoModulo(moduloEspDB.getEstado());
-        
+        moduloRespuesta.setUrl(moduloEspDB.getUrl());
         return moduloRespuesta;
     }
     
