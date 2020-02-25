@@ -13,7 +13,9 @@ import {
     ACTIVIDADES_SIN_ASIGNAR,
     MENSAJE_LOGIN,
     MENSAJE_SUSPENDER, MODULOS_REGISTRADOS, ESTADO_ASIGNAR, MENSAJE_ASIGNAR,
-    MENSAJE_CERRAR_SESION
+    MENSAJE_CERRAR_SESION,
+    MODULOS_ACCESO,
+    NOMBRE_USUARIO
 } from '../actions/actionsUsuario.js'
 
 
@@ -22,6 +24,7 @@ const initialState = {
     estadoUsuarios: false,
     estadoAsignar: false,
     actividadesUsuario: [],
+    nombreUsuario: [],
     tiposDocumento: [],
     usuarioEditar: [],
     cedula: [],
@@ -31,9 +34,10 @@ const initialState = {
     mensajeEditar: '',
     mensajeSuspender: '',
     mensajeAsignar: '',
-    mensajeCerrarSesion:'',
+    mensajeCerrarSesion: '',
     modulosAsignar: [],
-    actividadesSinAsignar: []
+    actividadesSinAsignar: [],
+    modulosAcceso: []
 }
 
 
@@ -41,6 +45,8 @@ export function reducerUsuario(state = initialState, action) {
     switch (action.type) {
         case MODULOS_REGISTRADOS:
             return Object.assign({}, state, { modulosAsignar: action.respuesta })
+        case MODULOS_ACCESO:
+            return Object.assign({}, state, { modulosAcceso: action.respuesta })
         case MOSTRAR_USUARIOS:
             return Object.assign({}, state, { usuariosRegistrados: action.respuesta })
         case ACTIVIDADES_SIN_ASIGNAR:
@@ -78,6 +84,8 @@ export function reducerUsuario(state = initialState, action) {
             return Object.assign({}, state, { estadoUsuarios: action.estado })
         case ESTADO_ASIGNAR:
             return Object.assign({}, state, { estadoAsignar: action.estado })
+        case NOMBRE_USUARIO:
+            return Object.assign({}, state, { nombreUsuario: action.nombre })
         default:
             return state
     }

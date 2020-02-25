@@ -1,100 +1,111 @@
 import React from 'react';
 
-//estilos
-import '../../css/business-casual.css'
-import '../../css/estilos.css'
-import '../../css/bootstrap.min.css'
-import '../../css/menu.css'
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import MaterialTable from 'material-table';
+import { withRouter } from 'react-router-dom';
 
-import { Button } from 'reactstrap';
-
-
-//componentes
-import Barra from '../general/BarraDirecciones.js'
-import Fila from './FilaTablaUsuario.js'
+import { actionConsultarModulosAcceso } from '../../actions/actionsUsuario.js'
+import { connect } from 'react-redux';
 
 class ContenidoInicio extends React.Component {
 
-	state = {
-		post: []
-	}
-
-	eventoBorrado = (evento) => {
-		evento.preventDefault();
-		console.log(this.state.post)
-	}
-
-
-
-	onChange = (evento) => {
-		this.setState({
-			[evento.target.name]: evento.target.value
-		});
+	componentDidUpdate() {
 	}
 
 	componentDidMount() {
-		// const respuesta = await fetch('http://localhost:8080/SuperadminustradorESCOM-web/api/usu/');
-		// const transformado = await respuesta.json();
-		// this.setState({ post: transformado });
-		// console.log(transformado);
+		this.props.actionConsultarModulosAcceso(localStorage.getItem('Token'));
 	}
 
-
-	renderTableData() {
-		return this.state.post.map((post, index) => {
-			const { cedula} = post //destructuring
-			return (
-				<Fila usuario={post} key={cedula} />
-			)
-		})
-
-	}
-
-	anadirTarea = (nombre, correo, cedula) => {
-		const nuevaTarea = {
-			nombre: nombre,
-			correo: correo,
-			cedula: cedula
-		}
-		this.setState({
-			post: [...this.state.post, nuevaTarea]
-		})
+	onClickCancelar = (event) => {
+		event.preventDefault();
+		console.log('history', this.props.history);
+		this.props.history.push('/adminUsuario');
 	}
 
 	render() {
 		return (
-			<div style={{background:"yellow"}}>
-			</div>
+			<>
+			
+				<Modal isOpen={true}
+					toggle={this.toggle}
+					className={this.props.className}
+					size="col-md-6"
+				>
+					<ModalBody>
+						<MaterialTable
+							title="Modulos disponibles"
+							localization={{
+								header: {
+									actions: ' '
+								},
+								pagination: {
+									nextTooltip: 'Siguiente ',
+									previousTooltip: 'Anterior',
+									labelDisplayedRows: '{from}-{to} de {count}',
+									lastTooltip: 'Ultima pagina',
+									firstTooltip: 'Primera pagina',
+									labelRowsSelect: 'Registros',
+									firstAriaLabel: 'oooo'
+								},
+								body: {
+									emptyDataSourceMessage: 'Aun no hay ningun usuario registrado'
+								},
+								toolbar: {
+									searchTooltip: 'Buscar',
+									searchPlaceholder: 'Buscar'
+								}
+							}}
+							columns={[
+								{ title: '', field: 'nombreModulo', headerStyle: estiloCabecera, cellStyle: estiloFila }
+							]}
+							data={this.props.modulosAcceso}
+							options={{
+								search: false,
+								rowStyle: estiloFila
+							}}
+							actions={[
+								{
+									icon: 'subdirectory_arrow_right',
+									tooltip: 'Ir',
+									onClick: (event, rowData) => {
+										this.onClickCancelar(event);
+									}
+								}
+							]}
+						/>
+						<ModalFooter>
+
+						</ModalFooter>
+
+					</ModalBody>
+				</Modal>
+			</>
 		);
 	}
 
 
 }
 
-
-
-const fondoBoton = {
-	background: "#ec671d",
-	fontSize: "14px",
-	fontFamily: "Open sans, sans-serif"
-  
-  }
-
-const estiloLetrero = {
-	paddingTop: "20px",
-	paddingRight: "12px",
-	paddingLeft: "40px",
-	paddingBottom: "1px"
-}
-
-const fondoBarraSuperior = {
-	background: "#FFFFFF"
+const estiloCabecera = {
+	fontSize: '13px',
+	fontFamily: 'sans-serif',
+	padding: '8px',
+	background: 'white'
 
 }
 
-const fondoTabla = {
-	background: "#EAF2F2"
+const estiloFila = {
+	fontSize: '12px',
+	fontFamily: 'sans-serif',
+	padding: '8px',
 }
 
 
-export default ContenidoInicio;
+function mapStateToProps(state) {
+	return {
+		configuracion: state.conf.configuracion,
+		modulosAcceso: state.user.modulosAcceso
+	}
+}
+
+export default withRouter(connect(mapStateToProps, { actionConsultarModulosAcceso })(ContenidoInicio));

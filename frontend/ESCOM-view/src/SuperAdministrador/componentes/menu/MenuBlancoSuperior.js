@@ -10,7 +10,7 @@ import { withRouter } from 'react-router-dom';
 
 import { connect } from 'react-redux';
 import { consultarConfiguracion } from '../../actions/actionConfiguracion.js'
-import { actionCerrarSesion } from '../../actions/actionsUsuario.js'
+import { actionCerrarSesion, actualizarMensajeCerrar, asignarNombreUsuario } from '../../actions/actionsUsuario.js'
 
 class BarraSuperior extends React.Component {
 	mensaje = () => {
@@ -18,17 +18,22 @@ class BarraSuperior extends React.Component {
 		this.props.actionCerrarSesion(token);
 	}
 
+	componentDidMount() {
+		this.props.asignarNombreUsuario(localStorage.getItem('Nombre'));
+	}
+
 	componentDidUpdate() {
-		switch (this.props.mensaje) {
-			case 'cerrada':
-				localStorage.setItem('TokenAuto',' ');
-				this.props.history.push('/');
-				break;
-			default:
-				// localStorage.setItem('TokenAuto',' ');
-				// this.props.history.push('/');
-				break;
+		if (this.props.mensaje !== '') {
+			switch (this.props.mensaje) {
+				case 'cerrada':
+					localStorage.setItem('Token', ' ');
+					this.props.history.go('/');
+					break;
+				default:
+					break;
+			}
 		}
+		this.props.actualizarMensajeCerrar('');
 	}
 
 	fondobotoon = () => {
@@ -67,7 +72,7 @@ class BarraSuperior extends React.Component {
 
 											<Button id="PopoverFocus" className="dropdown-toggle text-dark" type="button" style={{ background: "none", border: "none", boxShadow: "0px 0px 0px 0px" }}>
 												<img src={persona} alt="" width="30" height="30" />
-												<span className="username username-hide-on-mobile text-dark letra"> Pepito perez </span>
+												<span className="username username-hide-on-mobile text-dark letra"> {this.props.nombreUsuario} </span>
 											</Button>
 
 										</li>
@@ -105,11 +110,12 @@ const botones = {
 function mapStateToProps(state) {
 	return {
 		configuracion: state.conf.configuracion,
-		mensaje: state.user.mensajeCerrarSesion
+		mensaje: state.user.mensajeCerrarSesion,
+		nombreUsuario: state.user.nombreUsuario
 	}
 }
 
 
 
-export default withRouter(connect(mapStateToProps, { consultarConfiguracion, actionCerrarSesion })(BarraSuperior));
+export default withRouter(connect(mapStateToProps, { consultarConfiguracion, actionCerrarSesion, actualizarMensajeCerrar, asignarNombreUsuario })(BarraSuperior));
 

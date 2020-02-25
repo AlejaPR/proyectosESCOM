@@ -77,6 +77,8 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             usuarioDB.editarToken(usuario.getToken(), usuario.getIdUsuario());
             UsuarioPOJO usuarioRespuesta = new UsuarioPOJO();
             usuarioRespuesta.setToken(tokencin);
+            usuarioRespuesta.setNombre(usuario.getNombre());
+            usuarioRespuesta.setApellido(usuario.getApellido());
             validarTokens(tokencin);
             return usuarioRespuesta;
 
@@ -497,8 +499,14 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
                     }
                 }
             }
-            if (!modulosResultado.isEmpty()) {
-                    return modulosResultado;
+            List<ModuloPOJO> retorno=new ArrayList<>();
+            for(ModuloPOJO m : modulosResultado){
+                if(!comprobarExistencia(retorno, m.getIdModulo())){
+                    retorno.add(m);
+                }
+            }
+            if (!retorno.isEmpty()) {
+                    return retorno;
                 } else {
                     throw new ExcepcionGenerica("No hay permisos asociados");
                 }
@@ -508,8 +516,15 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         } catch (Exception ex) {
             throw new ExcepcionGenerica("Ocurrio una excepcion ");
         }
-        
+    }
     
+    public boolean comprobarExistencia(List<ModuloPOJO> modulos,int id){    
+        for(ModuloPOJO m: modulos){
+            if(id==m.getIdModulo()){
+                return true;
+            }
+        }
+        return false;
     }
 
 }

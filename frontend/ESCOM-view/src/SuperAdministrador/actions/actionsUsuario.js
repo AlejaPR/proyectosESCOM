@@ -3,6 +3,7 @@ import { encriptar, desencriptar } from '../componentes/general/Encriptar.js';
 import { mensajesDeError } from '../utilitario/MensajesError.js';
 
 export const MOSTRAR_USUARIOS = 'MOSTRAR_USUARIOS';
+export const MODULOS_ACCESO = 'MODULOS_ACCESO';
 export const ESTADO_USUARIOS = 'ESTADO_USUARIOS';
 export const MOSTRAR_DOCUMENTOS = 'MOSTRAR_DOCUMENTOS';
 export const ACTIVIDADES_SIN_ASIGNAR = 'ACTIVIDADES_SIN_ASIGNAR';
@@ -22,6 +23,7 @@ export const MENSAJE_SUSPENDER = 'MENSAJE_SUSPENDER';
 export const REDIRECCIONAR_LOGIN = 'REDIRECCIONAR_LOGIN';
 export const ESTADO_ASIGNAR = 'ESTADO_ASIGNAR';
 export const MODULOS_REGISTRADOS = 'MODULOS_REGISTRADOS';
+export const NOMBRE_USUARIO='NOMBRE_USUARIO';
 
 export function actionLoginUsuario(correo, contrasena, cambiar) {
     var crypto = require('crypto');
@@ -36,6 +38,12 @@ export function actionLoginUsuario(correo, contrasena, cambiar) {
                     dispatch({
                         type: MENSAJE_LOGIN,
                         mensaje: 'Login correcto'
+                    });
+                    var nombre=response.data.nombre+' '+response.data.apellido;
+                    localStorage.setItem('Nombre',nombre);
+                    dispatch({
+                        type: NOMBRE_USUARIO,
+                        nombre: nombre
                     });
                 }
             }).catch((error) => {
@@ -75,6 +83,7 @@ export function actionLoginUsuario(correo, contrasena, cambiar) {
     };
 }
 
+
 export function actionCerrarSesion(token) {
     var tokenlim = desencriptar(token);
     const headers = {
@@ -96,6 +105,15 @@ export function actionCerrarSesion(token) {
                 });
             });
     }
+}
+
+export function actualizarMensajeCerrar(mensaje) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: MENSAJE_CERRAR_SESION,
+            mensaje: mensaje
+        });
+    };
 }
 
 export function actualizarMensajeEditar(mensaje) {
@@ -130,6 +148,17 @@ export function actualizarMensajeSuspender(mensaje) {
         dispatch({
             type: MENSAJE_SUSPENDER,
             mensaje: mensaje
+        });
+    };
+}
+
+
+
+export function asignarNombreUsuario(nombre) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: NOMBRE_USUARIO,
+            nombre: nombre
         });
     };
 }
@@ -172,6 +201,43 @@ export function actionConsultarUsuarios(token) {
                             });
                         } else {
                             //
+                        }
+                    }
+                }
+            });
+    };
+}
+
+export function actionConsultarModulosAcceso(token) {
+    var tokenRequest = desencriptar(token);
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': tokenRequest
+    }
+    return (dispatch, getState) => {
+        axios.get("http://localhost:9090/proyectosESCOM-web/api/usuario/redireccionUsuario/"+tokenRequest, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: MODULOS_ACCESO,
+                    respuesta: response.data
+                });
+            }).catch((error) => {
+                if (error.request.response === '') {
+
+                } else {
+                    if (error.request) {
+                        var o = JSON.parse(error.request.response);
+                        let respuesta = mensajesDeError(o.respuesta);
+                        if (respuesta === 'Sin permiso') {
+                            dispatch({
+                                type: MODULOS_ACCESO,
+                                respuesta:[]
+                            });
+                        } else {
+                            dispatch({
+                                type: MODULOS_ACCESO,
+                                respuesta:[]
+                            });
                         }
                     }
                 }

@@ -3,10 +3,11 @@ import React from 'react';
 import '../../css/menu.css'
 import '../../css/registro.css'
 
-import { Button } from 'reactstrap';
+import Button from '@material-ui/core/Button';
 import { reduxForm, Field } from 'redux-form';
 
-import { actionLoginUsuario, actualizarMensajeLogin } from '../../actions/actionsUsuario.js'
+import { actionLoginUsuario, actualizarMensajeLogin, asignarNombreUsuario } from '../../actions/actionsUsuario.js'
+import { consultarConfiguracionLogin } from '../../actions/actionConfiguracion.js';
 import { connect } from 'react-redux';
 import { requerido, correo } from '../../utilitario/validacionCampos.js';
 
@@ -19,7 +20,14 @@ class Login extends React.Component {
 		habilitado: false
 	}
 
+
+
+	componentDidMount() {
+		this.props.consultarConfiguracionLogin();
+	}
+
 	componentDidUpdate() {
+		console.log('conf', this.props.configuracionLogin);
 		switch (this.props.mensaje) {
 			case 'Login correcto':
 				this.props.history.push('/inicio');
@@ -45,7 +53,9 @@ class Login extends React.Component {
 			<div>
 				<div className="container-fluid fondo-blanco">
 					<div className="row no-gutter">
-						<div className="d-none d-md-flex col-md-4 col-lg-6 bg-image"></div>
+						<div className="d-none d-md-flex col-md-4 col-lg-6" style={{paddingLeft:"0px"}} >
+							<img src={this.props.configuracionLogin.imagenLogin} alt="" style={{backgroundSize: 'cover',backgroundPosition: 'center'}} width="660px" height="695px" />
+						</div>
 						<div className="col-md-8 col-lg-6">
 							<div className="login d-flex align-items-center py-5">
 								<div className="container">
@@ -77,7 +87,7 @@ class Login extends React.Component {
 												<br />
 												<div className="row">
 													<div className="col-sm-6 center">
-														<Button style={fondoBoton} disabled={this.state.habilitado} type="submit">Iniciar sesion</Button>
+														<Button style={{ background: this.props.configuracionLogin.botones, fontSize: "15px", fontFamily: "sans-serif", textTransform: "none" }} className="btn btn-dark" variant="contained" disabled={this.state.habilitado} type="submit">Iniciar sesion</Button>
 
 													</div>
 													{
@@ -120,7 +130,9 @@ const fondoBoton = {
 
 function mapStateToProps(state) {
 	return {
-		mensaje: state.user.mensajeLogin
+		mensaje: state.user.mensajeLogin,
+		nombreUsuario: state.user.nombreUsuario,
+		configuracionLogin: state.conf.configuracionLogin
 	}
 }
 
@@ -130,4 +142,4 @@ let formulario = reduxForm({
 
 
 
-export default withRouter(connect(mapStateToProps, { actionLoginUsuario, actualizarMensajeLogin })(formulario));
+export default withRouter(connect(mapStateToProps, { actionLoginUsuario, actualizarMensajeLogin, consultarConfiguracionLogin, asignarNombreUsuario })(formulario));

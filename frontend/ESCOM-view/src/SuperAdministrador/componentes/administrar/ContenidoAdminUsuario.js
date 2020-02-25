@@ -8,7 +8,7 @@ import MTableToolbar from '../../utilitario/MTableToolbar.js';
 import { confirmAlert } from 'react-confirm-alert';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
-
+import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import { NotificationManager } from 'react-notifications';
 
 //redux conexion

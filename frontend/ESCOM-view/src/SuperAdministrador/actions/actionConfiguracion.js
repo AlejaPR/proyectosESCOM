@@ -11,6 +11,7 @@ export const ACTUALIZAR_FOTO_LOGO= 'ACTUALIZAR_FOTO_LOGO'
 export const ACTUALIZAR_BOTONES='ACTUALIZAR_BOTONES';
 export const MENSAJE_CONFIGURACION='MENSAJE_CONFIGURACION';
 export const CARGAR_CONFIGURACION='CARGAR_CONFIGURACION';
+export const CONFIGURACION_LOGIN='CONFIGURACION_LOGIN';
 
 export function actionActualizarConfiguracion(configuracion, token) {
     var tokenRequest = desencriptar(token);
@@ -68,6 +69,57 @@ export function consultarConfiguracion() {
             .then(response => {
                 dispatch({
                     type: MOSTRAR_CONFIGURACION,
+                    configuracion: response.data[0]
+                });
+            }).catch((error) => {
+                if (error.request.response === '') {
+                    dispatch({
+                        type: MOSTRAR_CONFIGURACION,
+                        configuracion:{
+                            barraLateral: "#164D14",
+                            barraSuperior:"white",
+                            botones:"#164D14"
+                        }
+                    });
+                }else{
+                    if (error.request) {
+                        var o = JSON.parse(error.request.response);
+                        let respuesta=mensajesDeError(o.respuesta);
+                        if(respuesta!==''){
+                            dispatch({
+                                type: MOSTRAR_CONFIGURACION,
+                                configuracion:{
+                                    barraLateral: "#164D14",
+                                    barraSuperior:"#FFFFFF",
+                                    botones:"#164D14"
+                                }
+                            });
+                        }else{
+                            dispatch({
+                                type: MOSTRAR_CONFIGURACION,
+                                configuracion:{
+                                    barraLateral: "#164D14",
+                                    fondoSuperior:"#FFFFFF",
+                                    botones:"#164D14"
+                                }
+                            });
+                        }
+                    }
+                } 
+                
+            });
+    }
+}
+
+export function consultarConfiguracionLogin() {
+    const headers = {
+        'Content-Type': 'application/json'
+    }
+    return (dispatch, getState) => {
+        axios.get("http://localhost:9090/proyectosESCOM-web/api/configuracion/listarInicio", { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: CONFIGURACION_LOGIN,
                     configuracion: response.data[0]
                 });
             }).catch((error) => {

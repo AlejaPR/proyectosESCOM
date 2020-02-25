@@ -3,14 +3,17 @@ import { campo } from '../utilitario/GenerarInputs.js';
 
 import {
     MOSTRAR_CONFIGURACION, CARGAR_CONFIGURACION, MENSAJE_CONFIGURACION,
-    ACTUALIZAR_BARRALATERAL, ACTUALIZAR_BARRASUPERIOR, ACTUALIZAR_BOTONES, ACTUALIZAR_FOTO_LOGIN, ACTUALIZAR_FOTO_LOGO,ESTADO_CONFIGURACION
+    ACTUALIZAR_BARRALATERAL, ACTUALIZAR_BARRASUPERIOR, ACTUALIZAR_BOTONES,
+    ACTUALIZAR_FOTO_LOGIN, ACTUALIZAR_FOTO_LOGO, ESTADO_CONFIGURACION,
+    CONFIGURACION_LOGIN
 } from '../actions/actionConfiguracion.js'
 
 
 const initialState = {
     configuracion: [],
     mensaje: '',
-    estadoConfiguracion:false
+    estadoConfiguracion: false,
+    configuracionLogin:[]
 }
 
 export function reducerConfiguracion(state = initialState, action) {
@@ -95,6 +98,14 @@ export function reducerConfiguracion(state = initialState, action) {
             return Object.assign({}, state, { configuracion: actualizarFotoLogo() })
         case ESTADO_CONFIGURACION:
             return Object.assign({}, state, { estadoConfiguracion: action.estado })
+        case CONFIGURACION_LOGIN:
+            const configuracionLogin = () => {
+                return ({
+                    imagenLogin: campo(action.configuracion.imagenLogin),
+                    botones: action.configuracion.botones
+                })
+            }
+            return Object.assign({}, state, { configuracionLogin: configuracionLogin() })
         default:
             return state
     }
