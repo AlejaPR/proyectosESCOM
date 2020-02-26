@@ -61,7 +61,9 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
         listaActividades = listaAct.getResultList();
         List<ActividadPOJO> respuesta = new ArrayList<>();
         for (Actividad act : listaActividades) {
-            respuesta.add(new ActividadPOJO(act.getIdActividad(), act.getNombreActividad(),act.getFkActIdmodulo().getIdModulo()));
+            String actividadConAcronimo=act.getNombreActividad();
+            String actividadSinAcronimo=actividadConAcronimo.substring(3);
+            respuesta.add(new ActividadPOJO(act.getIdActividad(), actividadSinAcronimo,act.getFkActIdmodulo().getIdModulo()));
         }
         return respuesta;
     }
@@ -83,7 +85,9 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
         listaActividades = listaAct.getResultList();
         List<ActividadPOJO> respuesta = new ArrayList<>();
         for (Actividad act : listaActividades) {
-            respuesta.add(new ActividadPOJO(act.getIdActividad(), act.getNombreActividad()));
+            String actividadConAcronimo=act.getNombreActividad();
+            String actividadSinAcronimo=actividadConAcronimo.substring(3);
+            respuesta.add(new ActividadPOJO(act.getIdActividad(), actividadSinAcronimo));
         }
         return respuesta;
     }
@@ -122,7 +126,11 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
         for (Actividad a : consultaActividadesModulo.getResultList()) {
             ActividadPOJO actividad = new ActividadPOJO();
             actividad.setIdActividad(a.getIdActividad());
-            actividad.setNombre(a.getNombreActividad());
+            
+            String actividadConAcronimo=a.getNombreActividad();
+            String actividadSinAcronimo=actividadConAcronimo.substring(3);
+            actividad.setNombre(actividadSinAcronimo);
+            
             actividad.setEstado(a.getEstado());
             listaActividadesM.add(actividad);
         }
@@ -162,6 +170,7 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
         
         actividadResultado = actividad.getResultList();
         
+        
         return actividadResultado;
     }
 
@@ -187,7 +196,9 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
                 .setParameter(5, modulo.getIdModulo())
                 .executeUpdate();
         
-        ActividadPOJO actividadR = new ActividadPOJO(actividad.getIdActividad(), nombreActividad, modulo.getIdModulo());
+        String actividadConAcronimo=nombreActividad;
+        String actividadSinAcronimo=actividadConAcronimo.substring(3);
+        ActividadPOJO actividadR = new ActividadPOJO(actividad.getIdActividad(), actividadSinAcronimo, modulo.getIdModulo());
         return actividadR;
     }
 
@@ -238,9 +249,11 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
         actividadEspDB.setParameter("idActividad", idActividad);
         lista = actividadEspDB.getSingleResult();
         
+        String actividadConAcronimo=lista.getNombreActividad();
+        String actividadSinAcronimo=actividadConAcronimo.substring(3);
         ActividadPOJO actividad = new ActividadPOJO();
         actividad.setIdActividad(lista.getIdActividad());
-        actividad.setNombre(lista.getNombreActividad());
+        actividad.setNombre(actividadSinAcronimo);
         actividad.setDescripcionActividad(lista.getDescripcionActividad());
         actividad.setEstado(lista.getEstado());
         actividad.setModuloActividad(lista.getFkActIdmodulo().getNombreModulo());
