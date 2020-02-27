@@ -218,13 +218,11 @@ export function actionConsultarModulosAcceso(token) {
     return (dispatch, getState) => {
         axios.get("http://localhost:9090/proyectosESCOM-web/api/usuario/redireccionUsuario/"+tokenRequest, { headers: headers })
             .then(response => {
-                debugger;
                 dispatch({
                     type: MODULOS_ACCESO,
                     respuesta: response.data
                 });
             }).catch((error) => {
-                debugger;
                 if (error.request.response === '') {
 
                 } else {

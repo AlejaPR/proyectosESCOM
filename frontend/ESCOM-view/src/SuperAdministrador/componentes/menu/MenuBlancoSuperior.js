@@ -37,18 +37,28 @@ class BarraSuperior extends React.Component {
 	}
 
 	fondobotoon = () => {
-		return ({
-			background: this.props.configuracion.barraSuperior,
-			height: "48px",
-			padding: ".1rem"
-		})
+		return (this.props.configuracion.barraSuperior === undefined ?
+			{
+				background: 'white',
+				height: "48px",
+				padding: ".1rem"
+			} : {
+				background: this.props.configuracion.barraSuperior,
+				height: "48px",
+				padding: ".1rem"
+			})
 	}
 	fondoPerfil = () => {
-		return ({
-			background: this.props.configuracion.barraSuperior,
-			height: "48px",
-			padding: ".5rem"
-		})
+		return (this.props.configuracion.barraSuperior === undefined ?
+			{
+				background: 'white',
+				height: "48px",
+				padding: ".5rem"
+			} : {
+				background: this.props.configuracion.barraSuperior,
+				height: "48px",
+				padding: ".5rem"
+			})
 	}
 
 	render() {

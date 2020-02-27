@@ -10,23 +10,21 @@ import { connect } from 'react-redux';
 class ContenidoInicio extends React.Component {
 
 	componentDidUpdate() {
-		console.log('modiulos',this.props.modulosAcceso);
+		console.log('modiulos', this.props.modulosAcceso);
 	}
 
-	componentDidMount() {
+	componentWillMount() {
 		this.props.actionConsultarModulosAcceso(localStorage.getItem('Token'));
 	}
 
 	onClickCancelar = (event) => {
-		event.preventDefault();
-		console.log('history', this.props.history);
-		this.props.history.push(this.props.modulosAcceso.url);
+
 	}
 
 	render() {
 		return (
 			<>
-			
+
 				<Modal isOpen={true}
 					toggle={this.toggle}
 					className={this.props.className}
@@ -69,7 +67,8 @@ class ContenidoInicio extends React.Component {
 									icon: 'subdirectory_arrow_right',
 									tooltip: 'Ir',
 									onClick: (event, rowData) => {
-										this.onClickCancelar(event);
+										event.preventDefault();
+										this.props.history.push(rowData.url);
 									}
 								}
 							]}

@@ -10,7 +10,7 @@ import { actionLoginUsuario, actualizarMensajeLogin, asignarNombreUsuario } from
 import { consultarConfiguracionLogin } from '../../actions/actionConfiguracion.js';
 import { connect } from 'react-redux';
 import { requerido, correo } from '../../utilitario/validacionCampos.js';
-
+import imagenDefecto from '../../imagenes/defectoLogin.png';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { withRouter } from 'react-router-dom';
 
@@ -27,7 +27,6 @@ class Login extends React.Component {
 	}
 
 	componentDidUpdate() {
-		console.log('conf', this.props.configuracionLogin);
 		switch (this.props.mensaje) {
 			case 'Login correcto':
 				this.props.history.push('/inicio');
@@ -54,7 +53,11 @@ class Login extends React.Component {
 				<div className="container-fluid fondo-blanco">
 					<div className="row no-gutter">
 						<div className="d-none d-md-flex col-md-4 col-lg-6" style={{paddingLeft:"0px"}} >
-							<img src={this.props.configuracionLogin.imagenLogin} alt="" style={{backgroundSize: 'cover',backgroundPosition: 'center'}} width="660px" height="695px" />
+						{
+						this.props.configuracionLogin.imagenLogin ===undefined ?<div style={{background:"white"}}><img src={imagenDefecto} alt="" style={{backgroundSize: 'cover',backgroundPosition: 'center'}} width="660px" height="695px" /></div> 
+						:
+						<img src={this.props.configuracionLogin.imagenLogin} alt="" style={{backgroundSize: 'cover',backgroundPosition: 'center'}} width="660px" height="695px" />
+						}					
 						</div>
 						<div className="col-md-8 col-lg-6">
 							<div className="login d-flex align-items-center py-5">

@@ -1,17 +1,19 @@
 import axios from 'axios';
-import {desencriptar } from '../componentes/general/Encriptar.js';
-import {mensajesDeError} from '../utilitario/MensajesError.js';
+import { desencriptar } from '../componentes/general/Encriptar.js';
+import { mensajesDeError } from '../utilitario/MensajesError.js';
+import imagenDefecto from '../imagenes/defectoLogin.png';
+
 
 export const ESTADO_CONFIGURACION = 'ESTADO_CONFIGURACION';
 export const MOSTRAR_CONFIGURACION = 'MOSTRAR_CONFIGURACION'
-export const ACTUALIZAR_BARRALATERAL= 'ACTUALIZAR_BARRALATERAL'
-export const ACTUALIZAR_BARRASUPERIOR= 'ACTUALIZAR_BARRASUPERIOR'
-export const ACTUALIZAR_FOTO_LOGIN= 'ACTUALIZAR_FOTO_LOGIN'
-export const ACTUALIZAR_FOTO_LOGO= 'ACTUALIZAR_FOTO_LOGO'
-export const ACTUALIZAR_BOTONES='ACTUALIZAR_BOTONES';
-export const MENSAJE_CONFIGURACION='MENSAJE_CONFIGURACION';
-export const CARGAR_CONFIGURACION='CARGAR_CONFIGURACION';
-export const CONFIGURACION_LOGIN='CONFIGURACION_LOGIN';
+export const ACTUALIZAR_BARRALATERAL = 'ACTUALIZAR_BARRALATERAL'
+export const ACTUALIZAR_BARRASUPERIOR = 'ACTUALIZAR_BARRASUPERIOR'
+export const ACTUALIZAR_FOTO_LOGIN = 'ACTUALIZAR_FOTO_LOGIN'
+export const ACTUALIZAR_FOTO_LOGO = 'ACTUALIZAR_FOTO_LOGO'
+export const ACTUALIZAR_BOTONES = 'ACTUALIZAR_BOTONES';
+export const MENSAJE_CONFIGURACION = 'MENSAJE_CONFIGURACION';
+export const CARGAR_CONFIGURACION = 'CARGAR_CONFIGURACION';
+export const CONFIGURACION_LOGIN = 'CONFIGURACION_LOGIN';
 
 export function actionActualizarConfiguracion(configuracion, token) {
     var tokenRequest = desencriptar(token);
@@ -38,24 +40,24 @@ export function actionActualizarConfiguracion(configuracion, token) {
                         type: MENSAJE_CONFIGURACION,
                         mensaje: 'Servidor fuera de servicio temporalmente'
                     });
-                }else{
+                } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta=mensajesDeError(o.respuesta);
-                        if(respuesta!==''){
+                        let respuesta = mensajesDeError(o.respuesta);
+                        if (respuesta !== '') {
                             dispatch({
                                 type: MENSAJE_CONFIGURACION,
                                 mensaje: respuesta
                             });
-                        }else{
+                        } else {
                             dispatch({
                                 type: MENSAJE_CONFIGURACION,
                                 mensaje: 'Ya existen los datos registrados previamente'
                             });
                         }
                     }
-                } 
-                
+                }
+
             });
     }
 }
@@ -75,38 +77,38 @@ export function consultarConfiguracion() {
                 if (error.request.response === '') {
                     dispatch({
                         type: MOSTRAR_CONFIGURACION,
-                        configuracion:{
+                        configuracion: {
                             barraLateral: "#164D14",
-                            barraSuperior:"white",
-                            botones:"#164D14"
+                            barraSuperior: "white",
+                            botones: "#164D14"
                         }
                     });
-                }else{
+                } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta=mensajesDeError(o.respuesta);
-                        if(respuesta!==''){
+                        let respuesta = mensajesDeError(o.respuesta);
+                        if (respuesta !== '') {
                             dispatch({
                                 type: MOSTRAR_CONFIGURACION,
-                                configuracion:{
+                                configuracion: {
                                     barraLateral: "#164D14",
-                                    barraSuperior:"#FFFFFF",
-                                    botones:"#164D14"
+                                    barraSuperior: "#FFFFFF",
+                                    botones: "#164D14"
                                 }
                             });
-                        }else{
+                        } else {
                             dispatch({
                                 type: MOSTRAR_CONFIGURACION,
-                                configuracion:{
+                                configuracion: {
                                     barraLateral: "#164D14",
-                                    fondoSuperior:"#FFFFFF",
-                                    botones:"#164D14"
+                                    fondoSuperior: "#FFFFFF",
+                                    botones: "#164D14"
                                 }
                             });
                         }
                     }
-                } 
-                
+                }
+
             });
     }
 }
@@ -125,39 +127,36 @@ export function consultarConfiguracionLogin() {
             }).catch((error) => {
                 if (error.request.response === '') {
                     dispatch({
-                        type: MOSTRAR_CONFIGURACION,
-                        configuracion:{
-                            barraLateral: "#164D14",
-                            barraSuperior:"white",
-                            botones:"#164D14"
+                        type: CONFIGURACION_LOGIN,
+                        configuracion: {
+                            botones: "#0E3D38",
+                            imagenLogin:undefined
                         }
                     });
-                }else{
+                } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta=mensajesDeError(o.respuesta);
-                        if(respuesta!==''){
+                        let respuesta = mensajesDeError(o.respuesta);
+                        if (respuesta !== '') {      
                             dispatch({
-                                type: MOSTRAR_CONFIGURACION,
-                                configuracion:{
-                                    barraLateral: "#164D14",
-                                    barraSuperior:"#FFFFFF",
-                                    botones:"#164D14"
+                                type: CONFIGURACION_LOGIN,
+                                configuracion: {
+                                    botones: "#0E3D38",
+                                    imagenLogin:undefined
                                 }
                             });
-                        }else{
+                        } else {
                             dispatch({
-                                type: MOSTRAR_CONFIGURACION,
-                                configuracion:{
-                                    barraLateral: "#164D14",
-                                    fondoSuperior:"#FFFFFF",
-                                    botones:"#164D14"
+                                type: CONFIGURACION_LOGIN,
+                                configuracion: {
+                                    botones: "#0E3D38",
+                                    imagenLogin:undefined
                                 }
                             });
                         }
                     }
-                } 
-                
+                }
+
             });
     }
 }
@@ -177,26 +176,26 @@ export function actionConsultarConfiguracionCompleta(token) {
                     configuracion: response.data[0]
                 });
             }).catch((error) => {
-                if (error.request.response === ''){
+                if (error.request.response === '') {
 
-                }else{
+                } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta=mensajesDeError(o.respuesta);
-                        if(respuesta==='Sin permiso'){
+                        let respuesta = mensajesDeError(o.respuesta);
+                        if (respuesta === 'Sin permiso') {
                             dispatch({
                                 type: ESTADO_CONFIGURACION,
                                 estado: true
                             });
-                        }else{
+                        } else {
                             dispatch({
                                 type: MENSAJE_CONFIGURACION,
                                 mensaje: 'Sin acceso al servicio'
                             });
                         }
                     }
-                } 
-                
+                }
+
             });
     }
 }
@@ -205,7 +204,7 @@ export function actionActualizarBarraLateral(color) {
     return (dispatch, getState) => {
         dispatch({
             type: ACTUALIZAR_BARRALATERAL,
-            color:color
+            color: color
         });
     }
 }
@@ -224,7 +223,7 @@ export function actionActualizarBarraSuperior(color) {
     return (dispatch, getState) => {
         dispatch({
             type: ACTUALIZAR_BARRASUPERIOR,
-            color:color
+            color: color
         });
     }
 }
@@ -233,7 +232,7 @@ export function actualizarFotoLogin(foto) {
     return (dispatch, getState) => {
         dispatch({
             type: ACTUALIZAR_FOTO_LOGIN,
-            fotoLogin:foto
+            fotoLogin: foto
         });
     }
 }
@@ -242,7 +241,7 @@ export function actualizarFotoLogo(foto) {
     return (dispatch, getState) => {
         dispatch({
             type: ACTUALIZAR_FOTO_LOGO,
-            fotoLogo:foto
+            fotoLogo: foto
         });
     }
 }
@@ -251,7 +250,7 @@ export function actionActualizarBotones(color) {
     return (dispatch, getState) => {
         dispatch({
             type: ACTUALIZAR_BOTONES,
-            color:color
+            color: color
         });
     }
 }

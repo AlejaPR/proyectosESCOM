@@ -6,7 +6,7 @@ import Folder from '@icons/material/LibraryIcon';
 import Bombillo from '@icons/material/LightbulbOnIcon';
 import Libro from  '@icons/material/FileIcon';
 import Configuracion from '@icons/material/PaletteIcon';
-
+import logoDefecto from '../../imagenes/defectoLogo.png';
 
 import { connect } from 'react-redux';
 import { consultarConfiguracion } from '../../actions/actionConfiguracion.js'
@@ -35,11 +35,18 @@ class MenuLateral extends React.Component {
 	}
 
 	fondoBarr=()=>{
-		return( {
-			background:this.props.configuracion.barraLateral,
-			fontSize: "14px",
-			fontFamily: "Open sans, sans-serif"
-		})
+		return( 
+			this.props.configuracion.barraLateral===undefined?
+			{
+				background:'#0E3D38',
+				fontSize: "14px",
+				fontFamily: "Open sans, sans-serif"
+			}:{
+				background:this.props.configuracion.barraLateral,
+				fontSize: "14px",
+				fontFamily: "Open sans, sans-serif"
+			}
+			)
 	}
 
 	render() {
@@ -47,7 +54,8 @@ class MenuLateral extends React.Component {
 			<div  id="sidebar-wrapper" className="toggled" style={this.fondoBarr()}>
 				<div className="col-sm" style={this.fondoBarr()}>
 					<div className="container text-center" style={this.fondoBarr()}>
-						<img src={this.props.configuracion.logo} alt="" width="130" height="50" />
+						{this.props.configuracion.logo===undefined?<img src={logoDefecto} alt="" width="130" height="50" />:<img src={this.props.configuracion.logo} alt="" width="130" height="50" />}
+						
 					</div>
 				</div>
 				<li className="nav-item"  style={{height:"65px"}}>
