@@ -469,6 +469,34 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             throw new ExcepcionGenerica("Ocurrio una excepcion ");
         }
     }
+    
+    /**
+     * Metodo que trae los datos del usuario con el parametro cedula para llamar
+     * la consulta que busca la lista de actividades del usuario
+     *
+     * @param numeroDocumento
+     * @return
+     * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
+     *
+     */
+    @Override
+    public List<ActividadPOJO> listarActividadesUsuarioActivas(int numeroDocumento) throws ExcepcionGenerica {
+        try {
+            List<ActividadPOJO> listaActividades = new ArrayList();
+            listaActividades = actividadDB.listarActividadesUsuarioActivas(numeroDocumento);
+            if (listaActividades.size() >= 0) {
+                return listaActividades;
+            } else {
+                throw new NoResultException("Error en la consulta");
+            }
+        } catch (NoResultException ex) {
+            throw new ExcepcionGenerica("No se encontraron datos del usuario");
+        } catch (NullPointerException ex) {
+            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
+        } catch (Exception ex) {
+            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+        }
+    }
 
     /**
      * Metodo que realiza la logica para la redireccion de modulos
@@ -485,18 +513,13 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             int id=0;
             Token tokenDevuelto = Seguridad.desencriptar(token);
             String firma = tokenDevuelto.getFirma();
-            UsuarioPOJO usuario = usuarioDB.busquedaToken(firma);
-            List<ActividadPOJO> listaActividad = listarActividadesUsuario(usuario.getNumeroDocumento());
+            UsuarioPOJO usuario = usuarioDB.busquedaToken(token);
+            List<ActividadPOJO> listaActividad = listarActividadesUsuarioActivas(usuario.getNumeroDocumento());
             for (int i = 0; i < listaActividad.size(); i++) {
                 id = listaActividad.get(i).getIdModulo();
-                if(modulosResultado.isEmpty()){              
-                modulosResultado.add(moduloDB.buscarModuloEspecifico(id));
-                }else{
-                    for(int in=0; in<modulosResultado.size();in++){
-                        if(id!=modulosResultado.get(in).getIdModulo()){
-                            modulosResultado.add(moduloDB.buscarModuloEspecifico(id));
-                        }
-                    }
+                ModuloPOJO moduloE = moduloDB.buscarModuloEspecifico(id);
+                if(moduloE.getEstadoModulo().equals("Activo")){
+                    modulosResultado.add(moduloE); 
                 }
             }
             List<ModuloPOJO> retorno=new ArrayList<>();

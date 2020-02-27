@@ -40,6 +40,13 @@ public class ActividadPOJO {
         this.nombre = nombre;
        this.idModulo = idModulo;
     }
+    
+    public ActividadPOJO(int idActividad, String nombre, int idModulo, String estado) {
+        this.idActividad = idActividad;
+        this.nombre = nombre;
+        this.idModulo=idModulo;
+        this.estado=estado;
+    }
 
     public int getIdActividad() {
         return idActividad;

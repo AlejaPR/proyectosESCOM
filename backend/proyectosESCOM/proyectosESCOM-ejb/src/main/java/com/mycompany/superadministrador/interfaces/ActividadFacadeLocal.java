@@ -51,5 +51,7 @@ public interface ActividadFacadeLocal {
     public void cambiarEstadoActividad(int idActividad, String estado);
     
     public ActividadPOJO buscarActividadEspecifica(int idActividad);
+    
+    List<ActividadPOJO> listarActividadesUsuarioActivas(Integer idUsuario);
 
 }

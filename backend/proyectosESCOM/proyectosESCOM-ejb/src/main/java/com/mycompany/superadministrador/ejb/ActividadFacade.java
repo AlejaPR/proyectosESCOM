@@ -63,7 +63,7 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
         for (Actividad act : listaActividades) {
             String actividadConAcronimo=act.getNombreActividad();
             String actividadSinAcronimo=actividadConAcronimo.substring(3);
-            respuesta.add(new ActividadPOJO(act.getIdActividad(), actividadSinAcronimo,act.getFkActIdmodulo().getIdModulo()));
+            respuesta.add(new ActividadPOJO(act.getIdActividad(), actividadSinAcronimo,act.getFkActIdmodulo().getIdModulo(), act.getEstado()));
         }
         return respuesta;
     }
@@ -261,4 +261,25 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
         return actividad;
     }
 
+    /**
+     * Metodo que realiza la consulta de actividades del usuario especifico
+     *
+     * @param idUsuario
+     * @return
+     *
+     */
+    @Override
+    public List<ActividadPOJO> listarActividadesUsuarioActivas(Integer idUsuario) {
+        List<Actividad> listaActividades = new ArrayList<>();
+        TypedQuery<Actividad> listaAct = em.createNamedQuery("consultaActividadesUsuarioActivas", Actividad.class);
+        listaAct.setParameter("numeroDocumento", idUsuario);
+        listaActividades = listaAct.getResultList();
+        List<ActividadPOJO> respuesta = new ArrayList<>();
+        for (Actividad act : listaActividades) {
+            String actividadConAcronimo=act.getNombreActividad();
+            String actividadSinAcronimo=actividadConAcronimo.substring(3);
+            respuesta.add(new ActividadPOJO(act.getIdActividad(), actividadSinAcronimo,act.getFkActIdmodulo().getIdModulo()));
+        }
+        return respuesta;
+    }
 }

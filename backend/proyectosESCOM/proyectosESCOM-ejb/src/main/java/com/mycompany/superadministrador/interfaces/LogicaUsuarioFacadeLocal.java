@@ -46,6 +46,8 @@ public interface LogicaUsuarioFacadeLocal {
     
     public void asignarActividadAUsuario(int numeroDocumento,int idActividad) throws ExcepcionGenerica ;
     
+    public List<ActividadPOJO> listarActividadesUsuarioActivas(int cedula) throws ExcepcionGenerica;
+    
     public List<ModuloPOJO> redireccionUsuario(String token)throws ExcepcionGenerica;
     
    

@@ -115,6 +115,7 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
         moduloRespuesta.setNombreModulo(moduloEspDB.getNombreModulo());
         moduloRespuesta.setDescripcionModulo(moduloEspDB.getDescripcionModulo());
         moduloRespuesta.setUrl(moduloEspDB.getUrl());
+        moduloRespuesta.setEstadoModulo(moduloEspDB.getEstado());
         return moduloRespuesta;
     }
     

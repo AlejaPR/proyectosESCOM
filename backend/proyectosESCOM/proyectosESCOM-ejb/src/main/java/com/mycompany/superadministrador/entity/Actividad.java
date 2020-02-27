@@ -32,9 +32,10 @@ import javax.validation.constraints.Size;
 @NamedQueries({
     @NamedQuery(name = "consultaActividades", query = "SELECT a from Actividad a,Usuario u, UsuarioActividad ua WHERE a.pkActIdactividad = ua.fkUacIdactividad.pkActIdactividad AND u.idUsuario=ua.fkUacIdusuario.idUsuario AND u.idUsuario=:idUsuario"),
     @NamedQuery(name = "consultaActividadesModulo", query = "SELECT a from Actividad a WHERE a.fkActIdmodulo = :idModulo"),
-    @NamedQuery(name = "consultaActividadesUsuario", query = "SELECT ac from Actividad ac,Usuario us, UsuarioActividad ua WHERE us.idUsuario = ua.fkUacIdusuario.idUsuario AND ac.pkActIdactividad =ua.fkUacIdactividad.pkActIdactividad AND ac.estado='Activo' AND us.numeroDocumento=:numeroDocumento"),
+    @NamedQuery(name = "consultaActividadesUsuario", query = "SELECT ac from Actividad ac,Usuario us, UsuarioActividad ua WHERE us.idUsuario = ua.fkUacIdusuario.idUsuario AND ac.pkActIdactividad =ua.fkUacIdactividad.pkActIdactividad AND us.numeroDocumento=:numeroDocumento"),
     @NamedQuery(name = "consultaActividadesNoAsociadasUsuario", query = "SELECT act FROM Actividad act WHERE act.estado='Activo' AND act.fkActIdmodulo.pkModIdmodulo=:idModulo  AND act NOT IN(SELECT ac from Actividad ac,Usuario us, UsuarioActividad ua WHERE us.idUsuario = ua.fkUacIdusuario.idUsuario AND ac.pkActIdactividad =ua.fkUacIdactividad.pkActIdactividad AND ac.estado='Activo' AND us.numeroDocumento=:numeroDocumento AND ac.fkActIdmodulo.pkModIdmodulo=:idModulo)"),
     @NamedQuery(name = "consultaActividadPorNombre", query = "SELECT a from Actividad a WHERE a.nombreActividad = :nombreActividad"),
+    @NamedQuery(name = "consultaActividadesUsuarioActivas", query = "SELECT ac from Actividad ac,Usuario us, UsuarioActividad ua WHERE us.idUsuario = ua.fkUacIdusuario.idUsuario AND ac.pkActIdactividad =ua.fkUacIdactividad.pkActIdactividad AND ac.estado='Activo' AND us.numeroDocumento=:numeroDocumento"),
 })
 
 public class Actividad implements Serializable {
