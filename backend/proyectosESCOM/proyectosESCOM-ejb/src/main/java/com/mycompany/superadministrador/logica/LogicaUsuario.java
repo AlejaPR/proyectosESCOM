@@ -513,7 +513,7 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             int id=0;
             Token tokenDevuelto = Seguridad.desencriptar(token);
             String firma = tokenDevuelto.getFirma();
-            UsuarioPOJO usuario = usuarioDB.busquedaToken(token);
+            UsuarioPOJO usuario = usuarioDB.busquedaToken(firma);
             List<ActividadPOJO> listaActividad = listarActividadesUsuarioActivas(usuario.getNumeroDocumento());
             for (int i = 0; i < listaActividad.size(); i++) {
                 id = listaActividad.get(i).getIdModulo();
