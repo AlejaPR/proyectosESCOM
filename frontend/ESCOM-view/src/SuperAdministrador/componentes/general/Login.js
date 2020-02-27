@@ -5,7 +5,7 @@ import '../../css/registro.css'
 
 import Button from '@material-ui/core/Button';
 import { reduxForm, Field } from 'redux-form';
-
+import Alert from '@material-ui/lab/Alert';
 import { actionLoginUsuario, actualizarMensajeLogin, asignarNombreUsuario } from '../../actions/actionsUsuario.js'
 import { consultarConfiguracionLogin } from '../../actions/actionConfiguracion.js';
 import { connect } from 'react-redux';
@@ -44,13 +44,14 @@ class Login extends React.Component {
 
 	handleSubmit = formValues => {
 		this.props.actionLoginUsuario(formValues.correo, formValues.contrasena, this.habilitarBoton);
+		this.props.reset();
 	}
 
 
 	render() {
 		return (
 			<div>
-				<div className="container-fluid fondo-blanco">
+				<div className="container-fluid" style={{background:"white"}}>
 					<div className="row no-gutter">
 						<div className="d-none d-md-flex col-md-4 col-lg-6" style={{paddingLeft:"0px"}} >
 						{
@@ -79,12 +80,13 @@ class Login extends React.Component {
 												</div>
 												<div className="row">
 													<div className="col-sm-12 center">
+													
 														<Field name="mensaje" component={generarMensaje} label={this.props.mensaje} />
 													</div>
 												</div>
 												<div className="row">
 													<div className="col-sm-12 center">
-														<a href="/editar" id="forget-password" className="small" >¿Olvido su contraseña?</a>
+														<a href="/editar" id="forget-password" style={{fontSize: "15px", fontFamily: "sans-serif"}} >¿Olvido su contraseña?</a>
 													</div>
 												</div>
 												<br />
@@ -122,7 +124,9 @@ const generarInput = ({ input, label, type, meta: { touched, error, warning } })
 const generarMensaje = ({ input, label, type, meta: { touched, error, warning } }) => (
 	<div>
 		<div>
-			<input {...input} value={label} placeholder={label} type={type} style={{ background: "none", border: "none", height: "10px", width: "400px", fontSize: "13px", fontFamily: "sans-serif", color: "#dc3545", margin: "0px 0px 16px" }} disabled={true} className="letra" />
+			<br/>
+			{label===undefined|label==''?<div></div>:<Alert draggable={true} severity="error">{label}</Alert>}
+			<br/>
 		</div>
 	</div>
 )

@@ -23,7 +23,7 @@ export const MENSAJE_SUSPENDER = 'MENSAJE_SUSPENDER';
 export const REDIRECCIONAR_LOGIN = 'REDIRECCIONAR_LOGIN';
 export const ESTADO_ASIGNAR = 'ESTADO_ASIGNAR';
 export const MODULOS_REGISTRADOS = 'MODULOS_REGISTRADOS';
-export const NOMBRE_USUARIO='NOMBRE_USUARIO';
+export const NOMBRE_USUARIO = 'NOMBRE_USUARIO';
 
 export function actionLoginUsuario(correo, contrasena, cambiar) {
     var crypto = require('crypto');
@@ -39,8 +39,8 @@ export function actionLoginUsuario(correo, contrasena, cambiar) {
                         type: MENSAJE_LOGIN,
                         mensaje: 'Login correcto'
                     });
-                    var nombre=response.data.nombre+' '+response.data.apellido;
-                    localStorage.setItem('Nombre',nombre);
+                    var nombre = response.data.nombre + ' ' + response.data.apellido;
+                    localStorage.setItem('Nombre', nombre);
                     dispatch({
                         type: NOMBRE_USUARIO,
                         nombre: nombre
@@ -57,26 +57,10 @@ export function actionLoginUsuario(correo, contrasena, cambiar) {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
                         cambiar(false);
-                        switch (o.respuesta) {
-                            case 'Credenciales incorrectas':
-                                dispatch({
-                                    type: MENSAJE_LOGIN,
-                                    mensaje: 'Credenciales incorrectas'
-                                });
-                                break;
-                            case 'Ocurrio un error en el servidor':
-                                dispatch({
-                                    type: MENSAJE_LOGIN,
-                                    mensaje: 'Ocurrio un error en el servidor'
-                                });
-                                break;
-                            default:
-                                dispatch({
-                                    type: MENSAJE_LOGIN,
-                                    mensaje: 'Ocurrio un error en el servidor'
-                                });
-                                break;
-                        }
+                        dispatch({
+                            type: MENSAJE_LOGIN,
+                            mensaje: o.respuesta
+                        });
                     }
                 }
             })
@@ -213,10 +197,11 @@ export function actionConsultarModulosAcceso(token) {
     var tokenRequest = desencriptar(token);
     const headers = {
         'Content-Type': 'application/json',
-        'TokenAuto': tokenRequest
+        'TokenAuto': tokenRequest,
+        'Permiso':'sj'
     }
     return (dispatch, getState) => {
-        axios.get("http://localhost:9090/proyectosESCOM-web/api/usuario/redireccionUsuario/"+tokenRequest, { headers: headers })
+        axios.get("http://localhost:9090/proyectosESCOM-web/api/usuario/redireccionUsuario/" + tokenRequest, { headers: headers })
             .then(response => {
                 dispatch({
                     type: MODULOS_ACCESO,
@@ -232,12 +217,12 @@ export function actionConsultarModulosAcceso(token) {
                         if (respuesta === 'Sin permiso') {
                             dispatch({
                                 type: MODULOS_ACCESO,
-                                respuesta:[]
+                                respuesta: []
                             });
                         } else {
                             dispatch({
                                 type: MODULOS_ACCESO,
-                                respuesta:[]
+                                respuesta: []
                             });
                         }
                     }

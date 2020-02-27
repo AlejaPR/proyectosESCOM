@@ -26,6 +26,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
 import javax.ejb.EJB;
+import javax.ejb.EJBTransactionRolledbackException;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
 
@@ -68,6 +69,9 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         try {
             String contrasenaEncriptada = Seguridad.generarHash(contrasena);
             Usuario usuario = usuarioDB.consultaLogin(correo, contrasenaEncriptada);
+            if (usuario.getEstado().equals("Suspendido")) {
+                throw new ExcepcionGenerica("Cuenta suspendida temporalmente");
+            }
             Seguridad token = new Seguridad();
             List<ActividadPOJO> actividad = usuarioDB.consultarActividadesUsuario(usuario.getIdUsuario());
             Gson gson = new Gson();
@@ -85,6 +89,10 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer el login del usuario ");
         } catch (NoResultException ex) {
+            throw new ExcepcionGenerica("No se encontro ninguna credencial que coincida");
+        } catch (ExcepcionGenerica ex) {
+            throw new ExcepcionGenerica(ex.getMessage());
+        } catch (EJBTransactionRolledbackException ex) {
             throw new ExcepcionGenerica("No se encontro ninguna credencial que coincida");
         } catch (Exception ex) {
             throw new ExcepcionGenerica("Ocurrio una excepcion ");
@@ -427,9 +435,9 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         try {
             UsuarioPOJO usuarioResultado = usuarioDB.buscarUsuarioEspecifico(cedula);
             if (usuarioResultado != null) {
-                 for(int i=0; i<listaActividad.size();i++){    
-                    usuarioActividadDB.eliminarActividadUsuario(usuarioDB.find(usuarioResultado.getId()),actividadDB.find(listaActividad.get(i).getIdActividad()));
-                 }
+                for (int i = 0; i < listaActividad.size(); i++) {
+                    usuarioActividadDB.eliminarActividadUsuario(usuarioDB.find(usuarioResultado.getId()), actividadDB.find(listaActividad.get(i).getIdActividad()));
+                }
             } else {
                 throw new NoResultException("No se encontraron datos del usuario");
             }
@@ -469,7 +477,7 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             throw new ExcepcionGenerica("Ocurrio una excepcion ");
         }
     }
-    
+
     /**
      * Metodo que trae los datos del usuario con el parametro cedula para llamar
      * la consulta que busca la lista de actividades del usuario
@@ -510,7 +518,7 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
     public List<ModuloPOJO> redireccionUsuario(String token) throws ExcepcionGenerica {
         try {
             List<ModuloPOJO> modulosResultado = new ArrayList();
-            int id=0;
+            int id = 0;
             Token tokenDevuelto = Seguridad.desencriptar(token);
             String firma = tokenDevuelto.getFirma();
             UsuarioPOJO usuario = usuarioDB.busquedaToken(firma);
@@ -518,21 +526,21 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             for (int i = 0; i < listaActividad.size(); i++) {
                 id = listaActividad.get(i).getIdModulo();
                 ModuloPOJO moduloE = moduloDB.buscarModuloEspecifico(id);
-                if(moduloE.getEstadoModulo().equals("Activo")){
-                    modulosResultado.add(moduloE); 
+                if (moduloE.getEstadoModulo().equals("Activo")) {
+                    modulosResultado.add(moduloE);
                 }
             }
-            List<ModuloPOJO> retorno=new ArrayList<>();
-            for(ModuloPOJO m : modulosResultado){
-                if(!comprobarExistencia(retorno, m.getIdModulo())){
+            List<ModuloPOJO> retorno = new ArrayList<>();
+            for (ModuloPOJO m : modulosResultado) {
+                if (!comprobarExistencia(retorno, m.getIdModulo())) {
                     retorno.add(m);
                 }
             }
             if (!retorno.isEmpty()) {
-                    return retorno;
-                } else {
-                    throw new ExcepcionGenerica("No hay permisos asociados");
-                }
+                return retorno;
+            } else {
+                throw new ExcepcionGenerica("No hay permisos asociados");
+            }
 
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
@@ -540,10 +548,10 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             throw new ExcepcionGenerica("Ocurrio una excepcion ");
         }
     }
-    
-    public boolean comprobarExistencia(List<ModuloPOJO> modulos,int id){    
-        for(ModuloPOJO m: modulos){
-            if(id==m.getIdModulo()){
+
+    public boolean comprobarExistencia(List<ModuloPOJO> modulos, int id) {
+        for (ModuloPOJO m : modulos) {
+            if (id == m.getIdModulo()) {
                 return true;
             }
         }

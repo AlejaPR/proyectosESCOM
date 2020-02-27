@@ -47,7 +47,7 @@ class ContenidoInicio extends React.Component {
 									firstAriaLabel: 'oooo'
 								},
 								body: {
-									emptyDataSourceMessage: 'Aun no hay ningun usuario registrado'
+									emptyDataSourceMessage: 'No se encontraron modulos disponibles'
 								},
 								toolbar: {
 									searchTooltip: 'Buscar',

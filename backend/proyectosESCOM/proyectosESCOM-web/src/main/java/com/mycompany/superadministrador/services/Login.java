@@ -15,6 +15,7 @@ import javax.ws.rs.core.Response;
 
 /**
  * Clase que administra el servicio para login
+ *
  * @author jeison gaona - alejandra pabon
  */
 @javax.enterprise.context.RequestScoped
@@ -47,7 +48,8 @@ public class Login {
             UsuarioPOJO usuario = usuarioLogica.loginUsuario(correo, contrasena);
             return Response.status(Response.Status.OK).entity(usuario).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("Credenciales incorrectas");
+            System.out.println("excep es"+e.getMessage());
+            respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
         } catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error en el servidor ");
