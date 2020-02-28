@@ -227,7 +227,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         usuario.setNombre(lista.getNombre());
         usuario.setApellido(lista.getApellido());
         usuario.setFechaDeNacimiento(fechaN);
-        usuario.setTipoDocumento(lista.getFkUsrIdtipodocumento().getIdTipodocumento());
+        usuario.setTipoDocumento(lista.getTipoDocumento().getIdTipodocumento());
         usuario.setNumeroDocumento(lista.getNumeroDocumento());
         usuario.setCorreoElectronico(lista.getCorreoElectronico());
         usuario.setEstado(lista.getEstado());
