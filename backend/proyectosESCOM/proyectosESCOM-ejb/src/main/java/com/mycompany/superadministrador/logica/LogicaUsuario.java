@@ -465,8 +465,8 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             Usuario usu = usuarioDB.find(usuario.getId());
             Actividad act = actividadDB.find(idActividad);
             UsuarioActividad usuarioActividad = new UsuarioActividad();
-            usuarioActividad.setFkUacIdusuario(usu);
-            usuarioActividad.setFkUacIdactividad(act);
+            usuarioActividad.setUsuario(usu);
+            usuarioActividad.setActividad(act);
             usuarioActividad.setUltimaModificacion(new Date());
             usuarioActividadDB.create(usuarioActividad);
         } catch (NullPointerException ex) {

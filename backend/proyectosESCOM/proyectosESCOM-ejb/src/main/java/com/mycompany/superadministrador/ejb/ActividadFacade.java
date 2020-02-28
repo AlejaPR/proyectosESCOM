@@ -63,7 +63,7 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
         for (Actividad act : listaActividades) {
             String actividadConAcronimo=act.getNombreActividad();
             String actividadSinAcronimo=actividadConAcronimo.substring(3);
-            respuesta.add(new ActividadPOJO(act.getIdActividad(), actividadSinAcronimo,act.getFkActIdmodulo().getIdModulo(), act.getEstado()));
+            respuesta.add(new ActividadPOJO(act.getIdActividad(), actividadSinAcronimo,act.getModulo().getIdModulo(), act.getEstado()));
         }
         return respuesta;
     }
@@ -245,7 +245,7 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
     public ActividadPOJO buscarActividadEspecifica(int idActividad) {
 
         Actividad lista = new Actividad();
-        TypedQuery<Actividad> actividadEspDB = em.createQuery("select a from Actividad a where a.pkActIdactividad=:idActividad", Actividad.class);
+        TypedQuery<Actividad> actividadEspDB = em.createQuery("select a from Actividad a where a.idActividad=:idActividad", Actividad.class);
         actividadEspDB.setParameter("idActividad", idActividad);
         lista = actividadEspDB.getSingleResult();
         
@@ -256,7 +256,7 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
         actividad.setNombre(actividadSinAcronimo);
         actividad.setDescripcionActividad(lista.getDescripcionActividad());
         actividad.setEstado(lista.getEstado());
-        actividad.setModuloActividad(lista.getFkActIdmodulo().getNombreModulo());
+        actividad.setModuloActividad(lista.getModulo().getNombreModulo());
         
         return actividad;
     }
@@ -278,7 +278,7 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
         for (Actividad act : listaActividades) {
             String actividadConAcronimo=act.getNombreActividad();
             String actividadSinAcronimo=actividadConAcronimo.substring(3);
-            respuesta.add(new ActividadPOJO(act.getIdActividad(), actividadSinAcronimo,act.getFkActIdmodulo().getIdModulo()));
+            respuesta.add(new ActividadPOJO(act.getIdActividad(), actividadSinAcronimo,act.getModulo().getIdModulo()));
         }
         return respuesta;
     }

@@ -6,8 +6,6 @@
 package com.mycompany.superadministrador.entity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -38,7 +36,7 @@ public class Bitacora implements Serializable{
     private String operacion;
     
     @Column(name = "FK_BTC_IDUSUARIO")
-    private Integer fkIdUsuario;
+    private Integer idUsuario;
     
     @Size(max = 20)
     @Column(name = "BTC_TABLAINVOLUCRADA")
@@ -53,7 +51,7 @@ public class Bitacora implements Serializable{
     private String mac;
     
     @Column(name = "FK_BTC_IDMODULO")
-    private Integer fkBtcIdmodulo;
+    private Integer idModulo;
     
     @Size(max = 20)
     @Column(name = "BTC_IP")
@@ -63,13 +61,13 @@ public class Bitacora implements Serializable{
         
     }
 
-    public Bitacora(String operacion, Integer fkIdUsuario, String tablaInvolucrada, Date fechaBitacora, String mac, Integer fkBtcIdmodulo, String ip) {
+    public Bitacora(String operacion, Integer idUsuario, String tablaInvolucrada, Date fechaBitacora, String mac, Integer idModulo, String ip) {
         this.operacion = operacion;
-        this.fkIdUsuario = fkIdUsuario;
+        this.idUsuario = idUsuario;
         this.tablaInvolucrada = tablaInvolucrada;
         this.fechaBitacora = fechaBitacora;
         this.mac = mac;
-        this.fkBtcIdmodulo = fkBtcIdmodulo;
+        this.idModulo = idModulo;
         this.ip = ip;
     }
 
@@ -89,14 +87,14 @@ public class Bitacora implements Serializable{
         this.operacion = operacion;
     }
 
-    public Integer getFkIdUsuario() {
-        return fkIdUsuario;
+    public Integer getIdUsuario() {
+        return idUsuario;
     }
 
-    public void setFkIdUsuario(Integer fkIdUsuario) {
-        this.fkIdUsuario = fkIdUsuario;
+    public void setIdUsuario(Integer idUsuario) {
+        this.idUsuario = idUsuario;
     }
-
+    
     public String getTablaInvolucrada() {
         return tablaInvolucrada;
     }
@@ -121,12 +119,12 @@ public class Bitacora implements Serializable{
         this.mac = mac;
     }
 
-    public Integer getFkBtcIdmodulo() {
-        return fkBtcIdmodulo;
+    public Integer getIdModulo() {
+        return idModulo;
     }
 
-    public void setFkBtcIdmodulo(Integer fkBtcIdmodulo) {
-        this.fkBtcIdmodulo = fkBtcIdmodulo;
+    public void setIdModulo(Integer idModulo) {
+        this.idModulo = idModulo;
     }
 
     public String getIp() {

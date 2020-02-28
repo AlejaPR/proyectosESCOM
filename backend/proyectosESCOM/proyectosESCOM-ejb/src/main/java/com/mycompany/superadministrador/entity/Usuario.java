@@ -34,10 +34,10 @@ import javax.persistence.TemporalType;
     @NamedQuery(name = "editarTokenCerrar", query = "UPDATE Usuario set token = :token WHERE correoElectronico=:correo"),
     @NamedQuery(name = "consultarExistencia", query = "SELECT u from Usuario u WHERE u.correoElectronico=:correo OR u.numeroDocumento=:numeroDocumento"),
     @NamedQuery(name = "consultaUsuarioEsp", query = "SELECT u from Usuario u WHERE u.numeroDocumento=:cedula"),
-    @NamedQuery(name = "editarUsuario", query = "UPDATE Usuario set nombre=:nombre,apellido=:apellido,"
-            + "numeroDocumento=:numeroDocumento,fechaNacimiento=:fechaNacimiento,correoElectronico=:correoElectronico,fkUsrIdtipodocumento=:tipoDocumento"
-            + " WHERE numeroDocumento=:documento"),
-    @NamedQuery(name = "eliminarActividad", query = "DELETE FROM UsuarioActividad UA WHERE UA.fkUacIdusuario.idUsuario=:numeroDocumento AND UA.fkUacIdactividad.pkActIdactividad=:codigoActividad ")
+    @NamedQuery(name = "editarUsuario", query = "UPDATE Usuario u set u.nombre=:nombre,u.apellido=:apellido,"
+            + "u.numeroDocumento=:numeroDocumento,u.fechaNacimiento=:fechaNacimiento,u.correoElectronico=:correoElectronico,u.tipoDocumento=:tipoDocumento"
+            + " WHERE u.numeroDocumento=:documento"),
+    @NamedQuery(name = "eliminarActividad", query = "DELETE FROM UsuarioActividad UA WHERE UA.usuario.idUsuario=:numeroDocumento AND UA.actividad.idActividad=:codigoActividad ")
 
 })
 public class Usuario implements Serializable {
@@ -80,16 +80,16 @@ public class Usuario implements Serializable {
 
     @JoinColumn(name = "FK_USR_IDTIPODOCUMENTO", referencedColumnName = "PK_TIP_IDTIPODOCUMENTO")
     @ManyToOne
-    private TipoDocumento fkUsrIdtipodocumento;
+    private TipoDocumento tipoDocumento;
 
-    @OneToMany(mappedBy = "fkUacIdusuario")
-    private List<UsuarioActividad> usuarioActividadList;
+    @OneToMany(mappedBy = "usuario")
+    private List<UsuarioActividad> listaUsuarioActividad;
 
     public Usuario() {
 
     }
 
-    public Usuario(String token, Integer numeroDocumento, String apellido, String estado, Date fechaNacimiento, Integer numeroIntentos, String nombre, Date ultimaModificacion, String correoElectronico, String contrasena, TipoDocumento fkUsrIdtipodocumento) {
+    public Usuario(String token, Integer numeroDocumento, String apellido, String estado, Date fechaNacimiento, Integer numeroIntentos, String nombre, Date ultimaModificacion, String correoElectronico, String contrasena, TipoDocumento tipoDocumento) {
         this.token = token;
         this.numeroDocumento = numeroDocumento;
         this.apellido = apellido;
@@ -100,7 +100,7 @@ public class Usuario implements Serializable {
         this.ultimaModificacion = ultimaModificacion;
         this.correoElectronico = correoElectronico;
         this.contrasena = contrasena;
-        this.fkUsrIdtipodocumento = fkUsrIdtipodocumento;
+        this.tipoDocumento = tipoDocumento;
     }
 
     public Integer getIdUsuario() {
@@ -191,20 +191,22 @@ public class Usuario implements Serializable {
         this.contrasena = contrasena;
     }
 
-    public TipoDocumento getFkUsrIdtipodocumento() {
-        return fkUsrIdtipodocumento;
+    public TipoDocumento getTipoDocumento() {
+        return tipoDocumento;
     }
 
-    public void setFkUsrIdtipodocumento(TipoDocumento fkUsrIdtipodocumento) {
-        this.fkUsrIdtipodocumento = fkUsrIdtipodocumento;
+    public void setTipoDocumento(TipoDocumento tipoDocumento) {
+        this.tipoDocumento = tipoDocumento;
     }
 
-    public List<UsuarioActividad> getUsuarioActividadList() {
-        return usuarioActividadList;
+    public List<UsuarioActividad> getListaUsuarioActividad() {
+        return listaUsuarioActividad;
     }
 
-    public void setUsuarioActividadList(List<UsuarioActividad> usuarioActividadList) {
-        this.usuarioActividadList = usuarioActividadList;
+    public void setListaUsuarioActividad(List<UsuarioActividad> listaUsuarioActividad) {
+        this.listaUsuarioActividad = listaUsuarioActividad;
     }
+
+    
 
 }

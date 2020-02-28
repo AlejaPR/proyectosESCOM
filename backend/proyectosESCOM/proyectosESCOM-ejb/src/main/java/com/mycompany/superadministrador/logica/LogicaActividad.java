@@ -48,7 +48,7 @@ public class LogicaActividad implements LogicaActividadFacadeLocal {
                     actividad.setNombre(actividadSinAcronimo);
                     
                     actividad.setDescripcionActividad(a.getDescripcionActividad());
-                    actividad.setModuloActividad(a.getFkActIdmodulo().getNombreModulo());
+                    actividad.setModuloActividad(a.getModulo().getNombreModulo());
                     actividad.setEstado(a.getEstado());
                     listaActividadesM.add(actividad);
                 }

@@ -6,20 +6,15 @@
 package com.mycompany.superadministrador.entity;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -40,21 +35,21 @@ public class UsuarioActividad implements Serializable {
     @Id
     @JoinColumn(name = "FK_UAC_IDACTIVIDAD")
     @ManyToOne
-    private Actividad fkUacIdactividad;
+    private Actividad actividad;
     
     @Id
     @JoinColumn(name = "FK_UAC_IDUSUARIO")
     @ManyToOne
-    private Usuario fkUacIdusuario;
+    private Usuario usuario;
 
     public UsuarioActividad(){
         
     }
     
-    public UsuarioActividad(Date ultimaModificacion, Actividad fkUacIdactividad, Usuario fkUacIdusuario) {
+    public UsuarioActividad(Date ultimaModificacion, Actividad actividad, Usuario usuario) {
         this.ultimaModificacion = ultimaModificacion;
-        this.fkUacIdactividad = fkUacIdactividad;
-        this.fkUacIdusuario = fkUacIdusuario;
+        this.actividad = actividad;
+        this.usuario = usuario;
     }
 
     public Integer getIdRelacion() {
@@ -73,21 +68,23 @@ public class UsuarioActividad implements Serializable {
         this.ultimaModificacion = ultimaModificacion;
     }
 
-    public Actividad getFkUacIdactividad() {
-        return fkUacIdactividad;
+    public Actividad getActividad() {
+        return actividad;
     }
 
-    public void setFkUacIdactividad(Actividad fkUacIdactividad) {
-        this.fkUacIdactividad = fkUacIdactividad;
+    public void setActividad(Actividad actividad) {
+        this.actividad = actividad;
     }
 
-    public Usuario getFkUacIdusuario() {
-        return fkUacIdusuario;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setFkUacIdusuario(Usuario fkUacIdusuario) {
-        this.fkUacIdusuario = fkUacIdusuario;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
+
+   
     
     
 }

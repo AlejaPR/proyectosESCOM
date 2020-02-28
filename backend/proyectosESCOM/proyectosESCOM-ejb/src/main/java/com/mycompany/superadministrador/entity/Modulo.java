@@ -29,7 +29,7 @@ import javax.validation.constraints.Size;
 @Table(name = "TBL_MODULO")
 @NamedQueries({
     @NamedQuery(name = "consultaModulos", query = "SELECT m FROM Modulo m"),
-    @NamedQuery(name = "consultaModuloEsp", query = "SELECT m from Modulo m WHERE m.pkModIdmodulo=:idModulo"),
+    @NamedQuery(name = "consultaModuloEsp", query = "SELECT m from Modulo m WHERE m.idModulo=:idModulo"),
     @NamedQuery(name = "consultarExistenciaModulo", query = "SELECT m from Modulo m WHERE m.nombreModulo=:nombreModulo"),
     @NamedQuery(name = "consultarAcronimo", query = "SELECT m from Modulo m WHERE m.acronimo=:acronimo")
    
@@ -39,7 +39,7 @@ public class Modulo implements Serializable{
     @Id
     @Basic(optional = false)
     @Column(name = "PK_MOD_IDMODULO")
-    private Integer pkModIdmodulo;
+    private Integer idModulo;
     
     @Column(name = "MOD_ULTIMAMODIFICACION")
     @Temporal(TemporalType.TIMESTAMP)
@@ -67,8 +67,8 @@ public class Modulo implements Serializable{
     @Column(name = "MOD_DESCRIPCIONMODULO")
     private String descripcionModulo;
     
-    @OneToMany(mappedBy = "fkActIdmodulo")
-    private List<Actividad> actividadList;
+    @OneToMany(mappedBy = "modulo")
+    private List<Actividad> listaActividad;
 
     public Modulo(){
         
@@ -84,11 +84,11 @@ public class Modulo implements Serializable{
     }
 
     public Integer getIdModulo() {
-        return pkModIdmodulo;
+        return idModulo;
     }
 
     public void setIdModulo(Integer idModulo) {
-        this.pkModIdmodulo = idModulo;
+        this.idModulo = idModulo;
     }
 
     public Date getUltimaModificacion() {
@@ -132,12 +132,12 @@ public class Modulo implements Serializable{
         this.descripcionModulo = descripcionModulo;
     }
 
-    public List<Actividad> getActividadList() {
-        return actividadList;
+    public List<Actividad> getListaActividad() {
+        return listaActividad;
     }
 
-    public void setActividadList(List<Actividad> actividadList) {
-        this.actividadList = actividadList;
+    public void setListaActividad(List<Actividad> listaActividad) {
+        this.listaActividad = listaActividad;
     }
 
     public String getAcronimo() {
