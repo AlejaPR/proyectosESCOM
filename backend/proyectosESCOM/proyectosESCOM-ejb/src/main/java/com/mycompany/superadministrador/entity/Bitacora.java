@@ -15,7 +15,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  *
@@ -31,14 +30,12 @@ public class Bitacora implements Serializable{
     @Column(name = "PK_BTC_IDBITACORA")
     private Integer idBitacora;
     
-    @Size(max = 50)
     @Column(name = "BTC_OPERACION")
     private String operacion;
     
     @Column(name = "FK_BTC_IDUSUARIO")
     private Integer idUsuario;
     
-    @Size(max = 20)
     @Column(name = "BTC_TABLAINVOLUCRADA")
     private String tablaInvolucrada;
     
@@ -46,14 +43,9 @@ public class Bitacora implements Serializable{
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaBitacora;
     
-    @Size(max = 20)
-    @Column(name = "BTC_MAC")
-    private String mac;
-    
     @Column(name = "FK_BTC_IDMODULO")
     private Integer idModulo;
-    
-    @Size(max = 20)
+
     @Column(name = "BTC_IP")
     private String ip;
     
@@ -61,12 +53,11 @@ public class Bitacora implements Serializable{
         
     }
 
-    public Bitacora(String operacion, Integer idUsuario, String tablaInvolucrada, Date fechaBitacora, String mac, Integer idModulo, String ip) {
+    public Bitacora(String operacion, Integer idUsuario, String tablaInvolucrada, Date fechaBitacora, Integer idModulo, String ip) {
         this.operacion = operacion;
         this.idUsuario = idUsuario;
         this.tablaInvolucrada = tablaInvolucrada;
         this.fechaBitacora = fechaBitacora;
-        this.mac = mac;
         this.idModulo = idModulo;
         this.ip = ip;
     }
@@ -109,14 +100,6 @@ public class Bitacora implements Serializable{
 
     public void setFechaBitacora(Date fechaBitacora) {
         this.fechaBitacora = fechaBitacora;
-    }
-
-    public String getMac() {
-        return mac;
-    }
-
-    public void setMac(String mac) {
-        this.mac = mac;
     }
 
     public Integer getIdModulo() {

@@ -6,7 +6,7 @@ import '../../css/registro.css'
 import Button from '@material-ui/core/Button';
 import { reduxForm, Field } from 'redux-form';
 import Alert from '@material-ui/lab/Alert';
-import { actionLoginUsuario, actualizarMensajeLogin, asignarNombreUsuario } from '../../actions/actionsUsuario.js'
+import { actionLoginUsuario, actualizarMensajeLogin, asignarNombreUsuario,actionAsignarIp } from '../../actions/actionsUsuario.js'
 import { consultarConfiguracionLogin } from '../../actions/actionConfiguracion.js';
 import { connect } from 'react-redux';
 import { requerido, correo } from '../../utilitario/validacionCampos.js';
@@ -29,6 +29,7 @@ class Login extends React.Component {
 	componentDidUpdate() {
 		switch (this.props.mensaje) {
 			case 'Login correcto':
+				this.props.actionAsignarIp();
 				this.props.history.push('/inicio');
 				break;
 			default:
@@ -149,4 +150,4 @@ let formulario = reduxForm({
 
 
 
-export default withRouter(connect(mapStateToProps, { actionLoginUsuario, actualizarMensajeLogin, consultarConfiguracionLogin, asignarNombreUsuario })(formulario));
+export default withRouter(connect(mapStateToProps, { actionAsignarIp,actionLoginUsuario, actualizarMensajeLogin, consultarConfiguracionLogin, asignarNombreUsuario })(formulario));

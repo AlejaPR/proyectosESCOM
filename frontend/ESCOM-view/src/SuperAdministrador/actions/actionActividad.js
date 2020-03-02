@@ -61,7 +61,7 @@ export function actionConsultarActividades(token) {
         'Permiso': 'sa_Consultar actividades registradas'
     }
     return (dispatch, getState) => {
-        axios.get("http://localhost:9090/proyectosESCOM-web/api/actividad/listarActividades", { headers: headers })
+        axios.get("http://localhost:9090/proyectosESCOM-web/api/actividades/listar", { headers: headers })
             .then(response => {
                 dispatch({
                     type: MOSTRAR_ACTIVIDADES,
@@ -97,18 +97,11 @@ export function actionAgregarActividad(actividad, token) {
         'Permiso': 'sa_Registrar actividad'
     }
     return (dispatch, getState) => {
-        axios.post("http://localhost:9090/proyectosESCOM-web/api/actividad/registrarActividad", actividad, { headers: headers })
+        axios.post("http://localhost:9090/proyectosESCOM-web/api/actividades/registrar", actividad, { headers: headers })
             .then(response => {
-                let act = {
-                    'nombre': response.data.nombre,
-                    'descripcionActividad': actividad.descripcionActividad,
-                    'idModulo': actividad.idModulo,
-                    'moduloActividad': actividad.moduloActividad,
-                    'estado': 'Activo'
-                }
                 dispatch({
                     type: AGREGAR_ACTIVIDAD,
-                    actividadARegistrar: act
+                    actividadARegistrar: actividad
                 });
                 dispatch({
                     type: MENSAJE_REGISTRAR,
@@ -152,7 +145,7 @@ export function actionConsultarModulos(token) {
         'Permiso': 'sa_Consultar actividades registradas'
     }
     return (dispatch, getState) => {
-        axios.get("http://localhost:9090/proyectosESCOM-web/api/modulo/listarModulos", { headers: headers })
+        axios.get("http://localhost:9090/proyectosESCOM-web/api/modulos/listar", { headers: headers })
             .then(response => {
                 dispatch({
                     type: MODULOS_REGISTRADOS,
@@ -189,7 +182,7 @@ export function actionSuspenderActivarActividad(codigoActividad, token, actualiz
         'Permiso': 'sa_Suspender/activar actividades de modulos'
     }
     return (dispatch, getState) => {
-        axios.get("http://localhost:9090/proyectosESCOM-web/api/actividad/cambiarEstadoActividad/" + codigoActividad, { headers: headers })
+        axios.get("http://localhost:9090/proyectosESCOM-web/api/actividades/cambiarEstado/" + codigoActividad, { headers: headers })
             .then(response => {
                 dispatch({
                     type: MENSAJE_SUSPENDER,
@@ -238,7 +231,7 @@ export function actionCargarInformacionDeActividad(codigoActividad, token) {
         'Permiso': 'sa_Editar informacion de la actividad'
     }
     return (dispatch, getState) => {
-        axios.get("http://localhost:9090/proyectosESCOM-web/api/actividad/listarActividadEspecifica/" + codigoActividad, { headers: headers })
+        axios.get("http://localhost:9090/proyectosESCOM-web/api/actividades/listarEspecifica/" + codigoActividad, { headers: headers })
             .then(response => {
                 dispatch({
                     type: INFORMACION_ACTIVIDAD,
@@ -279,7 +272,7 @@ export function actionEditarUsuario(actividad, token) {
         'Permiso': 'sa_Editar informacion de la actividad'
     }
     return (dispatch, getState) => {
-        axios.put("http://localhost:9090/proyectosESCOM-web/api/actividad/editarActividad", actividad, { headers: headers })
+        axios.put("http://localhost:9090/proyectosESCOM-web/api/actividades/editar", actividad, { headers: headers })
             .then(response => {
                 dispatch({
                     type: EDITAR_ACTIVIDAD,

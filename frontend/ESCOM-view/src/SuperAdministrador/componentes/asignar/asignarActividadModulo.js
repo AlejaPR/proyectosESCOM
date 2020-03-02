@@ -34,7 +34,6 @@ class AsignarActividadModulo extends React.Component {
     }
 
     componentDidUpdate() {
-        console.log('permiso modulo',this.props.mensaje);
         switch (this.props.mensaje) {
             case 'Operacion hecha con exito':
                 NotificationManager.success('Operacion hecha con exito');

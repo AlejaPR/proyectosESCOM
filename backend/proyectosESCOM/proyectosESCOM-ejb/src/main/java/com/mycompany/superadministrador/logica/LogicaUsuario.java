@@ -129,6 +129,7 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             List<Usuario> usuarioResultado = usuarioDB.consultaDatosExistentes(usuario.getCorreoElectronico(), usuario.getNumeroDocumento());
             if (usuarioResultado.isEmpty()) {
                 usuarioDB.registrarUsuario(usuario);
+                System.out.println("ip:"+usuario.getDatosSolicitud().getIp()+" MAC: "+usuario.getDatosSolicitud().getMAC());
             } else {
                 throw new NoResultException("El correo o numero de documento ya esta registrado");
             }

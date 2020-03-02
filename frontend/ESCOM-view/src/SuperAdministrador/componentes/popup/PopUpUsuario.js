@@ -83,11 +83,13 @@ class PopUpUsuario extends React.Component {
         'correoElectronico': formValues.correo,
         'contrasena': contrasenaEncryp,
         'fechaNacimiento': date,
-        'estado': 'Activo'
+        'estado': 'Activo',
+        'datosSolicitud':null
       };
       this.props.actionAgregarUsuario(usuario, localStorage.getItem('Token'));
       this.props.reset();
     } catch (error) {
+      console.log(error)
       NotificationManager.error('Ingrese todos los datos');
     }
   }

@@ -22,7 +22,7 @@ class MenuLateral extends React.Component {
 	}
 
 	componentDidMount() {
-		this.props.consultarConfiguracion();
+		this.props.consultarConfiguracion(localStorage.getItem('Token'));
 	}
 
 

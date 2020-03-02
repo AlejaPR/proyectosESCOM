@@ -23,7 +23,7 @@ import javax.ws.rs.core.Response;
  * @author jeison gaona - alejandra pabon
  */
 @javax.enterprise.context.RequestScoped
-@Path("modulo")
+@Path("modulos")
 public class ModuloServicio {
 
     @EJB
@@ -43,8 +43,8 @@ public class ModuloServicio {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/registrarModulo")
-    public Response registrarModulo(ModuloPOJO modulo) {
+    @Path("/registrar")
+    public Response registrar(ModuloPOJO modulo) {
         try {
             moduloLogica.registrarModulo(modulo);
             respuesta.setRespuesta("Modulo registrado");
@@ -65,8 +65,8 @@ public class ModuloServicio {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/listarModulos")
-    public Response listarModulos() {
+    @Path("/listar")
+    public Response listar() {
         try {
             List<ModuloPOJO> listaModulos = moduloLogica.devolverModulos();
             return Response.status(Response.Status.OK).entity(listaModulos).build();
@@ -87,7 +87,7 @@ public class ModuloServicio {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/datosModulo/{idModulo}")
+    @Path("/datos/{idModulo}")
     public Response listarModuloId(@PathParam("idModulo") int idModulo) {
         try {
             ModuloPOJO moduloDatos = moduloLogica.traerModuloId(idModulo);
@@ -110,8 +110,8 @@ public class ModuloServicio {
      */
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/editarModulo/{idModulo}")
-    public Response editarModulo(@PathParam("idModulo") int idModulo, ModuloPOJO moduloEditar) {
+    @Path("/editar/{idModulo}")
+    public Response editar(@PathParam("idModulo") int idModulo, ModuloPOJO moduloEditar) {
         try {
             moduloLogica.editarModulo(idModulo, moduloEditar);
             respuesta.setRespuesta("Modulo modificado correctamente");
@@ -133,8 +133,8 @@ public class ModuloServicio {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/cambiarEstadoModulo/{idModulo}")
-    public Response cambiarEstadoModulo(@PathParam("idModulo") int idModulo) {
+    @Path("/cambiarEstado/{idModulo}")
+    public Response cambiarEstado(@PathParam("idModulo") int idModulo) {
         try {
             moduloLogica.cambiarEstadoModulo(idModulo);
             respuesta.setRespuesta("Estado cambiado correctamente");
@@ -157,8 +157,8 @@ public class ModuloServicio {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/listarActividadesModulo/{idModulo}")
-    public Response listarActividadesModulo(@PathParam("idModulo") int idModulo) {
+    @Path("/listarActividades/{idModulo}")
+    public Response listarActividades(@PathParam("idModulo") int idModulo) {
         try {
             List<ActividadPOJO> listaActividadesM = moduloLogica.listarActividadesModulo(idModulo);
             return Response.status(Response.Status.OK).entity(listaActividadesM).build();
@@ -181,8 +181,8 @@ public class ModuloServicio {
      */
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/cambiarEstadoActividadModulo")
-    public Response cambiarEstadoActividadModulo(List<ActividadPOJO> listaActividad) {
+    @Path("/cambiarEstadoActividad")
+    public Response cambiarEstadoActividad(List<ActividadPOJO> listaActividad) {
         try {
             moduloLogica.cambiarEstadoActividadModulo(listaActividad);
             respuesta.setRespuesta("Estado de actividad cambiado correctamente");

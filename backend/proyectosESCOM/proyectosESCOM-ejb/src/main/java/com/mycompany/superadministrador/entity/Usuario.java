@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Size;
 
 /**
  *
@@ -46,15 +47,18 @@ public class Usuario implements Serializable {
     @Column(name = "PK_USR_IDUSUARIO")
     private Integer idUsuario;
 
+    @Size(max = 300)
     @Column(name = "USR_TOKEN")
     private String token;
 
     @Column(name = "USR_NUMERODOCUMENTO")
     private Integer numeroDocumento;
 
+    @Size(max = 50)
     @Column(name = "USR_APELLIDO")
     private String apellido;
 
+    @Size(max = 20)
     @Column(name = "USR_ESTADO")
     private String estado;
 
@@ -65,6 +69,7 @@ public class Usuario implements Serializable {
     @Column(name = "USR_NUMEROINTENTOS")
     private Integer numeroIntentos;
 
+    @Size(max = 50)
     @Column(name = "USR_NOMBRE")
     private String nombre;
 
@@ -72,9 +77,11 @@ public class Usuario implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date ultimaModificacion;
 
+    @Size(max = 50)
     @Column(name = "USR_CORREOELECTRONICO")
     private String correoElectronico;
 
+    @Size(max = 300)
     @Column(name = "USR_CONTRASENA")
     private String contrasena;
 

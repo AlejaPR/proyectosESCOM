@@ -34,6 +34,8 @@ public class UsuarioPOJO {
    private String token;
    
    private String fechaDeNacimiento;
+   
+   private DatosSolicitudPOJO datosSolicitud;
 
     public UsuarioPOJO() {
     }
@@ -136,9 +138,12 @@ public class UsuarioPOJO {
         this.fechaDeNacimiento = fechaDeNacimiento;
     }
 
-    
+    public DatosSolicitudPOJO getDatosSolicitud() {
+        return datosSolicitud;
+    }
 
-    
-   
-   
+    public void setDatosSolicitud(DatosSolicitudPOJO datosSolicitud) {
+        this.datosSolicitud = datosSolicitud;
+    }
+
 }

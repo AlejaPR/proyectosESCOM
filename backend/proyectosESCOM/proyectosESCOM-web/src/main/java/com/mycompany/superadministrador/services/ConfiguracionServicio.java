@@ -42,7 +42,7 @@ public class ConfiguracionServicio {
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/registrarConfiguracion")
+    @Path("/editarConfiguracion")
     public Response registrarConfiguracion(ConfiguracionPOJO configuracion) {
         try {
             configuracionLogica.registrarConfiguracion(configuracion);
@@ -105,7 +105,7 @@ public class ConfiguracionServicio {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/listarConfiguracionCompleta")
+    @Path("/listarCompleta")
     public Response configuracionCompleta() {
         try {
             List<ConfiguracionPOJO> listaEntorno = configuracionLogica.listarConfiguracionCompleta();

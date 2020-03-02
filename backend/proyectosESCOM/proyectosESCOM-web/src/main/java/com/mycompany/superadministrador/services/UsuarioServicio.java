@@ -25,7 +25,7 @@ import javax.ws.rs.core.Response;
  * @author jeison gaona - alejandra pabon
  */
 @javax.enterprise.context.RequestScoped
-@Path("usuario")
+@Path("usuarios")
 public class UsuarioServicio {
 
     @EJB
@@ -45,8 +45,8 @@ public class UsuarioServicio {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/registrarUsuario")
-    public Response registrarUsuario(UsuarioPOJO usuario) {
+    @Path("/registrar")
+    public Response registrar(UsuarioPOJO usuario) {
         try {
             usuarioLogica.registrarUsuario(usuario);
             respuesta.setRespuesta("Usuario registrado");
@@ -67,8 +67,8 @@ public class UsuarioServicio {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/listarUsuarios")
-    public Response listarUsuarios() {
+    @Path("/listar")
+    public Response listar() {
         try {
             List<UsuarioPOJO> listaUsuarios = usuarioLogica.devolverUsuarios();
             return Response.status(Response.Status.OK).entity(listaUsuarios).build();
@@ -111,7 +111,7 @@ public class UsuarioServicio {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/datosUsuario/{cedula}")
+    @Path("/datos/{cedula}")
     public Response listarUsuarioCedula(@PathParam("cedula") int cedula) {
         try {
             UsuarioPOJO usuarioDatos = usuarioLogica.traerUsuarioCedula(cedula);
@@ -134,8 +134,8 @@ public class UsuarioServicio {
      */
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/editarUsuario/{cedula}")
-    public Response editarUsuario(@PathParam("cedula") int cedula, UsuarioPOJO usuarioEditar) {
+    @Path("/editar/{cedula}")
+    public Response editar(@PathParam("cedula") int cedula, UsuarioPOJO usuarioEditar) {
         try {
             usuarioLogica.editarUsuario(cedula, usuarioEditar);
             respuesta.setRespuesta("Usuario modificado correctamente");
@@ -158,8 +158,8 @@ public class UsuarioServicio {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/cambiarEstadoUsuario/{cedula}")
-    public Response cambiarEstadoUsuario(@PathParam("cedula") int cedula) {
+    @Path("/cambiarEstado/{cedula}")
+    public Response cambiarEstado(@PathParam("cedula") int cedula) {
         try {
             usuarioLogica.cambiarEstadoUsuario(cedula);
             respuesta.setRespuesta("Estado cambiado correctamente");
@@ -182,8 +182,8 @@ public class UsuarioServicio {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/listarActividadesUsuario/{cedula}")
-    public Response listarActividadesUsuario(@PathParam("cedula") int cedula) {
+    @Path("/listarActividades/{cedula}")
+    public Response listarActividades(@PathParam("cedula") int cedula) {
         try {
             List<ActividadPOJO> listaActividades = usuarioLogica.listarActividadesUsuario(cedula);
             return Response.status(Response.Status.OK).entity(listaActividades).build();
@@ -207,8 +207,8 @@ public class UsuarioServicio {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/listarActividadesNoAsociadasUsuario/{numeroDocumento}/{codigoModulo}")
-    public Response listarActividadesNoAsociadasUsuario(@PathParam("numeroDocumento") int numeroDocumento, @PathParam("codigoModulo") int idModulo) {
+    @Path("/listarActividadesNoAsociadas/{numeroDocumento}/{codigoModulo}")
+    public Response listarActividadesNoAsociadas(@PathParam("numeroDocumento") int numeroDocumento, @PathParam("codigoModulo") int idModulo) {
         try {
             List<ActividadPOJO> listaActividades = usuarioLogica.listarActividadesNoAsociadasUsuario(numeroDocumento,idModulo);
             return Response.status(Response.Status.OK).entity(listaActividades).build();
@@ -231,8 +231,8 @@ public class UsuarioServicio {
      */
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/eliminarActividadUsuario/{cedula}")
-    public Response eliminarActividadUsuario(@PathParam("cedula") int cedula, List<ActividadPOJO> listaActividad) {
+    @Path("/eliminarActividad/{cedula}")
+    public Response eliminarActividad(@PathParam("cedula") int cedula, List<ActividadPOJO> listaActividad) {
         try {
             usuarioLogica.eliminarActividadUsuario(cedula, listaActividad);
             respuesta.setRespuesta("Actividad eliminada correctamente");
@@ -281,8 +281,8 @@ public class UsuarioServicio {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/redireccionUsuario/{token}")
-    public Response redireccionUsuario(@PathParam("token") String token) {
+    @Path("/redireccion/{token}")
+    public Response redireccion(@PathParam("token") String token) {
         try {
            List<ModuloPOJO> listaModulo= usuarioLogica.redireccionUsuario(token);
             return Response.status(Response.Status.OK).entity(listaModulo).build();

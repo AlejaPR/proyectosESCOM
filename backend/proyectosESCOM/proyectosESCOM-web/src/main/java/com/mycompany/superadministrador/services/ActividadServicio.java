@@ -22,7 +22,7 @@ import javax.ws.rs.core.Response;
  * @author jeison gaona - alejandra pabon
  */
 @javax.enterprise.context.RequestScoped
-@Path("actividad")
+@Path("actividades")
 public class ActividadServicio {
     
     @EJB
@@ -40,8 +40,8 @@ public class ActividadServicio {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/listarActividades")
-    public Response listarActividades() {
+    @Path("/listar")
+    public Response listar() {
         try {
             List<ActividadPOJO> listaActividades = actividadLogica.devolverActividades();
             return Response.status(Response.Status.OK).entity(listaActividades).build();
@@ -63,8 +63,8 @@ public class ActividadServicio {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/registrarActividad")
-    public Response registrarActividad(ActividadPOJO actividad) {
+    @Path("/registrar")
+    public Response registrar(ActividadPOJO actividad) {
         try {
             ActividadPOJO actividadR = new ActividadPOJO();
             actividadR=actividadLogica.registrarActividad(actividad);
@@ -88,8 +88,8 @@ public class ActividadServicio {
      */
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/editarActividad")
-    public Response editarActividad(ActividadPOJO actividadEditar) {
+    @Path("/editar")
+    public Response editar(ActividadPOJO actividadEditar) {
         try {
             actividadLogica.editarActividad(actividadEditar);
             respuesta.setRespuesta("Actividad modificada correctamente");
@@ -112,8 +112,8 @@ public class ActividadServicio {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/cambiarEstadoActividad/{idActividad}")
-    public Response cambiarEstadoActividad(@PathParam("idActividad") int idActividad) {
+    @Path("/cambiarEstado/{idActividad}")
+    public Response cambiarEstado(@PathParam("idActividad") int idActividad) {
         try {
             actividadLogica.cambiarEstadoActividad(idActividad);
             respuesta.setRespuesta("Estado de actividad modificado correctamente");
@@ -136,8 +136,8 @@ public class ActividadServicio {
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/listarActividadEspecifica/{idActividad}")
-    public Response listarActividadEspecifica(@PathParam("idActividad") int idActividad) {
+    @Path("/listarEspecifica/{idActividad}")
+    public Response listarEspecifica(@PathParam("idActividad") int idActividad) {
         try {
             ActividadPOJO actividadDatos = actividadLogica.traerActividadEspecifica(idActividad);
             return Response.status(Response.Status.OK).entity(actividadDatos).build();

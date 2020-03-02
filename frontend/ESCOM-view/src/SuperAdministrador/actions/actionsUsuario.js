@@ -165,7 +165,7 @@ export function actionConsultarUsuarios(token) {
         'Permiso': 'sa_Consultar usuarios registrados'
     }
     return (dispatch, getState) => {
-        axios.get("http://localhost:9090/proyectosESCOM-web/api/usuario/listarUsuarios", { headers: headers })
+        axios.get("http://localhost:9090/proyectosESCOM-web/api/usuarios/listar", { headers: headers })
             .then(response => {
                 dispatch({
                     type: MOSTRAR_USUARIOS,
@@ -201,7 +201,7 @@ export function actionConsultarModulosAcceso(token) {
         'Permiso':'sj'
     }
     return (dispatch, getState) => {
-        axios.get("http://localhost:9090/proyectosESCOM-web/api/usuario/redireccionUsuario/" + tokenRequest, { headers: headers })
+        axios.get("http://localhost:9090/proyectosESCOM-web/api/usuarios/redireccion/" + tokenRequest, { headers: headers })
             .then(response => {
                 dispatch({
                     type: MODULOS_ACCESO,
@@ -239,7 +239,7 @@ export function actionConsultarActividadesUsuario(numeroDocumento, token) {
         'Permiso': 'sa_Asignacion de actividades a los usuarios'
     }
     return (dispatch, getState) => {
-        axios.get("http://localhost:9090/proyectosESCOM-web/api/usuario/listarActividadesUsuario/" + numeroDocumento, { headers: headers })
+        axios.get("http://localhost:9090/proyectosESCOM-web/api/usuarios/listarActividades/" + numeroDocumento, { headers: headers })
             .then(response => {
                 dispatch({
                     type: MOSTRAR_ACTIVIDADES_USUARIO,
@@ -259,12 +259,21 @@ export function actionConsultarDocumentos(token) {
         'Permiso': 'sa_Consultar usuarios registrados'
     }
     return (dispatch, getState) => {
-        axios.get("http://localhost:9090/proyectosESCOM-web/api/usuario/tipoDocumento", { headers: headers })
+        axios.get("http://localhost:9090/proyectosESCOM-web/api/usuarios/tipoDocumento", { headers: headers })
             .then(response => {
                 dispatch({
                     type: MOSTRAR_DOCUMENTOS,
                     respuesta: response.data
                 });
+            });
+    };
+}
+
+export function actionAsignarIp() {
+    return (dispatch, getState) => {
+        axios.get("https://api.ipify.org/?format=json")
+            .then(response => {
+                localStorage.setItem('Ip',response.data.ip)
             });
     };
 }
@@ -276,8 +285,12 @@ export function actionAgregarUsuario(usuario, token) {
         'TokenAuto': tokenRequest,
         'Permiso': 'sa_Registrar usuarios'
     }
+    usuario.datosSolicitud={
+        'ip':localStorage.getItem('Ip'),
+        'token':tokenRequest
+    };
     return (dispatch, getState) => {
-        axios.post("http://localhost:9090/proyectosESCOM-web/api/usuario/registrarUsuario", usuario, { headers: headers })
+        axios.post("http://localhost:9090/proyectosESCOM-web/api/usuarios/registrar", usuario, { headers: headers })
             .then(response => {
                 dispatch({
                     type: AGREGAR_USUARIO,
@@ -324,7 +337,7 @@ export function actionAsignarActividad(token, numeroDocumento, actividad) {
         'Permiso': 'sa_Asignacion de actividades a los usuarios'
     }
     return (dispatch, getState) => {
-        axios.post("http://localhost:9090/proyectosESCOM-web/api/usuario/asignarActividad/" + numeroDocumento, actividad, { headers: headers })
+        axios.post("http://localhost:9090/proyectosESCOM-web/api/usuarios/asignarActividad/" + numeroDocumento, actividad, { headers: headers })
             .then(response => {
                 dispatch({
                     type: MENSAJE_ASIGNAR,
@@ -367,7 +380,7 @@ export function actionSuspenderActivarUsuario(cedula, token, actualizados, regis
         'Permiso': 'sa_Suspender/activar usuarios'
     }
     return (dispatch, getState) => {
-        axios.get("http://localhost:9090/proyectosESCOM-web/api/usuario/cambiarEstadoUsuario/" + cedula, { headers: headers })
+        axios.get("http://localhost:9090/proyectosESCOM-web/api/usuarios/cambiarEstado/" + cedula, { headers: headers })
             .then(response => {
                 dispatch({
                     type: MENSAJE_SUSPENDER,
@@ -413,7 +426,7 @@ export function actionCargarInformacionDeUsuario(cedula, token) {
         'Permiso': 'sa_Editar informacion de los usuarios'
     }
     return (dispatch, getState) => {
-        axios.get("http://localhost:9090/proyectosESCOM-web/api/usuario/datosUsuario/" + cedula, { headers: headers })
+        axios.get("http://localhost:9090/proyectosESCOM-web/api/usuarios/datos/" + cedula, { headers: headers })
             .then(response => {
                 dispatch({
                     type: INFORMACION_USUARIO,
@@ -454,7 +467,7 @@ export function actionConsultarModulos(token) {
         'Permiso': 'sa_Asignacion de actividades a los usuarios'
     }
     return (dispatch, getState) => {
-        axios.get("http://localhost:9090/proyectosESCOM-web/api/modulo/listarModulos", { headers: headers })
+        axios.get("http://localhost:9090/proyectosESCOM-web/api/modulos/listar", { headers: headers })
             .then(response => {
                 dispatch({
                     type: MODULOS_REGISTRADOS,
@@ -500,7 +513,7 @@ export function actionEliminarActividades(actividades, token, numeroDocumento) {
         'Permiso': 'sa_Asignacion de actividades a los usuarios'
     }
     return (dispatch, getState) => {
-        axios.put("http://localhost:9090/proyectosESCOM-web/api/usuario/eliminarActividadUsuario/" + numeroDocumento, actividades, { headers: headers })
+        axios.put("http://localhost:9090/proyectosESCOM-web/api/usuarios/eliminarActividad/" + numeroDocumento, actividades, { headers: headers })
             .then(response => {
                 dispatch({
                     type: MENSAJE_ASIGNAR,
@@ -546,7 +559,7 @@ export function actionConsultarActividadesSinAsignar(token, numeroDocumento, cod
         'Permiso': 'sa_Asignacion de actividades a los usuarios'
     }
     return (dispatch, getState) => {
-        axios.get("http://localhost:9090/proyectosESCOM-web/api/usuario/listarActividadesNoAsociadasUsuario/" + numeroDocumento + "/" + codigoModulo, { headers: headers })
+        axios.get("http://localhost:9090/proyectosESCOM-web/api/usuarios/listarActividadesNoAsociadas/" + numeroDocumento + "/" + codigoModulo, { headers: headers })
             .then(response => {
                 dispatch({
                     type: ACTIVIDADES_SIN_ASIGNAR,
@@ -614,7 +627,7 @@ export function actionEditarUsuario(usuario, cedula, token) {
         'Permiso': 'sa_Editar informacion de los usuarios'
     }
     return (dispatch, getState) => {
-        axios.put("http://localhost:9090/proyectosESCOM-web/api/usuario/editarUsuario/" + cedula, usuario, { headers: headers })
+        axios.put("http://localhost:9090/proyectosESCOM-web/api/usuarios/editar/" + cedula, usuario, { headers: headers })
             .then(response => {
                 dispatch({
                     type: EDITAR_USUARIO,
@@ -651,3 +664,12 @@ export function actionEditarUsuario(usuario, cedula, token) {
             });
     }
 }
+
+
+function getIp(){
+    axios.get('https://api.ipify.org/?format=json')
+    .then((response) => {
+        console.log('resp',response);
+        return response.data.ip;
+    });
+};
