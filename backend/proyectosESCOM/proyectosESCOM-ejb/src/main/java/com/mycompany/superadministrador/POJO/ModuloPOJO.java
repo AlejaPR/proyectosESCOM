@@ -24,6 +24,8 @@ public class ModuloPOJO {
     private String acronimo;
     
     private String url;
+    
+    private DatosSolicitudPOJO datosSolicitud;
 
     public ModuloPOJO() {
     }
@@ -92,5 +94,14 @@ public class ModuloPOJO {
     public void setUrl(String url) {
         this.url = url;
     }
+
+    public DatosSolicitudPOJO getDatosSolicitud() {
+        return datosSolicitud;
+    }
+
+    public void setDatosSolicitud(DatosSolicitudPOJO datosSolicitud) {
+        this.datosSolicitud = datosSolicitud;
+    }
+    
     
 }

@@ -46,7 +46,7 @@ public interface LogicaUsuarioFacadeLocal {
 
     public void eliminarActividadUsuario(int cedula, List<ActividadPOJO> listaActividad) throws ExcepcionGenerica;
 
-    public void asignarActividadAUsuario(int numeroDocumento, int idActividad) throws ExcepcionGenerica;
+    public void asignarActividadAUsuario(int numeroDocumento, ActividadPOJO actividad) throws ExcepcionGenerica;
 
     public List<ActividadPOJO> listarActividadesUsuarioActivas(int cedula) throws ExcepcionGenerica;
 

@@ -5,13 +5,10 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import { UncontrolledPopover, PopoverBody } from 'reactstrap';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
 import { Field, reduxForm } from 'redux-form'
 import RenderPasword from '../../utilitario/GenerarInputs';
 //imagenes
 import { requerido } from '../../utilitario/validacionCampos.js';
-import persona from '../../imagenes/icono-persona.png'
 import { withRouter } from 'react-router-dom';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';

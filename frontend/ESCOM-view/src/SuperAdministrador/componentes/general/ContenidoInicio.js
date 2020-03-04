@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import MaterialTable from 'material-table';
 import { withRouter } from 'react-router-dom';
 

@@ -29,8 +29,9 @@ import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
 //componentes
 
 //redux
-import { actionConsultarModulos, actionConsultarActividadesSinAsignar, actionEliminarActividades, actionLimpiar, actualizarMensajeAsignar, actionAsignarActividades, actionConsultarActividadesUsuario, actionAsignarActividad } from '../../actions/actionsUsuario.js'
+import { actionConsultarModulos, actionConsultarActividadesSinAsignar, actionEliminarActividades, actualizarMensajeAsignar, actionAsignarActividades, actionConsultarActividadesUsuario, actionAsignarActividad } from '../../actions/actionsUsuario.js'
 import { connect } from 'react-redux';
+
 
 class AsignarActividadUsuario extends React.Component {
 
@@ -61,7 +62,6 @@ class AsignarActividadUsuario extends React.Component {
                 this.props.actualizarMensajeAsignar('');
                 this.props.actionConsultarActividadesUsuario(this.props.cedula, localStorage.getItem('Token'));
                 if (this.state.selectedOption.value !== undefined) {
-                    debugger;
                     this.props.actionConsultarActividadesSinAsignar(localStorage.getItem('Token'), this.props.cedula, this.state.selectedOption.value);
                 }
                 break;
@@ -351,4 +351,4 @@ let asignarActividadUsuario = reduxForm({
     form: 'asignarActividadUsuario'
 })(AsignarActividadUsuario)
 
-export default withRouter(connect(mapStateToProps, { actionConsultarModulos, actionLimpiar, actionEliminarActividades, actionConsultarActividadesSinAsignar, actualizarMensajeAsignar, actionAsignarActividad, actionAsignarActividades, actionConsultarActividadesUsuario })(asignarActividadUsuario));
+export default withRouter(connect(mapStateToProps, { actionConsultarModulos, actionEliminarActividades, actionConsultarActividadesSinAsignar, actualizarMensajeAsignar, actionAsignarActividad, actionAsignarActividades, actionConsultarActividadesUsuario })(asignarActividadUsuario));

@@ -260,7 +260,7 @@ public class UsuarioServicio {
     @Path("/asignarActividad/{numeroDocumento}")
     public Response asignarActividad(@PathParam("numeroDocumento") int numeroDocumento,ActividadPOJO actividad) {
         try {
-            usuarioLogica.asignarActividadAUsuario(numeroDocumento, actividad.getIdActividad());
+            usuarioLogica.asignarActividadAUsuario(numeroDocumento, actividad);
             respuesta.setRespuesta("Actividad asignada");
             return Response.status(Response.Status.OK).entity(respuesta).build();
         } catch (ExcepcionGenerica e) {

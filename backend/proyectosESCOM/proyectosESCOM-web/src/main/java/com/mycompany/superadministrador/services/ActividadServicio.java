@@ -1,6 +1,7 @@
 package com.mycompany.superadministrador.services;
 
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
+import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import com.mycompany.superadministrador.POJO.Respuesta;
 import com.mycompany.superadministrador.interfaces.LogicaActividadFacadeLocal;
 import com.mycompany.superadministrador.utilitarios.ExcepcionGenerica;
@@ -110,12 +111,12 @@ public class ActividadServicio {
      * @param idActividad
      * @return  *
      */
-    @GET
+    @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/cambiarEstado/{idActividad}")
-    public Response cambiarEstado(@PathParam("idActividad") int idActividad) {
+    public Response cambiarEstado(@PathParam("idActividad") int idActividad,DatosSolicitudPOJO datosSolicitud) {
         try {
-            actividadLogica.cambiarEstadoActividad(idActividad);
+            actividadLogica.cambiarEstadoActividad(idActividad,datosSolicitud);
             respuesta.setRespuesta("Estado de actividad modificado correctamente");
             return Response.status(Response.Status.OK).entity(respuesta).build();
         } catch (ExcepcionGenerica e) {

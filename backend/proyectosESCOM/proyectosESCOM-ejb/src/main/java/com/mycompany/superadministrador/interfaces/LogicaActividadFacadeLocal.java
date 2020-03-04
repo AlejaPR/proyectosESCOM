@@ -6,6 +6,7 @@
 package com.mycompany.superadministrador.interfaces;
 
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
+import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import com.mycompany.superadministrador.utilitarios.ExcepcionGenerica;
 import java.util.List;
 import javax.ejb.Local;
@@ -23,7 +24,7 @@ public interface LogicaActividadFacadeLocal {
      
     public void editarActividad(ActividadPOJO actividadEditar) throws ExcepcionGenerica;
     
-    public void cambiarEstadoActividad(int idActividad) throws ExcepcionGenerica;
+    public void cambiarEstadoActividad(int idActividad,DatosSolicitudPOJO datosSolicitud) throws ExcepcionGenerica;
     
     public ActividadPOJO traerActividadEspecifica(int idActividad) throws ExcepcionGenerica;
     

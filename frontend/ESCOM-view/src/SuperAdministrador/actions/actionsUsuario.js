@@ -25,12 +25,19 @@ export const ESTADO_ASIGNAR = 'ESTADO_ASIGNAR';
 export const MODULOS_REGISTRADOS = 'MODULOS_REGISTRADOS';
 export const NOMBRE_USUARIO = 'NOMBRE_USUARIO';
 
+const URL_BASE = 'http://localhost:9090';
+const PERMISO_REGISTRAR = 'sa_Registrar usuarios';
+const PERMISO_CONSULTAR_USUARIOS = 'sa_Consultar usuarios registrados';
+const PERMISO_EDITAR_USUARIOS = 'sa_Editar informacion de los usuarios';
+const PERMISO_ASIGNACION_ACTIVIDADES = 'sa_Asignacion de actividades a los usuarios';
+const PERMISO_SUSPENDER_ACTIVAR = 'sa_Suspender/activar usuarios';
+
 export function actionLoginUsuario(correo, contrasena, cambiar) {
     var crypto = require('crypto');
     var contrasenaEncryp = crypto.createHmac('sha256', correo).update(contrasena).digest('hex');
     cambiar(true);
     return (dispatch, getState) => {
-        axios.get("http://localhost:9090/proyectosESCOM-web/api/login/" + correo + '/' + contrasenaEncryp)
+        axios.get(`${URL_BASE}/proyectosESCOM-web/api/login/${correo}/${contrasenaEncryp}`)
             .then(response => {
                 if (response.status === 200) {
                     var token = encriptar(response.data.token);
@@ -69,13 +76,12 @@ export function actionLoginUsuario(correo, contrasena, cambiar) {
 
 
 export function actionCerrarSesion(token) {
-    var tokenlim = desencriptar(token);
     const headers = {
         'Content-Type': 'application/json',
-        'TokenAuto': tokenlim
+        'TokenAuto': desencriptar(token)
     }
     return (dispatch, getState) => {
-        axios.delete("http://localhost:9090/proyectosESCOM-web/api/login/cerrarSesion/" + tokenlim, { headers: headers })
+        axios.delete(`${URL_BASE}/proyectosESCOM-web/api/login/cerrarSesion/${desencriptar(token)}`, { headers: headers })
             .then(response => {
                 dispatch({
                     type: MENSAJE_CERRAR_SESION,
@@ -87,6 +93,489 @@ export function actionCerrarSesion(token) {
                     type: MENSAJE_CERRAR_SESION,
                     mensaje: 'cerrada'
                 });
+            });
+    }
+}
+
+
+
+
+export function actionConsultarUsuarios(token) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMISO_CONSULTAR_USUARIOS
+    }
+    return (dispatch, getState) => {
+        axios.get(`${URL_BASE}/proyectosESCOM-web/api/usuarios/listar`, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: MOSTRAR_USUARIOS,
+                    respuesta: response.data
+                });
+            }).catch((error) => {
+                if (error.request.response === '') {
+
+                } else {
+                    if (error.request) {
+                        var o = JSON.parse(error.request.response);
+                        let respuesta = mensajesDeError(o.respuesta);
+                        if (respuesta === 'Sin permiso') {
+                            dispatch({
+                                type: ESTADO_USUARIOS,
+                                estado: true
+                            });
+                        } else {
+                            //
+                        }
+                    }
+                }
+            });
+    };
+}
+
+export function actionConsultarModulosAcceso(token) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token)
+    }
+    return (dispatch, getState) => {
+        axios.get(`${URL_BASE}/proyectosESCOM-web/api/usuarios/redireccion/${desencriptar(token)}`, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: MODULOS_ACCESO,
+                    respuesta: response.data
+                });
+            }).catch((error) => {
+                if (error.request.response === '') {
+
+                } else {
+                    if (error.request) {
+                        var o = JSON.parse(error.request.response);
+                        let respuesta = mensajesDeError(o.respuesta);
+                        if (respuesta === 'Sin permiso') {
+                            dispatch({
+                                type: MODULOS_ACCESO,
+                                respuesta: []
+                            });
+                        } else {
+                            dispatch({
+                                type: MODULOS_ACCESO,
+                                respuesta: []
+                            });
+                        }
+                    }
+                }
+            });
+    };
+}
+
+export function actionConsultarActividadesUsuario(numeroDocumento, token) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMISO_ASIGNACION_ACTIVIDADES
+    }
+    return (dispatch, getState) => {
+        axios.get(`${URL_BASE}/proyectosESCOM-web/api/usuarios/listarActividades/${numeroDocumento}`, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: MOSTRAR_ACTIVIDADES_USUARIO,
+                    respuesta: response.data
+                });
+            }).catch((error) => {
+                console.log('errors', error);
+            });
+    };
+}
+
+export function actionConsultarDocumentos(token) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMISO_CONSULTAR_USUARIOS
+    }
+    return (dispatch, getState) => {
+        axios.get(`${URL_BASE}/proyectosESCOM-web/api/usuarios/tipoDocumento`, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: MOSTRAR_DOCUMENTOS,
+                    respuesta: response.data
+                });
+            });
+    };
+}
+
+export function actionAsignarIp() {
+    return (dispatch, getState) => {
+        axios.get("https://api.ipify.org/?format=json")
+            .then(response => {
+                localStorage.setItem('Ip', response.data.ip)
+            });
+    };
+}
+
+export function actionAgregarUsuario(usuario, token) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMISO_REGISTRAR
+    }
+    usuario.datosSolicitud = {
+        'ip': localStorage.getItem('Ip'),
+        'token': desencriptar(token),
+        'operacion': PERMISO_REGISTRAR
+    };
+    return (dispatch, getState) => {
+        axios.post(`${URL_BASE}/proyectosESCOM-web/api/usuarios/registrar`, usuario, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: AGREGAR_USUARIO,
+                    usuarioARegistrar: usuario
+                });
+                dispatch({
+                    type: MENSAJE_REGISTRAR,
+                    mensaje: 'Usuario registrado'
+                });
+            }).catch((error) => {
+                if (error.request.response === '') {
+                    dispatch({
+                        type: MENSAJE_REGISTRAR,
+                        mensaje: 'Servidor fuera de servicio temporalmente'
+                    });
+                } else {
+                    if (error.request) {
+                        var o = JSON.parse(error.request.response);
+                        let respuesta = mensajesDeError(o.respuesta);
+                        if (respuesta !== '') {
+                            dispatch({
+                                type: MENSAJE_REGISTRAR,
+                                mensaje: respuesta
+                            });
+                        } else {
+                            dispatch({
+                                type: MENSAJE_REGISTRAR,
+                                mensaje: 'Ya existen los datos registrados previamente'
+                            });
+                        }
+                    }
+                }
+
+            });
+
+    }
+}
+
+export function actionAsignarActividad(token, numeroDocumento, actividad) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMISO_ASIGNACION_ACTIVIDADES
+    }
+    actividad.datosSolicitud = {
+        'ip': localStorage.getItem('Ip'),
+        'token': desencriptar(token),
+        'operacion': PERMISO_ASIGNACION_ACTIVIDADES
+    }
+    return (dispatch, getState) => {
+        axios.post(`${URL_BASE}/proyectosESCOM-web/api/usuarios/asignarActividad/${numeroDocumento}`, actividad, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: MENSAJE_ASIGNAR,
+                    mensaje: 'Actividad asignada'
+                });
+            }).catch((error) => {
+                if (error.request.response === '') {
+                    dispatch({
+                        type: MENSAJE_ASIGNAR,
+                        mensaje: 'Servidor fuera de servicio temporalmente'
+                    });
+                } else {
+                    if (error.request) {
+                        var o = JSON.parse(error.request.response);
+                        let respuesta = mensajesDeError(o.respuesta);
+                        if (respuesta !== '') {
+                            dispatch({
+                                type: MENSAJE_ASIGNAR,
+                                mensaje: respuesta
+                            });
+                        } else {
+                            dispatch({
+                                type: MENSAJE_ASIGNAR,
+                                mensaje: 'Ya existen los datos registrados previamente'
+                            });
+                        }
+                    }
+                }
+
+            });
+
+    }
+}
+
+export function actionSuspenderActivarUsuario(cedula, token, actualizados, registrados) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMISO_SUSPENDER_ACTIVAR
+    }
+    let datosSolicitud = {
+        'ip': localStorage.getItem('Ip'),
+        'token': desencriptar(token),
+        'operacion': PERMISO_SUSPENDER_ACTIVAR
+    };
+    return (dispatch, getState) => {
+        axios.put(`${URL_BASE}/proyectosESCOM-web/api/usuarios/cambiarEstado/${cedula}`, datosSolicitud, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: MENSAJE_SUSPENDER,
+                    mensaje: 'Operacion hecha con exito'
+                });
+                dispatch({
+                    type: ACTUALIZAR_USUARIOS,
+                    usuario: actualizados
+                });
+            }).catch((error) => {
+                if (error.request.response === '') {
+                    dispatch({
+                        type: MENSAJE_SUSPENDER,
+                        mensaje: 'Servidor fuera de servicio temporalmente'
+                    });
+                } else {
+                    if (error.request) {
+                        var o = JSON.parse(error.request.response);
+                        let respuesta = mensajesDeError(o.respuesta);
+                        if (respuesta !== '') {
+                            dispatch({
+                                type: MENSAJE_SUSPENDER,
+                                mensaje: respuesta
+                            });
+                        } else {
+                            dispatch({
+                                type: MENSAJE_SUSPENDER,
+                                mensaje: 'Sin acceso al servicio'
+                            });
+                        }
+                    }
+                }
+
+            });
+
+    }
+}
+
+export function actionCargarInformacionDeUsuario(cedula, token) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMISO_EDITAR_USUARIOS
+    }
+    return (dispatch, getState) => {
+        axios.get(`${URL_BASE}/proyectosESCOM-web/api/usuarios/datos/${cedula}`, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: INFORMACION_USUARIO,
+                    informacionUsuario: response.data
+                });
+            }).catch((error) => {
+                if (error.request.response === '') {
+                    dispatch({
+                        type: MENSAJE_EDITAR,
+                        mensaje: 'Servidor fuera de servicio temporalmente'
+                    });
+                } else {
+                    if (error.request) {
+                        var o = JSON.parse(error.request.response);
+                        let respuesta = mensajesDeError(o.respuesta);
+                        if (respuesta !== '') {
+                            dispatch({
+                                type: MENSAJE_EDITAR,
+                                mensaje: respuesta
+                            });
+                        } else {
+                            dispatch({
+                                type: MENSAJE_EDITAR,
+                                mensaje: 'Sin acceso al servicio'
+                            });
+                        }
+                    }
+                }
+            });
+    };
+}
+
+export function actionConsultarModulos(token) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMISO_ASIGNACION_ACTIVIDADES
+    }
+    return (dispatch, getState) => {
+        axios.get(`${URL_BASE}/proyectosESCOM-web/api/modulos/listar`, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: MODULOS_REGISTRADOS,
+                    respuesta: response.data
+                });
+
+            }).catch((error) => {
+                if (error.request.response === '') {
+
+
+                } else {
+                    if (error.request) {
+                        var o = JSON.parse(error.request.response);
+                        let respuesta = mensajesDeError(o.respuesta);
+                        if (respuesta === 'Sin permiso') {
+                            dispatch({
+                                type: ESTADO_ASIGNAR,
+                                estado: true
+                            });
+                        } else {
+                            //
+                        }
+                    }
+                }
+            });
+    };
+}
+
+
+
+export function actionEliminarActividades(actividades, token, numeroDocumento) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMISO_ASIGNACION_ACTIVIDADES
+    }
+    actividades[0].datosSolicitud = {
+        'ip': localStorage.getItem('Ip'),
+        'token': desencriptar(token),
+        'operacion': PERMISO_ASIGNACION_ACTIVIDADES
+    }
+    debugger;
+    return (dispatch, getState) => {
+        axios.put(`${URL_BASE}/proyectosESCOM-web/api/usuarios/eliminarActividad/${numeroDocumento}`, actividades, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: MENSAJE_ASIGNAR,
+                    mensaje: 'Actividades eliminadas'
+                });
+            }).catch((error) => {
+                console.log(error);
+
+                if (error.request.response === '') {
+                    dispatch({
+                        type: MENSAJE_ASIGNAR,
+                        mensaje: 'Servidor fuera de servicio temporalmente'
+                    });
+                } else {
+                    if (error.request) {
+                        var o = JSON.parse(error.request.response);
+                        let respuesta = mensajesDeError(o.respuesta);
+                        console.log('respuesta', respuesta);
+                        if (respuesta !== '') {
+                            dispatch({
+                                type: MENSAJE_ASIGNAR,
+                                mensaje: respuesta
+                            });
+                        } else {
+                            dispatch({
+                                type: MENSAJE_ASIGNAR,
+                                mensaje: 'Sin acceso al servicio'
+                            });
+                        }
+                    }
+                }
+
+            });
+
+    }
+}
+
+export function actionConsultarActividadesSinAsignar(token, numeroDocumento, codigoModulo) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMISO_ASIGNACION_ACTIVIDADES
+    }
+    return (dispatch, getState) => {
+        axios.get(`${URL_BASE}/proyectosESCOM-web/api/usuarios/listarActividadesNoAsociadas/${numeroDocumento}/${codigoModulo}`, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: ACTIVIDADES_SIN_ASIGNAR,
+                    respuesta: response.data
+                });
+
+            }).catch((error) => {
+                if (error.request.response === '') {
+
+
+                } else {
+                    if (error.request) {
+                        var o = JSON.parse(error.request.response);
+                        let respuesta = mensajesDeError(o.respuesta);
+                        if (respuesta === 'Sin permiso') {
+                            dispatch({
+                                type: ESTADO_ASIGNAR,
+                                estado: true
+                            });
+                        } else {
+                            //
+                        }
+                    }
+                }
+            });
+    };
+}
+
+
+export function actionEditarUsuario(usuario, cedula, token) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMISO_EDITAR_USUARIOS
+    }
+    usuario.datosSolicitud = {
+        'ip': localStorage.getItem('Ip'),
+        'token': desencriptar(token),
+        'operacion': PERMISO_EDITAR_USUARIOS
+    };
+    return (dispatch, getState) => {
+        axios.put(`${URL_BASE}/proyectosESCOM-web/api/usuarios/editar/${cedula}`, usuario, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: EDITAR_USUARIO,
+                    payload: usuario
+                });
+                dispatch({
+                    type: MENSAJE_EDITAR,
+                    mensaje: 'Modificado'
+                });
+            }).catch((error) => {
+                if (error.request.response === '') {
+                    dispatch({
+                        type: MENSAJE_EDITAR,
+                        mensaje: 'Servidor fuera de servicio temporalmente'
+                    });
+                } else {
+                    if (error.request) {
+                        var o = JSON.parse(error.request.response);
+                        let respuesta = mensajesDeError(o.respuesta);
+                        if (respuesta !== '') {
+                            dispatch({
+                                type: MENSAJE_EDITAR,
+                                mensaje: respuesta
+                            });
+                        } else {
+                            dispatch({
+                                type: MENSAJE_EDITAR,
+                                mensaje: 'Ya existen los datos registrados previamente'
+                            });
+                        }
+                    }
+                }
+
             });
     }
 }
@@ -137,7 +626,6 @@ export function actualizarMensajeSuspender(mensaje) {
 }
 
 
-
 export function asignarNombreUsuario(nombre) {
     return (dispatch, getState) => {
         dispatch({
@@ -155,443 +643,6 @@ export function actualizarMensajeAsignar(mensaje) {
         });
     };
 }
-
-
-export function actionConsultarUsuarios(token) {
-    var tokenRequest = desencriptar(token);
-    const headers = {
-        'Content-Type': 'application/json',
-        'TokenAuto': tokenRequest,
-        'Permiso': 'sa_Consultar usuarios registrados'
-    }
-    return (dispatch, getState) => {
-        axios.get("http://localhost:9090/proyectosESCOM-web/api/usuarios/listar", { headers: headers })
-            .then(response => {
-                dispatch({
-                    type: MOSTRAR_USUARIOS,
-                    respuesta: response.data
-                });
-            }).catch((error) => {
-                if (error.request.response === '') {
-
-                } else {
-                    if (error.request) {
-                        var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
-                        if (respuesta === 'Sin permiso') {
-                            dispatch({
-                                type: ESTADO_USUARIOS,
-                                estado: true
-                            });
-                        } else {
-                            //
-                        }
-                    }
-                }
-            });
-    };
-}
-
-export function actionConsultarModulosAcceso(token) {
-    var tokenRequest = desencriptar(token);
-    const headers = {
-        'Content-Type': 'application/json',
-        'TokenAuto': tokenRequest
-    }
-    return (dispatch, getState) => {
-        axios.get("http://localhost:9090/proyectosESCOM-web/api/usuarios/redireccion/" + tokenRequest, { headers: headers })
-            .then(response => {
-                dispatch({
-                    type: MODULOS_ACCESO,
-                    respuesta: response.data
-                });
-            }).catch((error) => {
-                if (error.request.response === '') {
-
-                } else {
-                    if (error.request) {
-                        var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
-                        if (respuesta === 'Sin permiso') {
-                            dispatch({
-                                type: MODULOS_ACCESO,
-                                respuesta: []
-                            });
-                        } else {
-                            dispatch({
-                                type: MODULOS_ACCESO,
-                                respuesta: []
-                            });
-                        }
-                    }
-                }
-            });
-    };
-}
-
-export function actionConsultarActividadesUsuario(numeroDocumento, token) {
-    var tokenRequest = desencriptar(token);
-    const headers = {
-        'Content-Type': 'application/json',
-        'TokenAuto': tokenRequest,
-        'Permiso': 'sa_Asignacion de actividades a los usuarios'
-    }
-    return (dispatch, getState) => {
-        axios.get("http://localhost:9090/proyectosESCOM-web/api/usuarios/listarActividades/" + numeroDocumento, { headers: headers })
-            .then(response => {
-                dispatch({
-                    type: MOSTRAR_ACTIVIDADES_USUARIO,
-                    respuesta: response.data
-                });
-            }).catch((error) => {
-                console.log('errors', error);
-            });
-    };
-}
-
-export function actionConsultarDocumentos(token) {
-    var tokenRequest = desencriptar(token);
-    const headers = {
-        'Content-Type': 'application/json',
-        'TokenAuto': tokenRequest,
-        'Permiso': 'sa_Consultar usuarios registrados'
-    }
-    return (dispatch, getState) => {
-        axios.get("http://localhost:9090/proyectosESCOM-web/api/usuarios/tipoDocumento", { headers: headers })
-            .then(response => {
-                dispatch({
-                    type: MOSTRAR_DOCUMENTOS,
-                    respuesta: response.data
-                });
-            });
-    };
-}
-
-export function actionAsignarIp() {
-    return (dispatch, getState) => {
-        axios.get("https://api.ipify.org/?format=json")
-            .then(response => {
-                localStorage.setItem('Ip',response.data.ip)
-            });
-    };
-}
-
-export function actionAgregarUsuario(usuario, token) {
-    var tokenRequest = desencriptar(token);
-    const headers = {
-        'Content-Type': 'application/json',
-        'TokenAuto': tokenRequest,
-        'Permiso': 'sa_Registrar usuarios'
-    }
-    usuario.datosSolicitud={
-        'ip':localStorage.getItem('Ip'),
-        'token':tokenRequest
-    };
-    return (dispatch, getState) => {
-        axios.post("http://localhost:9090/proyectosESCOM-web/api/usuarios/registrar", usuario, { headers: headers })
-            .then(response => {
-                dispatch({
-                    type: AGREGAR_USUARIO,
-                    usuarioARegistrar: usuario
-                });
-                dispatch({
-                    type: MENSAJE_REGISTRAR,
-                    mensaje: 'Usuario registrado'
-                });
-            }).catch((error) => {
-                if (error.request.response === '') {
-                    dispatch({
-                        type: MENSAJE_REGISTRAR,
-                        mensaje: 'Servidor fuera de servicio temporalmente'
-                    });
-                } else {
-                    if (error.request) {
-                        var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
-                        if (respuesta !== '') {
-                            dispatch({
-                                type: MENSAJE_REGISTRAR,
-                                mensaje: respuesta
-                            });
-                        } else {
-                            dispatch({
-                                type: MENSAJE_REGISTRAR,
-                                mensaje: 'Ya existen los datos registrados previamente'
-                            });
-                        }
-                    }
-                }
-
-            });
-
-    }
-}
-
-export function actionAsignarActividad(token, numeroDocumento, actividad) {
-    var tokenRequest = desencriptar(token);
-    const headers = {
-        'Content-Type': 'application/json',
-        'TokenAuto': tokenRequest,
-        'Permiso': 'sa_Asignacion de actividades a los usuarios'
-    }
-    return (dispatch, getState) => {
-        axios.post("http://localhost:9090/proyectosESCOM-web/api/usuarios/asignarActividad/" + numeroDocumento, actividad, { headers: headers })
-            .then(response => {
-                dispatch({
-                    type: MENSAJE_ASIGNAR,
-                    mensaje: 'Actividad asignada'
-                });
-            }).catch((error) => {
-                if (error.request.response === '') {
-                    dispatch({
-                        type: MENSAJE_ASIGNAR,
-                        mensaje: 'Servidor fuera de servicio temporalmente'
-                    });
-                } else {
-                    if (error.request) {
-                        var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
-                        if (respuesta !== '') {
-                            dispatch({
-                                type: MENSAJE_ASIGNAR,
-                                mensaje: respuesta
-                            });
-                        } else {
-                            dispatch({
-                                type: MENSAJE_ASIGNAR,
-                                mensaje: 'Ya existen los datos registrados previamente'
-                            });
-                        }
-                    }
-                }
-
-            });
-
-    }
-}
-
-export function actionSuspenderActivarUsuario(cedula, token, actualizados, registrados) {
-    var tokenRequest = desencriptar(token);
-    const headers = {
-        'Content-Type': 'application/json',
-        'TokenAuto': tokenRequest,
-        'Permiso': 'sa_Suspender/activar usuarios'
-    }
-    let datosSolicitud={
-        'ip':localStorage.getItem('Ip'),
-        'token':tokenRequest
-    };
-    return (dispatch, getState) => {
-        axios.put("http://localhost:9090/proyectosESCOM-web/api/usuarios/cambiarEstado/" + cedula,datosSolicitud, { headers: headers })
-            .then(response => {
-                dispatch({
-                    type: MENSAJE_SUSPENDER,
-                    mensaje: 'Operacion hecha con exito'
-                });
-                dispatch({
-                    type: ACTUALIZAR_USUARIOS,
-                    usuario: actualizados
-                });
-            }).catch((error) => {
-                if (error.request.response === '') {
-                    dispatch({
-                        type: MENSAJE_SUSPENDER,
-                        mensaje: 'Servidor fuera de servicio temporalmente'
-                    });
-                } else {
-                    if (error.request) {
-                        var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
-                        if (respuesta !== '') {
-                            dispatch({
-                                type: MENSAJE_SUSPENDER,
-                                mensaje: respuesta
-                            });
-                        } else {
-                            dispatch({
-                                type: MENSAJE_SUSPENDER,
-                                mensaje: 'Sin acceso al servicio'
-                            });
-                        }
-                    }
-                }
-
-            });
-
-    }
-}
-
-export function actionCargarInformacionDeUsuario(cedula, token) {
-    const headers = {
-        'Content-Type': 'application/json',
-        'TokenAuto': desencriptar(token),
-        'Permiso': 'sa_Editar informacion de los usuarios'
-    }
-    return (dispatch, getState) => {
-        axios.get("http://localhost:9090/proyectosESCOM-web/api/usuarios/datos/" + cedula, { headers: headers })
-            .then(response => {
-                dispatch({
-                    type: INFORMACION_USUARIO,
-                    informacionUsuario: response.data
-                });
-            }).catch((error) => {
-                if (error.request.response === '') {
-                    dispatch({
-                        type: MENSAJE_EDITAR,
-                        mensaje: 'Servidor fuera de servicio temporalmente'
-                    });
-                } else {
-                    if (error.request) {
-                        var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
-                        if (respuesta !== '') {
-                            dispatch({
-                                type: MENSAJE_EDITAR,
-                                mensaje: respuesta
-                            });
-                        } else {
-                            dispatch({
-                                type: MENSAJE_EDITAR,
-                                mensaje: 'Sin acceso al servicio'
-                            });
-                        }
-                    }
-                }
-            });
-    };
-}
-
-export function actionConsultarModulos(token) {
-    var tokenRequest = desencriptar(token);
-    const headers = {
-        'Content-Type': 'application/json',
-        'TokenAuto': tokenRequest,
-        'Permiso': 'sa_Asignacion de actividades a los usuarios'
-    }
-    return (dispatch, getState) => {
-        axios.get("http://localhost:9090/proyectosESCOM-web/api/modulos/listar", { headers: headers })
-            .then(response => {
-                dispatch({
-                    type: MODULOS_REGISTRADOS,
-                    respuesta: response.data
-                });
-
-            }).catch((error) => {
-                if (error.request.response === '') {
-
-
-                } else {
-                    if (error.request) {
-                        var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
-                        if (respuesta === 'Sin permiso') {
-                            dispatch({
-                                type: ESTADO_ASIGNAR,
-                                estado: true
-                            });
-                        } else {
-                            //
-                        }
-                    }
-                }
-            });
-    };
-}
-
-export function actionLimpiar() {
-    return (dispatch, getState) => {
-        dispatch({
-            type: ACTIVIDADES_SIN_ASIGNAR,
-            respuesta: undefined
-        });
-    };
-}
-
-export function actionEliminarActividades(actividades, token, numeroDocumento) {
-    var tokenRequest = desencriptar(token);
-    const headers = {
-        'Content-Type': 'application/json',
-        'TokenAuto': tokenRequest,
-        'Permiso': 'sa_Asignacion de actividades a los usuarios'
-    }
-    return (dispatch, getState) => {
-        axios.put("http://localhost:9090/proyectosESCOM-web/api/usuarios/eliminarActividad/" + numeroDocumento, actividades, { headers: headers })
-            .then(response => {
-                dispatch({
-                    type: MENSAJE_ASIGNAR,
-                    mensaje: 'Actividades eliminadas'
-                });
-            }).catch((error) => {
-                console.log(error);
-
-                if (error.request.response === '') {
-                    dispatch({
-                        type: MENSAJE_ASIGNAR,
-                        mensaje: 'Servidor fuera de servicio temporalmente'
-                    });
-                } else {
-                    if (error.request) {
-                        var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
-                        console.log('respuesta', respuesta);
-                        if (respuesta !== '') {
-                            dispatch({
-                                type: MENSAJE_ASIGNAR,
-                                mensaje: respuesta
-                            });
-                        } else {
-                            dispatch({
-                                type: MENSAJE_ASIGNAR,
-                                mensaje: 'Sin acceso al servicio'
-                            });
-                        }
-                    }
-                }
-
-            });
-
-    }
-}
-
-export function actionConsultarActividadesSinAsignar(token, numeroDocumento, codigoModulo) {
-    var tokenRequest = desencriptar(token);
-    const headers = {
-        'Content-Type': 'application/json',
-        'TokenAuto': tokenRequest,
-        'Permiso': 'sa_Asignacion de actividades a los usuarios'
-    }
-    return (dispatch, getState) => {
-        axios.get("http://localhost:9090/proyectosESCOM-web/api/usuarios/listarActividadesNoAsociadas/" + numeroDocumento + "/" + codigoModulo, { headers: headers })
-            .then(response => {
-                dispatch({
-                    type: ACTIVIDADES_SIN_ASIGNAR,
-                    respuesta: response.data
-                });
-
-            }).catch((error) => {
-                if (error.request.response === '') {
-
-
-                } else {
-                    if (error.request) {
-                        var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
-                        if (respuesta === 'Sin permiso') {
-                            dispatch({
-                                type: ESTADO_ASIGNAR,
-                                estado: true
-                            });
-                        } else {
-                            //
-                        }
-                    }
-                }
-            });
-    };
-}
-
-
-
 
 export function actionAsignarCedula(cedula) {
     return (dispatch, getState) => {
@@ -621,61 +672,3 @@ export function actionActualizarUsuarios(usuarios) {
         });
     }
 }
-
-export function actionEditarUsuario(usuario, cedula, token) {
-    const headers = {
-        'Content-Type': 'application/json',
-        'TokenAuto': desencriptar(token),
-        'Permiso': 'sa_Editar informacion de los usuarios'
-    }
-    usuario.datosSolicitud={
-        'ip':localStorage.getItem('Ip'),
-        'token':desencriptar(token)
-    };
-    return (dispatch, getState) => {
-        axios.put("http://localhost:9090/proyectosESCOM-web/api/usuarios/editar/" + cedula, usuario, { headers: headers })
-            .then(response => {
-                dispatch({
-                    type: EDITAR_USUARIO,
-                    payload: usuario
-                });
-                dispatch({
-                    type: MENSAJE_EDITAR,
-                    mensaje: 'Modificado'
-                });
-            }).catch((error) => {
-                if (error.request.response === '') {
-                    dispatch({
-                        type: MENSAJE_EDITAR,
-                        mensaje: 'Servidor fuera de servicio temporalmente'
-                    });
-                } else {
-                    if (error.request) {
-                        var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
-                        if (respuesta !== '') {
-                            dispatch({
-                                type: MENSAJE_EDITAR,
-                                mensaje: respuesta
-                            });
-                        } else {
-                            dispatch({
-                                type: MENSAJE_EDITAR,
-                                mensaje: 'Ya existen los datos registrados previamente'
-                            });
-                        }
-                    }
-                }
-
-            });
-    }
-}
-
-
-function getIp(){
-    axios.get('https://api.ipify.org/?format=json')
-    .then((response) => {
-        console.log('resp',response);
-        return response.data.ip;
-    });
-};

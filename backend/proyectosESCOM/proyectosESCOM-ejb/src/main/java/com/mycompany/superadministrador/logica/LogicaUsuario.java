@@ -135,7 +135,6 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             List<Usuario> usuarioResultado = usuarioDB.consultaDatosExistentes(usuario.getCorreoElectronico(), usuario.getNumeroDocumento());
             if (usuarioResultado.isEmpty()) {
                 usuarioDB.registrarUsuario(usuario);
-                usuario.getDatosSolicitud().setOperacion("sa_Registrar usuarios");
                 usuario.getDatosSolicitud().setTablaInvolucrada(TABLA);
                 bitacora.registrarEnBitacora(usuario.getDatosSolicitud());
             } else {
@@ -329,7 +328,6 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
                     throw new Exception("Usuario no modificado");
                 } else {
                     usuarioEditar.getDatosSolicitud().setTablaInvolucrada(TABLA);
-                    usuarioEditar.getDatosSolicitud().setOperacion("sa_Editar informacion de los usuarios");
                     bitacora.registrarEnBitacora(usuarioEditar.getDatosSolicitud());
                 }
             } else {
@@ -359,7 +357,6 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         try {
             UsuarioPOJO usuarioResultado = usuarioDB.buscarUsuarioEspecifico(cedula);
             datosSolicitud.setTablaInvolucrada(TABLA);
-            datosSolicitud.setOperacion("sa_Suspender/activar usuarios");
             if (usuarioResultado != null) {
                 if (usuarioResultado.getEstado().equals("Activo")) {
                     usuarioDB.cambiarEstadoUsuario(usuarioResultado.getId(), "Suspendido");
@@ -455,6 +452,8 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
                 for (int i = 0; i < listaActividad.size(); i++) {
                     usuarioActividadDB.eliminarActividadUsuario(usuarioDB.find(usuarioResultado.getId()), actividadDB.find(listaActividad.get(i).getIdActividad()));
                 }
+                listaActividad.get(0).getDatosSolicitud().setTablaInvolucrada(TABLA);
+                bitacora.registrarEnBitacora(listaActividad.get(0).getDatosSolicitud());
             } else {
                 throw new NoResultException("No se encontraron datos del usuario");
             }
@@ -476,16 +475,18 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
      *
      */
     @Override
-    public void asignarActividadAUsuario(int numeroDocumento, int idActividad) throws ExcepcionGenerica {
+    public void asignarActividadAUsuario(int numeroDocumento, ActividadPOJO actividad) throws ExcepcionGenerica {
         try {
             UsuarioPOJO usuario = usuarioDB.buscarUsuarioEspecifico(numeroDocumento);
             Usuario usu = usuarioDB.find(usuario.getId());
-            Actividad act = actividadDB.find(idActividad);
+            Actividad act = actividadDB.find(actividad.getIdActividad());
             UsuarioActividad usuarioActividad = new UsuarioActividad();
             usuarioActividad.setUsuario(usu);
             usuarioActividad.setActividad(act);
             usuarioActividad.setUltimaModificacion(new Date());
             usuarioActividadDB.create(usuarioActividad);
+            actividad.getDatosSolicitud().setTablaInvolucrada(TABLA);
+            bitacora.registrarEnBitacora(actividad.getDatosSolicitud());
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer el login del usuario ");
         } catch (NoResultException ex) {

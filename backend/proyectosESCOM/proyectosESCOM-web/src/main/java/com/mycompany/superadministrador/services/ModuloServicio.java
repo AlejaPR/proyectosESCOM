@@ -1,6 +1,7 @@
 package com.mycompany.superadministrador.services;
 
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
+import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import com.mycompany.superadministrador.POJO.ModuloPOJO;
 import com.mycompany.superadministrador.POJO.Respuesta;
 import com.mycompany.superadministrador.interfaces.LogicaModuloFacadeLocal;
@@ -131,12 +132,12 @@ public class ModuloServicio {
      * @param idModulo
      * @return  *
      */
-    @GET
+    @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/cambiarEstado/{idModulo}")
-    public Response cambiarEstado(@PathParam("idModulo") int idModulo) {
+    public Response cambiarEstado(@PathParam("idModulo") int idModulo,DatosSolicitudPOJO datosSolicitud) {
         try {
-            moduloLogica.cambiarEstadoModulo(idModulo);
+            moduloLogica.cambiarEstadoModulo(idModulo,datosSolicitud);
             respuesta.setRespuesta("Estado cambiado correctamente");
             return Response.status(Response.Status.OK).entity(respuesta).build();
         } catch (ExcepcionGenerica e) {

@@ -16,6 +16,7 @@ public class ActividadPOJO {
     private String descripcionActividad;
     private String moduloActividad;
     private String estado;
+    private DatosSolicitudPOJO datosSolicitud;
 
     private int idModulo;
 
@@ -34,18 +35,18 @@ public class ActividadPOJO {
         this.descripcionActividad = descripcionActividad;
         this.moduloActividad = moduloActividad;
     }
-    
-    public ActividadPOJO(int idActividad, String nombre,int idModulo) {
+
+    public ActividadPOJO(int idActividad, String nombre, int idModulo) {
         this.idActividad = idActividad;
         this.nombre = nombre;
-       this.idModulo = idModulo;
+        this.idModulo = idModulo;
     }
-    
+
     public ActividadPOJO(int idActividad, String nombre, int idModulo, String estado) {
         this.idActividad = idActividad;
         this.nombre = nombre;
-        this.idModulo=idModulo;
-        this.estado=estado;
+        this.idModulo = idModulo;
+        this.estado = estado;
     }
 
     public int getIdActividad() {
@@ -96,4 +97,14 @@ public class ActividadPOJO {
         this.estado = estado;
     }
 
+    public DatosSolicitudPOJO getDatosSolicitud() {
+        return datosSolicitud;
+    }
+
+    public void setDatosSolicitud(DatosSolicitudPOJO datosSolicitud) {
+        this.datosSolicitud = datosSolicitud;
+    }
+
+    
+    
 }

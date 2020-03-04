@@ -1,12 +1,14 @@
 package com.mycompany.superadministrador.logica;
 
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
+import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import com.mycompany.superadministrador.POJO.ModuloPOJO;
 import com.mycompany.superadministrador.entity.Actividad;
 import com.mycompany.superadministrador.entity.Modulo;
 import com.mycompany.superadministrador.interfaces.ActividadFacadeLocal;
 import com.mycompany.superadministrador.interfaces.LogicaModuloFacadeLocal;
 import com.mycompany.superadministrador.interfaces.ModuloFacadeLocal;
+import com.mycompany.superadministrador.interfaces.UtilitarioFacadeLocal;
 import com.mycompany.superadministrador.utilitarios.ExcepcionGenerica;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +18,7 @@ import javax.persistence.NoResultException;
 
 /**
  * Clase encarga de la logica de los modulos
+ *
  * @author jeison gaona - alejandra pabon
  * @author aleja
  */
@@ -28,10 +31,15 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
     @EJB
     ActividadFacadeLocal actividadDB;
 
+    @EJB
+    UtilitarioFacadeLocal bitacora;
+
+    private static final String TABLA = "TBL_MODULO";
+
     /**
      * Metodo que llama a la consulta para registrar el modulo
      *
-     * 
+     *
      * @param modulo
      * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
      *
@@ -67,13 +75,16 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
                     segundaLetra = parte2.substring(0, 1);
                     acronimo = primeraLetra + segundaLetra;
                     List<Modulo> moduloAcronimo = moduloDB.consultaAcronimo(acronimo);
+                    modulo.getDatosSolicitud().setTablaInvolucrada(TABLA);
                     if (moduloAcronimo.isEmpty()) {
                         moduloDB.registrarModulo(modulo, acronimo);
+                        bitacora.registrarEnBitacora(modulo.getDatosSolicitud());
                     } else {
                         primeraLetra = parte1.substring(0, 1);
                         segundaLetra = parte2.substring(1, 2);
                         acronimo = primeraLetra + segundaLetra;
                         moduloDB.registrarModulo(modulo, acronimo);
+                        bitacora.registrarEnBitacora(modulo.getDatosSolicitud());
                     }
                 }
             } else {
@@ -151,7 +162,8 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
     public void editarModulo(int idModulo, ModuloPOJO moduloEditar) throws ExcepcionGenerica {
         try {
             moduloDB.editarModulo(idModulo, moduloEditar);
-
+            moduloEditar.getDatosSolicitud().setTablaInvolucrada(TABLA);
+            bitacora.registrarEnBitacora(moduloEditar.getDatosSolicitud());
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la modificacion del modulo");
         } catch (NoResultException ex) {
@@ -171,14 +183,17 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
      *
      */
     @Override
-    public void cambiarEstadoModulo(int idModulo) throws ExcepcionGenerica {
+    public void cambiarEstadoModulo(int idModulo,DatosSolicitudPOJO datosSolicitud) throws ExcepcionGenerica {
         try {
             ModuloPOJO moduloResultado = moduloDB.buscarModuloEspecifico(idModulo);
+            datosSolicitud.setTablaInvolucrada(TABLA);
             if (moduloResultado != null) {
                 if (moduloResultado.getEstadoModulo().equals("Activo")) {
                     moduloDB.cambiarEstadoModulo(idModulo, "Suspendido");
+                    bitacora.registrarEnBitacora(datosSolicitud);
                 } else if (moduloResultado.getEstadoModulo().equals("Suspendido")) {
                     moduloDB.cambiarEstadoModulo(idModulo, "Activo");
+                    bitacora.registrarEnBitacora(datosSolicitud);
                 }
             } else {
                 throw new NoResultException("No se encontraron datos del modulo");
@@ -230,20 +245,21 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
     @Override
     public void cambiarEstadoActividadModulo(List<ActividadPOJO> listaActividad) throws ExcepcionGenerica {
         try {
-            
-            for(int i=0; i<listaActividad.size();i++){             
+
+            for (int i = 0; i < listaActividad.size(); i++) {
                 Actividad actividadResultado = actividadDB.find(listaActividad.get(i).getIdActividad());
-            if (actividadResultado != null) {
-                if (actividadResultado.getEstado().equals("Activo")) {
-                    actividadDB.cambiarEstadoActividadModulo(listaActividad.get(i).getIdActividad(), "Suspendido");
-                } else if (actividadResultado.getEstado().equals("Suspendido")) {
-                    actividadDB.cambiarEstadoActividadModulo(listaActividad.get(i).getIdActividad(), "Activo");
+                if (actividadResultado != null) {
+                    if (actividadResultado.getEstado().equals("Activo")) {
+                        actividadDB.cambiarEstadoActividadModulo(listaActividad.get(i).getIdActividad(), "Suspendido");
+                    } else if (actividadResultado.getEstado().equals("Suspendido")) {
+                        actividadDB.cambiarEstadoActividadModulo(listaActividad.get(i).getIdActividad(), "Activo");
+                    }
+                } else {
+                    throw new NoResultException("No se encontraron datos de la actividad");
                 }
-            } else {
-                throw new NoResultException("No se encontraron datos de la actividad");
             }
-            }
-            
+            listaActividad.get(0).getDatosSolicitud().setTablaInvolucrada(TABLA);
+            bitacora.registrarEnBitacora(listaActividad.get(0).getDatosSolicitud());
         } catch (NoResultException ex) {
             throw new ExcepcionGenerica("No se encontraron datos de la actividad");
         } catch (NullPointerException ex) {

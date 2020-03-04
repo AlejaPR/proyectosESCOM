@@ -4,6 +4,7 @@ import com.mycompany.superadministrador.POJO.ConfiguracionPOJO;
 import com.mycompany.superadministrador.entity.Configuracion;
 import com.mycompany.superadministrador.interfaces.ConfiguracionFacadeLocal;
 import com.mycompany.superadministrador.interfaces.LogicaConfiguracionFacadeLocal;
+import com.mycompany.superadministrador.interfaces.UtilitarioFacadeLocal;
 import com.mycompany.superadministrador.utilitarios.ExcepcionGenerica;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,16 +13,21 @@ import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
 
 /**
- * Clase encargada de la logica de la configuracion 
+ * Clase encargada de la logica de la configuracion
+ *
  * @author jeison gaona - alejandra pabon
  */
 @Stateless
 public class LogicaConfiguracion implements LogicaConfiguracionFacadeLocal {
-
+    
     @EJB
     ConfiguracionFacadeLocal configuracionDB;
     
-   
+    @EJB
+    UtilitarioFacadeLocal bitacora;
+    
+    private static final String TABLA = "TBL_CONFIGURACION";
+
     /**
      * Metodo que llama a la consulta para registrar la configuracion
      *
@@ -31,21 +37,22 @@ public class LogicaConfiguracion implements LogicaConfiguracionFacadeLocal {
      *
      */
     @Override
-    public void registrarConfiguracion (ConfiguracionPOJO configuracion) throws ExcepcionGenerica {
+    public void registrarConfiguracion(ConfiguracionPOJO configuracion) throws ExcepcionGenerica {
         try {
-                    List<ConfiguracionPOJO> listaConfiguracion = new ArrayList();
-                    listaConfiguracion= listarConfiguracionCompleta();
-                    for(int i=0; i<listaConfiguracion.size();i++){
-                        configuracionDB.registrarConfiguracion(listaConfiguracion.get(i).getIdConfiguracion(),configuracion); 
-                    }
-                    
+            List<ConfiguracionPOJO> listaConfiguracion = new ArrayList();
+            listaConfiguracion = listarConfiguracionCompleta();
+            for (int i = 0; i < listaConfiguracion.size(); i++) {
+                configuracionDB.registrarConfiguracion(listaConfiguracion.get(i).getIdConfiguracion(), configuracion);                
+            }
+            configuracion.getDatosSolicitud().setTablaInvolucrada(TABLA);
+            bitacora.registrarEnBitacora(configuracion.getDatosSolicitud());
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de registrar la configuracion");
         } catch (Exception ex) {
             throw new ExcepcionGenerica("Ocurrio una excepcion ");
         }
     }
-    
+
     /**
      * Metodo que llama a la consulta para obtener la lista de entorno
      *
@@ -64,7 +71,7 @@ public class LogicaConfiguracion implements LogicaConfiguracionFacadeLocal {
                     configuracion.setBarraSuperior(c.getBarraSuperior());
                     configuracion.setBarraLateral(c.getBarraLateral());
                     configuracion.setBotones(c.getBotones());
-                    configuracion.setLogo(c.getLogo());  
+                    configuracion.setLogo(c.getLogo());                    
                     listaEntorno.add(configuracion);
                 }
                 return listaEntorno;
@@ -77,7 +84,7 @@ public class LogicaConfiguracion implements LogicaConfiguracionFacadeLocal {
             throw new ExcepcionGenerica("Ocurrio una excepcion ");
         }
     }
-    
+
     /**
      * Metodo que llama a la consulta para obtener la lista de inicio
      *
@@ -94,7 +101,7 @@ public class LogicaConfiguracion implements LogicaConfiguracionFacadeLocal {
                 for (Configuracion c : inicioResultado) {
                     ConfiguracionPOJO configuracion = new ConfiguracionPOJO();
                     configuracion.setImagenLogin(c.getImagenLogin());
-                    configuracion.setBotones(c.getBotones());                  
+                    configuracion.setBotones(c.getBotones());                    
                     listaInicio.add(configuracion);
                 }
                 return listaInicio;
@@ -107,10 +114,12 @@ public class LogicaConfiguracion implements LogicaConfiguracionFacadeLocal {
             throw new ExcepcionGenerica("Ocurrio una excepcion ");
         }
     }
+
     /**
      * Metodo para obtener la configuracion completa de aspecto de la pagina web
+     *
      * @return
-     * @throws ExcepcionGenerica 
+     * @throws ExcepcionGenerica
      */
     @Override
     public List<ConfiguracionPOJO> listarConfiguracionCompleta() throws ExcepcionGenerica {
@@ -124,7 +133,7 @@ public class LogicaConfiguracion implements LogicaConfiguracionFacadeLocal {
                     configuracion.setBarraSuperior(c.getBarraSuperior());
                     configuracion.setBarraLateral(c.getBarraLateral());
                     configuracion.setBotones(c.getBotones());
-                    configuracion.setLogo(c.getLogo());  
+                    configuracion.setLogo(c.getLogo());                    
                     configuracion.setImagenLogin(c.getImagenLogin());
                     listaEntorno.add(configuracion);
                 }

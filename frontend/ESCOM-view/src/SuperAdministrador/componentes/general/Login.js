@@ -126,15 +126,12 @@ const generarMensaje = ({ input, label, type, meta: { touched, error, warning } 
 	<div>
 		<div>
 			<br/>
-			{label===undefined|label==''?<div></div>:<Alert draggable={true} severity="error">{label}</Alert>}
+			{label===undefined|label!==' '?<div></div>:<Alert draggable={true} severity="error">{label}</Alert>}
 			<br/>
 		</div>
 	</div>
 )
 
-const fondoBoton = {
-	background: "#ec671d"
-}
 
 function mapStateToProps(state) {
 	return {

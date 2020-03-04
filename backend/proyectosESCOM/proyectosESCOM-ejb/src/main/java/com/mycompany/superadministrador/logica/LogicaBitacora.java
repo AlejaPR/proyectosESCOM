@@ -22,25 +22,29 @@ public class LogicaBitacora implements LogicaBitacoraLocal {
 
     @EJB
     ActividadFacadeLocal actividadDB;
-    
+
     @EJB
     BitacoraFacadeLocal bitacoraDB;
-    
+
     @EJB
     LogicaUsuarioFacadeLocal usuarioLogica;
 
     /**
-     * 
-     * @param solicitud 
+     *
+     * @param solicitud
      */
     @Override
     public void registrarEnBitacora(DatosSolicitudPOJO solicitud) {
-        solicitud.setIdUsuario(usuarioLogica.devolverDatosUsuario(solicitud.getToken()).getId());
-        String actividadConAcronimo = solicitud.getOperacion();
-        String actividadSinAcronimo = solicitud.getOperacion().substring(3);
-        solicitud.setOperacion(actividadSinAcronimo);
-        solicitud.setIdModulo(actividadDB.buscarActividadPorNombre(actividadConAcronimo).get(0).getModulo().getIdModulo());
-        bitacoraDB.registrarUsuario(solicitud);
+        try {
+            solicitud.setIdUsuario(usuarioLogica.devolverDatosUsuario(solicitud.getToken()).getId());
+            String actividadConAcronimo = solicitud.getOperacion();
+            String actividadSinAcronimo = solicitud.getOperacion().substring(3);
+            solicitud.setOperacion(actividadSinAcronimo);
+            solicitud.setIdModulo(actividadDB.buscarActividadPorNombre(actividadConAcronimo).get(0).getModulo().getIdModulo());
+            bitacoraDB.registrarUsuario(solicitud);
+        } catch (Exception e) {
+
+        }
     }
 
 }

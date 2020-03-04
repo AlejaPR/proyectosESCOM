@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { desencriptar } from '../componentes/general/Encriptar.js';
 import { mensajesDeError } from '../utilitario/MensajesError.js';
-import imagenDefecto from '../imagenes/defectoLogin.png';
 
 
 export const ESTADO_CONFIGURACION = 'ESTADO_CONFIGURACION';
@@ -15,15 +14,22 @@ export const MENSAJE_CONFIGURACION = 'MENSAJE_CONFIGURACION';
 export const CARGAR_CONFIGURACION = 'CARGAR_CONFIGURACION';
 export const CONFIGURACION_LOGIN = 'CONFIGURACION_LOGIN';
 
+const URL_BASE = 'http://localhost:9090';
+const PERMISO_CONFIGURACION = 'sa_Administrar configuracion de aspecto';
+
 export function actionActualizarConfiguracion(configuracion, token) {
-    var tokenRequest = desencriptar(token);
     const headers = {
         'Content-Type': 'application/json',
-        'TokenAuto': tokenRequest,
-        'Permiso': 'sa_Administrar configuracion de aspecto'
+        'TokenAuto': desencriptar(token),
+        'Permiso':PERMISO_CONFIGURACION
+    }
+    configuracion.datosSolicitud={
+        'ip': localStorage.getItem('Ip'),
+        'token': desencriptar(token),
+        'operacion': PERMISO_CONFIGURACION
     }
     return (dispatch, getState) => {
-        axios.put("http://localhost:9090/proyectosESCOM-web/api/configuracion/editarConfiguracion", configuracion, { headers: headers })
+        axios.put(`${URL_BASE}/proyectosESCOM-web/api/configuracion/editarConfiguracion`, configuracion, { headers: headers })
             .then(response => {
                 dispatch({
                     type: MENSAJE_CONFIGURACION,
@@ -63,13 +69,12 @@ export function actionActualizarConfiguracion(configuracion, token) {
 }
 
 export function consultarConfiguracion(token) {
-    var tokenRequest = desencriptar(token);
     const headers = {
         'Content-Type': 'application/json',
-        'TokenAuto': tokenRequest
+        'TokenAuto': desencriptar(token)
     }
     return (dispatch, getState) => {
-        axios.get("http://localhost:9090/proyectosESCOM-web/api/configuracion/listarEntorno", { headers: headers })
+        axios.get(`${URL_BASE}/proyectosESCOM-web/api/configuracion/listarEntorno`, { headers: headers })
             .then(response => {
                 dispatch({
                     type: MOSTRAR_CONFIGURACION,
@@ -120,7 +125,7 @@ export function consultarConfiguracionLogin() {
         'Content-Type': 'application/json'
     }
     return (dispatch, getState) => {
-        axios.get("http://localhost:9090/proyectosESCOM-web/api/configuracion/listarInicio", { headers: headers })
+        axios.get(`${URL_BASE}/proyectosESCOM-web/api/configuracion/listarInicio`, { headers: headers })
             .then(response => {
                 dispatch({
                     type: CONFIGURACION_LOGIN,
@@ -164,14 +169,13 @@ export function consultarConfiguracionLogin() {
 }
 
 export function actionConsultarConfiguracionCompleta(token) {
-    var tokenRequest = desencriptar(token);
     const headers = {
         'Content-Type': 'application/json',
-        'TokenAuto': tokenRequest,
-        'Permiso': 'sa_Administrar configuracion de aspecto'
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMISO_CONFIGURACION
     }
     return (dispatch, getState) => {
-        axios.get("http://localhost:9090/proyectosESCOM-web/api/configuracion/listarCompleta", { headers: headers })
+        axios.get(`${URL_BASE}/proyectosESCOM-web/api/configuracion/listarCompleta`, { headers: headers })
             .then(response => {
                 dispatch({
                     type: CARGAR_CONFIGURACION,

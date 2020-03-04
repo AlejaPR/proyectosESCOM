@@ -17,7 +17,7 @@ public class ConfiguracionPOJO {
     private String barraSuperior;
     private String barraLateral;
     private String botones;
-
+    private DatosSolicitudPOJO datosSolicitud;
     public ConfiguracionPOJO() {
     }
 
@@ -77,6 +77,14 @@ public class ConfiguracionPOJO {
 
     public void setBotones(String botones) {
         this.botones = botones;
+    }
+
+    public DatosSolicitudPOJO getDatosSolicitud() {
+        return datosSolicitud;
+    }
+
+    public void setDatosSolicitud(DatosSolicitudPOJO datosSolicitud) {
+        this.datosSolicitud = datosSolicitud;
     }
 
     
