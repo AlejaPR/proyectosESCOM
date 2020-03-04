@@ -42,7 +42,7 @@ public class Filtro implements ContainerRequestFilter {
             try {
                 if (sesionesFacade.getMapaSesiones().containsKey(token)) {
                     if (sesionesFacade.modificarVencimiento(token)) {
-                        if(url.contains("api/login/cerrarSesion")|url.contains("api/usuario/redireccionUsuario")|url.contains("api/configuracion/listarEntorno")){
+                        if(url.contains("api/login/cerrarSesion")|url.contains("api/usuarios/redireccion")|url.contains("api/configuracion/listarEntorno")){
                             return;
                         }
                         if (!sesionesFacade.validarPermiso(token, permiso)) {

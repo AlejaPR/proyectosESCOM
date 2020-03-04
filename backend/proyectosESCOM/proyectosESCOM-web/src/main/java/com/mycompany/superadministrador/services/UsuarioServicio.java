@@ -1,6 +1,7 @@
 package com.mycompany.superadministrador.services;
 
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
+import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import com.mycompany.superadministrador.POJO.ModuloPOJO;
 import com.mycompany.superadministrador.POJO.Respuesta;
 import com.mycompany.superadministrador.POJO.TipoDocumentoPOJO;
@@ -156,12 +157,12 @@ public class UsuarioServicio {
      * @param cedula
      * @return  *
      */
-    @GET
+    @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/cambiarEstado/{cedula}")
-    public Response cambiarEstado(@PathParam("cedula") int cedula) {
+    public Response cambiarEstado(@PathParam("cedula") int cedula, DatosSolicitudPOJO datosSolicitud) {
         try {
-            usuarioLogica.cambiarEstadoUsuario(cedula);
+            usuarioLogica.cambiarEstadoUsuario(cedula,datosSolicitud);
             respuesta.setRespuesta("Estado cambiado correctamente");
             return Response.status(Response.Status.OK).entity(respuesta).build();
         } catch (ExcepcionGenerica e) {
@@ -285,6 +286,7 @@ public class UsuarioServicio {
     public Response redireccion(@PathParam("token") String token) {
         try {
            List<ModuloPOJO> listaModulo= usuarioLogica.redireccionUsuario(token);
+            System.out.println("Size de redi"+listaModulo.size());
             return Response.status(Response.Status.OK).entity(listaModulo).build();
         } catch (ExcepcionGenerica e) {
             respuesta.setRespuesta("Sin acceso al servicio");

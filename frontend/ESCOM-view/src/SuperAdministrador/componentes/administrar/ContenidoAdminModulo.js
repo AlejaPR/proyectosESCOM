@@ -33,7 +33,7 @@ class ContenidoAdminModulo extends React.Component {
 						estadoModulo: "Activo",
 						nombreModulo: task.nombreModulo,
 						descripcionModulo: task.descripcionModulo,
-						acronimo: task.acronimo
+						imagenModulo:task.imagenModulo
 					}
 					nuevo.push(modulo);
 				} else {
@@ -42,7 +42,7 @@ class ContenidoAdminModulo extends React.Component {
 						idModulo: task.idModulo,
 						descripcionModulo: task.descripcionModulo,
 						estadoModulo: "Suspendido",
-						acronimo: task.acronimo
+						imagenModulo:task.imagenModulo
 					}
 					nuevo.push(modulo);
 				}

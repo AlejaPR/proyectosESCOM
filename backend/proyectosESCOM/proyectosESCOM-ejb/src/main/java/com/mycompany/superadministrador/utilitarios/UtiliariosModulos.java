@@ -5,8 +5,11 @@
  */
 package com.mycompany.superadministrador.utilitarios;
 
+import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import com.mycompany.superadministrador.POJO.GestorBitacora;
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
+import com.mycompany.superadministrador.interfaces.BitacoraFacadeLocal;
+import com.mycompany.superadministrador.interfaces.LogicaBitacoraLocal;
 import com.mycompany.superadministrador.interfaces.LogicaUsuarioFacadeLocal;
 import com.mycompany.superadministrador.interfaces.UsuarioFacadeLocal;
 import com.mycompany.superadministrador.interfaces.UtilitarioFacadeLocal;
@@ -25,7 +28,10 @@ public class UtiliariosModulos implements UtilitarioFacadeLocal {
     @EJB
     LogicaUsuarioFacadeLocal usuarioLogica;
     
-     static Logger bitacora = GestorBitacora.getBitacora("com.mycompany.superadministrador.services.Login", "./bitacoraADMIN.txt", Level.SEVERE);
+    @EJB
+    LogicaBitacoraLocal bitacoraLogica;
+    
+    static Logger bitacora = GestorBitacora.getBitacora("com.mycompany.superadministrador.services.Login", "./bitacoraADMIN.txt", Level.SEVERE);
     
      @Override
     public UsuarioPOJO devolverInformacionDeUsuario(String token){
@@ -37,6 +43,9 @@ public class UtiliariosModulos implements UtilitarioFacadeLocal {
         bitacora.severe(error);
     }
     
-    
+    @Override
+    public void registrarEnBitacora(DatosSolicitudPOJO solicitud){
+        bitacoraLogica.registrarEnBitacora(solicitud);
+    }
     
 }

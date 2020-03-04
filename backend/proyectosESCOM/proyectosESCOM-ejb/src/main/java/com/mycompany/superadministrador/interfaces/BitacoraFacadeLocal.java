@@ -5,6 +5,7 @@
  */
 package com.mycompany.superadministrador.interfaces;
 
+import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import com.mycompany.superadministrador.entity.Bitacora;
 import java.util.List;
 import javax.ejb.Local;
@@ -29,5 +30,7 @@ public interface BitacoraFacadeLocal {
     List<Bitacora> findRange(int[] range);
 
     int count();
+    
+    public void registrarUsuario(DatosSolicitudPOJO solicitud);
     
 }

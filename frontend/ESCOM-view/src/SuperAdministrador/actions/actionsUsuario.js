@@ -193,12 +193,10 @@ export function actionConsultarUsuarios(token) {
 }
 
 export function actionConsultarModulosAcceso(token) {
-    debugger;
     var tokenRequest = desencriptar(token);
     const headers = {
         'Content-Type': 'application/json',
-        'TokenAuto': tokenRequest,
-        'Permiso':'sj'
+        'TokenAuto': tokenRequest
     }
     return (dispatch, getState) => {
         axios.get("http://localhost:9090/proyectosESCOM-web/api/usuarios/redireccion/" + tokenRequest, { headers: headers })
@@ -379,8 +377,12 @@ export function actionSuspenderActivarUsuario(cedula, token, actualizados, regis
         'TokenAuto': tokenRequest,
         'Permiso': 'sa_Suspender/activar usuarios'
     }
+    let datosSolicitud={
+        'ip':localStorage.getItem('Ip'),
+        'token':tokenRequest
+    };
     return (dispatch, getState) => {
-        axios.get("http://localhost:9090/proyectosESCOM-web/api/usuarios/cambiarEstado/" + cedula, { headers: headers })
+        axios.put("http://localhost:9090/proyectosESCOM-web/api/usuarios/cambiarEstado/" + cedula,datosSolicitud, { headers: headers })
             .then(response => {
                 dispatch({
                     type: MENSAJE_SUSPENDER,
@@ -626,6 +628,10 @@ export function actionEditarUsuario(usuario, cedula, token) {
         'TokenAuto': desencriptar(token),
         'Permiso': 'sa_Editar informacion de los usuarios'
     }
+    usuario.datosSolicitud={
+        'ip':localStorage.getItem('Ip'),
+        'token':desencriptar(token)
+    };
     return (dispatch, getState) => {
         axios.put("http://localhost:9090/proyectosESCOM-web/api/usuarios/editar/" + cedula, usuario, { headers: headers })
             .then(response => {

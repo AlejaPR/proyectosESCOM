@@ -8,8 +8,11 @@ package com.mycompany.superadministrador.POJO;
 public class DatosSolicitudPOJO {
     private String token;
     private String ip;
-    private String MAC;
-
+    private String operacion;
+    private int idUsuario;
+    private String tablaInvolucrada;
+    private int idModulo;
+    
     public DatosSolicitudPOJO() {
     }
     
@@ -30,13 +33,39 @@ public class DatosSolicitudPOJO {
         this.ip = ip;
     }
 
-    public String getMAC() {
-        return MAC;
+    public String getOperacion() {
+        return operacion;
     }
 
-    public void setMAC(String MAC) {
-        this.MAC = MAC;
+    public void setOperacion(String operacion) {
+        this.operacion = operacion;
     }
+
+    public int getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(int idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+
+    public String getTablaInvolucrada() {
+        return tablaInvolucrada;
+    }
+
+    public void setTablaInvolucrada(String tablaInvolucrada) {
+        this.tablaInvolucrada = tablaInvolucrada;
+    }
+
+    public int getIdModulo() {
+        return idModulo;
+    }
+
+    public void setIdModulo(int idModulo) {
+        this.idModulo = idModulo;
+    }
+
+    
     
     
 }

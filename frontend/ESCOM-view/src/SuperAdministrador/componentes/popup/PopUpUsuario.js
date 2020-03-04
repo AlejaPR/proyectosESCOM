@@ -9,7 +9,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
-import {generarInput,generarSelect} from '../../utilitario/GenerarInputs.js'
+import { generarInput, generarSelect } from '../../utilitario/GenerarInputs.js'
 import AddIcon from '@material-ui/icons/Add';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import CancelIcon from '@material-ui/icons/Cancel';
@@ -69,7 +69,7 @@ class PopUpUsuario extends React.Component {
     this.props.actionConsultarDocumentos(localStorage.getItem('Token'));
   }
 
-  
+
   handleSubmit = formValues => {
     try {
       var crypto = require('crypto');
@@ -84,7 +84,7 @@ class PopUpUsuario extends React.Component {
         'contrasena': contrasenaEncryp,
         'fechaNacimiento': date,
         'estado': 'Activo',
-        'datosSolicitud':null
+        'datosSolicitud': null
       };
       this.props.actionAgregarUsuario(usuario, localStorage.getItem('Token'));
       this.props.reset();
@@ -107,7 +107,7 @@ class PopUpUsuario extends React.Component {
   render() {
     return (
       <div>
-        <Button style={{background:this.props.configuracion.botones,fontSize:"14px",textTransform:"none"}} startIcon={<AddIcon/>} className="btn btn-dark" variant="contained" onClick={this.toggle}>Registrar usuario</Button>
+        <Button style={{ background: this.props.configuracion.botones, fontSize: "14px", textTransform: "none" }} startIcon={<AddIcon />} className="btn btn-dark" variant="contained" onClick={this.toggle}>Registrar usuario</Button>
         <Modal isOpen={this.state.modal}
           toggle={this.toggle}
           style={{ width: "400px" }}>
@@ -118,14 +118,18 @@ class PopUpUsuario extends React.Component {
                 <div className="row">
                   <div className="col-sm-12">
                     <Field name="nombre" validate={[requerido, nombre]} component={generarInput} label="Nombre" />
-                    <br />
-                    <Field name="apellido" validate={[requerido, apellido]} component={generarInput} label="Apellido" />
-                    <br />
                   </div>
                 </div>
+                <br />
+                <div className="row">
+                  <div className="col-sm-12">
+                    <Field name="apellido" validate={[requerido, apellido]} component={generarInput} label="Apellido" />
+                  </div>
+                </div>
+                <br />
                 <div className="row">
                   <div className="col-sm-5">
-                    <span style={{fontSize:"13px"}}>Tipo de documento </span>
+                    <span style={{ fontSize: "13px" }}>Tipo de documento </span>
                   </div>
                   <div className="col-sm-7">
                     <Field name="tipoDocumento" validate={[seleccione]} style={{ height: "35px", fontSize: "13px" }} className="form-control" component={generarSelect} label="Username">
@@ -160,8 +164,8 @@ class PopUpUsuario extends React.Component {
                 </div>
               </div>
               <ModalFooter>
-                <Button style={{background: this.props.configuracion.botones,fontSize: "13px",fontFamily: "sans-serif",textTransform:"none"}} className="btn btn-dark" variant="contained"  startIcon={<SaveAltIcon/>} type="submit">Registrar</Button>{''}
-                <Button style={fondoBotonCancelar} className="btn btn-dark" variant="contained" startIcon={<CancelIcon/>} onClick={this.toggle}>Cancelar</Button>
+                <Button style={{ background: this.props.configuracion.botones, fontSize: "13px", fontFamily: "sans-serif", textTransform: "none" }} className="btn btn-dark" variant="contained" startIcon={<SaveAltIcon />} type="submit">Registrar</Button>{''}
+                <Button style={fondoBotonCancelar} className="btn btn-dark" variant="contained" startIcon={<CancelIcon />} onClick={this.toggle}>Cancelar</Button>
               </ModalFooter>
             </form>
           </ModalBody>
@@ -177,7 +181,7 @@ const fondoBotonCancelar = {
   background: "gray",
   fontSize: "13px",
   fontFamily: "sans-serif",
-  textTransform:"none"
+  textTransform: "none"
 }
 
 function mapStateToProps(state) {
@@ -186,7 +190,7 @@ function mapStateToProps(state) {
     token: state.user.token,
     documentos: state.user.tiposDocumento,
     mensaje: state.user.mensajeRegistrar,
-    configuracion:state.conf.configuracion
+    configuracion: state.conf.configuracion
   }
 }
 

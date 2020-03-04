@@ -2,6 +2,7 @@ package com.mycompany.superadministrador.logica;
 
 import com.google.gson.Gson;
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
+import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import com.mycompany.superadministrador.POJO.ModuloPOJO;
 import com.mycompany.superadministrador.POJO.TipoDocumentoPOJO;
 import com.mycompany.superadministrador.POJO.Token;
@@ -16,6 +17,7 @@ import com.mycompany.superadministrador.interfaces.SesionesFacadeLocal;
 import com.mycompany.superadministrador.interfaces.TipoDocumentoFacadeLocal;
 import com.mycompany.superadministrador.interfaces.UsuarioActividadFacadeLocal;
 import com.mycompany.superadministrador.interfaces.UsuarioFacadeLocal;
+import com.mycompany.superadministrador.interfaces.UtilitarioFacadeLocal;
 import com.mycompany.superadministrador.seguridad.Seguridad;
 import com.mycompany.superadministrador.seguridad.Sesiones;
 import com.mycompany.superadministrador.utilitarios.ExcepcionGenerica;
@@ -56,6 +58,11 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
     @EJB
     SesionesFacadeLocal sesiones;
 
+    @EJB
+    UtilitarioFacadeLocal bitacora;
+
+    private static final String TABLA = "TBL_USUARIO";
+
     /**
      * Metodo encargado de la logica del login de usuario
      *
@@ -85,7 +92,6 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             usuarioRespuesta.setApellido(usuario.getApellido());
             validarTokens(tokencin);
             return usuarioRespuesta;
-
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer el login del usuario ");
         } catch (NoResultException ex) {
@@ -129,7 +135,9 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             List<Usuario> usuarioResultado = usuarioDB.consultaDatosExistentes(usuario.getCorreoElectronico(), usuario.getNumeroDocumento());
             if (usuarioResultado.isEmpty()) {
                 usuarioDB.registrarUsuario(usuario);
-                System.out.println("ip:"+usuario.getDatosSolicitud().getIp()+" MAC: "+usuario.getDatosSolicitud().getMAC());
+                usuario.getDatosSolicitud().setOperacion("sa_Registrar usuarios");
+                usuario.getDatosSolicitud().setTablaInvolucrada(TABLA);
+                bitacora.registrarEnBitacora(usuario.getDatosSolicitud());
             } else {
                 throw new NoResultException("El correo o numero de documento ya esta registrado");
             }
@@ -319,6 +327,10 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             if (!datosExistentes) {
                 if (usuarioDB.editarUsuario(cedula, usuarioEditar, tipoDocumentoDB.find(usuarioEditar.getTipoDocumento())) != 1) {
                     throw new Exception("Usuario no modificado");
+                } else {
+                    usuarioEditar.getDatosSolicitud().setTablaInvolucrada(TABLA);
+                    usuarioEditar.getDatosSolicitud().setOperacion("sa_Editar informacion de los usuarios");
+                    bitacora.registrarEnBitacora(usuarioEditar.getDatosSolicitud());
                 }
             } else {
                 throw new NoResultException("El correo o numero de documento ya esta registrado");
@@ -343,14 +355,18 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
      *
      */
     @Override
-    public void cambiarEstadoUsuario(int cedula) throws ExcepcionGenerica {
+    public void cambiarEstadoUsuario(int cedula, DatosSolicitudPOJO datosSolicitud) throws ExcepcionGenerica {
         try {
             UsuarioPOJO usuarioResultado = usuarioDB.buscarUsuarioEspecifico(cedula);
+            datosSolicitud.setTablaInvolucrada(TABLA);
+            datosSolicitud.setOperacion("sa_Suspender/activar usuarios");
             if (usuarioResultado != null) {
                 if (usuarioResultado.getEstado().equals("Activo")) {
                     usuarioDB.cambiarEstadoUsuario(usuarioResultado.getId(), "Suspendido");
+                    bitacora.registrarEnBitacora(datosSolicitud);
                 } else if (usuarioResultado.getEstado().equals("Suspendido")) {
                     usuarioDB.cambiarEstadoUsuario(usuarioResultado.getId(), "Activo");
+                    bitacora.registrarEnBitacora(datosSolicitud);
                 }
             } else {
                 throw new NoResultException("No se encontraron datos del usuario");

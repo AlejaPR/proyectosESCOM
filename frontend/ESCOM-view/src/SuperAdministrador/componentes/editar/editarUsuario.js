@@ -79,7 +79,8 @@ class editar extends React.Component {
       apellido: formValues.apellido,
       fechaNacimiento: date,
       tipoDocumento: formValues.tipoDocumento,
-      token: ''
+      token: '', 
+      datosSolicitud:null
     }
     this.props.actionEditarUsuario(usuario, this.props.cedula, localStorage.getItem('Token'));
 
