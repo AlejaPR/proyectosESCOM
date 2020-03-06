@@ -284,5 +284,33 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         usuario.setEstado(estado);
         em.merge(usuario);
     }
+    
+    /**
+     * Metodo que realiza la consulta a la tabla usuario Devuelve una lista con
+     * los usuarios registrados para el modulo documental 
+     *
+     * @return
+     *
+     */
+    @Override
+    public List<UsuarioPOJO> listarUsuariosModuloDocumental() {
+
+        List<UsuarioPOJO> listaUsuarios = new ArrayList<>();
+        TypedQuery<Usuario> consultaUsuariosRegistrados = em.createNamedQuery("consultaUsuarios", Usuario.class);
+
+        for (Usuario u : consultaUsuariosRegistrados.getResultList()) {
+            UsuarioPOJO usuario = new UsuarioPOJO();
+
+            String nombre= u.getNombre();
+            String apellido= u.getApellido();
+            String nombreCompleto= nombre + " " + apellido;
+            
+            usuario.setNombre(nombreCompleto);
+            usuario.setId(u.getIdUsuario());
+            
+            listaUsuarios.add(usuario);
+        }
+        return listaUsuarios;
+    }
 
 }

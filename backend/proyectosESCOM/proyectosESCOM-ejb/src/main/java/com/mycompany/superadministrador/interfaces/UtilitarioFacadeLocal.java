@@ -7,6 +7,7 @@ package com.mycompany.superadministrador.interfaces;
 
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
+import java.util.List;
 
 /**
  *
@@ -19,4 +20,6 @@ public interface UtilitarioFacadeLocal {
     public void registroLogger(String error);
     
     public void registrarEnBitacora(DatosSolicitudPOJO solicitud);
+    
+    public List<UsuarioPOJO> devolverUsuariosModulo();
 }

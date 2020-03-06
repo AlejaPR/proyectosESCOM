@@ -51,5 +51,7 @@ public interface LogicaUsuarioFacadeLocal {
     public List<ActividadPOJO> listarActividadesUsuarioActivas(int cedula) throws ExcepcionGenerica;
 
     public List<ModuloPOJO> redireccionUsuario(String token) throws ExcepcionGenerica;
+    
+    public List<UsuarioPOJO> devolverUsuariosModuloDocumental();
 
 }

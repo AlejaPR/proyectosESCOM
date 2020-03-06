@@ -58,13 +58,16 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
                     segundaLetra = parte1.substring(1, 2);
                     acronimo = primeraLetra + segundaLetra;
                     List<Modulo> moduloAcronimo = moduloDB.consultaAcronimo(acronimo);
+                     modulo.getDatosSolicitud().setTablaInvolucrada(TABLA);
                     if (moduloAcronimo.isEmpty()) {
                         moduloDB.registrarModulo(modulo, acronimo);
+                        bitacora.registrarEnBitacora(modulo.getDatosSolicitud());
                     } else {
                         primeraLetra = parte1.substring(1, 2);
                         segundaLetra = parte1.substring(2, 3);
-                        acronimo = primeraLetra + segundaLetra;
-                        moduloDB.registrarModulo(modulo, acronimo);
+                        acronimo = primeraLetra + segundaLetra;                      
+                        moduloDB.registrarModulo(modulo, acronimo);                    
+                        bitacora.registrarEnBitacora(modulo.getDatosSolicitud());
                     }
 
                 } else {
@@ -75,7 +78,7 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
                     segundaLetra = parte2.substring(0, 1);
                     acronimo = primeraLetra + segundaLetra;
                     List<Modulo> moduloAcronimo = moduloDB.consultaAcronimo(acronimo);
-                    modulo.getDatosSolicitud().setTablaInvolucrada(TABLA);
+                     modulo.getDatosSolicitud().setTablaInvolucrada(TABLA);
                     if (moduloAcronimo.isEmpty()) {
                         moduloDB.registrarModulo(modulo, acronimo);
                         bitacora.registrarEnBitacora(modulo.getDatosSolicitud());
@@ -83,7 +86,7 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
                         primeraLetra = parte1.substring(0, 1);
                         segundaLetra = parte2.substring(1, 2);
                         acronimo = primeraLetra + segundaLetra;
-                        moduloDB.registrarModulo(modulo, acronimo);
+                        moduloDB.registrarModulo(modulo, acronimo);                     
                         bitacora.registrarEnBitacora(modulo.getDatosSolicitud());
                     }
                 }

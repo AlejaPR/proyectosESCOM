@@ -575,5 +575,26 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         }
         return false;
     }
+    
+    /**
+     * Metodo que llama a la consulta para obtener la lista de usuarios para el modulo documental
+     *
+     * @return
+     * 
+     */
+    @Override
+    public List<UsuarioPOJO> devolverUsuariosModuloDocumental(){
+        try {
+            List<UsuarioPOJO> usuariosResultado = usuarioDB.listarUsuariosModuloDocumental();
+            if (!usuariosResultado.isEmpty()) {
+                return usuariosResultado;
+            } else {
+                //vencio el token o no esta registrado
+                return null;
+            }
+        } catch (Exception ex) {
+            return null;
+        } 
+    }
 
 }

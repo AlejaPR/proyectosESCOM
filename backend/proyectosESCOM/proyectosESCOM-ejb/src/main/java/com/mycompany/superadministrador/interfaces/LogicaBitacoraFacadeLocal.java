@@ -13,7 +13,7 @@ import javax.ejb.Local;
  * @author jeiso
  */
 @Local
-public interface LogicaBitacoraLocal {
+public interface LogicaBitacoraFacadeLocal {
     
     public void registrarEnBitacora(DatosSolicitudPOJO solicitud);
     

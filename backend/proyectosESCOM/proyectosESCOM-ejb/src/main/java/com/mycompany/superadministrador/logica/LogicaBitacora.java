@@ -8,7 +8,7 @@ package com.mycompany.superadministrador.logica;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import com.mycompany.superadministrador.interfaces.ActividadFacadeLocal;
 import com.mycompany.superadministrador.interfaces.BitacoraFacadeLocal;
-import com.mycompany.superadministrador.interfaces.LogicaBitacoraLocal;
+import com.mycompany.superadministrador.interfaces.LogicaBitacoraFacadeLocal;
 import com.mycompany.superadministrador.interfaces.LogicaUsuarioFacadeLocal;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -18,7 +18,7 @@ import javax.ejb.Stateless;
  * @author jeiso
  */
 @Stateless
-public class LogicaBitacora implements LogicaBitacoraLocal {
+public class LogicaBitacora implements LogicaBitacoraFacadeLocal {
 
     @EJB
     ActividadFacadeLocal actividadDB;

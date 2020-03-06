@@ -55,5 +55,7 @@ public interface UsuarioFacadeLocal {
     
     public void cambiarEstadoUsuario(int cedula, String estado);
     
+     public List<UsuarioPOJO> listarUsuariosModuloDocumental();
+    
    
 }
