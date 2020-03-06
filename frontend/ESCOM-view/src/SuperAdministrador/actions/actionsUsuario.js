@@ -26,11 +26,11 @@ export const MODULOS_REGISTRADOS = 'MODULOS_REGISTRADOS';
 export const NOMBRE_USUARIO = 'NOMBRE_USUARIO';
 
 const URL_BASE = 'http://localhost:9090';
-const PERMISO_REGISTRAR = 'sa_Registrar usuarios';
-const PERMISO_CONSULTAR_USUARIOS = 'sa_Consultar usuarios registrados';
-const PERMISO_EDITAR_USUARIOS = 'sa_Editar informacion de los usuarios';
-const PERMISO_ASIGNACION_ACTIVIDADES = 'sa_Asignacion de actividades a los usuarios';
-const PERMISO_SUSPENDER_ACTIVAR = 'sa_Suspender/activar usuarios';
+const PERMISO_REGISTRAR = 'SA_Registrar usuarios';
+const PERMISO_CONSULTAR_USUARIOS = 'SA_Consultar usuarios registrados';
+const PERMISO_EDITAR_USUARIOS = 'SA_Editar informacion de los usuarios';
+const PERMISO_ASIGNACION_ACTIVIDADES = 'SA_Asignacion de actividades a los usuarios';
+const PERMISO_SUSPENDER_ACTIVAR = 'SA_Suspender/activar usuarios';
 
 export function actionLoginUsuario(correo, contrasena, cambiar) {
     var crypto = require('crypto');
@@ -211,7 +211,9 @@ export function actionAsignarIp() {
         axios.get("https://api.ipify.org/?format=json")
             .then(response => {
                 localStorage.setItem('Ip', response.data.ip)
-            });
+            }).then(
+
+            );
     };
 }
 

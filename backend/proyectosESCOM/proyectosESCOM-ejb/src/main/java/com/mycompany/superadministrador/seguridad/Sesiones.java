@@ -109,10 +109,10 @@ public class Sesiones implements SesionesFacadeLocal {
     public boolean validarPermiso(String llave,String permisoRequerido){
         Gson gson=new Gson();
         String claim = Jwts.parser().setSigningKey("A4J7A3prcc20").parseClaimsJws(llave).getBody().get("actividades", String.class);
-        ActividadPOJO[] actividadesAsignadas = gson.fromJson(claim,
-                ActividadPOJO[].class); 
-        for(ActividadPOJO ap : actividadesAsignadas){
-            if(ap.getNombre().equals(permisoRequerido)){
+        String[] actividadesAsignadas = gson.fromJson(claim,
+                String[].class); 
+        for(String ap : actividadesAsignadas){
+            if(ap.equals(permisoRequerido)){
                 return true;
             }
         }

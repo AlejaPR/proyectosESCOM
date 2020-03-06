@@ -80,7 +80,7 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
                 throw new ExcepcionGenerica("Cuenta suspendida temporalmente");
             }
             Seguridad token = new Seguridad();
-            List<ActividadPOJO> actividad = usuarioDB.consultarActividadesUsuario(usuario.getIdUsuario());
+            String[] actividad = usuarioDB.consultarActividadesUsuario(usuario.getIdUsuario());
             Gson gson = new Gson();
             String actividades = gson.toJson(actividad);
             String tokencin = token.generarToken(usuario, actividades);

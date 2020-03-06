@@ -112,7 +112,7 @@ class ContenidoAdminUsuario extends React.Component {
 					paddingBottom: "20px",
 					margin: "0px 0px 32px"
 				}}>
-					<div className="container shadow" style={fondoBarraSuperior}>
+					<div className="container shadow" style={fondoBarraSuperior}> 
 						<div>
 							{
 								this.props.habilitado ? <div className="col-sm-12">
@@ -265,6 +265,8 @@ const fondoBarraSuperior = {
 	background: "#FFFFFF",
 	padding: '30px'
 }
+
+
 
 
 function mapStateToProps(state) {

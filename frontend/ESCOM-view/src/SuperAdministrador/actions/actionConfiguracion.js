@@ -15,7 +15,7 @@ export const CARGAR_CONFIGURACION = 'CARGAR_CONFIGURACION';
 export const CONFIGURACION_LOGIN = 'CONFIGURACION_LOGIN';
 
 const URL_BASE = 'http://localhost:9090';
-const PERMISO_CONFIGURACION = 'sa_Administrar configuracion de aspecto';
+const PERMISO_CONFIGURACION = 'SA_Administrar configuracion de aspecto';
 
 export function actionActualizarConfiguracion(configuracion, token) {
     const headers = {

@@ -16,16 +16,17 @@ export const MENSAJE_EDITAR = 'MENSAJE_EDITAR';
 export const EDITAR_ACTIVIDAD = 'EDITAR_ACTIVIDAD';
 
 const URL_BASE = 'http://localhost:9090';
-const PERMISO_REGISTRAR_ACTIVIDAD = 'sa_Registrar actividad';
-const PERMISO_SUSPENDER_ACTIVAR = 'sa_Suspender/activar actividades'
-const PERMISO_EDITAR_ACTIVIDAD = 'sa_Editar informacion de la actividad';
+const PERMISO_CONSULTAR_ACTIVIDADES = 'SA_Consultar actividades registradas';
+const PERMISO_REGISTRAR_ACTIVIDAD = 'SA_Registrar actividad';
+const PERMISO_SUSPENDER_ACTIVAR = 'SA_Suspender/activar actividades'
+const PERMISO_EDITAR_ACTIVIDAD = 'SA_Editar informacion de la actividad';
 
 
 export function actionConsultarActividades(token) {
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': desencriptar(token),
-        'Permiso': 'sa_Consultar actividades registradas'
+        'Permiso': PERMISO_CONSULTAR_ACTIVIDADES
     }
     return (dispatch, getState) => {
         axios.get(`${URL_BASE}/proyectosESCOM-web/api/actividades/listar`, { headers: headers })
@@ -112,7 +113,7 @@ export function actionConsultarModulos(token) {
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': desencriptar(token),
-        'Permiso': 'sa_Consultar actividades registradas'
+        'Permiso': PERMISO_CONSULTAR_ACTIVIDADES
     }
     return (dispatch, getState) => {
         axios.get(`${URL_BASE}/proyectosESCOM-web/api/modulos/listar`, { headers: headers })

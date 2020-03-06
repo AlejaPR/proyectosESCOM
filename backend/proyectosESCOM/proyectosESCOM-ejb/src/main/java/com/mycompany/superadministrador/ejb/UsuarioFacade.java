@@ -94,6 +94,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
 
     /**
      * Metodo que realiza la consulta para editar token
+     *
      * @param token
      * @param idUsuario
      * @return
@@ -108,7 +109,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
     }
 
     /**
-     * Metodo que realiza la consulta para editar el token al cerrar sesion 
+     * Metodo que realiza la consulta para editar el token al cerrar sesion
      *
      * @param firma
      * @param correo
@@ -131,16 +132,16 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
      *
      */
     @Override
-    public List<ActividadPOJO> consultarActividadesUsuario(int idUsuario) {
+    public String[] consultarActividadesUsuario(int idUsuario) {
         TypedQuery<Actividad> consultaActividadesUsuario = em.createNamedQuery("consultaActividades", Actividad.class);
         consultaActividadesUsuario.setParameter("idUsuario", idUsuario);
-        List<ActividadPOJO> actividadesPOJO = new ArrayList<>();
+        String[] actividades = new String[consultaActividadesUsuario.getResultList().size()];
+        int control=0;
         for (Actividad a : consultaActividadesUsuario.getResultList()) {
-            ActividadPOJO ap = new ActividadPOJO();
-            ap.setNombre(a.getNombreActividad());
-            actividadesPOJO.add(ap);
+            actividades[control]=a.getNombreActividad();
+            control++;
         }
-        return actividadesPOJO;
+        return actividades;
     }
 
     /**
@@ -245,8 +246,8 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
      *
      */
     @Override
-    public int editarUsuario(int idUsuario, UsuarioPOJO usuarioEditar,TipoDocumento tipo) {
-        
+    public int editarUsuario(int idUsuario, UsuarioPOJO usuarioEditar, TipoDocumento tipo) {
+
         TypedQuery<Usuario> editarToken = em.createNamedQuery("editarUsuario", Usuario.class);
         editarToken.setParameter("nombre", usuarioEditar.getNombre());
         editarToken.setParameter("apellido", usuarioEditar.getApellido());

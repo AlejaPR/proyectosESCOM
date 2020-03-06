@@ -35,7 +35,7 @@ public interface UsuarioFacadeLocal {
 
     public Usuario consultaLogin(String correo, String contrasena);
 
-    public List<ActividadPOJO> consultarActividadesUsuario(int idUsuario);
+    public String[] consultarActividadesUsuario(int idUsuario);
 
     public int editarToken(String token, int idUsuario);
 

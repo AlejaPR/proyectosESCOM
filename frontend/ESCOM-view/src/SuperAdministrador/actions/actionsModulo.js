@@ -16,11 +16,11 @@ export const AGREGAR_MODULO = 'AGREGAR_MODULO';
 export const MENSAJE_REGISTRAR_MODULO = 'MENSAJE_REGISTRAR_MODULO';
 
 const URL_BASE = 'http://localhost:9090';
-const PERMISO_REGISTRAR_MODULOS = 'sa_Registrar modulos';
-const PERMISO_CONSULTAR_MODULOS = 'sa_Consultar modulos registrados';
-const PERMISO_EDITAR_MODULOS = 'sa_Editar informacion de los modulos';
-const PERMISO_SUSPENDER_ACTIVAR_ACTIVIDADES = 'sa_Suspender/activar actividades de modulos';
-const PERMISO_SUSPENDER_ACTIVAR_MODULOS = 'sa_Suspender/activar modulos';
+const PERMISO_REGISTRAR_MODULOS = 'SA_Registrar modulos';
+const PERMISO_CONSULTAR_MODULOS = 'SA_Consultar modulos registrados';
+const PERMISO_EDITAR_MODULOS = 'SA_Editar informacion de los modulos';
+const PERMISO_SUSPENDER_ACTIVAR_ACTIVIDADES = 'SA_Suspender/activar actividades de modulos';
+const PERMISO_SUSPENDER_ACTIVAR_MODULOS = 'SA_Suspender/activar modulos';
 
 export function actionAgregarModulo(modulo, token) {
     var tokenRequest = desencriptar(token);

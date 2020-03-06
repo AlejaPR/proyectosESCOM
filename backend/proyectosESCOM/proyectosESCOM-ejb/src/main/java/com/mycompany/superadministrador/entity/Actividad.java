@@ -30,7 +30,7 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "TBL_ACTIVIDAD")
 @NamedQueries({
-    @NamedQuery(name = "consultaActividades", query = "SELECT a from Actividad a,Modulo m,Usuario u, UsuarioActividad ua WHERE a.idActividad = ua.actividad.idActividad AND u.idUsuario=ua.usuario.idUsuario AND u.idUsuario=:idUsuario AND a.estado='Activo' AND a.modulo.estado='Activo'"),
+    @NamedQuery(name = "consultaActividades", query = "SELECT a from Actividad a,Modulo m,Usuario u, UsuarioActividad ua WHERE m.idModulo=a.modulo.idModulo AND a.idActividad = ua.actividad.idActividad AND u.idUsuario=ua.usuario.idUsuario AND u.idUsuario=:idUsuario AND a.estado='Activo' AND a.modulo.estado='Activo'"),
     @NamedQuery(name = "consultaActividadesModulo", query = "SELECT a from Actividad a WHERE a.modulo = :idModulo"),
     @NamedQuery(name = "consultaActividadesUsuario", query = "SELECT ac from Actividad ac,Usuario us, UsuarioActividad ua WHERE us.idUsuario = ua.usuario.idUsuario AND ac.idActividad =ua.actividad.idActividad AND us.numeroDocumento=:numeroDocumento"),
     @NamedQuery(name = "consultaActividadesNoAsociadasUsuario", query = "SELECT act FROM Actividad act WHERE act.estado='Activo' AND act.modulo.idModulo=:idModulo  AND act NOT IN(SELECT ac from Actividad ac,Usuario us, UsuarioActividad ua WHERE us.idUsuario = ua.usuario.idUsuario AND ac.idActividad =ua.actividad.idActividad AND ac.estado='Activo' AND us.numeroDocumento=:numeroDocumento AND ac.modulo.idModulo=:idModulo)"),
