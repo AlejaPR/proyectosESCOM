@@ -312,5 +312,29 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         }
         return listaUsuarios;
     }
+    
+    /**
+     * Metodo que realiza la consulta a la tabla usuario Devuelve los datos de
+     * un usuario registrado con la cedula enviada
+     *
+     * @param palabraBusqueda
+     * @return
+     *
+     */
+    @Override
+    public UsuarioPOJO buscarUsuarioBitacora(String palabraBusqueda) {
+
+        Usuario lista = new Usuario();
+        TypedQuery<Usuario> usuarioEspDB = em.createQuery("select u from Usuario u where u.correoElectronico=:palabraBusqueda", Usuario.class);
+        usuarioEspDB.setParameter("palabraBusqueda", palabraBusqueda);
+        lista = usuarioEspDB.getSingleResult();
+        
+        UsuarioPOJO usuario = new UsuarioPOJO();
+        usuario.setId(lista.getIdUsuario());
+        usuario.setNumeroDocumento(lista.getNumeroDocumento());
+        usuario.setCorreoElectronico(lista.getCorreoElectronico());
+
+        return usuario;
+    }
 
 }

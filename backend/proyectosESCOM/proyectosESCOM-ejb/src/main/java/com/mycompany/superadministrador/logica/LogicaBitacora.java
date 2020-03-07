@@ -6,12 +6,18 @@
 package com.mycompany.superadministrador.logica;
 
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
+import com.mycompany.superadministrador.POJO.ReportePOJO;
+import com.mycompany.superadministrador.POJO.UsuarioPOJO;
 import com.mycompany.superadministrador.interfaces.ActividadFacadeLocal;
 import com.mycompany.superadministrador.interfaces.BitacoraFacadeLocal;
 import com.mycompany.superadministrador.interfaces.LogicaBitacoraFacadeLocal;
 import com.mycompany.superadministrador.interfaces.LogicaUsuarioFacadeLocal;
+import com.mycompany.superadministrador.interfaces.UsuarioFacadeLocal;
+import com.mycompany.superadministrador.utilitarios.ExcepcionGenerica;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.persistence.NoResultException;
 
 /**
  *
@@ -22,6 +28,9 @@ public class LogicaBitacora implements LogicaBitacoraFacadeLocal {
 
     @EJB
     ActividadFacadeLocal actividadDB;
+    
+    @EJB
+    UsuarioFacadeLocal usuarioDB;
 
     @EJB
     BitacoraFacadeLocal bitacoraDB;
@@ -46,5 +55,50 @@ public class LogicaBitacora implements LogicaBitacoraFacadeLocal {
 
         }
     }
+    
+    /**
+     * Metodo que llama a la consulta de bitacora
+     *
+     * @param reporte
+     * @return 
+     * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
+     *
+     */
+    @Override
+    public List<DatosSolicitudPOJO> consultar(ReportePOJO reporte) throws ExcepcionGenerica {
+        try {
+            
+            if (reporte.getIdBusqueda() == 1) {
+                UsuarioPOJO usuario = usuarioDB.buscarUsuarioBitacora(reporte.getPalabraBusqueda());
+                if(usuario!=null){
+                    if (reporte.getFechaFin() == null) {
+                        List<DatosSolicitudPOJO> listaSolicitud = bitacoraDB.buscarUsuarioSinFechaFin(usuario, reporte);
+                        return listaSolicitud;
+                    } else {
+                        return null;
+                    }
+                }else{
+                    throw new NoResultException("No se encontro ningun usuario con el parametro consultado");
+                }
+                
+  
+            } else if(reporte.getIdBusqueda() == 2){
+                
+            } else if(reporte.getIdBusqueda() == 3){
+                
+            }
+            else {
+                throw new NoResultException("No se encontro ningun resultado con los parametros consultados");
+            }
+        } catch (NullPointerException ex) {
+            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta de bitacora");
+        } catch (NoResultException ex) {
+            throw new ExcepcionGenerica("No se encontro ningun dato coincidente");
+        } catch (Exception ex) {
+            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+        }
+        return null;
+    }
+
 
 }

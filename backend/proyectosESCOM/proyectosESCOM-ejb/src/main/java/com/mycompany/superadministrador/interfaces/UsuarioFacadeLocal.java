@@ -55,7 +55,9 @@ public interface UsuarioFacadeLocal {
     
     public void cambiarEstadoUsuario(int cedula, String estado);
     
-     public List<UsuarioPOJO> listarUsuariosModuloDocumental();
+    public List<UsuarioPOJO> listarUsuariosModuloDocumental();
+     
+    public UsuarioPOJO buscarUsuarioBitacora(String palabraBusqueda);
     
    
 }

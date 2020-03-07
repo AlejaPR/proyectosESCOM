@@ -6,7 +6,10 @@
 package com.mycompany.superadministrador.interfaces;
 
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
+import com.mycompany.superadministrador.POJO.ReportePOJO;
+import com.mycompany.superadministrador.POJO.UsuarioPOJO;
 import com.mycompany.superadministrador.entity.Bitacora;
+import com.mycompany.superadministrador.utilitarios.ExcepcionGenerica;
 import java.util.List;
 import javax.ejb.Local;
 
@@ -32,5 +35,10 @@ public interface BitacoraFacadeLocal {
     int count();
     
     public void registrarUsuario(DatosSolicitudPOJO solicitud);
+    
+    public List<DatosSolicitudPOJO> buscarUsuarioSinFechaFin(UsuarioPOJO usuario, ReportePOJO reporte);
+    
+    public List<DatosSolicitudPOJO> buscarUsuarioConFechaFin(UsuarioPOJO usuario, ReportePOJO reporte);
+    
     
 }

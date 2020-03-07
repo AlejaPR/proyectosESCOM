@@ -11,14 +11,19 @@ import java.util.Date;
  *
  * @author aleja
  */
-public class ReportesPOJO {
+public class ReportePOJO {
     
     private int idBusqueda;
     private String palabraBusqueda;
     private Date fechaInicio;
     private Date fechaFin;
 
-    public ReportesPOJO(int idBusqueda, String palabraBusqueda, Date fechaInicio, Date fechaFin) {
+    public ReportePOJO() {
+    }
+    
+    
+
+    public ReportePOJO(int idBusqueda, String palabraBusqueda, Date fechaInicio, Date fechaFin) {
         this.idBusqueda = idBusqueda;
         this.palabraBusqueda = palabraBusqueda;
         this.fechaInicio = fechaInicio;

@@ -6,12 +6,25 @@
 package com.mycompany.superadministrador.ejb;
 
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
+import com.mycompany.superadministrador.POJO.ReportePOJO;
+import com.mycompany.superadministrador.POJO.UsuarioPOJO;
 import com.mycompany.superadministrador.interfaces.BitacoraFacadeLocal;
 import com.mycompany.superadministrador.entity.Bitacora;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TemporalType;
+import javax.persistence.TypedQuery;
 
 /**
  *
@@ -19,6 +32,7 @@ import javax.persistence.PersistenceContext;
  */
 @Stateless
 public class BitacoraFacade extends AbstractFacade<Bitacora> implements BitacoraFacadeLocal {
+
     @PersistenceContext(unitName = "conexionSuperadministrador")
     private EntityManager em;
 
@@ -30,7 +44,7 @@ public class BitacoraFacade extends AbstractFacade<Bitacora> implements Bitacora
     public BitacoraFacade() {
         super(Bitacora.class);
     }
-    
+
     @Override
     public void create(Bitacora documento) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -45,20 +59,73 @@ public class BitacoraFacade extends AbstractFacade<Bitacora> implements Bitacora
     public void remove(Bitacora documento) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
+
     @Override
     public void registrarUsuario(DatosSolicitudPOJO solicitud) {
         em.createNativeQuery("INSERT INTO TBL_BITACORA (BTC_OPERACION,FK_BTC_IDUSUARIO,BTC_FECHABITACORA,FK_BTC_IDMODULO,BTC_IP,BTC_TABLAINVOLUCRADA"
                 + ") VALUES (?,?,?,?,?,?)")
-                .setParameter(1,solicitud.getOperacion() )
+                .setParameter(1, solicitud.getOperacion())
                 .setParameter(2, solicitud.getIdUsuario())
                 .setParameter(3, new Date())
                 .setParameter(4, solicitud.getIdModulo())
                 .setParameter(5, solicitud.getIp())
                 .setParameter(6, solicitud.getTablaInvolucrada())
                 .executeUpdate();
-        
+
     }
 
-    
+    /**
+     * Metodo que realiza la consulta a la tabla usuario Devuelve los datos de
+     * un usuario registrado con la cedula enviada
+     *
+     * @param reporte
+     * @param usuario
+     * @return
+     *
+     */
+    @Override
+    public List<DatosSolicitudPOJO> buscarUsuarioSinFechaFin(UsuarioPOJO usuario, ReportePOJO reporte) {
+
+        List<DatosSolicitudPOJO> listaBitacora = new ArrayList();
+
+        TypedQuery<Bitacora> bitacora = em.createQuery("select b from Bitacora b where b.idUsuario=:idUsuario AND b.fechaBitacora >= :fechaInicio", Bitacora.class);
+        bitacora.setParameter("idUsuario", usuario.getId());
+        bitacora.setParameter("fechaInicio", reporte.getFechaInicio());
+        List<Bitacora> lista = bitacora.getResultList();
+        for (Bitacora b : lista) {
+            DatosSolicitudPOJO bitacoraU = new DatosSolicitudPOJO();
+            bitacoraU.setIdUsuario(b.getIdUsuario());
+            bitacoraU.setOperacion(b.getOperacion());
+            bitacoraU.setTablaInvolucrada(b.getTablaInvolucrada());
+            bitacoraU.setIdModulo(b.getIdModulo());
+            bitacoraU.setIp(b.getIp());
+
+            listaBitacora.add(bitacoraU);
+        }
+        return listaBitacora;
+    }
+
+    @Override
+    public List<DatosSolicitudPOJO> buscarUsuarioConFechaFin(UsuarioPOJO usuario, ReportePOJO reporte) {
+
+        List<DatosSolicitudPOJO> listaBitacora = new ArrayList();
+        TypedQuery<Bitacora> bitacora = em.createQuery("select b from Bitacora b where b.idUsuario=:idUsuario AND b.fechaBitacora > =:fechaInicio", Bitacora.class);
+        bitacora.setParameter("idUsuario", usuario.getId());
+        bitacora.setParameter("fechaInicio", reporte.getFechaFin());
+
+        for (Bitacora b : bitacora.getResultList()) {
+            DatosSolicitudPOJO bitacoraU = new DatosSolicitudPOJO();
+
+            bitacoraU.setIdUsuario(b.getIdUsuario());
+            bitacoraU.setOperacion(b.getOperacion());
+            bitacoraU.setTablaInvolucrada(b.getTablaInvolucrada());
+            bitacoraU.setIdModulo(b.getIdModulo());
+            bitacoraU.setIp(b.getIp());
+
+            listaBitacora.add(bitacoraU);
+        }
+
+        return listaBitacora;
+    }
+
 }
