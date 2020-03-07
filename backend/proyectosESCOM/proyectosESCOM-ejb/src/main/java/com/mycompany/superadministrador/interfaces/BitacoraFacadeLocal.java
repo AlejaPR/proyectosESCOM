@@ -45,5 +45,9 @@ public interface BitacoraFacadeLocal {
     
     public List<DatosSolicitudPOJO> buscarModuloConFechaFin(ModuloPOJO usuario, ReportePOJO reporte);
     
+    public List<DatosSolicitudPOJO> buscarActividadSinFechaFin(ReportePOJO reporte);
+    
+    public List<DatosSolicitudPOJO> buscarActividadConFechaFin(ReportePOJO reporte);
+    
     
 }

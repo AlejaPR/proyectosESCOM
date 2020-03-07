@@ -153,15 +153,15 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
     }
     
     /**Metodo que realiza la consulta a la tabla modulo
-       Devuelve los datos de un modulo registrado con el id enviado
-     * @param idModulo
+       Devuelve los datos de un modulo registrado para la bitacora
+     * @param palabraBusqueda
      * @return 
        **/
     @Override
     public ModuloPOJO buscarModuloBitacora(String palabraBusqueda) {
         
         Modulo lista = new Modulo();
-        TypedQuery<Modulo> moduloDB = em.createQuery("select m from Modulo m where m.nombreModulo=:palabraBusqueda", Modulo.class);
+        TypedQuery<Modulo> moduloDB = em.createQuery("select m from Modulo m where Lower(m.nombreModulo)=:palabraBusqueda", Modulo.class);
         moduloDB.setParameter("palabraBusqueda", palabraBusqueda);
         lista = moduloDB.getSingleResult();
         

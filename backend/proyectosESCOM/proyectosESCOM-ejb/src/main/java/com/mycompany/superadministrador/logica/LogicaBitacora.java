@@ -5,6 +5,7 @@
  */
 package com.mycompany.superadministrador.logica;
 
+import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import com.mycompany.superadministrador.POJO.ModuloPOJO;
 import com.mycompany.superadministrador.POJO.ReportePOJO;
@@ -30,10 +31,10 @@ public class LogicaBitacora implements LogicaBitacoraFacadeLocal {
 
     @EJB
     ActividadFacadeLocal actividadDB;
-    
+
     @EJB
     UsuarioFacadeLocal usuarioDB;
-    
+
     @EJB
     ModuloFacadeLocal moduloDB;
 
@@ -60,52 +61,67 @@ public class LogicaBitacora implements LogicaBitacoraFacadeLocal {
 
         }
     }
-    
+
     /**
      * Metodo que llama a la consulta de bitacora
      *
      * @param reporte
-     * @return 
+     * @return
      * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
      *
      */
     @Override
     public List<DatosSolicitudPOJO> consultar(ReportePOJO reporte) throws ExcepcionGenerica {
         try {
-            
+
             if (reporte.getIdBusqueda() == 1) {
                 UsuarioPOJO usuario = usuarioDB.buscarUsuarioBitacora(reporte.getPalabraBusqueda());
-                if(usuario!=null){
+                if (usuario != null) {
                     if (reporte.getFechaFin() == null) {
                         List<DatosSolicitudPOJO> listaSolicitud = bitacoraDB.buscarUsuarioSinFechaFin(usuario, reporte);
                         return listaSolicitud;
                     } else {
-                        List<DatosSolicitudPOJO> listaSolicitud = bitacoraDB.buscarUsuarioConFechaFin(usuario, reporte);
-                        return listaSolicitud;
+                        if (reporte.getFechaInicio().compareTo(reporte.getFechaFin()) < 0) {
+                            List<DatosSolicitudPOJO> listaSolicitud = bitacoraDB.buscarUsuarioConFechaFin(usuario, reporte);
+                            return listaSolicitud;
+                        } else {
+                            throw new NoResultException("La fecha de inicio debe ser menor a la fecha fin");
+                        }
                     }
-                }else{
+                } else {
                     throw new NoResultException("No se encontro ningun usuario con el parametro consultado");
                 }
-                
-            } else if(reporte.getIdBusqueda() == 2){
+
+            } else if (reporte.getIdBusqueda() == 2) {
                 ModuloPOJO modulo = moduloDB.buscarModuloBitacora(reporte.getPalabraBusqueda());
-                if(modulo!=null){
+                if (modulo != null) {
                     if (reporte.getFechaFin() == null) {
                         List<DatosSolicitudPOJO> listaSolicitud = bitacoraDB.buscarModuloSinFechaFin(modulo, reporte);
                         return listaSolicitud;
                     } else {
+                        if (reporte.getFechaInicio().compareTo(reporte.getFechaFin()) < 0) {
                         List<DatosSolicitudPOJO> listaSolicitud = bitacoraDB.buscarModuloConFechaFin(modulo, reporte);
                         return listaSolicitud;
+                        }else{
+                            throw new NoResultException("La fecha de inicio debe ser menor a la fecha fin");
+                        }
                     }
-                }else{
+                } else {
                     throw new NoResultException("No se encontro ningun modulo con el parametro consultado");
                 }
-                
-            } else if(reporte.getIdBusqueda() == 3){
-                
-            }
-            else {
-                throw new NoResultException("No se encontro ningun resultado con los parametros consultados");
+            } else if (reporte.getIdBusqueda() == 3) {
+
+                if (reporte.getFechaFin() == null) {
+                    List<DatosSolicitudPOJO> listaSolicitud = bitacoraDB.buscarActividadSinFechaFin(reporte);
+                    return listaSolicitud;
+                } else {
+                    if (reporte.getFechaInicio().compareTo(reporte.getFechaFin()) < 0) {
+                    List<DatosSolicitudPOJO> listaSolicitud = bitacoraDB.buscarActividadConFechaFin(reporte);
+                    return listaSolicitud;
+                    }else{
+                            throw new NoResultException("La fecha de inicio debe ser menor a la fecha fin");
+                        }
+                }
             }
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta de bitacora");
@@ -116,6 +132,5 @@ public class LogicaBitacora implements LogicaBitacoraFacadeLocal {
         }
         return null;
     }
-
 
 }

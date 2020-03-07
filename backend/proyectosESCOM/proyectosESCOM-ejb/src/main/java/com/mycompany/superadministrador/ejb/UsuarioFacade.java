@@ -315,7 +315,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
     
     /**
      * Metodo que realiza la consulta a la tabla usuario Devuelve los datos de
-     * un usuario registrado con la cedula enviada
+     * un usuario registrado para la bitacora
      *
      * @param palabraBusqueda
      * @return
@@ -325,7 +325,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
     public UsuarioPOJO buscarUsuarioBitacora(String palabraBusqueda) {
 
         Usuario lista = new Usuario();
-        TypedQuery<Usuario> usuarioEspDB = em.createQuery("select u from Usuario u where u.correoElectronico=:palabraBusqueda", Usuario.class);
+        TypedQuery<Usuario> usuarioEspDB = em.createQuery("select u from Usuario u where ((Lower(u.nombre)  =:palabraBusqueda) OR (Lower(u.apellido)  =:palabraBusqueda) OR (Lower(u.correoElectronico)  =:palabraBusqueda))", Usuario.class);
         usuarioEspDB.setParameter("palabraBusqueda", palabraBusqueda);
         lista = usuarioEspDB.getSingleResult();
         

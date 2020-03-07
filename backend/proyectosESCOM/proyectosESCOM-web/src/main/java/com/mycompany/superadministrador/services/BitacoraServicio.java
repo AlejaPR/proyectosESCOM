@@ -27,21 +27,21 @@ import javax.ws.rs.core.Response;
 @javax.enterprise.context.RequestScoped
 @Path("bitacora")
 public class BitacoraServicio {
-    
+
     @EJB
     LogicaBitacoraFacadeLocal bitacoraLogica;
 
     private final Respuesta respuesta = new Respuesta();
 
     public BitacoraServicio() {
-        
+
     }
-    
+
     /**
      * Servicio que realiza consulta a la bitacora
      *
      * @param reporte
-     * @return  *
+     * @return *
      */
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -50,9 +50,14 @@ public class BitacoraServicio {
     public Response consultar(ReportePOJO reporte) {
         try {
             List<DatosSolicitudPOJO> consultaBitacora = new ArrayList();
-            consultaBitacora= bitacoraLogica.consultar(reporte);
-            
-            return Response.status(Response.Status.OK).entity(consultaBitacora).build();
+            consultaBitacora = bitacoraLogica.consultar(reporte);
+            if (!consultaBitacora.isEmpty()) {
+                return Response.status(Response.Status.OK).entity(consultaBitacora).build();
+            }else{
+                respuesta.setRespuesta("No se encontraron reportes");
+                return Response.status(Response.Status.OK).entity(respuesta).build();
+            }
+
         } catch (ExcepcionGenerica e) {
             respuesta.setRespuesta("No se encontraron resultados con los parametros ingresados");
             return Response.status(Response.Status.NOT_FOUND).entity(respuesta).build();
@@ -61,8 +66,5 @@ public class BitacoraServicio {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }
-    
-    
 
-    
 }

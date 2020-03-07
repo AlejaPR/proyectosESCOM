@@ -72,9 +72,5 @@ public class DatosSolicitudPOJO {
 
     public void setFechaBitacora(String fechaBitacora) {
         this.fechaBitacora = fechaBitacora;
-    }
-
-    
-    
-    
+    } 
 }
