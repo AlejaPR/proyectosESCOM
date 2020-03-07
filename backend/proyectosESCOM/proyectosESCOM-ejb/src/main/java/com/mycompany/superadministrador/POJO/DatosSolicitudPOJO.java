@@ -12,6 +12,7 @@ public class DatosSolicitudPOJO {
     private int idUsuario;
     private String tablaInvolucrada;
     private int idModulo;
+    private String fechaBitacora;
     
     public DatosSolicitudPOJO() {
     }
@@ -63,6 +64,14 @@ public class DatosSolicitudPOJO {
 
     public void setIdModulo(int idModulo) {
         this.idModulo = idModulo;
+    }
+
+    public String getFechaBitacora() {
+        return fechaBitacora;
+    }
+
+    public void setFechaBitacora(String fechaBitacora) {
+        this.fechaBitacora = fechaBitacora;
     }
 
     

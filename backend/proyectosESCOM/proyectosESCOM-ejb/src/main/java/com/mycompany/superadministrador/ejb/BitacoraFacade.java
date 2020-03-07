@@ -93,13 +93,30 @@ public class BitacoraFacade extends AbstractFacade<Bitacora> implements Bitacora
         bitacora.setParameter("idUsuario", usuario.getId());
         bitacora.setParameter("fechaInicio", reporte.getFechaInicio(),TemporalType.DATE);
         List<Bitacora> lista = bitacora.getResultList();
-        for (Bitacora b : lista) {
+        
+        for (int i=0; i<lista.size();i++) {    
+        /**
+         * Conversion de fecha Oracle
+         */
+        SimpleDateFormat formatoUsuario = new SimpleDateFormat("dd-MM-yyyy");
+        Date fecha = null;
+        String fechaN = null;
+
+        
+        if (lista.get(i).getFechaBitacora()== null) {
+            fecha = null;
+        } else {
+            fecha = lista.get(i).getFechaBitacora();
+            fechaN = formatoUsuario.format(fecha);
+        }
+        
             DatosSolicitudPOJO bitacoraU = new DatosSolicitudPOJO();
-            bitacoraU.setIdUsuario(b.getIdUsuario());
-            bitacoraU.setOperacion(b.getOperacion());
-            bitacoraU.setTablaInvolucrada(b.getTablaInvolucrada());
-            bitacoraU.setIdModulo(b.getIdModulo());
-            bitacoraU.setIp(b.getIp());
+            bitacoraU.setIdUsuario(lista.get(i).getIdUsuario());
+            bitacoraU.setOperacion(lista.get(i).getOperacion());
+            bitacoraU.setTablaInvolucrada(lista.get(i).getTablaInvolucrada());
+            bitacoraU.setIdModulo(lista.get(i).getIdModulo());
+            bitacoraU.setIp(lista.get(i).getIp());
+            bitacoraU.setFechaBitacora(fechaN);
 
             listaBitacora.add(bitacoraU);
         }
@@ -111,19 +128,36 @@ public class BitacoraFacade extends AbstractFacade<Bitacora> implements Bitacora
 
         List<DatosSolicitudPOJO> listaBitacora = new ArrayList();
 
-        TypedQuery<Bitacora> bitacoraDos = em.createQuery("select b from Bitacora b where b.idUsuario=:idUsuario AND b.fechaBitacora >= :fechaInicio AND b.fechaBitacora <= :fechaFin", Bitacora.class);
+        TypedQuery<Bitacora> bitacoraDos = em.createQuery("select b from Bitacora b where (b.idUsuario=:idUsuario AND b.fechaBitacora >= :fechaInicio) "
+                + "OR (b.idUsuario=:idUsuario AND b.fechaBitacora <= :fechaFin)", Bitacora.class);
         bitacoraDos.setParameter("idUsuario", usuario.getId());
         bitacoraDos.setParameter("fechaInicio", reporte.getFechaInicio(),TemporalType.DATE);
         bitacoraDos.setParameter("fechaFin", reporte.getFechaFin(),TemporalType.DATE);
         List<Bitacora> lista = bitacoraDos.getResultList();
         
-        for (Bitacora b : lista) {
+        for (int i=0; i<lista.size();i++) {    
+        /**
+         * Conversion de fecha Oracle
+         */
+        SimpleDateFormat formatoUsuario = new SimpleDateFormat("dd-MM-yyyy");
+        Date fecha = null;
+        String fechaN = null;
+
+        
+        if (lista.get(i).getFechaBitacora()== null) {
+            fecha = null;
+        } else {
+            fecha = lista.get(i).getFechaBitacora();
+            fechaN = formatoUsuario.format(fecha);
+        }
+        
             DatosSolicitudPOJO bitacoraU = new DatosSolicitudPOJO();
-            bitacoraU.setIdUsuario(b.getIdUsuario());
-            bitacoraU.setOperacion(b.getOperacion());
-            bitacoraU.setTablaInvolucrada(b.getTablaInvolucrada());
-            bitacoraU.setIdModulo(b.getIdModulo());
-            bitacoraU.setIp(b.getIp());
+            bitacoraU.setIdUsuario(lista.get(i).getIdUsuario());
+            bitacoraU.setOperacion(lista.get(i).getOperacion());
+            bitacoraU.setTablaInvolucrada(lista.get(i).getTablaInvolucrada());
+            bitacoraU.setIdModulo(lista.get(i).getIdModulo());
+            bitacoraU.setIp(lista.get(i).getIp());
+            bitacoraU.setFechaBitacora(fechaN);
 
             listaBitacora.add(bitacoraU);
         }
@@ -147,13 +181,29 @@ public class BitacoraFacade extends AbstractFacade<Bitacora> implements Bitacora
         bitacora.setParameter("idModulo", modulo.getIdModulo());
         bitacora.setParameter("fechaInicio", reporte.getFechaInicio(),TemporalType.DATE);
         List<Bitacora> lista = bitacora.getResultList();
-        for (Bitacora b : lista) {
+        for (int i=0; i<lista.size();i++) {    
+        /**
+         * Conversion de fecha Oracle
+         */
+        SimpleDateFormat formatoUsuario = new SimpleDateFormat("dd-MM-yyyy");
+        Date fecha = null;
+        String fechaN = null;
+
+        
+        if (lista.get(i).getFechaBitacora()== null) {
+            fecha = null;
+        } else {
+            fecha = lista.get(i).getFechaBitacora();
+            fechaN = formatoUsuario.format(fecha);
+        }
+        
             DatosSolicitudPOJO bitacoraU = new DatosSolicitudPOJO();
-            bitacoraU.setIdUsuario(b.getIdUsuario());
-            bitacoraU.setOperacion(b.getOperacion());
-            bitacoraU.setTablaInvolucrada(b.getTablaInvolucrada());
-            bitacoraU.setIdModulo(b.getIdModulo());
-            bitacoraU.setIp(b.getIp());
+            bitacoraU.setIdUsuario(lista.get(i).getIdUsuario());
+            bitacoraU.setOperacion(lista.get(i).getOperacion());
+            bitacoraU.setTablaInvolucrada(lista.get(i).getTablaInvolucrada());
+            bitacoraU.setIdModulo(lista.get(i).getIdModulo());
+            bitacoraU.setIp(lista.get(i).getIp());
+            bitacoraU.setFechaBitacora(fechaN);
 
             listaBitacora.add(bitacoraU);
         }
@@ -165,19 +215,36 @@ public class BitacoraFacade extends AbstractFacade<Bitacora> implements Bitacora
 
         List<DatosSolicitudPOJO> listaBitacora = new ArrayList();
 
-        TypedQuery<Bitacora> bitacoraDos = em.createQuery("select b from Bitacora b where b.idModulo=:idModulo AND b.fechaBitacora >=:fechaInicio AND b.fechaBitacora <=:fechaFin", Bitacora.class);
+        TypedQuery<Bitacora> bitacoraDos = em.createQuery("select b from Bitacora b where (b.idModulo=:idModulo AND b.fechaBitacora >=:fechaInicio)"
+                + " OR (b.idModulo=:idModulo AND b.fechaBitacora <=:fechaFin)", Bitacora.class);
         bitacoraDos.setParameter("idModulo", modulo.getIdModulo());
         bitacoraDos.setParameter("fechaInicio", reporte.getFechaInicio(),TemporalType.DATE);
         bitacoraDos.setParameter("fechaFin", reporte.getFechaFin(),TemporalType.DATE);
         List<Bitacora> lista = bitacoraDos.getResultList();
         
-        for (Bitacora b : lista) {
+        for (int i=0; i<lista.size();i++) {    
+        /**
+         * Conversion de fecha Oracle
+         */
+        SimpleDateFormat formatoUsuario = new SimpleDateFormat("dd-MM-yyyy");
+        Date fecha = null;
+        String fechaN = null;
+
+        
+        if (lista.get(i).getFechaBitacora()== null) {
+            fecha = null;
+        } else {
+            fecha = lista.get(i).getFechaBitacora();
+            fechaN = formatoUsuario.format(fecha);
+        }
+        
             DatosSolicitudPOJO bitacoraU = new DatosSolicitudPOJO();
-            bitacoraU.setIdUsuario(b.getIdUsuario());
-            bitacoraU.setOperacion(b.getOperacion());
-            bitacoraU.setTablaInvolucrada(b.getTablaInvolucrada());
-            bitacoraU.setIdModulo(b.getIdModulo());
-            bitacoraU.setIp(b.getIp());
+            bitacoraU.setIdUsuario(lista.get(i).getIdUsuario());
+            bitacoraU.setOperacion(lista.get(i).getOperacion());
+            bitacoraU.setTablaInvolucrada(lista.get(i).getTablaInvolucrada());
+            bitacoraU.setIdModulo(lista.get(i).getIdModulo());
+            bitacoraU.setIp(lista.get(i).getIp());
+            bitacoraU.setFechaBitacora(fechaN);
 
             listaBitacora.add(bitacoraU);
         }
