@@ -6,6 +6,7 @@
 package com.mycompany.superadministrador.ejb;
 
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
+import com.mycompany.superadministrador.POJO.ModuloPOJO;
 import com.mycompany.superadministrador.POJO.ReportePOJO;
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
 import com.mycompany.superadministrador.interfaces.BitacoraFacadeLocal;
@@ -110,17 +111,65 @@ public class BitacoraFacade extends AbstractFacade<Bitacora> implements Bitacora
 
         List<DatosSolicitudPOJO> listaBitacora = new ArrayList();
 
-         List<Bitacora> lista =em.createNativeQuery("select * from tbl_bitacora where tbl_bitacora.fk_btc_idusuario = ? AND tbl_bitacora.btc_fechabitacora>= ? AND tbl_bitacora.btc_fechabitacora<= ?")
-                .setParameter(1, usuario.getId())
-                .setParameter(2, reporte.getFechaInicio(),TemporalType.DATE)
-                .setParameter(3, reporte.getFechaFin())
-                 .getResultList();
- 
-//        TypedQuery<Bitacora> bitacora = em.createQuery("select b from Bitacora b where b.idUsuario=:idUsuario AND b.fechaBitacora>= :fechaInicio AND b.fechaBitacora<= :fechaFin", Bitacora.class);
-//        bitacora.setParameter("idUsuario", usuario.getId());
-//        bitacora.setParameter("fechaInicio", reporte.getFechaInicio(),TemporalType.DATE);
-//        bitacora.setParameter("fechaFin", reporte.getFechaFin(),TemporalType.DATE);
-//        List<Bitacora> lista = bitacora.getResultList();
+        TypedQuery<Bitacora> bitacoraDos = em.createQuery("select b from Bitacora b where b.idUsuario=:idUsuario AND b.fechaBitacora >= :fechaInicio AND b.fechaBitacora <= :fechaFin", Bitacora.class);
+        bitacoraDos.setParameter("idUsuario", usuario.getId());
+        bitacoraDos.setParameter("fechaInicio", reporte.getFechaInicio());
+        bitacoraDos.setParameter("fechaFin", reporte.getFechaFin());
+        List<Bitacora> lista = bitacoraDos.getResultList();
+        
+        for (Bitacora b : lista) {
+            DatosSolicitudPOJO bitacoraU = new DatosSolicitudPOJO();
+            bitacoraU.setIdUsuario(b.getIdUsuario());
+            bitacoraU.setOperacion(b.getOperacion());
+            bitacoraU.setTablaInvolucrada(b.getTablaInvolucrada());
+            bitacoraU.setIdModulo(b.getIdModulo());
+            bitacoraU.setIp(b.getIp());
+
+            listaBitacora.add(bitacoraU);
+        }
+        return listaBitacora;
+    }
+    
+    /**
+     * Metodo que realiza la consulta a la tabla usuario Devuelve los datos de
+     * un usuario registrado con la cedula enviada
+     *
+     * @param reporte
+     * @param modulo
+     * @return
+     *
+     */
+    @Override
+    public List<DatosSolicitudPOJO> buscarModuloSinFechaFin(ModuloPOJO modulo, ReportePOJO reporte) {
+
+        List<DatosSolicitudPOJO> listaBitacora = new ArrayList();
+        TypedQuery<Bitacora> bitacora = em.createQuery("select b from Bitacora b where b.idModulo =:idModulo AND b.fechaBitacora >= :fechaInicio", Bitacora.class);
+        bitacora.setParameter("idModulo", modulo.getIdModulo());
+        bitacora.setParameter("fechaInicio", reporte.getFechaInicio(),TemporalType.DATE);
+        List<Bitacora> lista = bitacora.getResultList();
+        for (Bitacora b : lista) {
+            DatosSolicitudPOJO bitacoraU = new DatosSolicitudPOJO();
+            bitacoraU.setIdUsuario(b.getIdUsuario());
+            bitacoraU.setOperacion(b.getOperacion());
+            bitacoraU.setTablaInvolucrada(b.getTablaInvolucrada());
+            bitacoraU.setIdModulo(b.getIdModulo());
+            bitacoraU.setIp(b.getIp());
+
+            listaBitacora.add(bitacoraU);
+        }
+        return listaBitacora;
+    }
+
+    @Override
+    public List<DatosSolicitudPOJO> buscarModuloConFechaFin(ModuloPOJO modulo, ReportePOJO reporte) {
+
+        List<DatosSolicitudPOJO> listaBitacora = new ArrayList();
+
+        TypedQuery<Bitacora> bitacoraDos = em.createQuery("select b from Bitacora b where b.idModulo=:idModulo AND b.fechaBitacora >= :fechaInicio AND b.fechaBitacora <= :fechaFin", Bitacora.class);
+        bitacoraDos.setParameter("idModulo", modulo.getIdModulo());
+        bitacoraDos.setParameter("fechaInicio", reporte.getFechaInicio(),TemporalType.DATE.DATE);
+        bitacoraDos.setParameter("fechaFin", reporte.getFechaFin(),TemporalType.DATE.DATE);
+        List<Bitacora> lista = bitacoraDos.getResultList();
         
         for (Bitacora b : lista) {
             DatosSolicitudPOJO bitacoraU = new DatosSolicitudPOJO();

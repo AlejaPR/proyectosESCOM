@@ -6,6 +6,7 @@
 package com.mycompany.superadministrador.interfaces;
 
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
+import com.mycompany.superadministrador.POJO.ModuloPOJO;
 import com.mycompany.superadministrador.POJO.ReportePOJO;
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
 import com.mycompany.superadministrador.entity.Bitacora;
@@ -39,6 +40,10 @@ public interface BitacoraFacadeLocal {
     public List<DatosSolicitudPOJO> buscarUsuarioSinFechaFin(UsuarioPOJO usuario, ReportePOJO reporte);
     
     public List<DatosSolicitudPOJO> buscarUsuarioConFechaFin(UsuarioPOJO usuario, ReportePOJO reporte);
+    
+    public List<DatosSolicitudPOJO> buscarModuloSinFechaFin(ModuloPOJO usuario, ReportePOJO reporte);
+    
+    public List<DatosSolicitudPOJO> buscarModuloConFechaFin(ModuloPOJO usuario, ReportePOJO reporte);
     
     
 }

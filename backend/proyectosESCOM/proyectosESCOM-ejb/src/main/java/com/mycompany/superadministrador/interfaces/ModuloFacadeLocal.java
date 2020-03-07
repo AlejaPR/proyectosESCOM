@@ -45,4 +45,6 @@ public interface ModuloFacadeLocal {
     
     public void cambiarEstadoModulo(int idModulo, String estado);
     
+    public ModuloPOJO buscarModuloBitacora(String palabraBusqueda);
+    
 }

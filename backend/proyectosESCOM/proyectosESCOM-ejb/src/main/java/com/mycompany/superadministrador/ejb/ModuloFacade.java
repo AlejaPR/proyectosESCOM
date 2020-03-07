@@ -151,4 +151,24 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
         modulo.setEstado(estado);
         em.merge(modulo);
     }
+    
+    /**Metodo que realiza la consulta a la tabla modulo
+       Devuelve los datos de un modulo registrado con el id enviado
+     * @param idModulo
+     * @return 
+       **/
+    @Override
+    public ModuloPOJO buscarModuloBitacora(String palabraBusqueda) {
+        
+        Modulo lista = new Modulo();
+        TypedQuery<Modulo> moduloDB = em.createQuery("select m from Modulo m where m.nombreModulo=:palabraBusqueda", Modulo.class);
+        moduloDB.setParameter("palabraBusqueda", palabraBusqueda);
+        lista = moduloDB.getSingleResult();
+        
+        ModuloPOJO moduloRespuesta = new ModuloPOJO();
+        moduloRespuesta.setIdModulo(lista.getIdModulo());
+        moduloRespuesta.setNombreModulo(lista.getNombreModulo());
+      
+        return moduloRespuesta;
+    }
 }

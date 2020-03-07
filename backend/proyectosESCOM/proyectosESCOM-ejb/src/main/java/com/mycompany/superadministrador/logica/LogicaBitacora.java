@@ -6,12 +6,14 @@
 package com.mycompany.superadministrador.logica;
 
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
+import com.mycompany.superadministrador.POJO.ModuloPOJO;
 import com.mycompany.superadministrador.POJO.ReportePOJO;
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
 import com.mycompany.superadministrador.interfaces.ActividadFacadeLocal;
 import com.mycompany.superadministrador.interfaces.BitacoraFacadeLocal;
 import com.mycompany.superadministrador.interfaces.LogicaBitacoraFacadeLocal;
 import com.mycompany.superadministrador.interfaces.LogicaUsuarioFacadeLocal;
+import com.mycompany.superadministrador.interfaces.ModuloFacadeLocal;
 import com.mycompany.superadministrador.interfaces.UsuarioFacadeLocal;
 import com.mycompany.superadministrador.utilitarios.ExcepcionGenerica;
 import java.util.List;
@@ -31,6 +33,9 @@ public class LogicaBitacora implements LogicaBitacoraFacadeLocal {
     
     @EJB
     UsuarioFacadeLocal usuarioDB;
+    
+    @EJB
+    ModuloFacadeLocal moduloDB;
 
     @EJB
     BitacoraFacadeLocal bitacoraDB;
@@ -83,6 +88,18 @@ public class LogicaBitacora implements LogicaBitacoraFacadeLocal {
                 }
                 
             } else if(reporte.getIdBusqueda() == 2){
+                ModuloPOJO modulo = moduloDB.buscarModuloBitacora(reporte.getPalabraBusqueda());
+                if(modulo!=null){
+                    if (reporte.getFechaFin() == null) {
+                        List<DatosSolicitudPOJO> listaSolicitud = bitacoraDB.buscarModuloSinFechaFin(modulo, reporte);
+                        return listaSolicitud;
+                    } else {
+                        List<DatosSolicitudPOJO> listaSolicitud = bitacoraDB.buscarModuloConFechaFin(modulo, reporte);
+                        return listaSolicitud;
+                    }
+                }else{
+                    throw new NoResultException("No se encontro ningun modulo con el parametro consultado");
+                }
                 
             } else if(reporte.getIdBusqueda() == 3){
                 
