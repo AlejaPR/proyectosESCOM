@@ -90,7 +90,7 @@ public class BitacoraFacade extends AbstractFacade<Bitacora> implements Bitacora
 
         TypedQuery<Bitacora> bitacora = em.createQuery("select b from Bitacora b where b.idUsuario=:idUsuario AND b.fechaBitacora >= :fechaInicio", Bitacora.class);
         bitacora.setParameter("idUsuario", usuario.getId());
-        bitacora.setParameter("fechaInicio", reporte.getFechaInicio());
+        bitacora.setParameter("fechaInicio", reporte.getFechaInicio(),TemporalType.DATE);
         List<Bitacora> lista = bitacora.getResultList();
         for (Bitacora b : lista) {
             DatosSolicitudPOJO bitacoraU = new DatosSolicitudPOJO();
@@ -109,13 +109,21 @@ public class BitacoraFacade extends AbstractFacade<Bitacora> implements Bitacora
     public List<DatosSolicitudPOJO> buscarUsuarioConFechaFin(UsuarioPOJO usuario, ReportePOJO reporte) {
 
         List<DatosSolicitudPOJO> listaBitacora = new ArrayList();
-        TypedQuery<Bitacora> bitacora = em.createQuery("select b from Bitacora b where b.idUsuario=:idUsuario AND b.fechaBitacora > =:fechaInicio", Bitacora.class);
-        bitacora.setParameter("idUsuario", usuario.getId());
-        bitacora.setParameter("fechaInicio", reporte.getFechaFin());
 
-        for (Bitacora b : bitacora.getResultList()) {
+         List<Bitacora> lista =em.createNativeQuery("select * from tbl_bitacora where tbl_bitacora.fk_btc_idusuario = ? AND tbl_bitacora.btc_fechabitacora>= ? AND tbl_bitacora.btc_fechabitacora<= ?")
+                .setParameter(1, usuario.getId())
+                .setParameter(2, reporte.getFechaInicio(),TemporalType.DATE)
+                .setParameter(3, reporte.getFechaFin())
+                 .getResultList();
+ 
+//        TypedQuery<Bitacora> bitacora = em.createQuery("select b from Bitacora b where b.idUsuario=:idUsuario AND b.fechaBitacora>= :fechaInicio AND b.fechaBitacora<= :fechaFin", Bitacora.class);
+//        bitacora.setParameter("idUsuario", usuario.getId());
+//        bitacora.setParameter("fechaInicio", reporte.getFechaInicio(),TemporalType.DATE);
+//        bitacora.setParameter("fechaFin", reporte.getFechaFin(),TemporalType.DATE);
+//        List<Bitacora> lista = bitacora.getResultList();
+        
+        for (Bitacora b : lista) {
             DatosSolicitudPOJO bitacoraU = new DatosSolicitudPOJO();
-
             bitacoraU.setIdUsuario(b.getIdUsuario());
             bitacoraU.setOperacion(b.getOperacion());
             bitacoraU.setTablaInvolucrada(b.getTablaInvolucrada());
@@ -124,7 +132,6 @@ public class BitacoraFacade extends AbstractFacade<Bitacora> implements Bitacora
 
             listaBitacora.add(bitacoraU);
         }
-
         return listaBitacora;
     }
 

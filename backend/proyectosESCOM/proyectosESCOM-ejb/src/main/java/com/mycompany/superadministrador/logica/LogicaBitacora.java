@@ -75,13 +75,13 @@ public class LogicaBitacora implements LogicaBitacoraFacadeLocal {
                         List<DatosSolicitudPOJO> listaSolicitud = bitacoraDB.buscarUsuarioSinFechaFin(usuario, reporte);
                         return listaSolicitud;
                     } else {
-                        return null;
+                        List<DatosSolicitudPOJO> listaSolicitud = bitacoraDB.buscarUsuarioConFechaFin(usuario, reporte);
+                        return listaSolicitud;
                     }
                 }else{
                     throw new NoResultException("No se encontro ningun usuario con el parametro consultado");
                 }
                 
-  
             } else if(reporte.getIdBusqueda() == 2){
                 
             } else if(reporte.getIdBusqueda() == 3){
