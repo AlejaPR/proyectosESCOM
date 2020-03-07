@@ -113,8 +113,8 @@ public class BitacoraFacade extends AbstractFacade<Bitacora> implements Bitacora
 
         TypedQuery<Bitacora> bitacoraDos = em.createQuery("select b from Bitacora b where b.idUsuario=:idUsuario AND b.fechaBitacora >= :fechaInicio AND b.fechaBitacora <= :fechaFin", Bitacora.class);
         bitacoraDos.setParameter("idUsuario", usuario.getId());
-        bitacoraDos.setParameter("fechaInicio", reporte.getFechaInicio());
-        bitacoraDos.setParameter("fechaFin", reporte.getFechaFin());
+        bitacoraDos.setParameter("fechaInicio", reporte.getFechaInicio(),TemporalType.DATE);
+        bitacoraDos.setParameter("fechaFin", reporte.getFechaFin(),TemporalType.DATE);
         List<Bitacora> lista = bitacoraDos.getResultList();
         
         for (Bitacora b : lista) {
@@ -165,10 +165,10 @@ public class BitacoraFacade extends AbstractFacade<Bitacora> implements Bitacora
 
         List<DatosSolicitudPOJO> listaBitacora = new ArrayList();
 
-        TypedQuery<Bitacora> bitacoraDos = em.createQuery("select b from Bitacora b where b.idModulo=:idModulo AND b.fechaBitacora >= :fechaInicio AND b.fechaBitacora <= :fechaFin", Bitacora.class);
+        TypedQuery<Bitacora> bitacoraDos = em.createQuery("select b from Bitacora b where b.idModulo=:idModulo AND b.fechaBitacora >=:fechaInicio AND b.fechaBitacora <=:fechaFin", Bitacora.class);
         bitacoraDos.setParameter("idModulo", modulo.getIdModulo());
-        bitacoraDos.setParameter("fechaInicio", reporte.getFechaInicio(),TemporalType.DATE.DATE);
-        bitacoraDos.setParameter("fechaFin", reporte.getFechaFin(),TemporalType.DATE.DATE);
+        bitacoraDos.setParameter("fechaInicio", reporte.getFechaInicio(),TemporalType.DATE);
+        bitacoraDos.setParameter("fechaFin", reporte.getFechaFin(),TemporalType.DATE);
         List<Bitacora> lista = bitacoraDos.getResultList();
         
         for (Bitacora b : lista) {
