@@ -55,7 +55,13 @@ componentDidUpdate(){
 			fechaInicio:new Date(formValues.fechaInicio),
 			fechaFin:new Date(formValues.fechaFin)
 		}
-		this.props.actionConsultarReporte(localStorage.getItem('Token'),reporte);
+		let objeto=new Date(formValues.fechaFin);
+		let dia=objeto.getUTCDate();
+		let mes=objeto.getUTCMonth()+1;
+		let ano=objeto.getFullYear();
+		let transf= new Date(ano,mes,dia);
+		debugger;
+		// this.props.actionConsultarReporte(localStorage.getItem('Token'),reporte);
 	}
 
 	render() {

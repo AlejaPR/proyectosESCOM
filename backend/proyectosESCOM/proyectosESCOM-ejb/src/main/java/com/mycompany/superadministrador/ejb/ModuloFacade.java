@@ -159,7 +159,6 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
        **/
     @Override
     public ModuloPOJO buscarModuloBitacora(String palabraBusqueda) {
-        
         Modulo lista = new Modulo();
         TypedQuery<Modulo> moduloDB = em.createQuery("select m from Modulo m where Lower(m.nombreModulo)=:palabraBusqueda", Modulo.class);
         moduloDB.setParameter("palabraBusqueda", palabraBusqueda);
