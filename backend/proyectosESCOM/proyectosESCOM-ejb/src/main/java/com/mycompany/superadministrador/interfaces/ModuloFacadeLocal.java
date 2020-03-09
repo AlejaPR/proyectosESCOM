@@ -47,4 +47,6 @@ public interface ModuloFacadeLocal {
     
     public ModuloPOJO buscarModuloBitacora(String palabraBusqueda);
     
+    public ModuloPOJO buscarModuloBitacoraId(int idModulo);
+    
 }

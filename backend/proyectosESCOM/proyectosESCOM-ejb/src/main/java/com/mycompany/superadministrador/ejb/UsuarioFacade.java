@@ -324,9 +324,10 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
     @Override
     public UsuarioPOJO buscarUsuarioBitacora(String palabraBusqueda) {
 
+        String busqueda = palabraBusqueda.toLowerCase();
         Usuario lista = new Usuario();
-        TypedQuery<Usuario> usuarioEspDB = em.createQuery("select u from Usuario u where ((Lower(u.nombre)  =:palabraBusqueda) OR (Lower(u.apellido)  =:palabraBusqueda) OR (Lower(u.correoElectronico)  =:palabraBusqueda))", Usuario.class);
-        usuarioEspDB.setParameter("palabraBusqueda", palabraBusqueda);
+        TypedQuery<Usuario> usuarioEspDB = em.createQuery("select u from Usuario u where (Lower(u.correoElectronico)  =:busqueda)", Usuario.class);
+        usuarioEspDB.setParameter("busqueda", busqueda);
         lista = usuarioEspDB.getSingleResult();
         
         UsuarioPOJO usuario = new UsuarioPOJO();
@@ -336,5 +337,56 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
 
         return usuario;
     }
+    
+     /**
+     * Metodo que realiza la consulta a la tabla usuario Devuelve los datos de
+     * un usuario registrado para la bitacora, recibe el numero de documento
+     *
+     * @param documentoBusqueda
+     * @return
+     *
+     */
+    @Override
+    public UsuarioPOJO buscarUsuarioBitacoraDocumento(int documentoBusqueda) {
+
+        Usuario lista = new Usuario();
+        TypedQuery<Usuario> usuarioEspDB = em.createQuery("select u from Usuario u where u.numeroDocumento =:documentoBusqueda", Usuario.class);
+        usuarioEspDB.setParameter("documentoBusqueda", documentoBusqueda);
+        lista = usuarioEspDB.getSingleResult();
+        
+        UsuarioPOJO usuario = new UsuarioPOJO();
+        usuario.setId(lista.getIdUsuario());
+        usuario.setNumeroDocumento(lista.getNumeroDocumento());
+        usuario.setCorreoElectronico(lista.getCorreoElectronico());
+
+        return usuario;
+    }
+
+     /**
+     * Metodo que realiza la consulta a la tabla usuario Devuelve los datos de
+     * un usuario registrado para la bitacora, recibe el id de usuario
+     *
+     * @param idUsuario
+     * @return
+     *
+     */
+    @Override
+    public UsuarioPOJO buscarUsuarioBitacoraId(int idUsuario) {
+
+        Usuario lista = new Usuario();
+        TypedQuery<Usuario> usuarioEspDB = em.createQuery("select u from Usuario u where u.idUsuario =:idUsuario", Usuario.class);
+        usuarioEspDB.setParameter("idUsuario", idUsuario);
+        lista = usuarioEspDB.getSingleResult();
+        
+        UsuarioPOJO usuario = new UsuarioPOJO();
+        usuario.setId(lista.getIdUsuario());
+        usuario.setNumeroDocumento(lista.getNumeroDocumento());
+        usuario.setCorreoElectronico(lista.getCorreoElectronico());
+        usuario.setApellido(lista.getApellido());
+        usuario.setNombre(lista.getNombre());
+
+        return usuario;
+    }
+
 
 }

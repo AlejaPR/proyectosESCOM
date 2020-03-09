@@ -13,6 +13,8 @@ public class DatosSolicitudPOJO {
     private String tablaInvolucrada;
     private int idModulo;
     private String fechaBitacora;
+    private String correo;
+    private String nombreModulo;
     
     public DatosSolicitudPOJO() {
     }
@@ -73,4 +75,23 @@ public class DatosSolicitudPOJO {
     public void setFechaBitacora(String fechaBitacora) {
         this.fechaBitacora = fechaBitacora;
     } 
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public void setCorreo(String correo) {
+        this.correo = correo;
+    }
+
+    public String getNombreModulo() {
+        return nombreModulo;
+    }
+
+    public void setNombreModulo(String nombreModulo) {
+        this.nombreModulo = nombreModulo;
+    }
+    
+    
+    
 }

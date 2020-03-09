@@ -77,11 +77,10 @@ public class LogicaBitacora implements LogicaBitacoraFacadeLocal {
             if (reporte.getIdBusqueda() == 1) {
                 UsuarioPOJO usuario =new UsuarioPOJO();
                 try {
-                    Integer.parseInt(reporte.getPalabraBusqueda());
-                    //harias la consulta con numero de documento
+                    int documento = Integer.parseInt(reporte.getPalabraBusqueda());
+                    usuario = usuarioDB.buscarUsuarioBitacoraDocumento(documento);
                 } catch (NumberFormatException e) {
-                    //harias consulta con el cooreo
-                   usuario = usuarioDB.buscarUsuarioBitacora(reporte.getPalabraBusqueda());
+                    usuario = usuarioDB.buscarUsuarioBitacora(reporte.getPalabraBusqueda());
                 }
                 if (usuario != null) {
                     if (reporte.getFechaFin() == null) {

@@ -159,9 +159,11 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
        **/
     @Override
     public ModuloPOJO buscarModuloBitacora(String palabraBusqueda) {
+        
+        String busqueda = palabraBusqueda.toLowerCase();
         Modulo lista = new Modulo();
-        TypedQuery<Modulo> moduloDB = em.createQuery("select m from Modulo m where Lower(m.nombreModulo)=:palabraBusqueda", Modulo.class);
-        moduloDB.setParameter("palabraBusqueda", palabraBusqueda);
+        TypedQuery<Modulo> moduloDB = em.createQuery("select m from Modulo m where Lower(m.nombreModulo)=:busqueda", Modulo.class);
+        moduloDB.setParameter("busqueda", busqueda);
         lista = moduloDB.getSingleResult();
         
         ModuloPOJO moduloRespuesta = new ModuloPOJO();
@@ -169,5 +171,29 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
         moduloRespuesta.setNombreModulo(lista.getNombreModulo());
       
         return moduloRespuesta;
+    }
+    
+     /**
+     * Metodo que realiza la consulta a la tabla modulo Devuelve los datos de
+     * un modulo registrado para la bitacora, recibe el id de modulo
+     *
+     * @param idModulo
+     * @return
+     *
+     */
+    @Override
+    public ModuloPOJO buscarModuloBitacoraId(int idModulo) {
+
+        Modulo lista = new Modulo();
+        TypedQuery<Modulo> usuarioEspDB = em.createQuery("select m from Modulo m where m.idModulo =:idModulo", Modulo.class);
+        usuarioEspDB.setParameter("idModulo", idModulo);
+        lista = usuarioEspDB.getSingleResult();
+        
+        ModuloPOJO modulo = new ModuloPOJO();
+        
+        modulo.setNombreModulo(lista.getNombreModulo());
+        modulo.setAcronimo(lista.getAcronimo());
+        
+        return modulo;
     }
 }
