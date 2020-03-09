@@ -7,7 +7,10 @@ import IconButton from '@material-ui/core/IconButton';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import FormHelperText from '@material-ui/core/FormHelperText';
-// import TextField from '@material-ui/core/TextField'
+import TextField from '@material-ui/core/TextField'
+import {
+  withStyles
+} from '@material-ui/core/styles';
 
 export const generarSelect = ({ input, label, type, meta: { touched, error }, children }) => (
   <div>
@@ -65,7 +68,7 @@ export default function RenderPasword({
         {...input}
         {...custom}
         error={(touched && error) ? true : false}
-        aria-describedby={(touched && error) ?''  : error}
+        aria-describedby={(touched && error) ? '' : error}
         endAdornment={
           <InputAdornment position="end">
             <IconButton
@@ -78,9 +81,9 @@ export default function RenderPasword({
             </IconButton>
           </InputAdornment>
         }
-        style={{ height: "35px",width:"100%" }}
+        style={{ height: "35px", width: "100%" }}
       />
-      <FormHelperText id="outlined-weight-helper-text"  error={(touched && error) ? true : false} >{(touched && error) ?error  : ''}</FormHelperText>
+      <FormHelperText id="outlined-weight-helper-text" error={(touched && error) ? true : false} >{(touched && error) ? error : ''}</FormHelperText>
     </>
   );
 }
@@ -114,23 +117,48 @@ export const generarTextArea = ({ input, label, meta: { touched, error, warning 
 );
 
 // export const generarInput = ({
-// 	input,
-// 	label,
-// 	meta: { touched, error },
-// 	...custom
+//   input,
+//   label,
+//   meta: { touched, error },
+//   ...custom
 // }) => (
 
-// 		<TextField
-//       style={{width:"100%", fontSize: "13px", fontFamily: 'sans-serif'}}
-// 			helperText={touched && error}
-// 			label={label}
-// 			error={(touched && error) ? true : false}
-// 			{...input}
+//     <CssTextField
+//       fullWidth
+//       helperText={touched && error}
+//       label={label}
+//       error={(touched && error) ? true : false}
+//       {...input}
 //       {...custom}
-      
-// 			required={true}
-// 			variant="outlined"
-// 			size="small"
-// 		/>
+//       required={true}
+//       // InputLabelProps={
+//       //   {
+//       //     style: {
+//       //     fontSize:'13px'
+//       // }}
+//       // }
+// variant = 'outlined'
+// size = 'small'
+//   />
 
-// 	)
+//   )
+
+const CssTextField = withStyles({
+  root: {
+    '& label.Mui-focused': {
+      color: 'green',
+      fontSize: '16px'
+    },
+    '& .MuiInput-underline:after': {
+      borderBottomColor: 'green',
+    },
+    '& .MuiOutlinedInput-input': {
+      fontSize: '13px',
+    },
+    '&::label.placeholder': {
+      textOverflow: "ellipsis !important",
+      color: "blue",
+      fontSize: 10
+    }
+  },
+})(TextField);

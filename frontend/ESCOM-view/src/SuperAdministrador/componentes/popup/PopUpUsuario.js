@@ -75,6 +75,7 @@ class PopUpUsuario extends React.Component {
       var crypto = require('crypto');
       var contrasenaEncryp = crypto.createHmac('sha256', formValues.correo).update(formValues.contrasena).digest('hex');
       let date = new Date(formValues.fechaNacimiento);
+      debugger;
       let usuario = {
         'nombre': formValues.nombre,
         'apellido': formValues.apellido,
@@ -117,13 +118,13 @@ class PopUpUsuario extends React.Component {
               <div className="contenedor-inputs">
                 <div className="row">
                   <div className="col-sm-12">
-                    <Field name="nombre" validate={[requerido, nombre]} component={generarInput} label="Nombre" />
+                    <Field name="nombre"  type="text"  validate={[requerido, nombre]} component={generarInput} label="Nombre" />
                   </div>
                 </div>
                 <br />
                 <div className="row">
                   <div className="col-sm-12">
-                    <Field name="apellido" validate={[requerido, apellido]} component={generarInput} label="Apellido" />
+                    <Field name="apellido"  type="text"  validate={[requerido, apellido]} component={generarInput} label="Apellido" />
                   </div>
                 </div>
                 <br />
@@ -141,25 +142,25 @@ class PopUpUsuario extends React.Component {
                 <br />
                 <div className="row">
                   <div className="col-sm-12">
-                    <Field name="numeroDocumento" validate={[requerido, documentoIdentificacion]} component={generarInput} label="Numero de documento" />
+                    <Field name="numeroDocumento"  type="number"  validate={[requerido, documentoIdentificacion]} component={generarInput} label="Numero de documento" />
                   </div>
                 </div>
                 <br />
                 <div className="row">
                   <div className="col-sm-12">
-                    <Field name="correo" validate={[requerido, correo]} component={generarInput} label="Correo electronico" />
+                    <Field name="correo"  type="text" validate={[requerido, correo]} component={generarInput} label="Correo electronico" />
                   </div>
                 </div>
                 <br />
                 <div className="row">
                   <div className="col-sm-12">
-                    <Field name="contrasena" validate={[requerido, contrasena]} type="password" component={generarInput} label="Contraseña" />
+                    <Field name="contrasena"  validate={[requerido, contrasena]} type="password" component={generarInput} label="Contraseña" />
                   </div>
                 </div>
                 <br />
                 <div className="row">
                   <div className="col-sm-12">
-                    <Field name="fechaNacimiento" type="date" validate={[requerido, fechaNacimiento]} component={generarInput} label="Fecha de nacimiento" />
+                    <Field name="fechaNacimiento" type="date" validate={[requerido, fechaNacimiento]} component={generarInput}  />
                   </div>
                 </div>
               </div>

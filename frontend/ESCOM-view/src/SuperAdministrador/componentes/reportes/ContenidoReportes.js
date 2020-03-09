@@ -1,11 +1,5 @@
 import React from 'react';
 
-//estilos
-import '../../css/business-casual.css'
-import '../../css/estilos.css'
-import '../../css/bootstrap.min.css'
-import '../../css/menu.css'
-
 import { Button } from 'reactstrap';
 import Divider from '@material-ui/core/Divider';
 import MaterialTable from 'material-table';
@@ -18,6 +12,7 @@ import Select from 'react-select'
 
 
 import { connect } from 'react-redux';
+import {actionConsultarReporte} from '../../actions/actionReporte.js'
 import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
 
@@ -48,8 +43,19 @@ class ContenidoReportes extends React.Component {
 		}
 		return opciones;
 	}
-	handleSubmit = formValues => {
+componentDidUpdate(){
+	console.log("reporte es :",this.props.reporte);
+}
 
+	handleSubmit = formValues => {
+		console.log(formValues);
+		let reporte={
+			idBusqueda:formValues.actividad.value,
+			palabraBusqueda:formValues.palabraBusqueda,
+			fechaInicio:new Date(formValues.fechaInicio),
+			fechaFin:new Date(formValues.fechaFin)
+		}
+		this.props.actionConsultarReporte(localStorage.getItem('Token'),reporte);
 	}
 
 	render() {
@@ -80,14 +86,12 @@ class ContenidoReportes extends React.Component {
 									<Field name="actividad" validate={[seleccione]} valor={this.retornarValor()} onChange={this.handleChangeDos} component={ReduxFormSelectDos} options={this.actividades()} />
 								</div>
 								<div className="col-sm-7">
-									<Field name="nombre" component={generarInput} className="form-control" label="Buscar" />
+									<Field name="palabraBusqueda" component={generarInput} className="form-control" label="Buscar" />
 								</div>
 								<div >
 									<Button style={fondoBoton}>Buscar</Button>
 								</div>
 							</div>
-
-
 							<div className="col-sm-12" style={{
 								paddingTop: "20px",
 								paddingRight: "2px",
@@ -98,11 +102,11 @@ class ContenidoReportes extends React.Component {
 								<div className="row">
 									<label for="form_control_3">Fecha inicial</label>
 									<div className="col-sm-5">
-										<input type="date" name="fechaNacimiento" style={{ height: "34px" }} id="user1" className="form-control" readonly />
+										<Field name="fechaInicio" type="date" component={generarInput} style={{ height: "35px" }} className="form-control" label="Buscar" />
 									</div>
 									<label for="form_control_3">Fecha final</label>
 									<div className="col-sm-5">
-										<input type="date" name="fechaNacimiento" style={{ height: "34px" }} id="user1" className="form-control" readonly />
+										<Field name="fechaFin" type="date" component={generarInput}  style={{ height: "35px" }} className="form-control" label="Buscar" />
 									</div>
 								</div>
 							</div>
@@ -136,25 +140,16 @@ class ContenidoReportes extends React.Component {
 								}
 							}}
 							columns={[
-								{ title: 'Nombre de la actividad', field: 'nombre', headerStyle: estiloCabecera, cellStyle: estiloFila }
+								{ title: 'Operacion', field: 'operacion', headerStyle: estiloCabecera, cellStyle: estiloFila },
+								{ title: 'Fecha de bitacora', field: 'fechaBitacora', headerStyle: estiloCabecera, cellStyle: estiloFila },
+								{ title: 'Id usuario', field: 'idUsuario', headerStyle: estiloCabecera, cellStyle: estiloFila },
+								{ title: 'Tabla involucrada', field: 'tablaInvolucrada', headerStyle: estiloCabecera, cellStyle: estiloFila }
 							]}
-							data={this.props.actividades}
+							data={this.props.reporte}
 							options={{
 								search: false,
-								rowStyle: estiloFila,
-								selection: false
+								rowStyle: estiloFila
 							}}
-							onSelectionChange={(rows) => {
-								this.setState({ actividadesSeleccionadas: rows });
-							}}
-
-							actions={[
-								{
-									tooltip: 'Eliminar actividades seleccionadas',
-									icon: 'delete',
-									onClick: (evt, data) => this.props.actionEliminarActividades(this.state.actividadesSeleccionadas, localStorage.getItem('Token'), this.props.cedula)
-								}
-							]}
 						/>
 						<br />
 					</div>
@@ -220,7 +215,8 @@ const estiloLetrero = {
 
 function mapStateToProps(state) {
 	return {
-
+		reporte:state.rep.reporte,
+		mensaje:state.rep.mensajeReporte
 	}
 }
 
@@ -228,4 +224,4 @@ let reporte = reduxForm({
 	form: 'reporte'
 })(ContenidoReportes)
 
-export default withRouter(connect(mapStateToProps, {})(reporte));
+export default withRouter(connect(mapStateToProps, {actionConsultarReporte})(reporte));
