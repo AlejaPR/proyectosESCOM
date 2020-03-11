@@ -63,5 +63,5 @@ public interface UsuarioFacadeLocal {
     
     public UsuarioPOJO buscarUsuarioBitacoraId(int idUsuario);
     
-   
+    public void cambiarClaveInterna(String nuevaClave, UsuarioPOJO usuario);
 }

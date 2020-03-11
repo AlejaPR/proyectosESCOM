@@ -2,6 +2,7 @@ package com.mycompany.superadministrador.logica;
 
 import com.google.gson.Gson;
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
+import com.mycompany.superadministrador.POJO.ClavePOJO;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import com.mycompany.superadministrador.POJO.ModuloPOJO;
 import com.mycompany.superadministrador.POJO.TipoDocumentoPOJO;
@@ -595,6 +596,41 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         } catch (Exception ex) {
             return null;
         } 
+    }
+    
+    /**
+     * Metodo que llama a la consulta para cambiar contraseña interna del usuario
+     *
+     * @param clavePOJO
+     * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
+     *
+     */
+    @Override
+    public void cambiarClaveInterna(ClavePOJO clavePOJO) throws ExcepcionGenerica {
+        try {
+            Token tokenDevuelto = Seguridad.desencriptar(clavePOJO.getToken());
+            String firma = tokenDevuelto.getFirma();
+            UsuarioPOJO usuario = usuarioDB.busquedaToken(firma);
+        
+            if(usuario != null){
+                if(!clavePOJO.getAntiguaClave().equals(clavePOJO.getNuevaClave())){
+                    usuarioDB.cambiarClaveInterna(clavePOJO.getNuevaClave(), usuario);              
+                    
+                }else{
+                    throw new ExcepcionGenerica("La contraseña nueva no puede ser igual a la antigua");
+                }
+            }else{
+                throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la modificacion del usuario ");
+            }
+
+        } catch (NullPointerException ex) {
+            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la modificacion del usuario ");
+        } catch (NoResultException ex) {
+            throw new ExcepcionGenerica("El usuario no existe");
+        } catch (Exception ex) {
+            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+        }
+
     }
 
 }

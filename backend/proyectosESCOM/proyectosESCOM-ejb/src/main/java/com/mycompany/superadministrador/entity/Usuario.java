@@ -38,7 +38,8 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "editarUsuario", query = "UPDATE Usuario u set u.nombre=:nombre,u.apellido=:apellido,"
             + "u.numeroDocumento=:numeroDocumento,u.fechaNacimiento=:fechaNacimiento,u.correoElectronico=:correoElectronico,u.tipoDocumento=:tipoDocumento"
             + " WHERE u.numeroDocumento=:documento"),
-    @NamedQuery(name = "eliminarActividad", query = "DELETE FROM UsuarioActividad UA WHERE UA.usuario.idUsuario=:numeroDocumento AND UA.actividad.idActividad=:codigoActividad ")
+    @NamedQuery(name = "eliminarActividad", query = "DELETE FROM UsuarioActividad UA WHERE UA.usuario.idUsuario=:numeroDocumento AND UA.actividad.idActividad=:codigoActividad "),
+    @NamedQuery(name = "cambiarClaveInterna", query = "UPDATE Usuario u set u.contrasena = :clave WHERE u.idUsuario=:idUsuario")
 
 })
 public class Usuario implements Serializable {
