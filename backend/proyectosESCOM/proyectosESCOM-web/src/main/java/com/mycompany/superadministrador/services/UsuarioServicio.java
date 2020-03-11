@@ -1,6 +1,7 @@
 package com.mycompany.superadministrador.services;
 
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
+import com.mycompany.superadministrador.POJO.ClavePOJO;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import com.mycompany.superadministrador.POJO.ModuloPOJO;
 import com.mycompany.superadministrador.POJO.Respuesta;
@@ -297,4 +298,27 @@ public class UsuarioServicio {
         }
     }
 
+    /**
+     * Servicio para el cambio de contraseña interna
+     *
+     * @param clavePOJO
+     * @return  *
+     */
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/cambiarClaveInterna")
+    public Response cambiarClaveInterna(ClavePOJO clavePOJO) {
+        try {
+            usuarioLogica.cambiarClaveInterna(clavePOJO);
+            respuesta.setRespuesta("Contraseña modificada exitosamente");
+            return Response.status(Response.Status.OK).entity(respuesta).build();
+        } catch (ExcepcionGenerica e) {
+            respuesta.setRespuesta("Sin acceso al servicio");
+            return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
+        } catch (Exception e) {
+            respuesta.setRespuesta("Ocurrio un error en el servidor ");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
+        }
+    }
 }

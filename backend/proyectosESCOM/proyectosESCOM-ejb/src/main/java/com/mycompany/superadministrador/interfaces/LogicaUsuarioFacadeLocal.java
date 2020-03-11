@@ -6,6 +6,7 @@
 package com.mycompany.superadministrador.interfaces;
 
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
+import com.mycompany.superadministrador.POJO.ClavePOJO;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import com.mycompany.superadministrador.POJO.ModuloPOJO;
 import com.mycompany.superadministrador.POJO.TipoDocumentoPOJO;
@@ -53,5 +54,7 @@ public interface LogicaUsuarioFacadeLocal {
     public List<ModuloPOJO> redireccionUsuario(String token) throws ExcepcionGenerica;
     
     public List<UsuarioPOJO> devolverUsuariosModuloDocumental();
+    
+    public void cambiarClaveInterna(ClavePOJO clavePOJO) throws ExcepcionGenerica ;
 
 }

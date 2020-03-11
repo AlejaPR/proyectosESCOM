@@ -388,5 +388,14 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         return usuario;
     }
 
+    @Override
+    public void cambiarClaveInterna(String nuevaClave, UsuarioPOJO usuario) {
+        
+        TypedQuery<Usuario> cambiarContraseña = em.createNamedQuery("cambiarClaveInterna", Usuario.class);
+        cambiarContraseña.setParameter("clave", nuevaClave);
+        cambiarContraseña.setParameter("idUsuario", usuario.getId());
+        cambiarContraseña.executeUpdate();
+    }
+
 
 }
