@@ -5,7 +5,7 @@ import Barra from '../general/BarraDirecciones';
 import Button from '@material-ui/core/Button';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { withRouter } from 'react-router-dom';
-import { campo, generarInput } from '../../utilitario/GenerarInputs.js';
+import { campo, generarInput,generarTextArea } from '../../utilitario/GenerarInputs.js';
 import PropTypes from "prop-types";
 import { requerido, validacionCuarentaCaracteres, validacionDoscientosCaracteres } from '../../utilitario/validacionCampos.js';
 import Alert from '@material-ui/lab/Alert';
@@ -234,7 +234,7 @@ class EditarModulo extends React.Component {
                                                 <td colspan="2" style={{ width: "65%", paddingRight: "39px", paddingLeft: "39px" }}>
                                                     <div className="row">
                                                         <div className="col-sm-12">
-                                                            <label>Nombre</label>
+                                                            
                                                             <Field name="nombre" validate={[requerido, validacionCuarentaCaracteres]} component={generarInput} label="Nombre" />
                                                         </div>
                                                     </div>
@@ -260,8 +260,7 @@ class EditarModulo extends React.Component {
                                                 <td colspan="2" style={{ width: "65%", paddingRight: "39px", paddingLeft: "39px" }}>
                                                     <div className="row">
                                                         <div className="col-sm-12">
-                                                            <label>Descripcion</label>
-                                                            <Field name="descripcion" validate={[requerido, validacionDoscientosCaracteres]} component={renderTextArea} label="Apellido" />
+                                                            <Field name="descripcion" validate={[requerido, validacionDoscientosCaracteres]} component={generarTextArea} filas={10} label="Descripcion" />
                                                         </div>
                                                     </div>
                                                 </td>
@@ -298,20 +297,8 @@ class EditarModulo extends React.Component {
                 </div>
             </div>
         )
-
-
     }
 }
-
-const renderTextArea = ({ input, meta: { touched, error, warning } }) => (
-    <div>
-        <div>
-            <textarea {...input} style={{ fontSize: "12px" }} rows="10" className="form-control letra form-control-solid placeholder-no-fix" />
-            {touched && ((error && <span className="text-danger letra form-group">{error}</span>) || (warning && <span>{warning}</span>))}
-        </div>
-    </div>
-);
-
 
 const fondoBotonCancelar = {
     background: "gray",

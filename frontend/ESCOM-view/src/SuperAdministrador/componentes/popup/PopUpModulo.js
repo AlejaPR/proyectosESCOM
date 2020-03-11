@@ -218,7 +218,7 @@ class PopUpModulo extends React.Component {
               <br />
               <div className="row">
                 <div className="col-sm-12">
-                  <Field name="descripcion" validate={[requerido, validacionDoscientosCaracteres]} component={generarTextArea} label="Descripcion" />
+                  <Field name="descripcion" validate={[requerido, validacionDoscientosCaracteres]} filas={4} component={generarTextArea} label="Descripcion" />
                 </div>
               </div>
               <ModalFooter>

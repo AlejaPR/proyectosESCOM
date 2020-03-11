@@ -9,7 +9,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
-import { generarInput, generarSelect } from '../../utilitario/GenerarInputs.js'
+import { generarInput, generarSelect, generarDate,ReduxFormSelect} from '../../utilitario/GenerarInputs.js'
 import AddIcon from '@material-ui/icons/Add';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import CancelIcon from '@material-ui/icons/Cancel';
@@ -95,6 +95,21 @@ class PopUpUsuario extends React.Component {
     }
   }
 
+  opciones = () => {
+    let respuesta = [];
+    this.props.documentos.forEach(
+        documento => {
+          const { idTipoDocumento, tipoDocumento } = documento
+            let objeto = {
+                label: tipoDocumento,
+                value:idTipoDocumento,
+            }
+            respuesta.push(objeto);
+        }
+    )
+    return respuesta;
+}
+
   cargarDocumentos() {
     return this.props.documentos.map((documento, index) => {
       const { idTipoDocumento, tipoDocumento } = documento
@@ -118,16 +133,16 @@ class PopUpUsuario extends React.Component {
               <div className="contenedor-inputs">
                 <div className="row">
                   <div className="col-sm-12">
-                    <Field name="nombre"  type="text"  validate={[requerido, nombre]} component={generarInput} label="Nombre" />
+                    <Field name="nombre" type="text" validate={[requerido, nombre]} component={generarInput} label="Nombre" />
                   </div>
                 </div>
-                <br />
+
                 <div className="row">
                   <div className="col-sm-12">
-                    <Field name="apellido"  type="text"  validate={[requerido, apellido]} component={generarInput} label="Apellido" />
+                    <Field name="apellido" type="text" validate={[requerido, apellido]} component={generarInput} label="Apellido" />
                   </div>
                 </div>
-                <br />
+
                 <div className="row">
                   <div className="col-sm-5">
                     <span style={{ fontSize: "13px" }}>Tipo de documento </span>
@@ -139,30 +154,31 @@ class PopUpUsuario extends React.Component {
                     </Field>
                   </div>
                 </div>
-                <br />
                 <div className="row">
                   <div className="col-sm-12">
-                    <Field name="numeroDocumento"  type="number"  validate={[requerido, documentoIdentificacion]} component={generarInput} label="Numero de documento" />
+                    {/* <Field name="numeroDocumento" validate={[seleccione]} component={ReduxFormSelect} options={this.opciones()} /> */}
+                    <Field name="numeroDocumento" type="number" validate={[requerido, documentoIdentificacion]} component={generarInput} label="Numero de documento" />
+                  </div>
+                </div>
+
+                <div className="row">
+                  <div className="col-sm-12">
+                    <Field name="correo" type="text" validate={[requerido, correo]} component={generarInput} label="Correo electronico" />
+                  </div>
+                </div>
+
+                <div className="row">
+                  <div className="col-sm-12">
+                    <Field name="contrasena" validate={[requerido, contrasena]} type="password" component={generarInput} label="Contraseña" />
+                  </div>
+                </div>
+
+                <div className="row">
+                  <div className="col-sm-12">
+                    <Field name="fechaNacimiento" type='date'   validate={[requerido]} component={generarDate} label="Fecha de nacimiento" />
                   </div>
                 </div>
                 <br />
-                <div className="row">
-                  <div className="col-sm-12">
-                    <Field name="correo"  type="text" validate={[requerido, correo]} component={generarInput} label="Correo electronico" />
-                  </div>
-                </div>
-                <br />
-                <div className="row">
-                  <div className="col-sm-12">
-                    <Field name="contrasena"  validate={[requerido, contrasena]} type="password" component={generarInput} label="Contraseña" />
-                  </div>
-                </div>
-                <br />
-                <div className="row">
-                  <div className="col-sm-12">
-                    <Field name="fechaNacimiento" type="date" validate={[requerido, fechaNacimiento]} component={generarInput}  />
-                  </div>
-                </div>
               </div>
               <ModalFooter>
                 <Button style={{ background: this.props.configuracion.botones, fontSize: "13px", fontFamily: "sans-serif", textTransform: "none" }} className="btn btn-dark" variant="contained" startIcon={<SaveAltIcon />} type="submit">Registrar</Button>{''}

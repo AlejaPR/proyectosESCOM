@@ -111,19 +111,16 @@ class EditarActividad extends React.Component {
 
                                         <div className="row">
                                             <div className="col-sm-6">
-                                                <label>Nombre de la actividad</label>
                                                 <Field name="nombre" disabled={true} validate={[requerido, validacionCuarentaCaracteres]} component={generarInput} label="Nombre" />
                                             </div>
                                             <div className="col-sm-6">
-                                                <label>Modulo</label>
-                                                <Field name="modulo" disabled={true} validate={[requerido]} component={generarInput} label="modulo" />
+                                                <Field name="modulo" disabled={true} validate={[requerido]} component={generarInput} label="Modulo" />
                                             </div>
                                         </div>
                                         <br />
                                         <div className="row">
                                             <div className="col-sm-6">
-                                                <label>Descripcion</label>
-                                                <Field name="descripcion" validate={[requerido]} component={generarTextArea} label="Descripcion" />
+                                                <Field name="descripcion" validate={[requerido]} filas={4} component={generarTextArea} label="Descripcion" />
                                             </div>
                                         </div>
                                         <br />

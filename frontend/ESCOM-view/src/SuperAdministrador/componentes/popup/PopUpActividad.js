@@ -98,23 +98,21 @@ class PopUpActividad extends React.Component {
                     <ModalHeader toggle={this.toggle} className="center">Crear actividad</ModalHeader>
                     <ModalBody>
                         <form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
-                            <div className="contenedor-inputs">
-                                <div className="row">
-                                    <div className="col-sm-12">
-                                        <Field name="nombre" validate={[requerido, validacionCuarentaCaracteres]} component={generarInput} label="Nombre" />
-                                        <br />
-                                    </div>
+                            <div className="row">
+                                <div className="col-sm-12">
+                                    <Field name="nombre" validate={[requerido, validacionCuarentaCaracteres]} component={generarInput} label="Nombre" />
                                 </div>
-                                <div className="row">
-                                    <div className="col-sm-12">
-                                        <Field name="descripcion" component={generarTextArea} validate={[requerido, validacionDoscientosCaracteres]} label="descripcion" />
-                                    </div>
+                            </div>
+                            <br />
+                            <div className="row">
+                                <div className="col-sm-12">
+                                    <Field name="descripcion" component={generarTextArea} filas={4} validate={[requerido, validacionDoscientosCaracteres]} label="descripcion" />
                                 </div>
-                                <br />
-                                <div className="row">
-                                    <div className="col-sm-12">
-                                        <Field name="modulo" validate={[seleccione]} component={ReduxFormSelect} options={this.opciones()} />
-                                    </div>
+                            </div>
+                            <br />
+                            <div className="row">
+                                <div className="col-sm-12">
+                                    <Field name="modulo" validate={[seleccione]} component={ReduxFormSelect} options={this.opciones()} />
                                 </div>
                             </div>
                             <ModalFooter>

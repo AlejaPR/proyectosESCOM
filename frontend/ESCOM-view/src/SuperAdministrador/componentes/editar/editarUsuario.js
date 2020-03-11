@@ -124,36 +124,34 @@ class editar extends React.Component {
 
                     <div className="row">
                       <div className="col-sm-6">
-                        <label>Nombre</label>
+                        
                         <Field name="nombre" validate={[requerido, nombre]} component={generarInput} label="Nombre" />
                       </div>
                       <div className="col-sm-6">
-                        <label>Apellidos</label>
+                        
                         <Field name="apellido" validate={[requerido, apellido]} component={generarInput} label="Apellido" />
                       </div>
                     </div>
                     <br />
                     <div className="row">
                       <div className="col-sm-6">
-                        <label>Tipo de documento</label>
+                      <label>Numero de documento</label>
                         <Field name="tipoDocumento" validate={[seleccione]} style={{ height: "35px", fontSize: "13px" }} className="form-control" component={generarSelect} label="Username">
                           <option className="letra" style={{ height: "35px", fontSize: "13px" }} value="0">Seleccione</option>
                           {this.props.documentos.map(documento => <option key={documento.idTipoDocumento} className="letra" style={{ height: "35px", fontSize: "13px" }} value={documento.idTipoDocumento}>{documento.tipoDocumento}</option>)}
                         </Field>
                       </div>
                       <div className="col-sm-6">
-                        <label>Numero de documento</label>
+                        
                         <Field name="numeroDocumento" type="number" validate={[requerido, documentoIdentificacion]} component={generarInput} label="Numero de documento" />
                       </div>
                     </div>
                     <br />
                     <div className="row">
                       <div className="col-sm-6">
-                        <label>Correo</label>
                         <Field name="correo" validate={[requerido, correo]} component={generarInput} label="Correo electronico" />
                       </div>
                       <div className="col-sm-6">
-                        <label>Fecha de nacimiento</label>
                         <Field name="fechaNacimiento" type="date" validate={[requerido, fechaNacimiento]} component={generarInput} label="Fecha de nacimiento" />
                       </div>
                     </div>

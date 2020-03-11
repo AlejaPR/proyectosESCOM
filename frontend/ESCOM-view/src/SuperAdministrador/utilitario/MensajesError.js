@@ -21,3 +21,11 @@ export const mensajesDeError = respuesta => {
             return '';
     }
 };
+
+export const formatoFecha = (fecha) => {
+    let fechaRecibida = new Date(fecha);
+    let dia = fechaRecibida.getUTCDate();
+    let mes = fechaRecibida.getUTCMonth();
+    let ano = fechaRecibida.getFullYear();
+    return new Date(ano, mes, dia);
+}

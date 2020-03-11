@@ -7,10 +7,15 @@ import IconButton from '@material-ui/core/IconButton';
 import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import TextField from '@material-ui/core/TextField'
+import TextField from '@material-ui/core/TextField';
+import { withStyles } from "@material-ui/core/styles";
+import Select from 'react-select';
 import {
-  withStyles
-} from '@material-ui/core/styles';
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker
+} from '@material-ui/pickers';
+import Grid from '@material-ui/core/Grid';
+import DateFnsUtils from '@date-io/date-fns';
 
 export const generarSelect = ({ input, label, type, meta: { touched, error }, children }) => (
   <div>
@@ -23,14 +28,14 @@ export const generarSelect = ({ input, label, type, meta: { touched, error }, ch
   </div>
 )
 
-export const generarInput = ({ input, disabled, label, type, meta: { touched, error, warning } }) => (
-  <div>
-    <div>
-      <input {...input} disabled={disabled} placeholder={label} type={type} style={{ height: "35px", fontSize: "13px", fontFamily: 'sans-serif' }} className="form-control placeholder-no-fix" />
-      {touched && ((error && <span className="text-danger form-group" style={{ fontSize: '12px', fontFamily: 'sans-serif' }}>{error}</span>) || (warning && <span>{warning}</span>))}
-    </div>
-  </div>
-)
+// export const generarInput = ({ input, disabled, label, type, meta: { touched, error, warning } }) => (
+//   <div>
+//     <div>
+//       <input {...input} disabled={disabled} placeholder={label} type={type} style={{ height: "35px", fontSize: "13px", fontFamily: 'sans-serif' }} className="form-control placeholder-no-fix" />
+//       {touched && ((error && <span className="text-danger form-group" style={{ fontSize: '12px', fontFamily: 'sans-serif' }}>{error}</span>) || (warning && <span>{warning}</span>))}
+//     </div>
+//   </div>
+// )
 
 export default function RenderPasword({
   input,
@@ -107,14 +112,43 @@ export const campo = value => {
   }
 };
 
-export const generarTextArea = ({ input, label, meta: { touched, error, warning } }) => (
-  <div>
-    <div>
-      <textarea {...input} placeholder={label} style={{ fontSize: "13px" }} className="form-control letra form-control-solid placeholder-no-fix" />
-      {touched && ((error && <span className="text-danger form-group" style={{ fontSize: '12px', fontFamily: 'sans-serif' }}>{error}</span>) || (warning && <span>{warning}</span>))}
-    </div>
-  </div>
-);
+// export const generarTextArea = ({ input, label, meta: { touched, error, warning } }) => (
+//   <div>
+//     <div>
+//       <textarea {...input} placeholder={label} style={{ fontSize: "13px" }} className="form-control letra form-control-solid placeholder-no-fix" />
+//       {touched && ((error && <span className="text-danger form-group" style={{ fontSize: '12px', fontFamily: 'sans-serif' }}>{error}</span>) || (warning && <span>{warning}</span>))}
+//     </div>
+//   </div>
+// );
+
+
+export const generarTextArea = ({
+  input,
+  label, filas,
+  meta: { touched, error },
+  ...custom
+}) => (
+    <CssTextField
+      fullWidth
+      helperText={touched && error}
+      label={label}
+      error={(touched && error) ? true : false}
+      {...input}
+      {...custom}
+      required={true}
+      rows={filas}
+      multiline={true}
+      // InputLabelProps={
+      //   {
+      //     style: {
+      //     fontSize:'13px'
+      // }}
+      // }
+      variant='outlined'
+      size='small'
+    />
+
+  )
 
 // export const generarInput = ({
 //   input,
@@ -122,7 +156,6 @@ export const generarTextArea = ({ input, label, meta: { touched, error, warning 
 //   meta: { touched, error },
 //   ...custom
 // }) => (
-
 //     <CssTextField
 //       fullWidth
 //       helperText={touched && error}
@@ -137,28 +170,161 @@ export const generarTextArea = ({ input, label, meta: { touched, error, warning 
 //       //     fontSize:'13px'
 //       // }}
 //       // }
-// variant = 'outlined'
-// size = 'small'
-//   />
+//       variant='outlined'
+//     />
 
 //   )
+
+// export const generarDate = ({
+//   input,
+//   label,
+//   meta: { touched, error },
+//   ...custom
+// }) => (
+//     <MuiPickersUtilsProvider utils={DateFnsUtils}>
+//       <KeyboardDatePicker
+//         disableToolbar
+//         {...input}
+//         variant="inline"
+//         label="Fecha de nacimiento"
+//         margin="normal"
+//         format="MM/dd/yyyy"
+//         KeyboardButtonProps={{
+//           'aria-label': 'change date',
+//           'size': 'small'
+//         }}
+//         disableFuture={true}
+//         autoOk={true}
+//         error={(touched && error) ? true : false}
+//         style={{ width: "100%" }}
+//         helperText={touched && error}
+//       />
+//     </MuiPickersUtilsProvider>
+
+//   )
+
+
+export const ReduxFormSelect = props => {
+  const customStyles = {
+      option: (provided, state) => ({
+          ...provided,
+          fontSize: 13
+      }),
+      control: styles => ({ ...styles, backgroundColor: 'white', fontSize: 13, fontFamily: 'sans-serif' }),
+      singleValue: (provided, state) => {
+          const opacity = state.isDisabled ? 0.5 : 1;
+          const transition = 'opacity 300ms';
+          return { ...provided, opacity, transition };
+      }
+  }
+  const { input, options } = props;
+  const { touched, error } = props.meta;
+  return (
+      <>
+          <Select
+              {...input}
+
+              styles={customStyles}
+              isSearchable={false}
+              placeholder='Seleccione un modulo'
+              onChange={value => input.onChange(value)}
+              onBlur={() => input.onBlur(input.value)}
+              noOptionsMessage={() => 'Aun no hay ningun modulo registrado'}
+              options={options}
+          />
+          {touched && ((error && <span className="text-danger form-group" style={{ fontSize: '12px', fontFamily: 'sans-serif' }}>{error}</span>))}
+      </>
+  )
+}
 
 const CssTextField = withStyles({
   root: {
     '& label.Mui-focused': {
-      color: 'green',
-      fontSize: '16px'
+      color: 'black',
     },
-    '& .MuiInput-underline:after': {
-      borderBottomColor: 'green',
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: 'gray'
+      }
     },
-    '& .MuiOutlinedInput-input': {
-      fontSize: '13px',
-    },
-    '&::label.placeholder': {
-      textOverflow: "ellipsis !important",
-      color: "blue",
-      fontSize: 10
-    }
   },
 })(TextField);
+
+
+const styles = {
+  inputRoot: {
+    fontSize: 13
+  },
+  labelRoot: {
+    fontSize: 13,
+    color: "gray",
+    heigth: '3px',
+    "&$labelFocused": {
+      color: "purple",
+      fontSize: 16
+    }
+  },
+  labelFocused: {}
+};
+
+function renderAlgo({
+  input,
+  label, classes,filas,
+  meta: { touched, error },
+  ...custom
+}) {
+  return (
+    <TextField
+      fullWidth
+      label={label}
+      InputProps={{ classes: { root: classes.inputRoot } }}
+      InputLabelProps={{
+        classes: {
+          root: classes.labelRoot,
+          focused: classes.labelFocused
+        }
+      }}
+      error={(touched && error) ? true : false}
+      helperText={touched && error}
+      required={true}
+      {...input}
+      {...custom}
+      variant='outlined'
+      margin="normal"
+      size='small'
+    />
+  )
+}
+
+function renderDate({
+  input,
+  label, classes,
+  meta: { touched, error },
+  ...custom
+}) {
+  return (
+    <TextField
+      fullWidth
+      label={label}
+      InputProps={{ classes: { root: classes.inputRoot } }}
+      InputLabelProps={{
+        classes: {
+          root: classes.labelRoot,
+          focused: classes.labelFocused
+        },
+        shrink: true,
+      }}
+      error={(touched && error) ? true : false}
+      helperText={touched && error}
+      required={true}
+      {...input}
+      {...custom}
+      variant='outlined'
+      margin="normal"
+      size='small'
+    />
+  )
+}
+
+export const generarInput = withStyles(styles)(renderAlgo);
+export const generarDate = withStyles(styles)(renderDate);

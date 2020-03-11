@@ -9,189 +9,216 @@
 //     super();
 //     this.state = {
 //       people: [
-//         { name: "Keanu Reeves", profession: "Actor" ,age:"32"},
-//         { name: "Lionel Messi", profession: "Football Player",age:"56" },
-//         { name: "Cristiano Ronaldo", profession: "Football Player",age:"22" },
-//         { name: "Jack Nicklaus", profession: "Golf Player",age:"43" },
+//         { name: "Keanu Reeves", profession: "Actor", age: "32" },
+//         { name: "Lionel Messi", profession: "Football Player", age: "56" },
+//         { name: "Cristiano Ronaldo", profession: "Football Player", age: "22" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Keanu Reeves", profession: "Actor", age: "32" },
+//         { name: "Lionel Messi", profession: "Football Player", age: "56" },
+//         { name: "Cristiano Ronaldo", profession: "Football Player", age: "22" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Keanu Reeves", profession: "Actor", age: "32" },
+//         { name: "Lionel Messi", profession: "Football Player", age: "56" },
+//         { name: "Cristiano Ronaldo", profession: "Football Player", age: "22" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Keanu Reeves", profession: "Actor", age: "32" },
+//         { name: "Lionel Messi", profession: "Football Player", age: "56" },
+//         { name: "Cristiano Ronaldo", profession: "Football Player", age: "22" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+//         { name: "Jack Nicklaus", profession: "Golf Player", age: "43" },
+
 //       ]
 //     }
 //   }
 
+//   headRows = () => {
+//     return [
+//       { id: 'ID', name: 'Name', email: 'Email', city: 'City', expenses: 'Sum' },
+//     ]
+//   }
+
+//   // function footRows() {
+//   //   return [
+//   //     { id: 'ID', name: 'Name', email: 'Email', city: 'City', expenses: 'Sum' },
+//   //   ]
+//   // }
+
+//   // function columns() {
+//   //   return [
+//   //     { header: 'ID', dataKey: 'id' },
+//   //     { header: 'Name', dataKey: 'name' },
+//   //     { header: 'Email', dataKey: 'email' },
+//   //     { header: 'City', dataKey: 'city' },
+//   //     { header: 'Exp', dataKey: 'expenses' },
+//   //   ]
+//   // }
+
+//   // function data(rowCount) {
+//   //   rowCount = rowCount || 10
+//   //   let body = []
+//   //   for (var j = 1; j <= rowCount; j++) {
+//   //     body.push({
+//   //       id: j,
+//   //       name: faker.name.findName(),
+//   //       email: faker.internet.email(),
+//   //       city: faker.address.city(),
+//   //       expenses: faker.finance.amount(),
+//   //     })
+//   //   }
+//   //   return body
+//   // }
+
+//   bodyRows = (rowCount) => {
+//     rowCount = rowCount || 10
+//     let body = []
+//     for (var j = 1; j <= rowCount; j++) {
+//       body.push({
+//         id: j,
+//         name: window.faker.name.findName(),
+//         email: window.faker.internet.email(),
+//         city: window.faker.address.city(),
+//         expenses: window.faker.finance.amount(),
+//       })
+//     }
+//     return body
+//   }
+
 //   exportPDF = () => {
-//     const unit = "pt";
-//     const size = "A4"; // Use A1, A2, A3 or A4
-//     const orientation = "portrait"; // portrait or landscape
-
-//     const marginLeft = 40;
-//     const doc = new jsPDF(orientation, unit, size);
-
-//     doc.setFontSize(15);
-
-//     const title = "My Awesome Report";
+//     var doc = new jsPDF()
+//     var totalPagesExp = '{total_pages_count_string}'
 //     const headers = [["NAME", "PROFESSION","AGE"]];
-
 //     const data = this.state.people.map(elt=> [elt.name, elt.profession,elt.age]);
-
-//     let content = {
-//       startY: 50,
+//     doc.autoTable({
 //       head: headers,
-//       body: data
-//     };
-
-//     doc.text(title, marginLeft, 40);
-//     doc.autoTable(content);
-//     doc.save("report.pdf")
+//       body: data,
+//       didDrawPage: function(data) {
+//         // Header
+//         doc.setFontSize(20)
+//         doc.setTextColor(40)
+//         doc.setFontStyle('normal')
+//         // if (base64Img) {
+//         //   doc.addImage(base64Img, 'JPEG', data.settings.margin.left, 15, 10, 10)
+//         // }
+//         doc.text('Report', data.settings.margin.left + 15, 22)
+  
+//         // Footer
+//         var str = 'Page ' + doc.internal.getNumberOfPages()
+//         // Total page number plugin only available in jspdf v1.0+
+//         if (typeof doc.putTotalPages === 'function') {
+//           str = str + ' of ' + totalPagesExp
+//         }
+//         doc.setFontSize(10)
+  
+//         // jsPDF 1.4+ uses getWidth, <1.4 uses .width
+//         var pageSize = doc.internal.pageSize
+//         var pageHeight = pageSize.height ? pageSize.height : pageSize.getHeight()
+//         doc.text(str, data.settings.margin.left, pageHeight - 10)
+//       },
+//       margin: { top: 30 },
+//     })
+//     doc.save('myrepo.pdf');
 //   }
 
 //   render() {
-//     return (
+//       return(
 //       <div>
-//         <button onClick={() => this.exportPDF()}>Generate Report</button>
-//       </div>
+//     <button onClick={() => this.exportPDF()}>Generate Report</button>
+//       </div >
 //     );
 //   }
 // }
-
-// export default Reporte;
+// export default Reporte
+import 'date-fns';
 import React from 'react';
+import Grid from '@material-ui/core/Grid';
+import DateFnsUtils from '@date-io/date-fns';
 import {
-  fade,
-  ThemeProvider,
-  withStyles,
-  makeStyles,
-  createMuiTheme,
-} from '@material-ui/core/styles';
-import InputBase from '@material-ui/core/InputBase';
-import InputLabel from '@material-ui/core/InputLabel';
-import TextField from '@material-ui/core/TextField';
-import FormControl from '@material-ui/core/FormControl';
-import { green } from '@material-ui/core/colors';
+  MuiPickersUtilsProvider,
+  KeyboardTimePicker,
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
 
-const CssTextField = withStyles({
-  root: {
-    '& label.Mui-focused': {
-      color: 'green',
-    },
-    '& .MuiInput-underline:after': {
-      borderBottomColor: 'green',
-    },
-    '& .MuiOutlinedInput-root': {
-      '& fieldset': {
-        borderColor: 'red',
-      },
-      '&:hover fieldset': {
-        borderColor: 'yellow',
-      },
-      '&.Mui-focused fieldset': {
-        borderColor: 'green',
-      },
-    },
-  },
-})(TextField);
+export default function MaterialUIPickers() {
+  // The first commit of Material-UI
+  const [selectedDate, setSelectedDate] = React.useState(new Date('2020-03-18T21:11:54'));
 
-const BootstrapInput = withStyles(theme => ({
-  root: {
-    'label + &': {
-      marginTop: theme.spacing(3),
-    },
-  },
-  input: {
-    borderRadius: 4,
-    position: 'relative',
-    backgroundColor: theme.palette.common.white,
-    border: '1px solid #ced4da',
-    fontSize: 16,
-    width: 'auto',
-    padding: '10px 12px',
-    transition: theme.transitions.create(['border-color', 'box-shadow']),
-    // Use the system font instead of the default Roboto font.
-    fontFamily: [
-      '-apple-system',
-      'BlinkMacSystemFont',
-      '"Segoe UI"',
-      'Roboto',
-      '"Helvetica Neue"',
-      'Arial',
-      'sans-serif',
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-    ].join(','),
-    '&:focus': {
-      boxShadow: `${fade(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
-      borderColor: theme.palette.primary.main,
-    },
-  },
-}))(InputBase);
-
-const useStylesReddit = makeStyles(theme => ({
-  root: {
-    border: '1px solid #e2e2e1',
-    overflow: 'hidden',
-    borderRadius: 4,
-    backgroundColor: '#fcfcfb',
-    transition: theme.transitions.create(['border-color', 'box-shadow']),
-    '&:hover': {
-      backgroundColor: '#fff',
-    },
-    '&$focused': {
-      backgroundColor: '#fff',
-      boxShadow: `${fade(theme.palette.primary.main, 0.25)} 0 0 0 2px`,
-      borderColor: theme.palette.primary.main,
-    },
-  },
-  focused: {},
-}));
-
-function RedditTextField(props) {
-  const classes = useStylesReddit();
-
-  return <TextField InputProps={{ classes, disableUnderline: true }} {...props} />;
-}
-
-const useStyles = makeStyles(theme => ({
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-  },
-  margin: {
-    margin: theme.spacing(1),
-  },
-}));
-
-const ValidationTextField = withStyles({
-  root: {
-    '& input:valid + fieldset': {
-      borderColor: 'green',
-      borderWidth: 2,
-    },
-    '& input:invalid + fieldset': {
-      borderColor: 'red',
-      borderWidth: 2,
-    },
-    '& input:valid:focus + fieldset': {
-      borderLeftWidth: 6,
-      padding: '4px !important', // override inline-style
-    },
-  },
-})(TextField);
-
-const theme = createMuiTheme({
-  palette: {
-    primary: green,
-  },
-});
-
-export default function CustomizedInputs() {
-  const classes = useStyles();
+  const handleDateChange = date => {
+    setSelectedDate(date);
+  };
 
   return (
     
-      <CssTextField
-        className={classes.margin}
-        label="Custom CSS"
-        variant="outlined"
-        id="custom-css-outlined-input"
-      />
+    // <MuiPickersUtilsProvider utils={DateFnsUtils}>
+    //   <Grid container justify="space-around">
+    //     {/* <KeyboardDatePicker
+    //       disableToolbar
+    //       variant="inline"
+    //       format="MM/dd/yyyy"
+    //       margin="normal"
+    //       id="date-picker-inline"
+    //       label="Date picker inline"
+    //       value={selectedDate}
+    //       onChange={handleDateChange}
+    //       KeyboardButtonProps={{
+    //         'aria-label': 'change date',
+    //       }}
+    //     /> */}
+    //     <KeyboardDatePicker
+    //       margin="normal"
+    //       id="date-picker-dialog"
+    //       label="Date picker dialog"
+    //       format="MM/dd/yyyy"
+    //       minDate={selectedDate}
+    //       value={selectedDate}
+    //       onChange={handleDateChange}
+    //       KeyboardButtonProps={{
+    //         'aria-label': 'change date',
+    //       }}
+    //     />
+    //     {/* <KeyboardTimePicker
+    //       margin="normal"
+    //       id="time-picker"
+    //       label="Time picker"
+    //       value={selectedDate}
+    //       onChange={handleDateChange}
+    //       KeyboardButtonProps={{
+    //         'aria-label': 'change time',
+    //       }}
+    //     /> */}
+    //   </Grid>
+    // </MuiPickersUtilsProvider>
+    <>
+    </>
   );
 }
