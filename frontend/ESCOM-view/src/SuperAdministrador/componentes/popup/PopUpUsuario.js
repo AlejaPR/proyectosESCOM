@@ -9,7 +9,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
-import { generarInput, generarSelect, generarDate,ReduxFormSelect} from '../../utilitario/GenerarInputs.js'
+import { generarInput, generarSelect, generarDate} from '../../utilitario/GenerarInputs.js'
 import AddIcon from '@material-ui/icons/Add';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import CancelIcon from '@material-ui/icons/Cancel';
@@ -175,7 +175,7 @@ class PopUpUsuario extends React.Component {
 
                 <div className="row">
                   <div className="col-sm-12">
-                    <Field name="fechaNacimiento" type='date'   validate={[requerido]} component={generarDate} label="Fecha de nacimiento" />
+                    <Field name="fechaNacimiento" type='date'   validate={[requerido,fechaNacimiento]} component={generarDate} label="Fecha de nacimiento" />
                   </div>
                 </div>
                 <br />

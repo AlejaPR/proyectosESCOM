@@ -37,6 +37,7 @@ export function actionConsultarReporte(token, reporte) {
                     });
                 } else {
                     if (error.request) {
+                        debugger;
                         var o = JSON.parse(error.request.response);
                         let respuesta = mensajesDeError(o.respuesta);
                         if (respuesta !== '') {
@@ -47,7 +48,7 @@ export function actionConsultarReporte(token, reporte) {
                         } else {
                             dispatch({
                                 type: MENSAJE_REPORTE,
-                                mensaje: 'Ya existen los datos registrados previamente'
+                                mensaje: 'No se encontraron reportes'
                             });
                         }
                     }
@@ -57,3 +58,22 @@ export function actionConsultarReporte(token, reporte) {
 
     }
 }
+
+
+export function actualizarReporte() {
+    return (dispatch, getState) => {
+        dispatch({
+            type: REPORTES,
+            reporte: []
+        });
+    };
+}
+export function actualizarMensaje(mensaje) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: MENSAJE_REPORTE,
+            mensaje: mensaje
+        });
+    };
+}
+

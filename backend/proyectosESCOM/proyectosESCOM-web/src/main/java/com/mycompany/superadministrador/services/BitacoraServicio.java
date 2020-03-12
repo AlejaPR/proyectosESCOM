@@ -55,7 +55,7 @@ public class BitacoraServicio {
                 return Response.status(Response.Status.OK).entity(consultaBitacora).build();
             }else{
                 respuesta.setRespuesta("No se encontraron reportes");
-                return Response.status(Response.Status.OK).entity(respuesta).build();
+                return Response.status(Response.Status.NOT_FOUND).entity(respuesta).build();
             }
 
         } catch (ExcepcionGenerica e) {

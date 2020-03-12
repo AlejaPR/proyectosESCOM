@@ -1,10 +1,13 @@
 import React from 'react';
 
+import 'react-notifications/lib/notifications.css';
+
+
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import MaterialTable from 'material-table';
 //componentes
-import { generarInput } from '../../utilitario/GenerarInputs.js'
+import { generarInput, generarDate } from '../../utilitario/GenerarInputs.js'
 
 import Barra from '../general/BarraDirecciones.js'
 import { formatoFecha } from '../../utilitario/MensajesError.js';
@@ -14,7 +17,8 @@ import SearchIcon from '@material-ui/icons/Search';
 import ReplayIcon from '@material-ui/icons/Replay';
 import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf';
 import { connect } from 'react-redux';
-import { actionConsultarReporte } from '../../actions/actionReporte.js'
+import { actionConsultarReporte, actualizarReporte, actualizarMensaje } from '../../actions/actionReporte.js';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
 import jsPDF from "jspdf";
@@ -24,18 +28,38 @@ class ContenidoReportes extends React.Component {
 	constructor(props) {
 		super(props);
 		this.reiniciar = this.reiniciar.bind(this);
-		this.exportPDF=this.exportPDF.bind(this);
+		this.exportPDF = this.exportPDF.bind(this);
 	}
 	state = {
 		valor: null,
-		logo:''
+		textoAyuda: 'Buscar',
+		fechaInicio: [],
+		fechaFin: []
 	}
 	retornarValor = () => {
 		return this.state.valor;
 	}
+
 	handleChangeDos = selectedOption => {
+		switch (selectedOption.value) {
+			case 1:
+				this.setState({ textoAyuda: 'Ingrese el correo o numero de identificacion del usuario' })
+				break;
+			case 2:
+				this.setState({ textoAyuda: 'Ingrese el nombre del modulo ' })
+
+				break;
+			case 3:
+				this.setState({ textoAyuda: 'Ingrese una palabra clave de la actividad' })
+
+				break;
+			default:
+				this.setState({ textoAyuda: 'Buscar' })
+				break
+		}
 		this.setState({ valor: selectedOption });
 	};
+
 	actividades = () => {
 		let opciones = [];
 		opciones[0] = {
@@ -53,61 +77,119 @@ class ContenidoReportes extends React.Component {
 		return opciones;
 	}
 	componentDidUpdate() {
-		// console.log('conf', this.props.configuracion)
-		if(this.state.logo!==''){this.setState({logo:this.props.configuracion.logo})}
+		switch (this.props.mensaje) {
+			case 'No se encontraron reportes':
+				NotificationManager.warning('No se encontraron resultados');
+				break;
+			default:
+				break;
+
+		}
+		this.props.actualizarMensaje('');
 	}
 
+
+
 	handleSubmit = formValues => {
-		let reporte = {
-			idBusqueda: formValues.actividad.value,
-			palabraBusqueda: formValues.palabraBusqueda,
-			fechaInicio: formatoFecha(formValues.fechaInicio),
-			fechaFin: formatoFecha(formValues.fechaFin)
+		this.props.actualizarReporte();
+		this.props.actualizarMensaje('');
+		if (this.validarFechas(formatoFecha(formValues.fechaInicio), formatoFecha(formValues.fechaFin))) {
+			let reporte = {
+				idBusqueda: formValues.actividad.value,
+				palabraBusqueda: formValues.palabraBusqueda,
+				fechaInicio: formatoFecha(formValues.fechaInicio),
+				fechaFin: formatoFecha(formValues.fechaFin)
+			}
+			this.setState({ fechaInicio: formatoFecha(formValues.fechaInicio) });
+			this.setState({ fechaFin: formatoFecha(formValues.fechaFin) });
+			this.props.actionConsultarReporte(localStorage.getItem('Token'), reporte);
 		}
-		this.props.actionConsultarReporte(localStorage.getItem('Token'), reporte);
+	}
+
+	validarFechas = (fechaInicio, fechaFin) => {
+		if ((fechaInicio > fechaFin) | (fechaInicio.getTime() === fechaFin.getTime())) {
+			NotificationManager.warning('Ingrese un rango de fechas valido');
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	reiniciar() {
-		this.setState({ valor: null })
+		this.props.actualizarMensaje('');
+		this.setState({ valor: null });
+		this.setState({ textoAyuda: 'Buscar' })
+		this.props.actualizarReporte();
 		this.props.reset();
 	}
 
+	devolverFechaString = fechaRecibida => {
+		let meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+		let dia = fechaRecibida.getDate();
+		let mes = fechaRecibida.getUTCMonth();
+		let ano = fechaRecibida.getFullYear();
+		return `${dia}-${meses[mes]}-${ano}`;
+	}
+
+	calcularNumeroDePaginas() {
+		if (!(this.props.reporte.length === 0 | this.props.reporte === undefined)) {
+			return Math.round(this.props.reporte.length / 30) + 1;
+		}
+	}
+
 	exportPDF = () => {
-		var doc = new jsPDF()
-		var totalPagesExp = '{total_pages_count_string}'
-		const headers = [["OPERACION", "MODULO", "TABLA INVOLUCRADA", "FECHA BITACORA"]];
-		const data = this.props.reporte.map(elt => [elt.operacion, elt.nombreModulo, elt.tablaInvolucrada, elt.fechaBitacora]);
-		const logo=this.props.configuracion.logo;
-		doc.autoTable({
-			head: headers,
-			body: data,
-			didDrawPage: function (data) {
-				// Header
-				doc.setFontSize(5)
-				doc.setTextColor(40)
-				doc.setFontStyle('normal')
+		if (this.props.reporte.length === 0 | this.props.reporte === undefined) {
+			NotificationManager.error('No hay datos para exportar');
+		}
+		else {
+			var doc = new jsPDF()
+			var totalPagesExp = this.calcularNumeroDePaginas();
+			const headers = [["OPERACION", "MODULO", "TABLA INVOLUCRADA", "FECHA BITACORA", "CORREO DEL RESPONSABLE", "IP         "]];
+			const data = this.props.reporte.map(elt => [elt.operacion, elt.nombreModulo, elt.tablaInvolucrada, elt.fechaBitacora, elt.correo, elt.ip]);
+			const logo = this.props.configuracion.logo;
+			let fechaHoy = new Date();
+			const fecha = this.devolverFechaString(fechaHoy);
+			const fechaInicio = this.devolverFechaString(this.state.fechaInicio);
+			const fechaFin = this.devolverFechaString(this.state.fechaFin);
+			doc.autoTable({
 
-				
-				doc.addImage(logo, 'PNG', data.settings.margin.left, 14, 43, 15)
+				head: headers,
+				body: data,
+				headStyles: {
+					fontSize: 8,
+				},
+				bodyStyles: {
+					fontSize: 8,
+				},
+				alternateRowStyles: {
+					fontSize: 8,
+				},
+				didDrawPage: function (data) {
+					// Header
+					doc.setFontSize(10);
+					doc.setTextColor(40);
+					doc.setFontStyle('normal');
+					doc.addImage(logo, 'PNG', data.settings.margin.left, 8, 43, 15);
+					doc.text('Fecha de generacion: ' + fecha, data.settings.margin.left + 125, 12);
+					doc.text('Fecha de inicio: ' + fechaInicio, data.settings.margin.left + 125, 16);
+					doc.text('Fecha de fin: ' + fechaFin, data.settings.margin.left + 125, 20);
+					// Footer
+					var str = 'Pagina ' + doc.internal.getNumberOfPages()
+					// Total page number plugin only available in jspdf v1.0+
+					if (typeof doc.putTotalPages === 'function') {
+						str = str + ' de ' + totalPagesExp
+					}
+					doc.setFontSize(10)
 
-				doc.text('', data.settings.margin.left + 35, 22)
-				
-				// Footer
-				var str = 'Pagina ' + doc.internal.getNumberOfPages()
-				// Total page number plugin only available in jspdf v1.0+
-				if (typeof doc.putTotalPages === 'function') {
-					str = str + ' of ' + totalPagesExp
-				}
-				doc.setFontSize(10)
-
-				// jsPDF 1.4+ uses getWidth, <1.4 uses .width
-				var pageSize = doc.internal.pageSize
-				var pageHeight = pageSize.height ? pageSize.height : pageSize.getHeight()
-				doc.text(str, data.settings.margin.left, pageHeight - 10)
-			},
-			margin: { top: 30 },
-		})
-		doc.save('myrepo.pdf');
+					// jsPDF 1.4+ uses getWidth, <1.4 uses .width
+					var pageSize = doc.internal.pageSize
+					var pageHeight = pageSize.height ? pageSize.height : pageSize.getHeight()
+					doc.text(str, data.settings.margin.left, pageHeight - 10)
+				},
+				margin: { top: 30 },
+			})
+			doc.save('myrepo.pdf');
+		}
 	}
 
 	render() {
@@ -133,12 +215,12 @@ class ContenidoReportes extends React.Component {
 				}}>
 					<div className="container shadow" style={{ background: "white", padding: "27px" }}>
 						<form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
-							<div className="input-group">
-								<div className="col-sm-4">
+							<div className="row">
+								<div className="col-sm-4" style={{ paddingTop: "15px" }}>
 									<Field name="actividad" validate={[seleccione]} valor={this.retornarValor()} onChange={this.handleChangeDos} component={ReduxFormSelectDos} options={this.actividades()} />
 								</div>
 								<div className="col-sm-8">
-									<Field name="palabraBusqueda" component={generarInput} className="form-control" label="Buscar" />
+									<Field name="palabraBusqueda" component={generarInput} className="form-control" label={this.state.textoAyuda} />
 								</div>
 							</div>
 							<div className="col-sm-12" style={{
@@ -149,13 +231,13 @@ class ContenidoReportes extends React.Component {
 							}}>
 
 								<div className="row">
-									<label for="form_control_3">Fecha inicial</label>
-									<div className="col-sm-5">
-										<Field name="fechaInicio" type="date" component={generarInput} style={{ height: "35px" }} className="form-control" />
+									<div className="col-sm-6">
+
+										<Field name="fechaInicio" type="date" component={generarDate} label="Fecha de inicio" />
 									</div>
-									<label for="form_control_3">Fecha final</label>
-									<div className="col-sm-5">
-										<Field name="fechaFin" type="date" component={generarInput} style={{ height: "35px" }} className="form-control" />
+									<div className="col-sm-6">
+
+										<Field name="fechaFin" type="date" component={generarDate} label="Fecha de fin" />
 									</div>
 								</div>
 							</div>
@@ -203,7 +285,7 @@ class ContenidoReportes extends React.Component {
 									firstAriaLabel: 'oooo'
 								},
 								body: {
-									emptyDataSourceMessage: 'Ningun registro de actividad encontrado'
+									emptyDataSourceMessage: 'Ningun registro de bitacora encontrado'
 								},
 								toolbar: {
 									searchTooltip: 'Buscar',
@@ -216,6 +298,8 @@ class ContenidoReportes extends React.Component {
 								{ title: 'Nombre del modulo', field: 'nombreModulo', headerStyle: estiloCabecera, cellStyle: estiloFila },
 								{ title: 'Tabla involucrada', field: 'tablaInvolucrada', headerStyle: estiloCabecera, cellStyle: estiloFila },
 								{ title: 'Fecha de bitacora', field: 'fechaBitacora', headerStyle: estiloCabecera, cellStyle: estiloFila },
+								{ title: 'Correo del responsable', field: 'correo', headerStyle: estiloCabecera, cellStyle: estiloFila },
+								{ title: 'IP', field: 'ip', headerStyle: estiloCabecera, cellStyle: estiloFila },
 							]}
 							data={this.props.reporte}
 							options={{
@@ -235,7 +319,7 @@ class ContenidoReportes extends React.Component {
 					</div>
 
 				</div>
-
+				<NotificationContainer />
 			</div >
 		);
 	}
@@ -244,12 +328,25 @@ class ContenidoReportes extends React.Component {
 }
 
 export const ReduxFormSelectDos = props => {
+	const customStyles = {
+		option: (provided, state) => ({
+			...provided,
+			fontSize: 13
+		}),
+		control: styles => ({ ...styles, backgroundColor: 'white', fontSize: 13, fontFamily: 'sans-serif' }),
+		singleValue: (provided, state) => {
+			const opacity = state.isDisabled ? 0.5 : 1;
+			const transition = 'opacity 300ms';
+			return { ...provided, opacity, transition };
+		}
+	}
 	const { input, options } = props;
 	const { touched, error } = props.meta;
 	return (
 		<div>
 			<Select
 				{...input}
+				styles={customStyles}
 				maxMenuHeight={185}
 				isSearchable={true}
 				value={props.valor}
@@ -279,13 +376,6 @@ const estiloFila = {
 }
 
 
-const fondoBoton = {
-	background: "#ec671d",
-	fontSize: "14px",
-	fontFamily: "Open sans, sans-serif"
-
-}
-
 const estiloLetrero = {
 	paddingTop: "20px",
 	paddingRight: "12px",
@@ -305,4 +395,4 @@ let reporte = reduxForm({
 	form: 'reporte'
 })(ContenidoReportes)
 
-export default withRouter(connect(mapStateToProps, { actionConsultarReporte })(reporte));
+export default withRouter(connect(mapStateToProps, { actionConsultarReporte, actualizarReporte, actualizarMensaje })(reporte));

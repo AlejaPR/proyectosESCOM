@@ -10,12 +10,6 @@ import FormHelperText from '@material-ui/core/FormHelperText';
 import TextField from '@material-ui/core/TextField';
 import { withStyles } from "@material-ui/core/styles";
 import Select from 'react-select';
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker
-} from '@material-ui/pickers';
-import Grid from '@material-ui/core/Grid';
-import DateFnsUtils from '@date-io/date-fns';
 
 export const generarSelect = ({ input, label, type, meta: { touched, error }, children }) => (
   <div>
@@ -267,6 +261,24 @@ const styles = {
   labelFocused: {}
 };
 
+
+const stylesDate = {
+  inputRoot: {
+    fontSize: 14
+  },
+  labelRoot: {
+    fontSize: 15,
+    color: "gray",
+    heigth: '3px',
+    "&$labelFocused": {
+      color: "purple",
+      fontSize: 10
+    }
+  },
+  labelFocused: {}
+};
+
+
 function renderAlgo({
   input,
   label, classes,filas,
@@ -327,4 +339,4 @@ function renderDate({
 }
 
 export const generarInput = withStyles(styles)(renderAlgo);
-export const generarDate = withStyles(styles)(renderDate);
+export const generarDate = withStyles(stylesDate)(renderDate);
