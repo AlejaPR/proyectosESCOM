@@ -81,6 +81,9 @@ class ContenidoReportes extends React.Component {
 			case 'No se encontraron reportes':
 				NotificationManager.warning('No se encontraron resultados');
 				break;
+			case 'Sin permiso':
+				NotificationManager.warning('No tiene permisos para realizar reportes');
+				break;
 			default:
 				break;
 
