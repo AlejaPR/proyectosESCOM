@@ -651,9 +651,9 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
     @Override
     public String devolverCorreo(String token) throws ExcepcionGenerica {
         try {
-//            Token tokenDevuelto = Seguridad.desencriptar(token);
-//            String firma = tokenDevuelto.getFirma();
-            UsuarioPOJO usuario = usuarioDB.busquedaToken(token);
+            Token tokenDevuelto = Seguridad.desencriptar(token);
+            String firma = tokenDevuelto.getFirma();
+            UsuarioPOJO usuario = usuarioDB.busquedaToken(firma);
             
             if(usuario != null){
                 return usuario.getCorreoElectronico();                    
