@@ -27,7 +27,7 @@ public class Filtro implements ContainerRequestFilter {
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
         String url = requestContext.getUriInfo().getAbsolutePath().toString();
-        if (url.contains("api/login")|url.contains("api/configuracion/listarInicio")|url.contains("api/usuarios/cambiarClaveInterna")) {
+        if (url.contains("api/login")|url.contains("api/configuracion/listarInicio")) {
             return;
         }
         String token = requestContext.getHeaderString("TokenAuto");
@@ -42,7 +42,7 @@ public class Filtro implements ContainerRequestFilter {
             try {
                 if (sesionesFacade.getMapaSesiones().containsKey(token)) {
                     if (sesionesFacade.modificarVencimiento(token)) {
-                        if(url.contains("api/login/cerrarSesion")|url.contains("api/usuarios/redireccion")|url.contains("api/configuracion/listarEntorno")){
+                        if(url.contains("api/usuarios/devolverCorreo")|url.contains("api/usuarios/cambiarClaveInterna")|url.contains("api/login/cerrarSesion")|url.contains("api/usuarios/redireccion")|url.contains("api/configuracion/listarEntorno")){
                             return;
                         }
                         if (!sesionesFacade.validarPermiso(token, permiso)) {

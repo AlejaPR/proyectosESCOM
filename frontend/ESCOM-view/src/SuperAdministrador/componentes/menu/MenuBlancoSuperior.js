@@ -1,6 +1,6 @@
 import React from 'react';
 
-
+import 'react-notifications/lib/notifications.css';
 //reactstrap
 import Button from '@material-ui/core/Button';
 import { UncontrolledPopover, PopoverBody } from 'reactstrap';
@@ -13,13 +13,14 @@ import { withRouter } from 'react-router-dom';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import { NotificationContainer, NotificationManager } from 'react-notifications';
 
 
 
 
 import { connect } from 'react-redux';
 import { consultarConfiguracion } from '../../actions/actionConfiguracion.js'
-import { actionCerrarSesion, actualizarMensajeCerrar, asignarNombreUsuario } from '../../actions/actionsUsuario.js'
+import { actionCerrarSesion, actualizarMensajeCerrar, actionCambiarContrasena, asignarNombreUsuario, actionConsultarCorreo, actualizarMensajeCambiarContrasena } from '../../actions/actionsUsuario.js'
 
 class BarraSuperior extends React.Component {
 
@@ -43,6 +44,7 @@ class BarraSuperior extends React.Component {
 		this.setState(prevState => ({
 			modal: !prevState.modal
 		}));
+		this.props.actionConsultarCorreo(localStorage.getItem('Token'));
 	}
 
 	mensaje = () => {
@@ -77,7 +79,22 @@ class BarraSuperior extends React.Component {
 					break;
 			}
 		}
+		if (this.props.mensajeCambiar !== '') {
+			switch (this.props.mensajeCambiar) {
+				case 'Contraseña cambiada':
+					NotificationManager.success('Contraseña actualizada');
+					this.props.reset();
+					break;
+				case 'La contraseña nueva no puede ser igual a la antigua':
+					NotificationManager.success('La contraseña nueva no puede ser igual a la antigua');
+					this.props.reset();
+					break;
+				default:
+					break;
+			}
+		}
 		this.props.actualizarMensajeCerrar('');
+		this.props.actualizarMensajeCambiarContrasena('');
 	}
 
 	fondobotoon = () => {
@@ -106,7 +123,15 @@ class BarraSuperior extends React.Component {
 	}
 
 	handleSubmitForm = values => {
-		console.log('values', values);
+		if (values.nuevaContrasena !== values.verificacionNueva) {
+			NotificationManager.warning('Las contraseñas no coinciden');
+		} else {
+			let clave = {
+				'nuevaClave': values.nuevaContrasena,
+				'antiguaClave': values.contrasenaActual
+			}
+			this.props.actionCambiarContrasena(clave, this.props.emailUsuario, localStorage.getItem('Token'));
+		}
 	}
 	render() {
 		return (
@@ -143,7 +168,7 @@ class BarraSuperior extends React.Component {
 														<Field name="nuevaContrasena" component={RenderPasword} validate={[requerido]} label="Nueva contraseña" />
 														<Field name="verificacionNueva" component={RenderPasword} validate={[requerido]} label="Confirmar nueva contraseña" />
 														<ModalFooter>
-															<div style={{paddingRight:"120px"}}>
+															<div style={{ paddingRight: "120px" }}>
 																<Button
 																	style={{ background: this.props.configuracion.botones, fontSize: "14px", fontFamily: "sans-serif", textTransform: "none" }}
 																	className="btn btn-dark"
@@ -164,6 +189,7 @@ class BarraSuperior extends React.Component {
 						</nav>
 					</div>
 				</div>
+				<NotificationContainer />
 			</div>
 		)
 	}
@@ -185,7 +211,9 @@ function mapStateToProps(state) {
 	return {
 		configuracion: state.conf.configuracion,
 		mensaje: state.user.mensajeCerrarSesion,
-		nombreUsuario: state.user.nombreUsuario
+		nombreUsuario: state.user.nombreUsuario,
+		emailUsuario: state.user.emailUsuario,
+		mensajeCambiar: state.user.mensajeContrasena
 	}
 }
 
@@ -194,5 +222,5 @@ let formularioContrasena = reduxForm({
 })(BarraSuperior);
 
 
-export default withRouter(connect(mapStateToProps, { consultarConfiguracion, actionCerrarSesion, actualizarMensajeCerrar, asignarNombreUsuario })(formularioContrasena));
+export default withRouter(connect(mapStateToProps, { consultarConfiguracion, actionCambiarContrasena, actionCerrarSesion, actionConsultarCorreo, actualizarMensajeCerrar, actualizarMensajeCambiarContrasena, asignarNombreUsuario })(formularioContrasena));
 

@@ -60,7 +60,6 @@ export default function RenderPasword({
   return (
     <>
       <OutlinedInput
-        id="outlined-adornment-password"
         type={values.showPassword ? 'text' : 'password'}
         onChange={handleChange('password')}
         placeholder={label}

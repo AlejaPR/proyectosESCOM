@@ -126,7 +126,7 @@ const generarMensaje = ({ input, label, type, meta: { touched, error, warning } 
 	<div>
 		<div>
 			<br/>
-			{label===undefined?<div></div>:<Alert draggable={true} severity="error">{label}</Alert>}
+			{label===undefined|label==''?<div></div>:<Alert draggable={true} severity="error">{label}</Alert>}
 			<br/>
 		</div>
 	</div>

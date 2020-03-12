@@ -24,6 +24,8 @@ export const REDIRECCIONAR_LOGIN = 'REDIRECCIONAR_LOGIN';
 export const ESTADO_ASIGNAR = 'ESTADO_ASIGNAR';
 export const MODULOS_REGISTRADOS = 'MODULOS_REGISTRADOS';
 export const NOMBRE_USUARIO = 'NOMBRE_USUARIO';
+export const EMAIL_USUARIO = 'EMAIL_USUARIO';
+export const MENSAJE_CONTRASENA = 'MENSAJE_CONTRASENA';
 
 const URL_BASE = 'http://localhost:9090';
 const PERMISO_REGISTRAR = 'SA_Registrar usuarios';
@@ -31,6 +33,7 @@ const PERMISO_CONSULTAR_USUARIOS = 'SA_Consultar usuarios registrados';
 const PERMISO_EDITAR_USUARIOS = 'SA_Editar informacion de los usuarios';
 const PERMISO_ASIGNACION_ACTIVIDADES = 'SA_Asignacion de actividades a los usuarios';
 const PERMISO_SUSPENDER_ACTIVAR = 'SA_Suspender/activar usuarios';
+const PERMISO_CAMBIAR_CONTRASENA='SA_Cambiar contrasena';
 
 export function actionLoginUsuario(correo, contrasena, cambiar) {
     var crypto = require('crypto');
@@ -75,6 +78,7 @@ export function actionLoginUsuario(correo, contrasena, cambiar) {
 }
 
 
+
 export function actionCerrarSesion(token) {
     const headers = {
         'Content-Type': 'application/json',
@@ -99,6 +103,38 @@ export function actionCerrarSesion(token) {
 
 
 
+export function actionConsultarCorreo(token) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token)
+    }
+    return (dispatch, getState) => {
+        axios.get(`${URL_BASE}/proyectosESCOM-web/api/usuarios/devolverCorreo/${desencriptar(token)}`, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: EMAIL_USUARIO,
+                    email: response.data
+                });
+            }).catch((error) => {
+                if (error.request.response === '') {
+
+                } else {
+                    if (error.request) {
+                        var o = JSON.parse(error.request.response);
+                        let respuesta = mensajesDeError(o.respuesta);
+                        if (respuesta === 'Sin permiso') {
+                            dispatch({
+                                type: EMAIL_USUARIO,
+                                email: true
+                            });
+                        } else {
+                            //
+                        }
+                    }
+                }
+            });
+    };
+}
 
 export function actionConsultarUsuarios(token) {
     const headers = {
@@ -132,6 +168,57 @@ export function actionConsultarUsuarios(token) {
                 }
             });
     };
+}
+
+export function actionCambiarContrasena(clave, correo, token) {
+    var crypto = require('crypto');
+    let claveObj={
+        'nuevaClave':crypto.createHmac('sha256', correo).update(clave.nuevaClave).digest('hex'),
+        'antiguaClave':crypto.createHmac('sha256', correo).update(clave.antiguaClave).digest('hex'),
+        'token':desencriptar(token)
+    }
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token)
+    }
+    claveObj.datosSolicitud = {
+        'ip': localStorage.getItem('Ip'),
+        'token': desencriptar(token),
+        'operacion': PERMISO_CAMBIAR_CONTRASENA
+    };
+    return (dispatch, getState) => {
+        axios.post(`${URL_BASE}/proyectosESCOM-web/api/usuarios/cambiarClaveInterna`, claveObj, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: MENSAJE_CONTRASENA,
+                    mensaje: 'Contraseña cambiada'
+                });
+            }).catch((error) => {
+                if (error.request.response === '') {
+                    dispatch({
+                        type: MENSAJE_CONTRASENA,
+                        mensaje: 'Servidor fuera de servicio temporalmente'
+                    });
+                } else {
+                    if (error.request) {
+                        var o = JSON.parse(error.request.response);
+                        let respuesta = mensajesDeError(o.respuesta);
+                        if (respuesta !== '') {
+                            dispatch({
+                                type: MENSAJE_CONTRASENA,
+                                mensaje: respuesta
+                            });
+                        } else {
+                            dispatch({
+                                type: MENSAJE_CONTRASENA,
+                                mensaje: 'Ya existen los datos registrados previamente'
+                            });
+                        }
+                    }
+                }
+
+            });
+    }
 }
 
 export function actionConsultarModulosAcceso(token) {
@@ -641,6 +728,15 @@ export function actualizarMensajeAsignar(mensaje) {
     return (dispatch, getState) => {
         dispatch({
             type: MENSAJE_ASIGNAR,
+            mensaje: mensaje
+        });
+    };
+}
+
+export function actualizarMensajeCambiarContrasena(mensaje) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: MENSAJE_CONTRASENA,
             mensaje: mensaje
         });
     };

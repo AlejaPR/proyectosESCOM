@@ -582,15 +582,16 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         }
         return false;
     }
-    
+
     /**
-     * Metodo que llama a la consulta para obtener la lista de usuarios para el modulo documental
+     * Metodo que llama a la consulta para obtener la lista de usuarios para el
+     * modulo documental
      *
      * @return
-     * 
+     *
      */
     @Override
-    public List<UsuarioPOJO> devolverUsuariosModuloDocumental(){
+    public List<UsuarioPOJO> devolverUsuariosModuloDocumental() {
         try {
             List<UsuarioPOJO> usuariosResultado = usuarioDB.listarUsuariosModuloDocumental();
             if (!usuariosResultado.isEmpty()) {
@@ -601,11 +602,12 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             }
         } catch (Exception ex) {
             return null;
-        } 
+        }
     }
-    
+
     /**
-     * Metodo que llama a la consulta para cambiar contraseña interna del usuario
+     * Metodo que llama a la consulta para cambiar contraseña interna del
+     * usuario
      *
      * @param clavePOJO
      * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
@@ -617,16 +619,17 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             Token tokenDevuelto = Seguridad.desencriptar(clavePOJO.getToken());
             String firma = tokenDevuelto.getFirma();
             UsuarioPOJO usuario = usuarioDB.busquedaToken(firma);
-            usuario.getDatosSolicitud().setTablaInvolucrada(TABLA);
-            
-            if(usuario != null){
-                if(!clavePOJO.getAntiguaClave().equals(clavePOJO.getNuevaClave())){
-                    usuarioDB.cambiarClaveInterna(clavePOJO.getNuevaClave(), usuario);              
-                    bitacora.registrarEnBitacora(usuario.getDatosSolicitud());
-                }else{
+            clavePOJO.setAntiguaClave(Seguridad.generarHash(clavePOJO.getAntiguaClave()));
+            clavePOJO.setNuevaClave(Seguridad.generarHash(clavePOJO.getNuevaClave()));
+            if (usuario != null) {
+                if (!clavePOJO.getAntiguaClave().equals(clavePOJO.getNuevaClave())) {
+                    usuarioDB.cambiarClaveInterna(clavePOJO.getNuevaClave(), usuario);
+                    clavePOJO.getDatosSolicitud().setTablaInvolucrada(TABLA);
+                    bitacora.registrarEnBitacora(clavePOJO.getDatosSolicitud());
+                } else {
                     throw new ExcepcionGenerica("La contraseña nueva no puede ser igual a la antigua");
                 }
-            }else{
+            } else {
                 throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la modificacion del usuario ");
             }
 
@@ -635,16 +638,17 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         } catch (NoResultException ex) {
             throw new ExcepcionGenerica("El usuario no existe");
         } catch (Exception ex) {
-            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+            throw new ExcepcionGenerica(ex.getMessage());
         }
 
     }
-    
+
     /**
-     * Metodo que llama a la consulta para cambiar contraseña interna del usuario
+     * Metodo que llama a la consulta para cambiar contraseña interna del
+     * usuario
      *
      * @param token
-     * @return 
+     * @return
      * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
      *
      */
@@ -654,12 +658,12 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             Token tokenDevuelto = Seguridad.desencriptar(token);
             String firma = tokenDevuelto.getFirma();
             UsuarioPOJO usuario = usuarioDB.busquedaToken(firma);
-            
-            if(usuario != null){
-                return usuario.getCorreoElectronico();                    
-            }else{
-                    throw new ExcepcionGenerica("No se encontro el usuario");
-           }
+
+            if (usuario != null) {
+                return usuario.getCorreoElectronico();
+            } else {
+                throw new ExcepcionGenerica("No se encontro el usuario");
+            }
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la modificacion del usuario ");
         } catch (NoResultException ex) {

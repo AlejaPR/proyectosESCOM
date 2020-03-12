@@ -287,7 +287,6 @@ public class UsuarioServicio {
     public Response redireccion(@PathParam("token") String token) {
         try {
            List<ModuloPOJO> listaModulo= usuarioLogica.redireccionUsuario(token);
-            System.out.println("Size de redi"+listaModulo.size());
             return Response.status(Response.Status.OK).entity(listaModulo).build();
         } catch (ExcepcionGenerica e) {
             respuesta.setRespuesta("Sin acceso al servicio");
@@ -314,7 +313,7 @@ public class UsuarioServicio {
             respuesta.setRespuesta("Contraseña modificada exitosamente");
             return Response.status(Response.Status.OK).entity(respuesta).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("No se ha podido modificar la contraseña");
+            respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
         } catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error en el servidor ");
