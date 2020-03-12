@@ -14,6 +14,7 @@ public class ClavePOJO {
     private String token;
     private String antiguaClave;
     private String nuevaClave;
+    private DatosSolicitudPOJO datosSolicitud;
 
     public ClavePOJO() {
     }
@@ -47,6 +48,14 @@ public class ClavePOJO {
 
     public void setNuevaClave(String nuevaClave) {
         this.nuevaClave = nuevaClave;
+    }
+
+    public DatosSolicitudPOJO getDatosSolicitud() {
+        return datosSolicitud;
+    }
+
+    public void setDatosSolicitud(DatosSolicitudPOJO datosSolicitud) {
+        this.datosSolicitud = datosSolicitud;
     }
 
     

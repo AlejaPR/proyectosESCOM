@@ -56,5 +56,7 @@ public interface LogicaUsuarioFacadeLocal {
     public List<UsuarioPOJO> devolverUsuariosModuloDocumental();
     
     public void cambiarClaveInterna(ClavePOJO clavePOJO) throws ExcepcionGenerica ;
+    
+    public String devolverCorreo(String token) throws ExcepcionGenerica ;
 
 }

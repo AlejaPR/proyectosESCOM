@@ -314,6 +314,29 @@ public class UsuarioServicio {
             respuesta.setRespuesta("Contraseña modificada exitosamente");
             return Response.status(Response.Status.OK).entity(respuesta).build();
         } catch (ExcepcionGenerica e) {
+            respuesta.setRespuesta("No se ha podido modificar la contraseña");
+            return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
+        } catch (Exception e) {
+            respuesta.setRespuesta("Ocurrio un error en el servidor ");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
+        }
+    }
+    
+    /**
+     * Servicio que devuelve correo y recibe token
+     *
+     * @param token
+     * 
+     * @return  *
+     */
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/devolverCorreo/{token}")
+    public Response devolverCorreo(@PathParam("token") String token) {
+        try {
+           String correoUsuario= usuarioLogica.devolverCorreo(token);
+            return Response.status(Response.Status.OK).entity(correoUsuario).build();
+        } catch (ExcepcionGenerica e) {
             respuesta.setRespuesta("Sin acceso al servicio");
             return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
         } catch (Exception e) {

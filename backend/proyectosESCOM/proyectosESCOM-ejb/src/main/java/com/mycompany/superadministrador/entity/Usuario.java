@@ -85,6 +85,10 @@ public class Usuario implements Serializable {
     @Size(max = 300)
     @Column(name = "USR_CONTRASENA")
     private String contrasena;
+    
+    @Column(name = "USR_FECHAINGRESO")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaIngreso;
 
     @JoinColumn(name = "FK_USR_IDTIPODOCUMENTO", referencedColumnName = "PK_TIP_IDTIPODOCUMENTO")
     @ManyToOne
@@ -97,7 +101,8 @@ public class Usuario implements Serializable {
 
     }
 
-    public Usuario(String token, Integer numeroDocumento, String apellido, String estado, Date fechaNacimiento, Integer numeroIntentos, String nombre, Date ultimaModificacion, String correoElectronico, String contrasena, TipoDocumento tipoDocumento) {
+    public Usuario(String token, Integer numeroDocumento, String apellido, String estado, Date fechaNacimiento, Integer numeroIntentos,
+            String nombre, Date ultimaModificacion, String correoElectronico, String contrasena, TipoDocumento tipoDocumento, Date fechaIngreso) {
         this.token = token;
         this.numeroDocumento = numeroDocumento;
         this.apellido = apellido;
@@ -109,6 +114,7 @@ public class Usuario implements Serializable {
         this.correoElectronico = correoElectronico;
         this.contrasena = contrasena;
         this.tipoDocumento = tipoDocumento;
+        this.fechaIngreso = fechaIngreso;
     }
 
     public Integer getIdUsuario() {
@@ -213,6 +219,14 @@ public class Usuario implements Serializable {
 
     public void setListaUsuarioActividad(List<UsuarioActividad> listaUsuarioActividad) {
         this.listaUsuarioActividad = listaUsuarioActividad;
+    }
+
+    public Date getFechaIngreso() {
+        return fechaIngreso;
+    }
+
+    public void setFechaIngreso(Date fechaIngreso) {
+        this.fechaIngreso = fechaIngreso;
     }
 
     

@@ -80,6 +80,12 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             if (usuario.getEstado().equals("Suspendido")) {
                 throw new ExcepcionGenerica("Cuenta suspendida temporalmente");
             }
+//            if(usuario.getFechaIngreso().before(new Date())){
+//                throw new ExcepcionGenerica("Cuenta suspendida temporalmente");
+//            }
+//            if(usuario.getNumeroIntentos()> 3){
+//                
+//            }
             Seguridad token = new Seguridad();
             String[] actividad = usuarioDB.consultarActividadesUsuario(usuario.getIdUsuario());
             Gson gson = new Gson();
@@ -611,11 +617,12 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             Token tokenDevuelto = Seguridad.desencriptar(clavePOJO.getToken());
             String firma = tokenDevuelto.getFirma();
             UsuarioPOJO usuario = usuarioDB.busquedaToken(firma);
-        
+            usuario.getDatosSolicitud().setTablaInvolucrada(TABLA);
+            
             if(usuario != null){
                 if(!clavePOJO.getAntiguaClave().equals(clavePOJO.getNuevaClave())){
                     usuarioDB.cambiarClaveInterna(clavePOJO.getNuevaClave(), usuario);              
-                    
+                    bitacora.registrarEnBitacora(usuario.getDatosSolicitud());
                 }else{
                     throw new ExcepcionGenerica("La contraseña nueva no puede ser igual a la antigua");
                 }
@@ -623,6 +630,36 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
                 throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la modificacion del usuario ");
             }
 
+        } catch (NullPointerException ex) {
+            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la modificacion del usuario ");
+        } catch (NoResultException ex) {
+            throw new ExcepcionGenerica("El usuario no existe");
+        } catch (Exception ex) {
+            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+        }
+
+    }
+    
+    /**
+     * Metodo que llama a la consulta para cambiar contraseña interna del usuario
+     *
+     * @param token
+     * @return 
+     * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
+     *
+     */
+    @Override
+    public String devolverCorreo(String token) throws ExcepcionGenerica {
+        try {
+//            Token tokenDevuelto = Seguridad.desencriptar(token);
+//            String firma = tokenDevuelto.getFirma();
+            UsuarioPOJO usuario = usuarioDB.busquedaToken(token);
+            
+            if(usuario != null){
+                return usuario.getCorreoElectronico();                    
+            }else{
+                    throw new ExcepcionGenerica("No se encontro el usuario");
+           }
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la modificacion del usuario ");
         } catch (NoResultException ex) {

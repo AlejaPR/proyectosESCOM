@@ -155,7 +155,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         String contrasena = Seguridad.generarHash(usuario.getContrasena());
         usuario.setContrasena(contrasena);
         em.createNativeQuery("INSERT INTO TBL_USUARIO (USR_TOKEN,USR_NUMERODOCUMENTO,USR_APELLIDO,USR_ESTADO,USR_FECHANACIMIENTO,USR_NUMEROINTENTOS,USR_NOMBRE,USR_ULTIMAMODIFICACION,USR_CORREOELECTRONICO,"
-                + "FK_USR_IDTIPODOCUMENTO,USR_CONTRASENA) VALUES (?,?,?,?,?,?,?,?,?,?,?)")
+                + "FK_USR_IDTIPODOCUMENTO,USR_CONTRASENA, USR_FECHAINGRESO) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)")
                 .setParameter(1, " ")
                 .setParameter(2, usuario.getNumeroDocumento())
                 .setParameter(3, usuario.getApellido())
@@ -167,6 +167,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
                 .setParameter(9, usuario.getCorreoElectronico())
                 .setParameter(10, usuario.getTipoDocumento())
                 .setParameter(11, usuario.getContrasena())
+                .setParameter(12, new Date())
                 .executeUpdate();
     }
 
