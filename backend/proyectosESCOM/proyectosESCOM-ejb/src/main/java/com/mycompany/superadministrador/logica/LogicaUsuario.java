@@ -74,31 +74,89 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
      */
     @Override
     public UsuarioPOJO loginUsuario(String correo, String contrasena) throws ExcepcionGenerica {
+
         try {
             String contrasenaEncriptada = Seguridad.generarHash(contrasena);
-            Usuario usuario = usuarioDB.consultaLogin(correo, contrasenaEncriptada);
-            if (usuario.getEstado().equals("Suspendido")) {
-                throw new ExcepcionGenerica("Cuenta suspendida temporalmente");
+            List<Usuario> listaUsuario = usuarioDB.consultaLogin(correo, contrasenaEncriptada);
+
+            if (listaUsuario.isEmpty()) {
+                //Credenciales incorrectas 
+                List<UsuarioPOJO> listaUsuarioCorreo = usuarioDB.buscarCorreoUsuario(correo);
+
+                if (!listaUsuarioCorreo.isEmpty()) {
+                    for (UsuarioPOJO usuarioCorreo : listaUsuarioCorreo) {
+                        if (usuarioCorreo.getNumeroIntentos() == 3) {
+                            Date fechaIngreso = new Date();
+                            Calendar calendar = Calendar.getInstance();
+                            calendar.setTime(fechaIngreso);
+                            calendar.add(Calendar.MINUTE, 60);
+                            usuarioDB.cambiarFechaIngreso(calendar.getTime(), usuarioCorreo);
+                            return null;
+                        } else {
+                            int intentos = usuarioCorreo.getNumeroIntentos() + 1;
+                            usuarioDB.cambiarNumeroIntentos(intentos, usuarioCorreo.getId());
+                            if (intentos == 3) {
+                                usuarioDB.cambiarNumeroIntentos(intentos, usuarioCorreo.getId());
+                                Date fechaIngreso = new Date();
+                                Calendar calendar = Calendar.getInstance();
+                                calendar.setTime(fechaIngreso);
+                                calendar.add(Calendar.MINUTE, 60);
+                                usuarioDB.cambiarFechaIngreso(calendar.getTime(), usuarioCorreo);
+                            }
+
+                            return null;
+                        }
+                    }
+
+                } else {
+                    throw new ExcepcionGenerica("No se encontro ninguna credencial que coincida");
+                }
+
+            } else {
+                //Credenciales correctas 
+                UsuarioPOJO usuarioRespuesta = new UsuarioPOJO();
+                for (Usuario usuario : listaUsuario) {
+                    if (usuario.getEstado().equals("Suspendido")) {
+                        throw new ExcepcionGenerica("Cuenta suspendida temporalmente");
+                    } else {
+                        if (usuario.getFechaIngreso() != null) {
+                            //valida si la fecha ingreso esta antes de la actual
+                            if (usuario.getFechaIngreso().after(new Date())) {
+                                throw new ExcepcionGenerica("Cuenta suspendida temporalmente por intentos erroneos");
+                            } else {
+                                usuarioDB.cambiarIntentosConFecha(usuario);
+                                Seguridad token = new Seguridad();
+                                String[] actividad = usuarioDB.consultarActividadesUsuario(usuario.getIdUsuario());
+                                Gson gson = new Gson();
+                                String actividades = gson.toJson(actividad);
+                                String tokencin = token.generarToken(usuario, actividades);
+                                usuario.setToken(Seguridad.desencriptar(tokencin).getFirma());
+                                usuarioDB.editarToken(usuario.getToken(), usuario.getIdUsuario());
+                                usuarioRespuesta.setToken(tokencin);
+                                usuarioRespuesta.setNombre(usuario.getNombre());
+                                usuarioRespuesta.setApellido(usuario.getApellido());
+                                validarTokens(tokencin);
+                                return usuarioRespuesta;
+                            }
+                        } else {
+                            Seguridad token = new Seguridad();
+                            String[] actividad = usuarioDB.consultarActividadesUsuario(usuario.getIdUsuario());
+                            Gson gson = new Gson();
+                            String actividades = gson.toJson(actividad);
+                            String tokencin = token.generarToken(usuario, actividades);
+                            usuario.setToken(Seguridad.desencriptar(tokencin).getFirma());
+                            usuarioDB.editarToken(usuario.getToken(), usuario.getIdUsuario());
+                            usuarioRespuesta.setToken(tokencin);
+                            usuarioRespuesta.setNombre(usuario.getNombre());
+                            usuarioRespuesta.setApellido(usuario.getApellido());
+                            validarTokens(tokencin);
+                        }
+
+                    }
+                }
+                return usuarioRespuesta;
             }
-//            if(usuario.getFechaIngreso().before(new Date())){
-//                throw new ExcepcionGenerica("Cuenta suspendida temporalmente");
-//            }
-//            if(usuario.getNumeroIntentos()> 3){
-//                
-//            }
-            Seguridad token = new Seguridad();
-            String[] actividad = usuarioDB.consultarActividadesUsuario(usuario.getIdUsuario());
-            Gson gson = new Gson();
-            String actividades = gson.toJson(actividad);
-            String tokencin = token.generarToken(usuario, actividades);
-            usuario.setToken(Seguridad.desencriptar(tokencin).getFirma());
-            usuarioDB.editarToken(usuario.getToken(), usuario.getIdUsuario());
-            UsuarioPOJO usuarioRespuesta = new UsuarioPOJO();
-            usuarioRespuesta.setToken(tokencin);
-            usuarioRespuesta.setNombre(usuario.getNombre());
-            usuarioRespuesta.setApellido(usuario.getApellido());
-            validarTokens(tokencin);
-            return usuarioRespuesta;
+
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer el login del usuario ");
         } catch (NoResultException ex) {
@@ -110,6 +168,7 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         } catch (Exception ex) {
             throw new ExcepcionGenerica("Ocurrio una excepcion ");
         }
+        return null;
     }
 
     /**
@@ -623,18 +682,22 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             clavePOJO.setNuevaClave(Seguridad.generarHash(clavePOJO.getNuevaClave()));
             if (usuario != null) {
                 if (!clavePOJO.getAntiguaClave().equals(clavePOJO.getNuevaClave())) {
-                    usuarioDB.cambiarClaveInterna(clavePOJO.getNuevaClave(), usuario);
-                    clavePOJO.getDatosSolicitud().setTablaInvolucrada(TABLA);
-                    bitacora.registrarEnBitacora(clavePOJO.getDatosSolicitud());
+                    if (!clavePOJO.getNuevaClave().equals(usuario.getContrasena())) {
+                        usuarioDB.cambiarClaveInterna(clavePOJO.getNuevaClave(), usuario);
+                        clavePOJO.getDatosSolicitud().setTablaInvolucrada(TABLA);
+                        bitacora.registrarEnBitacora(clavePOJO.getDatosSolicitud());
+                    } else {
+                        throw new ExcepcionGenerica("La contraseña nueva no puede ser igual a la antigua");
+                    }
                 } else {
                     throw new ExcepcionGenerica("La contraseña nueva no puede ser igual a la antigua");
                 }
             } else {
-                throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la modificacion del usuario ");
+                throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
             }
 
         } catch (NullPointerException ex) {
-            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la modificacion del usuario ");
+            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (NoResultException ex) {
             throw new ExcepcionGenerica("El usuario no existe");
         } catch (Exception ex) {

@@ -11,6 +11,7 @@ import java.util.List;
 import javax.ejb.Local;
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
 import com.mycompany.superadministrador.entity.TipoDocumento;
+import java.util.Date;
 
 /**
  *
@@ -33,7 +34,7 @@ public interface UsuarioFacadeLocal {
 
     int count();
 
-    public Usuario consultaLogin(String correo, String contrasena);
+    public List<Usuario> consultaLogin(String correo, String contrasena);
 
     public String[] consultarActividadesUsuario(int idUsuario);
 
@@ -64,4 +65,12 @@ public interface UsuarioFacadeLocal {
     public UsuarioPOJO buscarUsuarioBitacoraId(int idUsuario);
     
     public void cambiarClaveInterna(String nuevaClave, UsuarioPOJO usuario);
+    
+    public List<UsuarioPOJO> buscarCorreoUsuario(String correo);
+    
+    public void cambiarNumeroIntentos(int numeroIntentos, int idUsuario);
+    
+    public void cambiarFechaIngreso(Date fechaIngreso, UsuarioPOJO usuario);
+    
+    public void cambiarIntentosConFecha(Usuario usuario);
 }

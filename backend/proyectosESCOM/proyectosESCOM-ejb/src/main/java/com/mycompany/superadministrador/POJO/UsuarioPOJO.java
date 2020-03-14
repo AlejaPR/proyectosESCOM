@@ -35,12 +35,17 @@ public class UsuarioPOJO {
    
    private String fechaDeNacimiento;
    
+   private Date fechaIngreso;
+   
+   private int numeroIntentos;
+   
    private DatosSolicitudPOJO datosSolicitud;
 
     public UsuarioPOJO() {
     }
    
-    public UsuarioPOJO(String correoElectronico, int numeroDocumento, String nombre, String apellido, String contrasena, Date fechaNacimiento, int tipoDocumento) {
+    public UsuarioPOJO(String correoElectronico, int numeroDocumento, String nombre, String apellido, String contrasena, 
+            Date fechaNacimiento, int tipoDocumento, Date fechaIngreso, int numeroIntentos) {
         this.correoElectronico = correoElectronico;
         this.numeroDocumento = numeroDocumento;
         this.nombre = nombre;
@@ -48,6 +53,8 @@ public class UsuarioPOJO {
         this.contrasena = contrasena;
         this.fechaNacimiento = fechaNacimiento;
         this.tipoDocumento = tipoDocumento;
+        this.fechaIngreso = fechaIngreso;
+        this.numeroIntentos = numeroIntentos;
     }
 
     public int getId() {
@@ -146,4 +153,21 @@ public class UsuarioPOJO {
         this.datosSolicitud = datosSolicitud;
     }
 
+    public Date getFechaIngreso() {
+        return fechaIngreso;
+    }
+
+    public void setFechaIngreso(Date fechaIngreso) {
+        this.fechaIngreso = fechaIngreso;
+    }
+
+    public int getNumeroIntentos() {
+        return numeroIntentos;
+    }
+
+    public void setNumeroIntentos(int numeroIntentos) {
+        this.numeroIntentos = numeroIntentos;
+    }
+
+    
 }

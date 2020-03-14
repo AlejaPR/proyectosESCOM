@@ -46,9 +46,15 @@ public class Login {
     public Response login(@PathParam("correo") String correo, @PathParam("contrasena") String contrasena) {
         try {
             UsuarioPOJO usuario = usuarioLogica.loginUsuario(correo, contrasena);
-            return Response.status(Response.Status.OK).entity(usuario).build();
+            if (usuario != null) {
+                return Response.status(Response.Status.OK).entity(usuario).build();
+            } else {
+                respuesta.setRespuesta("No se encontro ninguna credencial que coincida");
+                return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
+            }
+
         } catch (ExcepcionGenerica e) {
-            System.out.println("excep es"+e.getMessage());
+            System.out.println("excep es" + e.getMessage());
             respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
         } catch (Exception e) {

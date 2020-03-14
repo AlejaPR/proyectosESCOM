@@ -39,7 +39,11 @@ import javax.validation.constraints.Size;
             + "u.numeroDocumento=:numeroDocumento,u.fechaNacimiento=:fechaNacimiento,u.correoElectronico=:correoElectronico,u.tipoDocumento=:tipoDocumento"
             + " WHERE u.numeroDocumento=:documento"),
     @NamedQuery(name = "eliminarActividad", query = "DELETE FROM UsuarioActividad UA WHERE UA.usuario.idUsuario=:numeroDocumento AND UA.actividad.idActividad=:codigoActividad "),
-    @NamedQuery(name = "cambiarClaveInterna", query = "UPDATE Usuario u set u.contrasena = :clave WHERE u.idUsuario=:idUsuario")
+    @NamedQuery(name = "cambiarClaveInterna", query = "UPDATE Usuario u set u.contrasena = :clave WHERE u.idUsuario=:idUsuario"),
+    @NamedQuery(name = "consultaCorreo", query = "SELECT u FROM Usuario u WHERE u.correoElectronico =:correo"),
+    @NamedQuery(name = "cambiarIntentos", query = "UPDATE Usuario u set u.numeroIntentos=:numeroIntentos WHERE u.idUsuario=:idUsuario"),
+    @NamedQuery(name = "cambiarFechaIngreso", query = "UPDATE Usuario u set u.fechaIngreso = :fechaIngreso WHERE u.idUsuario= :idUsuario"),
+    @NamedQuery(name = "cambiarIntentosFecha", query = "UPDATE Usuario u set u.fechaIngreso = :fechaIngreso, u.numeroIntentos=:numeroIntentos WHERE u.idUsuario= :idUsuario"),
 
 })
 public class Usuario implements Serializable {

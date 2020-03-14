@@ -57,6 +57,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         usuarioRespuesta.setId(usuarioDB.getIdUsuario());
         usuarioRespuesta.setCorreoElectronico(usuarioDB.getCorreoElectronico());
         usuarioRespuesta.setNumeroDocumento(usuarioDB.getNumeroDocumento());
+        usuarioRespuesta.setContrasena(usuarioDB.getContrasena());
         return usuarioRespuesta;
     }
 
@@ -69,11 +70,15 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
      *
      */
     @Override
-    public Usuario consultaLogin(String correo, String contrasena) {
+    public List<Usuario> consultaLogin(String correo, String contrasena) {
+        
+        List<Usuario> listaUsuario = new ArrayList();
         TypedQuery<Usuario> consultaLogin = em.createNamedQuery("consultaLogin", Usuario.class);
         consultaLogin.setParameter("correo", correo);
         consultaLogin.setParameter("contrasena", contrasena);
-        return consultaLogin.getSingleResult();
+        listaUsuario = consultaLogin.getResultList();
+       
+        return listaUsuario;
     }
 
     /**
@@ -167,7 +172,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
                 .setParameter(9, usuario.getCorreoElectronico())
                 .setParameter(10, usuario.getTipoDocumento())
                 .setParameter(11, usuario.getContrasena())
-                .setParameter(12, new Date())
+                .setParameter(12, null)
                 .executeUpdate();
     }
 
@@ -398,5 +403,58 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         cambiarContraseña.executeUpdate();
     }
 
+    /**
+     * Metodo que realiza la consulta de correo para el login
+     *
+     * @param correo
+     * @return
+     *
+     */
+    @Override
+    public List<UsuarioPOJO> buscarCorreoUsuario(String correo) {
+        List<Usuario> devolverUsuario = new ArrayList();
+        TypedQuery<Usuario> consultaLogin = em.createNamedQuery("consultaCorreo", Usuario.class);
+        consultaLogin.setParameter("correo", correo);
+        devolverUsuario = consultaLogin.getResultList();
+        
+        List<UsuarioPOJO> listaUsuario = new ArrayList();
+        for(Usuario u: devolverUsuario){
+            UsuarioPOJO usuario = new UsuarioPOJO();
+            usuario.setId(u.getIdUsuario());
+            usuario.setFechaIngreso(u.getFechaIngreso());
+            usuario.setNumeroIntentos(u.getNumeroIntentos());
+            listaUsuario.add(usuario);
+        }
+        
+        return listaUsuario;
+    }
+    
+    @Override
+    public void cambiarNumeroIntentos(int numeroIntentos, int idUsuario) {
+        
+        TypedQuery<Usuario> cambiarIntentos = em.createNamedQuery("cambiarIntentos", Usuario.class);
+        cambiarIntentos.setParameter("numeroIntentos", numeroIntentos);
+        cambiarIntentos.setParameter("idUsuario", idUsuario);
+        cambiarIntentos.executeUpdate();
+    }
+    
+    @Override
+    public void cambiarFechaIngreso(Date fechaIngreso, UsuarioPOJO usuario) {
+        
+        TypedQuery<Usuario> cambiarFecha = em.createNamedQuery("cambiarFechaIngreso", Usuario.class);
+        cambiarFecha.setParameter("fechaIngreso", fechaIngreso);
+        cambiarFecha.setParameter("idUsuario", usuario.getId());
+        cambiarFecha.executeUpdate();
+    }
+    
+    @Override
+    public void cambiarIntentosConFecha(Usuario usuario) {
+        
+        TypedQuery<Usuario> cambiarFecha = em.createNamedQuery("cambiarIntentosFecha", Usuario.class);
+        cambiarFecha.setParameter("fechaIngreso", null);
+        cambiarFecha.setParameter("numeroIntentos", 0);
+        cambiarFecha.setParameter("idUsuario", usuario.getIdUsuario());
+        cambiarFecha.executeUpdate();
+    }
 
 }
