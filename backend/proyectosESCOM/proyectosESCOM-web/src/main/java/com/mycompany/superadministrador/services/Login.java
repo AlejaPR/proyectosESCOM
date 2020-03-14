@@ -54,7 +54,6 @@ public class Login {
             }
 
         } catch (ExcepcionGenerica e) {
-            System.out.println("excep es" + e.getMessage());
             respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
         } catch (Exception e) {

@@ -219,10 +219,10 @@ class ContenidoReportes extends React.Component {
 					<div className="container shadow" style={{ background: "white", padding: "27px" }}>
 						<form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
 							<div className="row">
-								<div className="col-sm-4" style={{ paddingTop: "15px" }}>
+								<div className="col-sm-4" style={{ paddingTop: "15px" ,zIndex:'2'}}>
 									<Field name="actividad" validate={[seleccione]} valor={this.retornarValor()} onChange={this.handleChangeDos} component={ReduxFormSelectDos} options={this.actividades()} />
 								</div>
-								<div className="col-sm-8">
+								<div className="col-sm-8" >
 									<Field name="palabraBusqueda" component={generarInput} className="form-control" label={this.state.textoAyuda} />
 								</div>
 							</div>
@@ -234,7 +234,7 @@ class ContenidoReportes extends React.Component {
 							}}>
 
 								<div className="row">
-									<div className="col-sm-6">
+									<div className="col-sm-6" style={{zIndex:'0'}}>
 
 										<Field name="fechaInicio" type="date" component={generarDate} label="Fecha de inicio" />
 									</div>
@@ -311,7 +311,7 @@ class ContenidoReportes extends React.Component {
 							}}
 						/>
 						<br />
-						<div style={{ paddingLeft: "400px" }}>
+						<div style={{ paddingLeft: "400px"}}>
 							<Button
 								onClick={() => this.exportPDF()}
 								startIcon={<PictureAsPdfIcon />}
@@ -336,7 +336,7 @@ export const ReduxFormSelectDos = props => {
 			...provided,
 			fontSize: 13
 		}),
-		control: styles => ({ ...styles, backgroundColor: 'white', fontSize: 13, fontFamily: 'sans-serif' }),
+		control: styles => ({ ...styles, backgroundColor: 'white', fontSize: 13, fontFamily: 'sans-serif',zIndex:"0" }),
 		singleValue: (provided, state) => {
 			const opacity = state.isDisabled ? 0.5 : 1;
 			const transition = 'opacity 300ms';

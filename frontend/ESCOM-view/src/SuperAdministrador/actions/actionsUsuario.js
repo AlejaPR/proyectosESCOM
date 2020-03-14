@@ -33,7 +33,7 @@ const PERMISO_CONSULTAR_USUARIOS = 'SA_Consultar usuarios registrados';
 const PERMISO_EDITAR_USUARIOS = 'SA_Editar informacion de los usuarios';
 const PERMISO_ASIGNACION_ACTIVIDADES = 'SA_Asignacion de actividades a los usuarios';
 const PERMISO_SUSPENDER_ACTIVAR = 'SA_Suspender/activar usuarios';
-const PERMISO_CAMBIAR_CONTRASENA='SA_Cambiar contrasena';
+const PERMISO_CAMBIAR_CONTRASENA = 'SA_Cambiar contrasena';
 
 export function actionLoginUsuario(correo, contrasena, cambiar) {
     var crypto = require('crypto');
@@ -172,10 +172,10 @@ export function actionConsultarUsuarios(token) {
 
 export function actionCambiarContrasena(clave, correo, token) {
     var crypto = require('crypto');
-    let claveObj={
-        'nuevaClave':crypto.createHmac('sha256', correo).update(clave.nuevaClave).digest('hex'),
-        'antiguaClave':crypto.createHmac('sha256', correo).update(clave.antiguaClave).digest('hex'),
-        'token':desencriptar(token)
+    let claveObj = {
+        'nuevaClave': crypto.createHmac('sha256', correo).update(clave.nuevaClave).digest('hex'),
+        'antiguaClave': crypto.createHmac('sha256', correo).update(clave.antiguaClave).digest('hex'),
+        'token': desencriptar(token)
     }
     const headers = {
         'Content-Type': 'application/json',
@@ -211,7 +211,7 @@ export function actionCambiarContrasena(clave, correo, token) {
                         } else {
                             dispatch({
                                 type: MENSAJE_CONTRASENA,
-                                mensaje: 'Ya existen los datos registrados previamente'
+                                mensaje: o.respuesta
                             });
                         }
                     }

@@ -682,12 +682,12 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             clavePOJO.setNuevaClave(Seguridad.generarHash(clavePOJO.getNuevaClave()));
             if (usuario != null) {
                 if (!clavePOJO.getAntiguaClave().equals(clavePOJO.getNuevaClave())) {
-                    if (!clavePOJO.getNuevaClave().equals(usuario.getContrasena())) {
+                    if (!clavePOJO.getAntiguaClave().equals(usuario.getContrasena())) {
                         usuarioDB.cambiarClaveInterna(clavePOJO.getNuevaClave(), usuario);
                         clavePOJO.getDatosSolicitud().setTablaInvolucrada(TABLA);
                         bitacora.registrarEnBitacora(clavePOJO.getDatosSolicitud());
                     } else {
-                        throw new ExcepcionGenerica("La contraseña nueva no puede ser igual a la antigua");
+                        throw new ExcepcionGenerica("La contraseña ingresada no es la correcta");
                     }
                 } else {
                     throw new ExcepcionGenerica("La contraseña nueva no puede ser igual a la antigua");
@@ -700,7 +700,9 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (NoResultException ex) {
             throw new ExcepcionGenerica("El usuario no existe");
-        } catch (Exception ex) {
+        }catch (ExcepcionGenerica ex) {
+            throw new ExcepcionGenerica(ex.getMessage());
+        }catch (Exception ex) {
             throw new ExcepcionGenerica(ex.getMessage());
         }
 

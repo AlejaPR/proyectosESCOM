@@ -40,14 +40,16 @@ class BarraSuperior extends React.Component {
 		showPassword: false,
 	}
 
-	toggle() {
+	toggle(event) {
+		event.preventDefault();
 		this.setState(prevState => ({
 			modal: !prevState.modal
 		}));
 		this.props.actionConsultarCorreo(localStorage.getItem('Token'));
 	}
 
-	mensaje = () => {
+	mensaje = (event) => {
+		event.preventDefault();
 		var token = localStorage.getItem('Token');
 		this.props.actionCerrarSesion(token);
 	}
@@ -86,7 +88,11 @@ class BarraSuperior extends React.Component {
 					this.props.reset();
 					break;
 				case 'La contraseña nueva no puede ser igual a la antigua':
-					NotificationManager.success('La contraseña nueva no puede ser igual a la antigua');
+					NotificationManager.error('La contraseña nueva no puede ser igual a la antigua');
+					this.props.reset();
+					break;
+				case 'La contraseña ingresada no es la correcta':
+					NotificationManager.error('La contraseña ingresada no es la correcta');
 					this.props.reset();
 					break;
 				default:
