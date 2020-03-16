@@ -1,8 +1,5 @@
 package com.mycompany.superadministrador.seguridad;
-
-import com.google.gson.Gson;
 import com.mycompany.superadministrador.POJO.Token;
-import com.mycompany.superadministrador.entity.Actividad;
 import com.mycompany.superadministrador.entity.Usuario;
 import com.mycompany.superadministrador.interfaces.SeguridadFacadeLocal;
 import io.jsonwebtoken.Jws;
@@ -13,26 +10,21 @@ import java.security.Key;
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.Calendar;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
-
 /**
- *
- * @author Alejandra Pabon Rodriguez 461 215 234 Clase seguridad que genera
- * token con jwt
+ * Esta es la clase encargada de generar el token con jwt
+ * @author Alejandra Pabon, Jeison Gaona
+ * Universidad de Cundinamarca
  */
 public class Seguridad implements SeguridadFacadeLocal{
 
 
-    /**
+    /**Metodo que genera el token
      * 
      * @param usuario
      * @param actividades
@@ -52,27 +44,26 @@ public class Seguridad implements SeguridadFacadeLocal{
     }
     
 
+    /**Metodo que desencripta el token
+     * @param token
+     * @return 
+     */
     public static Token desencriptar(String token) {
         String clave="A4J7A3prcc20";
         Token tokenResultado = new Token();
         Jws parseClaimsJws = Jwts.parser().setSigningKey(clave).parseClaimsJws(token);
-        
-        
-        
-        //System.out.println("header "+parseClaimsJws.getHeader());
         tokenResultado.setHeader(parseClaimsJws.getHeader().toString());
-        //System.out.println("body " + Jwts.parser().setSigningKey(clave).parseClaimsJws(token).getBody());
         tokenResultado.setBody(parseClaimsJws.getBody().toString());
-        //System.out.println("issuer " + Jwts.parser().setSigningKey(clave).parseClaimsJws(token).getBody().getIssuer());
         tokenResultado.setIssuer(Jwts.parser().setSigningKey(clave).parseClaimsJws(token).getBody().getIssuer());
-        //System.out.println("signature " + parseClaimsJws.getSignature());
         tokenResultado.setFirma(parseClaimsJws.getSignature());
-        
         return tokenResultado;
     }
 
-    
-    
+    /**Metodo que suma o resta dias a la fecha del token
+     * @param fecha
+     * @param anos
+     * @return 
+     **/
     public static Date sumarRestarDiasFecha(Date fecha, int anos) {
 
         Calendar calendar = Calendar.getInstance();
@@ -84,6 +75,10 @@ public class Seguridad implements SeguridadFacadeLocal{
         return calendar.getTime(); // Devuelve el objeto Date con los nuevos días añadidos
     }
 
+    /**Metodo que genera un hash al token para doble encriptacion
+     * @param texto
+     * @return 
+     **/
     public static String generarHash(String texto) {
         String respuesta = "";
         try {

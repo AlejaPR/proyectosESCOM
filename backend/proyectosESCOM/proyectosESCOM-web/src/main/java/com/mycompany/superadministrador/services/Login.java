@@ -1,5 +1,4 @@
 package com.mycompany.superadministrador.services;
-
 import com.mycompany.superadministrador.POJO.Respuesta;
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
 import com.mycompany.superadministrador.interfaces.LogicaUsuarioFacadeLocal;
@@ -12,29 +11,28 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 /**
- * Clase que administra el servicio para login
+ * Clase encargada de manejar el servicio de login
  *
- * @author jeison gaona - alejandra pabon
+ * @author Alejandra Pabon- Jeison Gaona
  */
 @javax.enterprise.context.RequestScoped
 @Path("login")
 public class Login {
 
-    /**
-     * LLamado del bean de usuario
-     */
+    /**Inyeccion de la interfaz logica usuario**/
     @EJB
     LogicaUsuarioFacadeLocal usuarioLogica;
 
+    /**Variable para el manejo de mensajes**/
     private Respuesta respuesta = new Respuesta();
 
+    /**Constructor vacio de la clase**/
     public Login() {
     }
 
     /**
-     * Servicio que realiza la autenticacion del usuario
+     * Servicio que realiza el ingreso de usuario
      *
      * @param correo
      * @param contrasena

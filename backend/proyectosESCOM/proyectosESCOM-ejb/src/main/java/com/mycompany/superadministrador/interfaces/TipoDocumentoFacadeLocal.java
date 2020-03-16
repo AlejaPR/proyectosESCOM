@@ -1,18 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.superadministrador.interfaces;
-
 import com.mycompany.superadministrador.POJO.TipoDocumentoPOJO;
 import com.mycompany.superadministrador.entity.TipoDocumento;
 import java.util.List;
 import javax.ejb.Local;
-
 /**
- *
- * @author aleja
+ * Esta es la interfaz para la clase tipo documento
+ * Contiene todos los metodos requeridos para la entidad tipo documento
+ * @author Alejandra Pabon, Jeison Gaona
+ * Universidad de Cundinamarca
  */
 @Local
 public interface TipoDocumentoFacadeLocal {

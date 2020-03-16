@@ -1,5 +1,4 @@
 package com.mycompany.superadministrador.ejb;
-
 import com.mycompany.superadministrador.POJO.TipoDocumentoPOJO;
 import com.mycompany.superadministrador.interfaces.TipoDocumentoFacadeLocal;
 import com.mycompany.superadministrador.entity.TipoDocumento;
@@ -9,10 +8,11 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
 /**
- *
- * @author jeison gaona - alejandra pabon
+ * Este es el bean de la entidad tipo de documento
+ * Contiene todos los metodos para la persistencia y consultas a la base de datos
+ * @author Alejandra Pabon, Jeison Gaona
+ * Universidad de Cundinamarca
  */
 @Stateless
 public class TipoDocumentoFacade extends AbstractFacade<TipoDocumento> implements TipoDocumentoFacadeLocal {
@@ -59,7 +59,4 @@ public class TipoDocumentoFacade extends AbstractFacade<TipoDocumento> implement
         }
         return tipoDocumentoLista;
     }
-
-    
-
 }

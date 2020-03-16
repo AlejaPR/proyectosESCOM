@@ -1,10 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.superadministrador.entity;
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -20,10 +14,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
-
 /**
- *
- * @author aleja
+ * Esta es la clase de la entidad modulo
+ * Contiene todos los campos para la persistencia y consultas named query
+ * @author Alejandra Pabon, Jeison Gaona
+ * Universidad de Cundinamarca
  */
 @Entity
 @Table(name = "TBL_MODULO")
@@ -36,46 +31,64 @@ import javax.validation.constraints.Size;
 })
 public class Modulo implements Serializable{
     
+    /**Variable id**/
     @Id
     @Basic(optional = false)
     @Column(name = "PK_MOD_IDMODULO")
     private Integer idModulo;
     
+    /**Variable ultima modificacion**/
     @Column(name = "MOD_ULTIMAMODIFICACION")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ultimaModificacion;
     
+    /**Variable estado de modulo**/
     @Size(max = 20)
     @Column(name = "MOD_ESTADO")
     private String estado;
     
+    /**Variable para almacenar logo de modulo**/
     @Lob
     @Column(name = "MOD_IMAGEN")
     private byte[] imagen;
     
+    /**Variable nombre modulo**/
     @Size(max = 40)
     @Column(name = "MOD_NOMBREMODULO")
     private String nombreModulo;
     
+    /**Variable acronimo**/
     @Size(max = 20)
     @Column(name = "MOD_ACRONIMO")
     private String acronimo;
     
+    /**Variable url**/
     @Size(max = 40)
     @Column(name = "MOD_URL")
     private String url;
     
+    /**Variable descripcion modulo**/
     @Size(max = 200)
     @Column(name = "MOD_DESCRIPCIONMODULO")
     private String descripcionModulo;
     
+    /**Variable para la relacion con la entidad actividad**/
     @OneToMany(mappedBy = "modulo")
     private List<Actividad> listaActividad;
 
+    /**Constructor vacio de la clase**/    
     public Modulo(){
         
     }
 
+    /**Constructor con variables
+     * @param ultimaModificacion
+     * @param estado
+     * @param imagen
+     * @param nombreModulo
+     * @param acronimo
+     * @param descripcionModulo
+     **/
     public Modulo(Date ultimaModificacion, String estado, byte[] imagen, String nombreModulo, String acronimo, String descripcionModulo) {
         this.ultimaModificacion = ultimaModificacion;
         this.estado = estado;
@@ -85,6 +98,7 @@ public class Modulo implements Serializable{
         this.descripcionModulo = descripcionModulo;
     }
 
+    /**Metodos get y set de variables**/
     public Integer getIdModulo() {
         return idModulo;
     }

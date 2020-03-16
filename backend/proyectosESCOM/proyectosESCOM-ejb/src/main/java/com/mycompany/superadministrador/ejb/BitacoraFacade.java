@@ -1,10 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.superadministrador.ejb;
-
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import com.mycompany.superadministrador.POJO.ModuloPOJO;
 import com.mycompany.superadministrador.POJO.ReportePOJO;
@@ -13,26 +7,21 @@ import com.mycompany.superadministrador.interfaces.BitacoraFacadeLocal;
 import com.mycompany.superadministrador.entity.Bitacora;
 import com.mycompany.superadministrador.interfaces.ModuloFacadeLocal;
 import com.mycompany.superadministrador.interfaces.UsuarioFacadeLocal;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TemporalType;
 import javax.persistence.TypedQuery;
-
 /**
- *
- * @author aleja
+ * Este es el bean de la entidad bitacora
+ * Contiene todos los metodos para la persistencia y consultas a la base de datos
+ * @author Alejandra Pabon, Jeison Gaona
+ * Universidad de Cundinamarca
  */
 @Stateless
 public class BitacoraFacade extends AbstractFacade<Bitacora> implements BitacoraFacadeLocal {
@@ -49,9 +38,10 @@ public class BitacoraFacade extends AbstractFacade<Bitacora> implements Bitacora
         super(Bitacora.class);
     }
 
+    /**Inyeccion a la interfaz de usuario facade**/
     @EJB 
     UsuarioFacadeLocal usuarioDB;
-    
+    /**Inyeccion a la interfaz de modulo facade*/
     @EJB 
     ModuloFacadeLocal moduloDB;
     
@@ -87,7 +77,6 @@ public class BitacoraFacade extends AbstractFacade<Bitacora> implements Bitacora
                 .setParameter(5, solicitud.getIp())
                 .setParameter(6, solicitud.getTablaInvolucrada())
                 .executeUpdate();
-
     }
 
     /**
@@ -410,12 +399,20 @@ public class BitacoraFacade extends AbstractFacade<Bitacora> implements Bitacora
         return listaBitacora;
     }
     
+    /**Metodo que conecta con la interfaz de usuario para consultar el usuario con el id
+     * @param id
+     * @return 
+     **/
     public UsuarioPOJO devolverUsuarioBitacora(int id){
         
         UsuarioPOJO usuario = usuarioDB.buscarUsuarioBitacoraId(id);
         return usuario;
     }
     
+    /**Metodo que conecta con la interfaz de modulo para consultar el modulo con el id
+     * @param id
+     * @return 
+     **/
     public ModuloPOJO devolverModuloBitacora(int id){
         
         ModuloPOJO modulo = moduloDB.buscarModuloBitacoraId(id);

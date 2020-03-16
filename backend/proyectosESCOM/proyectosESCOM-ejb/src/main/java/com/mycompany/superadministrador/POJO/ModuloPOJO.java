@@ -1,35 +1,41 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.superadministrador.POJO;
-
 /**
- *
- * @author aleja
+ * Esta es la clase POJO de la entidad modulo
+ * contiene las variables de la tabla sin anotaciones
+ * @author Alejandra Pabon, Jeison Gaona
+ * Universidad de Cundinamarca
  */
 public class ModuloPOJO {
     
+    /**Variable id modulo*/
     private int idModulo;
-    
+    /**Variable estado de modulo*/
     private String estadoModulo;
-    
+    /**Variable para almacerna el logo del modulo*/
     private byte[] imagenModulo;
-    
+    /**Variable nombre*/
     private String nombreModulo;
-    
+    /**Variable descripcion*/
     private String descripcionModulo;
-    
+    /**Variable acronimo*/
     private String acronimo;
-    
+    /**Variable url*/
     private String url;
-    
+    /**Variable datos solicitud para registro de bitacora*/
     private DatosSolicitudPOJO datosSolicitud;
 
+    /**Constructor vacio de la clase*/
     public ModuloPOJO() {
     }
 
+    /**Constructor con variables
+     * @param idModulo
+     * @param estadoModulo
+     * @param imagenModulo
+     * @param nombreModulo
+     * @param descripcionModulo
+     * @param acronimo
+     */
     public ModuloPOJO(int idModulo, String estadoModulo, byte[] imagenModulo, String nombreModulo, String descripcionModulo, String acronimo) {
         this.idModulo = idModulo;
         this.estadoModulo = estadoModulo;
@@ -39,6 +45,7 @@ public class ModuloPOJO {
         this.acronimo = acronimo;
     }
 
+     /**Metodos get y set de las variables*/
     public int getIdModulo() {
         return idModulo;
     }

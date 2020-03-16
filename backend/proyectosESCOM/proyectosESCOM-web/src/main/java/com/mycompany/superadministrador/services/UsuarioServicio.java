@@ -1,5 +1,4 @@
 package com.mycompany.superadministrador.services;
-
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.POJO.ClavePOJO;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
@@ -20,21 +19,23 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 /**
- * Clase encargada de manejar todos los servicios referente al usuario
+ * Clase encargada de manejar de servicios de la entidad usuario
  *
- * @author jeison gaona - alejandra pabon
+ * @author Alejandra Pabon- Jeison Gaona
  */
 @javax.enterprise.context.RequestScoped
 @Path("usuarios")
 public class UsuarioServicio {
 
+    /**Inyeccion de la interfaz logica usuario**/
     @EJB
     LogicaUsuarioFacadeLocal usuarioLogica;
 
+    /**Variable para manejo de mensajes**/
     private final Respuesta respuesta = new Respuesta();
 
+    /**Constructor vacio de la clase**/
     public UsuarioServicio() {
     }
 
@@ -156,7 +157,8 @@ public class UsuarioServicio {
      * cedula
      *
      * @param cedula
-     * @return  *
+     * @param datosSolicitud
+     * @return
      */
     @PUT
     @Produces(MediaType.APPLICATION_JSON)

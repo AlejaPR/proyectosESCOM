@@ -1,13 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.superadministrador.POJO;
-
 /**
- *
- * @author aleja
+ * Esta es la clase POJO de la tipo documento
+ * contiene las variables de la tabla sin anotaciones
+ * @author Alejandra Pabon, Jeison Gaona
+ * Universidad de Cundinamarca
  */
 public class TipoDocumentoPOJO {
     /**Variable para id tipo de documento**/

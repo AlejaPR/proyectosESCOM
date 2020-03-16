@@ -1,11 +1,8 @@
-
 package com.mycompany.superadministrador.utilitarios;
-
 import javax.ejb.ApplicationException;
-
 /**
  * Clase encargada de capturar excepciones lanzadas en la aplicacion
- * @author Jeison Gaona - Alejandra Pabon
+ * @author Alejandra Pabon-Jeison Gaona
  */
 @ApplicationException(rollback = true)
 public class ExcepcionGenerica extends Exception{

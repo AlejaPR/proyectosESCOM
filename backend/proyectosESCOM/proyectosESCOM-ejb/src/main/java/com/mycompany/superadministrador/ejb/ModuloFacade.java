@@ -1,5 +1,4 @@
 package com.mycompany.superadministrador.ejb;
-
 import com.mycompany.superadministrador.POJO.ModuloPOJO;
 import com.mycompany.superadministrador.interfaces.ModuloFacadeLocal;
 import com.mycompany.superadministrador.entity.Modulo;
@@ -10,10 +9,11 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
 /**
- *
- * @author jeison gaona - alejandra pabon
+ * Este es el bean de la entidad modulo
+ * Contiene todos los metodos para la persistencia y consultas a la base de datos
+ * @author Alejandra Pabon, Jeison Gaona
+ * Universidad de Cundinamarca
  */
 @Stateless
 public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacadeLocal {
@@ -43,8 +43,7 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
        
         return consultaDatosM.getResultList();
     }
-    
-    
+       
     /**
      * Metodo que realiza la consulta de acronimo
      *
@@ -60,7 +59,6 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
         return consultaAcronimo.getResultList();
     }
 
-   
     /**
      * Metodo que realiza la consulta para registrar modulo
      *
@@ -121,7 +119,7 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
     }
     
      /**Metodo que realiza la modificacion de un modulo
-       Recibe id para filtrar la busqueda
+     *Recibe id para filtrar la busqueda
      * @param idModulo
      * @param moduloEditar
      * 
@@ -139,7 +137,7 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
     }
     
      /**Metodo que realiza el cambio de estado de un modulo
-       Recibe id para filtrar la busqueda y el valor del estado
+     * Recibe id para filtrar la busqueda y el valor del estado
      * @param idModulo
      * @param estado
      * 
@@ -153,7 +151,7 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
     }
     
     /**Metodo que realiza la consulta a la tabla modulo
-       Devuelve los datos de un modulo registrado para la bitacora
+     * Devuelve los datos de un modulo registrado para la bitacora
      * @param palabraBusqueda
      * @return 
        **/
@@ -174,8 +172,8 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
     }
     
      /**
-     * Metodo que realiza la consulta a la tabla modulo Devuelve los datos de
-     * un modulo registrado para la bitacora, recibe el id de modulo
+     * Metodo que realiza la consulta a la tabla modulo 
+     * Devuelve los datos de un modulo registrado para la bitacora, recibe el id de modulo
      *
      * @param idModulo
      * @return

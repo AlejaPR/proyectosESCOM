@@ -1,5 +1,4 @@
 package com.mycompany.superadministrador.logica;
-
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import com.mycompany.superadministrador.entity.Actividad;
@@ -14,24 +13,27 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
-
 /**
- * Clase encargada de la logica de las actividades
- *
- * @author jeison gaona - alejandra pabon
+ * Esta es la clase encargada de la logica de usuario
+ * @author Alejandra Pabon, Jeison Gaona
+ * Universidad de Cundinamarca
  */
 @Stateless
 public class LogicaActividad implements LogicaActividadFacadeLocal {
 
+    /**Inyeccion de la interfaz de actividad**/
     @EJB
     ActividadFacadeLocal actividadDB;
 
+    /**Inyeccion de la interfaz de modulo**/
     @EJB
     ModuloFacadeLocal moduloDB;
 
+    /**Inyeccion de la interfaz de utilitario**/
     @EJB
     UtilitarioFacadeLocal bitacora;
 
+    /**Variable para registro en bitacora**/
     private static final String TABLA = "TBL_ACTIVIDAD";
 
     /**
@@ -76,6 +78,7 @@ public class LogicaActividad implements LogicaActividadFacadeLocal {
      *
      *
      * @param actividad
+     * @return 
      * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
      *
      */
@@ -101,7 +104,7 @@ public class LogicaActividad implements LogicaActividadFacadeLocal {
                 throw new NoResultException("El modulo no se encuentra registrado");
             }
         } catch (NullPointerException ex) {
-            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer el login del usuario ");
+            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (NoResultException ex) {
             throw new ExcepcionGenerica("No se encontro ningun dato coincidente");
         } catch (Exception ex) {
@@ -137,6 +140,7 @@ public class LogicaActividad implements LogicaActividadFacadeLocal {
      * Metodo que llama a la consulta para editar el estado de la actividad
      *
      * @param idActividad
+     * @param datosSolicitud
      * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
      *
      */
@@ -167,8 +171,8 @@ public class LogicaActividad implements LogicaActividadFacadeLocal {
     }
 
     /**
-     * Metodo que llama a la consulta que devuelve los datos del usuario
-     * recibiendo la cedula
+     * Metodo que llama a la consulta que devuelve los datos de la actividad especifica
+     * recibe el id
      *
      * @param idActividad
      * @return
@@ -182,10 +186,10 @@ public class LogicaActividad implements LogicaActividadFacadeLocal {
             if (actividadResultado != null) {
                 return actividadResultado;
             } else {
-                throw new NoResultException("No se encontraron datos del usuario");
+                throw new NoResultException("No se encontraron datos de la actividad");
             }
         } catch (NoResultException ex) {
-            throw new ExcepcionGenerica("No se encontraron datos del usuario");
+            throw new ExcepcionGenerica("No se encontraron datos de la actividad");
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {

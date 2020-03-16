@@ -1,17 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.superadministrador.interfaces;
-
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
 import java.util.List;
-
 /**
- *
- * @author jeiso
+ * Esta es la interfaz para la clase utilitarios 
+ * Contiene todos los metodos requeridos por los modulos
+ * @author Alejandra Pabon, Jeison Gaona
+ * Universidad de Cundinamarca
  */
 public interface UtilitarioFacadeLocal {
     

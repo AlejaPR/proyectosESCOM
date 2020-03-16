@@ -1,28 +1,31 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.superadministrador.POJO;
-
 import java.util.Date;
-
 /**
- *
- * @author aleja
+ * Esta es la clase POJO para generar los reportes 
+ * @author Alejandra Pabon, Jeison Gaona
+ * Universidad de Cundinamarca
  */
 public class ReportePOJO {
     
+    /**Variable id para filtrar la busqueda**/
     private int idBusqueda;
+    /**Variable para filtrar la busqueda con palabra*/
     private String palabraBusqueda;
+    /**Variable fecha inicio*/
     private Date fechaInicio;
+    /**Variable fecha fin*/
     private Date fechaFin;
 
+    /**Constructor de la clase*/
     public ReportePOJO() {
     }
     
-    
-
+     /**Constructor con variables
+     * @param idBusqueda
+     * @param palabraBusqueda
+     * @param fechaInicio
+     * @param fechaFin
+      */
     public ReportePOJO(int idBusqueda, String palabraBusqueda, Date fechaInicio, Date fechaFin) {
         this.idBusqueda = idBusqueda;
         this.palabraBusqueda = palabraBusqueda;
@@ -30,6 +33,7 @@ public class ReportePOJO {
         this.fechaFin = fechaFin;
     } 
 
+     /**Metodos get y set de las variables*/
     public int getIdBusqueda() {
         return idBusqueda;
     }

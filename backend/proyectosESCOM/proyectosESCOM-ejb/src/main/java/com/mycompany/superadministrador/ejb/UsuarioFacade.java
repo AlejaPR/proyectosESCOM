@@ -1,6 +1,4 @@
 package com.mycompany.superadministrador.ejb;
-
-import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
 import com.mycompany.superadministrador.entity.Actividad;
 import com.mycompany.superadministrador.entity.TipoDocumento;
@@ -17,10 +15,11 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
 /**
- *
- * @author jeison gaona - alejandra pabon
+ * Este es el bean de la entidad usuario
+ * Contiene todos los metodos para la persistencia y consultas a la base de datos
+ * @author Alejandra Pabon, Jeison Gaona
+ * Universidad de Cundinamarca
  */
 @Stateless
 public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFacadeLocal {
@@ -34,6 +33,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         return em;
     }
 
+    /**Inyeccion a la interfaz de sesiones facade*/
     @EJB
     SesionesFacadeLocal sesiones;
 
@@ -177,8 +177,8 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
     }
 
     /**
-     * Metodo que realiza la consulta a la tabla usuario Devuelve una lista con
-     * los usuarios registrados
+     * Metodo que realiza la consulta a la tabla usuario 
+     * Devuelve una lista con los usuarios registrados
      *
      * @return
      *
@@ -202,8 +202,8 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
     }
 
     /**
-     * Metodo que realiza la consulta a la tabla usuario Devuelve los datos de
-     * un usuario registrado con la cedula enviada
+     * Metodo que realiza la consulta a la tabla usuario 
+     * Devuelve los datos de un usuario registrado con la cedula enviada
      *
      * @param cedula
      * @return
@@ -243,8 +243,8 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
     }
 
     /**
-     * Metodo que realiza la modificacion de un usuario Recibe cedula para
-     * filtrar la busqueda
+     * Metodo que realiza la modificacion de un usuario 
+     * Recibe cedula para filtrar la busqueda
      *
      * @param idUsuario
      * @param usuarioEditar
@@ -263,20 +263,11 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         editarToken.setParameter("tipoDocumento", tipo);
         editarToken.setParameter("documento", idUsuario);
         return editarToken.executeUpdate();
-//        System.out.println("numero de documento "+usuarioEditar.getNumeroDocumento());
-//        Usuario usuario = em.find(Usuario.class, idUsuario);
-//        usuario.setNumeroDocumento(usuarioEditar.getNumeroDocumento());
-//        usuario.setApellido(usuarioEditar.getApellido());
-//        usuario.setFechaNacimiento(usuarioEditar.getFechaNacimiento());
-//        usuario.setNombre(usuarioEditar.getNombre());
-//        usuario.setCorreoElectronico(usuarioEditar.getCorreoElectronico());
-//        em.merge(usuario);
-
     }
 
     /**
-     * Metodo que realiza el cambio de estado de un usuario Recibe cedula para
-     * filtrar la busqueda y el valor del estado
+     * Metodo que realiza el cambio de estado de un usuario 
+     * Recibe cedula para filtrar la busqueda y el valor del estado
      *
      * @param idUsuario
      * @param estado
@@ -292,8 +283,8 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
     }
     
     /**
-     * Metodo que realiza la consulta a la tabla usuario Devuelve una lista con
-     * los usuarios registrados para el modulo documental 
+     * Metodo que realiza la consulta a la tabla usuario 
+     * Devuelve una lista con los usuarios registrados para el modulo documental 
      *
      * @return
      *
@@ -320,8 +311,8 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
     }
     
     /**
-     * Metodo que realiza la consulta a la tabla usuario Devuelve los datos de
-     * un usuario registrado para la bitacora
+     * Metodo que realiza la consulta a la tabla usuario 
+     * Devuelve los datos de un usuario registrado para la bitacora recibiendo el correo
      *
      * @param palabraBusqueda
      * @return
@@ -345,8 +336,8 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
     }
     
      /**
-     * Metodo que realiza la consulta a la tabla usuario Devuelve los datos de
-     * un usuario registrado para la bitacora, recibe el numero de documento
+     * Metodo que realiza la consulta a la tabla usuario 
+     * Devuelve los datos de un usuario registrado para la bitacora, recibe el numero de documento
      *
      * @param documentoBusqueda
      * @return
@@ -369,8 +360,8 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
     }
 
      /**
-     * Metodo que realiza la consulta a la tabla usuario Devuelve los datos de
-     * un usuario registrado para la bitacora, recibe el id de usuario
+     * Metodo que realiza la consulta a la tabla usuario 
+     * Devuelve los datos de un usuario registrado para la bitacora, recibe el id de usuario
      *
      * @param idUsuario
      * @return
@@ -394,6 +385,11 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         return usuario;
     }
 
+    /**Metodo que edita la clave del usuario
+     * Recibe la nueva clave y el id del usuario
+     * @param nuevaClave
+     * @param usuario
+     */
     @Override
     public void cambiarClaveInterna(String nuevaClave, UsuarioPOJO usuario) {
         
@@ -429,6 +425,10 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         return listaUsuario;
     }
     
+    /**Metodo que modifica el campo numero de intentos del usuario
+     * @param numeroIntentos
+     * @param idUsuario
+     **/
     @Override
     public void cambiarNumeroIntentos(int numeroIntentos, int idUsuario) {
         
@@ -438,6 +438,10 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         cambiarIntentos.executeUpdate();
     }
     
+    /**Metodo que modifica el campo fecha ingreso del usuario
+     * @param fechaIngreso
+     * @param usuario
+     **/
     @Override
     public void cambiarFechaIngreso(Date fechaIngreso, UsuarioPOJO usuario) {
         
@@ -447,6 +451,9 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         cambiarFecha.executeUpdate();
     }
     
+    /**Metodo que modifica el campo fecha ingreso y numero de intentos para el login
+     * @param usuario
+     **/
     @Override
     public void cambiarIntentosConFecha(Usuario usuario) {
         

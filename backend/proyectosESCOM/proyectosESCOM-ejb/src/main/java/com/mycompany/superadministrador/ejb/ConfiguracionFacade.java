@@ -1,15 +1,15 @@
 package com.mycompany.superadministrador.ejb;
-
 import com.mycompany.superadministrador.POJO.ConfiguracionPOJO;
 import com.mycompany.superadministrador.interfaces.ConfiguracionFacadeLocal;
 import com.mycompany.superadministrador.entity.Configuracion;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
 /**
- *
- * @author jeison gaona-alejandra pabon
+ * Este es el bean de la entidad configuracion
+ * Contiene todos los metodos para la persistencia y consultas a la base de datos
+ * @author Alejandra Pabon, Jeison Gaona
+ * Universidad de Cundinamarca
  */
 @Stateless
 public class ConfiguracionFacade extends AbstractFacade<Configuracion> implements ConfiguracionFacadeLocal {

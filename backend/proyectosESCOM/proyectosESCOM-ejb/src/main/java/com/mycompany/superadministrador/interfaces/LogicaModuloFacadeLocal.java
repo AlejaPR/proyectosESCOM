@@ -1,20 +1,15 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.superadministrador.interfaces;
-
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import com.mycompany.superadministrador.POJO.ModuloPOJO;
 import com.mycompany.superadministrador.utilitarios.ExcepcionGenerica;
 import java.util.List;
 import javax.ejb.Local;
-
 /**
- *
- * @author aleja
+ * Esta es la interfaz para la clase logica modulo
+ * Contiene todos los metodos requeridos para la conexion de la logica con la entidad modulo
+ * @author Alejandra Pabon, Jeison Gaona
+ * Universidad de Cundinamarca
  */
 @Local
 public interface LogicaModuloFacadeLocal {

@@ -1,5 +1,4 @@
 package com.mycompany.superadministrador.services;
-
 import com.mycompany.superadministrador.POJO.ConfiguracionPOJO;
 import com.mycompany.superadministrador.POJO.Respuesta;
 import com.mycompany.superadministrador.interfaces.LogicaConfiguracionFacadeLocal;
@@ -8,27 +7,27 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 /**
- * Clase encargada de manejar todos los servicios referente a la configuracion
- *
- * @author jeison gaona - alejandra pabon
+ * Clase encargada de manejar todos los servicios referente a la entidad configuracion
+ * @author Alejandra Pabon- Jeison Gaona
  */
 @javax.enterprise.context.RequestScoped
 @Path("configuracion")
 public class ConfiguracionServicio {
     
+    /**Inyeccion de la interfaz logica configuracion**/
     @EJB
     LogicaConfiguracionFacadeLocal configuracionLogica;
 
+    /**Variable para manejo de mensajes**/
     private final Respuesta respuesta = new Respuesta();
     
+    /**Constructor vacio de la clase**/
     public ConfiguracionServicio() {
     }
     
@@ -79,7 +78,7 @@ public class ConfiguracionServicio {
     }
     
     /**
-     * Servicio que lista la configuracion de entorno
+     * Servicio que lista la configuracion de inicio
      *
      * @return  *
      */

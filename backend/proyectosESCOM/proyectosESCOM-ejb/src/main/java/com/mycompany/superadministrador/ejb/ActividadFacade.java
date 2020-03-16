@@ -1,5 +1,4 @@
 package com.mycompany.superadministrador.ejb;
-
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.interfaces.ActividadFacadeLocal;
 import com.mycompany.superadministrador.entity.Actividad;
@@ -11,10 +10,11 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-
 /**
- *
- * @author jeison gaona- alejandra pabon
+ * Este es el bean de la entidad actividad
+ * Contiene todos los metodos para la persistencia y consultas a la base de datos
+ * @author Alejandra Pabon, Jeison Gaona
+ * Universidad de Cundinamarca
  */
 @Stateless
 public class ActividadFacade extends AbstractFacade<Actividad> implements ActividadFacadeLocal {
@@ -138,8 +138,8 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
     }
 
     /**
-     * Metodo que realiza el cambio de estado de una actividad Recibe el valor
-     * del estado y el id de la actividad
+     * Metodo que realiza el cambio de estado de una actividad 
+     * Recibe el valor del estado y el id de la actividad
      *
      * @param idActividad
      * @param estado
@@ -167,10 +167,7 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
         List<Actividad> actividadResultado = new ArrayList();
         TypedQuery<Actividad> actividad = em.createNamedQuery("consultaActividadPorNombre", Actividad.class);
         actividad.setParameter("nombreActividad", nombreActividad);
-        
         actividadResultado = actividad.getResultList();
-        
-        
         return actividadResultado;
     }
 
@@ -206,8 +203,6 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
      * Metodo que realiza la modificacion de una actividad
      *
      * @param actividadEditar
-     *
-     *
      */
     @Override
     public void editarActividad(ActividadPOJO actividadEditar) {
@@ -234,8 +229,8 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
     }
     
     /**
-     * Metodo que realiza la consulta a la tabla usuario Devuelve los datos de
-     * un usuario registrado con la cedula enviada
+     * Metodo que realiza la consulta para buscar actividad especifica
+     * Recibe el id de la actividad
      *
      * @param idActividad
      * @return
@@ -262,7 +257,7 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
     }
 
     /**
-     * Metodo que realiza la consulta de actividades del usuario especifico
+     * Metodo que realiza la consulta de actividades del usuario especifico activas
      *
      * @param idUsuario
      * @return

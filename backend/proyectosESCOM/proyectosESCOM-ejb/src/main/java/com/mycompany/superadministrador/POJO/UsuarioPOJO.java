@@ -1,49 +1,57 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.superadministrador.POJO;
-
 import java.util.Date;
-
 /**
- *
- * @author jeiso
+ * Esta es la clase POJO de la entidad usuario
+ * contiene las variables de la tabla sin anotaciones
+ * @author Alejandra Pabon, Jeison Gaona
+ * Universidad de Cundinamarca
  */
 public class UsuarioPOJO {
     
-    private int id;
-    
+   /**Variable id de usuario*/
+   private int id;
+   /**Variable correo de usuario*/
    private String correoElectronico;
-   
+   /**Variable estado de usuario*/
    private String estado;
-   
+   /**Variable numero de documento de usuario*/
    private int numeroDocumento;
-   
+   /**Variable nombre de usuario*/
    private String nombre;
-   
+   /**Variable apellido de usuario*/
    private String apellido;
-   
+   /**Variable clave de usuario*/
    private String contrasena;
-   
+   /**Variable fecha de nacimiento */
    private Date fechaNacimiento;
-   
+   /**Variable para tipo de documento*/
    private int tipoDocumento;
-   
+   /**Variable token de usuario*/
    private String token;
-   
+   /**Variable para generar formato a fecha nacimiento*/
    private String fechaDeNacimiento;
-   
+   /**Variable fecha de ingreso*/
    private Date fechaIngreso;
-   
+   /**Variable numero de intentos*/
    private int numeroIntentos;
-   
+   /**Variable datos solicitud para registrar bitacora*/
    private DatosSolicitudPOJO datosSolicitud;
 
+   /**Constructor vacio de clase*/
     public UsuarioPOJO() {
     }
    
+    /**Constructor con variables
+     * @param correoElectronico
+     * @param numeroDocumento
+     * @param nombre
+     * @param apellido
+     * @param contrasena
+     * @param fechaNacimiento
+     * @param tipoDocumento
+     * @param fechaIngreso
+     * @param numeroIntentos
+     */
     public UsuarioPOJO(String correoElectronico, int numeroDocumento, String nombre, String apellido, String contrasena, 
             Date fechaNacimiento, int tipoDocumento, Date fechaIngreso, int numeroIntentos) {
         this.correoElectronico = correoElectronico;
@@ -57,6 +65,7 @@ public class UsuarioPOJO {
         this.numeroIntentos = numeroIntentos;
     }
 
+    /**Metodos get y set de las variables*/
     public int getId() {
         return id;
     }
@@ -167,7 +176,5 @@ public class UsuarioPOJO {
 
     public void setNumeroIntentos(int numeroIntentos) {
         this.numeroIntentos = numeroIntentos;
-    }
-
-    
+    }  
 }

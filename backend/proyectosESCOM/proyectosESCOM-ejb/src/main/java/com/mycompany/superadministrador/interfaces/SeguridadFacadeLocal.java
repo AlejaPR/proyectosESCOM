@@ -1,15 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.superadministrador.interfaces;
-
 import javax.ejb.Local;
-
 /**
- *
- * @author jeiso
+ * Esta es la interfaz para la seguridad
+ * Contiene todos los metodos requeridos para la seguridad
+ * @author Alejandra Pabon, Jeison Gaona
+ * Universidad de Cundinamarca
  */
 @Local
 public interface SeguridadFacadeLocal {

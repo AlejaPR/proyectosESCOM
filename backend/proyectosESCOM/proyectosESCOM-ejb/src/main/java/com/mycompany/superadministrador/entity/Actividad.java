@@ -1,10 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.superadministrador.entity;
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -21,11 +15,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
 /**
- *
- * @author aleja
+ * Esta es la clase de la entidad actividad
+ * Contiene todos los campos para la persistencia y consultas named query
+ * @author Alejandra Pabon, Jeison Gaona
+ * Universidad de Cundinamarca
  */
 @Entity
 @Table(name = "TBL_ACTIVIDAD")
@@ -40,36 +34,51 @@ import javax.validation.constraints.Size;
 
 public class Actividad implements Serializable {
 
+    /**Variable id**/
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "PK_ACT_IDACTIVIDAD")
     private Integer idActividad;
-
+    
+    /**Variable estado de actividad**/
     @Column(name = "ACT_ESTADO")
     private String estado;
 
+    /**Variable descripcion de actividad**/
     @Column(name = "ACT_DESCRIPCIONACTIVIDAD")
     private String descripcionActividad;
 
+    /**Variable ultima modificacion de actividad**/
     @Column(name = "ACT_ULTIMAMODIFICACION")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ultimaModificacion;
 
+    /**Variable nombre de actividad**/
     @Column(name = "ACT_NOMBREACTIVIDAD")
     private String nombreActividad;
 
+    /**Variable para la relacion con entidad modulo**/
     @JoinColumn(name = "FK_ACT_IDMODULO", referencedColumnName = "PK_MOD_IDMODULO")
     @ManyToOne
     private Modulo modulo;
 
+    /**Variable para la relacio con la entidad usuario actividad**/
     @OneToMany(mappedBy = "actividad")
     private List<UsuarioActividad> listaUsuarioActividad;
 
+    /**Constructor vacio de la clase**/
     public Actividad() {
 
     }
 
+    /**Constructor con variables
+     * @param estado
+     * @param descripcionActividad
+     * @param ultimaModificacion
+     * @param nombreActividad
+     * @param modulo
+     **/
     public Actividad(String estado, String descripcionActividad, Date ultimaModificacion, String nombreActividad, Modulo modulo) {
         this.estado = estado;
         this.descripcionActividad = descripcionActividad;
@@ -78,6 +87,7 @@ public class Actividad implements Serializable {
         this.modulo = modulo;
     }
 
+    /**Metodos get y set de las variables**/
     public Integer getIdActividad() {
         return idActividad;
     }

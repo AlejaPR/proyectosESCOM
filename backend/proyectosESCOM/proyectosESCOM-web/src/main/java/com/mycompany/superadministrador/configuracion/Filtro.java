@@ -1,5 +1,4 @@
 package com.mycompany.superadministrador.configuracion;
-
 import com.mycompany.superadministrador.POJO.Respuesta;
 import com.mycompany.superadministrador.interfaces.SesionesFacadeLocal;
 import io.jsonwebtoken.MalformedJwtException;
@@ -11,19 +10,23 @@ import javax.ws.rs.container.PreMatching;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
-
 /**
- *
- * @author Alejandra Pabon Rodriguez 461 215 234 Clase que genera el filtro para
- * el token
+ * Esta es la clase encargada del manejo del filtro del token
+ * @author Alejandra Pabon, Jeison Gaona
+ * Universidad de Cundinamarca
  */
 @Provider
 @PreMatching
 public class Filtro implements ContainerRequestFilter {
 
+    /**Inyeccion de la interfaz de sesiones**/
     @EJB
     SesionesFacadeLocal sesionesFacade;
 
+    /**Metodo encargado del filtro
+     * @param requestContext
+     * @throws java.io.IOException
+     **/
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
         String url = requestContext.getUriInfo().getAbsolutePath().toString();

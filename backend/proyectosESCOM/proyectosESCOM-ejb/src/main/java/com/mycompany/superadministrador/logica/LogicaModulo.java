@@ -1,5 +1,4 @@
 package com.mycompany.superadministrador.logica;
-
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import com.mycompany.superadministrador.POJO.ModuloPOJO;
@@ -15,30 +14,31 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
-
 /**
- * Clase encarga de la logica de los modulos
- *
- * @author jeison gaona - alejandra pabon
- * @author aleja
+ * Esta es la clase encargada de la logica de modulo
+ * @author Alejandra Pabon, Jeison Gaona
+ * Universidad de Cundinamarca
  */
 @Stateless
 public class LogicaModulo implements LogicaModuloFacadeLocal {
 
+    /**Inyeccion de la interfaz de modulo**/
     @EJB
     ModuloFacadeLocal moduloDB;
 
+    /**Inyeccion de la interfaz de actividad**/
     @EJB
     ActividadFacadeLocal actividadDB;
 
+    /**Inyeccion de la interfaz de bitacora**/
     @EJB
     UtilitarioFacadeLocal bitacora;
 
+    /**Variable para el registro de bitacora**/
     private static final String TABLA = "TBL_MODULO";
 
     /**
      * Metodo que llama a la consulta para registrar el modulo
-     *
      *
      * @param modulo
      * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
@@ -182,6 +182,7 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
      * recibiendo como parametro el id
      *
      * @param idModulo
+     * @param datosSolicitud
      * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
      *
      */

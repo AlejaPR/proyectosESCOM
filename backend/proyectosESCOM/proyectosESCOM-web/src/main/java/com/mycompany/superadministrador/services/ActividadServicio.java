@@ -1,5 +1,4 @@
 package com.mycompany.superadministrador.services;
-
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import com.mycompany.superadministrador.POJO.Respuesta;
@@ -16,21 +15,23 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 /**
- * Clase encargada de manejar todos los servicios referente a las actividades
+ * Clase encargada de manejar todos los servicios referente a la entidad actividad
  *
- * @author jeison gaona - alejandra pabon
+ * @author Alejandra Pabon- Jeison Gaona
  */
 @javax.enterprise.context.RequestScoped
 @Path("actividades")
 public class ActividadServicio {
     
+    /**Inyeccion de la interfaz logica actividad**/
     @EJB
     LogicaActividadFacadeLocal actividadLogica;
 
+    /**Variable para el manejo de mensajes**/
     private final Respuesta respuesta = new Respuesta();
     
+    /**Constructor vacio de la clase**/
     public ActividadServicio() {
     }
 
@@ -50,7 +51,7 @@ public class ActividadServicio {
             respuesta.setRespuesta("Sin acceso al servicio");
             return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
         } catch (Exception e) {
-            respuesta.setRespuesta("Ocurrio un error en el servidor ");
+            respuesta.setRespuesta("Ocurrio un error en el servidor");
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }
@@ -105,7 +106,7 @@ public class ActividadServicio {
     }
     
      /**
-     * Servicio que permite la suspencion/activacion de la actividad
+     * Servicio que permite la suspension/activacion de la actividad
      *
      * 
      * @param idActividad
@@ -129,8 +130,8 @@ public class ActividadServicio {
     }
     
     /**
-     * Servicio que lista los datos de un usuario especifico consultado con la
-     * cedula
+     * Servicio que lista los datos de una actividad en especifico
+     * Recibe el id 
      *
      * @param idActividad
      * @return  *

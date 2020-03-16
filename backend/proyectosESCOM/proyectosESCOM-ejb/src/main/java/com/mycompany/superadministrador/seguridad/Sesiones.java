@@ -1,39 +1,35 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.superadministrador.seguridad;
-
 import com.google.gson.Gson;
-import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.interfaces.SesionesFacadeLocal;
 import io.jsonwebtoken.Jwts;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-//import javax.faces.bean.ApplicationScoped;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import javax.ejb.Singleton;
-import javax.ejb.Stateless;
-import javax.faces.bean.ManagedBean;
-
 /**
- *
- * @author jeiso
+ * Esta es la clase encargada del manejo de sesiones
+ * @author Alejandra Pabon, Jeison Gaona
+ * Universidad de Cundinamarca
  */
 @Singleton
 public class Sesiones implements SesionesFacadeLocal {
 
+    /**Mapa de sesiones de usuario*/
     Map<String, Calendar> mapaSesiones = new HashMap<String, Calendar>();
 
+    /**Constructo vacio de la clase**/
     public Sesiones() {
     }
 
+    /**Metodo que modifica el vencimiento del token
+     * @param llave
+     * @return 
+     **/
     @Override
     public boolean modificarVencimiento(String llave) {
         if (mapaSesiones.get(llave) == null) {
@@ -50,6 +46,10 @@ public class Sesiones implements SesionesFacadeLocal {
         }
     }
 
+    /**Metodo que valida la fecha del token
+     * @param fechaToken
+     * @return 
+     **/
     @Override
     public  int validacionDeFecha(Calendar fechaToken) {
         Calendar fechaHoy = new GregorianCalendar();
@@ -59,6 +59,10 @@ public class Sesiones implements SesionesFacadeLocal {
         return minutos;
     }
 
+    /**Metodo para formar la fecha de vencimiento del token
+     * @param sameDate
+     * @return 
+     **/
     public String formarFechaString(Calendar sameDate) {
         String am_pm = "";
         if (sameDate.get(Calendar.AM_PM) == 1) {
@@ -76,6 +80,10 @@ public class Sesiones implements SesionesFacadeLocal {
                 + "" + sameDate.get(Calendar.HOUR_OF_DAY) + ":" + sameDate.get(Calendar.MINUTE) + ":" +second+ " " + am_pm;
     }
 
+    /**Metodo para generar formato de fecha
+     * @param date
+     * @return 
+     **/
     public static Date GetItemDate(final String date) {
         final Calendar cal = Calendar.getInstance(TimeZone.getDefault());
         final SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss a");
@@ -87,6 +95,11 @@ public class Sesiones implements SesionesFacadeLocal {
         }
     }
 
+    /**Metodo para agregar minutos a fecha
+     * @param earlierDate
+     * @param laterDate
+     * @return 
+     **/
     public static int minutesDiff(Date earlierDate, Date laterDate) {
         if (earlierDate == null || laterDate == null) {
             return 0;
@@ -94,6 +107,11 @@ public class Sesiones implements SesionesFacadeLocal {
         return (int) ((laterDate.getTime() / 60000) - (earlierDate.getTime() / 60000));
     }
 
+    /**Metodo que suma o resta dias a la fecha del token
+     * @param fecha
+     * @param minutos
+     * @return 
+     **/
     public static Calendar sumarRestarDiasFecha(Date fecha, int minutos) {
 
         Calendar calendar = Calendar.getInstance();
@@ -105,6 +123,11 @@ public class Sesiones implements SesionesFacadeLocal {
         return calendar;// Devuelve el objeto Date con los nuevos días añadidos
     }
     
+    /**Metodo que valida los permisos
+     * @param llave
+     * @param permisoRequerido
+     * @return 
+     **/
     @Override
     public boolean validarPermiso(String llave,String permisoRequerido){
         Gson gson=new Gson();
@@ -119,6 +142,7 @@ public class Sesiones implements SesionesFacadeLocal {
         return false;
     }
 
+    /**Metodos get y set del mapa de sesiones**/
     @Override
     public Map<String, Calendar> getMapaSesiones() {
         return mapaSesiones;

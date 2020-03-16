@@ -1,5 +1,4 @@
 package com.mycompany.superadministrador.services;
-
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import com.mycompany.superadministrador.POJO.ModuloPOJO;
@@ -17,21 +16,23 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
 /**
- * Clase encargada de manejar todos los servicios referente al modulo
+ * Clase encargada de manejar todos los servicios referente a la entidad modulo
  *
- * @author jeison gaona - alejandra pabon
+ * @author Alejandra Pabon- Jeison Gaona
  */
 @javax.enterprise.context.RequestScoped
 @Path("modulos")
 public class ModuloServicio {
 
+    /**Inyeccion de la interfaz logica modulo**/
     @EJB
     LogicaModuloFacadeLocal moduloLogica;
 
+    /**Variable para manejo de mensajes**/
     private final Respuesta respuesta = new Respuesta();
 
+    /**Constructor vacio de la clase**/
     public ModuloServicio() {
     }
 
@@ -138,7 +139,7 @@ public class ModuloServicio {
     public Response cambiarEstado(@PathParam("idModulo") int idModulo,DatosSolicitudPOJO datosSolicitud) {
         try {
             moduloLogica.cambiarEstadoModulo(idModulo,datosSolicitud);
-            respuesta.setRespuesta("Estado cambiado correctamente");
+            respuesta.setRespuesta("Estado de modulo cambiado correctamente");
             return Response.status(Response.Status.OK).entity(respuesta).build();
         } catch (ExcepcionGenerica e) {
             respuesta.setRespuesta("Sin acceso al servicio");
@@ -173,7 +174,7 @@ public class ModuloServicio {
     }
 
     /**
-     * Servicio que permite la suspencion/habilitacion de una actividad de un
+     * Servicio que permite la suspension/habilitacion de una actividad de un
      * modulo en especifico
      *
      *
@@ -186,7 +187,7 @@ public class ModuloServicio {
     public Response cambiarEstadoActividad(List<ActividadPOJO> listaActividad) {
         try {
             moduloLogica.cambiarEstadoActividadModulo(listaActividad);
-            respuesta.setRespuesta("Estado de actividad cambiado correctamente");
+            respuesta.setRespuesta("Estado de actividad del modulo cambiado correctamente");
             return Response.status(Response.Status.OK).entity(respuesta).build();
         } catch (ExcepcionGenerica e) {
             respuesta.setRespuesta("No se ha podido modificar la actividad");

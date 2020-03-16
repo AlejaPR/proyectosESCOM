@@ -1,10 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.superadministrador.entity;
-
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -18,10 +12,11 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 /**
- *
- * @author aleja
+ * Esta es la clase de la entidad tipo de documento
+ * Contiene todos los campos para la persistencia y consultas named query
+ * @author Alejandra Pabon, Jeison Gaona
+ * Universidad de Cundinamarca
  */
 @Entity
 @Table(name = "TBL_TIPODOCUMENTO")
@@ -30,29 +25,38 @@ import javax.validation.constraints.Size;
 })
 public class TipoDocumento implements Serializable {
     
+    /**Variable id**/
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "PK_TIP_IDTIPODOCUMENTO")
     private Integer idTipodocumento;
     
+    /**Variable tipo documento**/
     @Size(max = 20)
     @Column(name = "TIP_TIPODOCUMENTO")
     private String tipoDocumento;
     
+    /**Variable ultima modificacion**/
     @Column(name = "TIP_ULTIMAMODIFICACION")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ultimaModificacion;
     
+    /**Constructor vacio de la clase**/
     public TipoDocumento(){
         
     }
 
+    /**Constructor con variables
+     * @param tipoDocumento
+     * @param ultimaModificacion
+     **/
     public TipoDocumento(String tipoDocumento, Date ultimaModificacion) {
         this.tipoDocumento = tipoDocumento;
         this.ultimaModificacion = ultimaModificacion;
     }
 
+    /**Metodos get y set de las variables**/
     public Integer getIdTipodocumento() {
         return idTipodocumento;
     }

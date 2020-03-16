@@ -1,5 +1,4 @@
 package com.mycompany.superadministrador.logica;
-
 import com.google.gson.Gson;
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.POJO.ClavePOJO;
@@ -32,36 +31,43 @@ import javax.ejb.EJB;
 import javax.ejb.EJBTransactionRolledbackException;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
-
 /**
- * Clase encargada de la logica de usuario
- *
- * @author jeison gaona - alejandra pabon
+ * Esta es la clase encargada de la logica de usuario
+ * @author Alejandra Pabon, Jeison Gaona
+ * Universidad de Cundinamarca
  */
 @Stateless
 public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
 
+    /**Inyeccion de la interfaz usuario**/
     @EJB
     UsuarioFacadeLocal usuarioDB;
 
+    /**Inyeccion de la interfaz de tipo documento**/
     @EJB
     TipoDocumentoFacadeLocal tipoDocumentoDB;
 
+    /**Inyeccion de la interfaz de actividad**/
     @EJB
     ActividadFacadeLocal actividadDB;
 
+    /**Inyeccion de la interfaz de usuario-actividad**/
     @EJB
     UsuarioActividadFacadeLocal usuarioActividadDB;
 
+    /**Inyeccion de la interfaz de modulo**/
     @EJB
     ModuloFacadeLocal moduloDB;
 
+    /**Inyeccion de la interfaz de sesiones**/
     @EJB
     SesionesFacadeLocal sesiones;
 
+    /**Inyeccion de la interfaz de bitacora**/
     @EJB
     UtilitarioFacadeLocal bitacora;
 
+    /**Variable para el registro en bitacora**/
     private static final String TABLA = "TBL_USUARIO";
 
     /**
@@ -103,11 +109,9 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
                                 calendar.add(Calendar.MINUTE, 60);
                                 usuarioDB.cambiarFechaIngreso(calendar.getTime(), usuarioCorreo);
                             }
-
                             return null;
                         }
                     }
-
                 } else {
                     throw new ExcepcionGenerica("No se encontro ninguna credencial que coincida");
                 }
@@ -415,6 +419,7 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
      * recibiendo como parametro la cedula
      *
      * @param cedula
+     * @param datosSolicitud
      * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
      *
      */
@@ -445,7 +450,7 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
 
     /**
      * Metodo que trae los datos del usuario con el parametro cedula para llamar
-     * la consulta que busca la lista de actividades del usuario
+     * la consulta que busca la lista de todas las actividades del usuario
      *
      * @param numeroDocumento
      * @return
@@ -536,7 +541,7 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
      * Metodo que asigna actividades a los usuarios
      *
      * @param numeroDocumento
-     * @param idActividad
+     * @param actividad
      * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
      *
      */
@@ -554,7 +559,7 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             actividad.getDatosSolicitud().setTablaInvolucrada(TABLA);
             bitacora.registrarEnBitacora(actividad.getDatosSolicitud());
         } catch (NullPointerException ex) {
-            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer el login del usuario ");
+            throw new ExcepcionGenerica("Ocurrio un error al momento de asignar actividad al usuario ");
         } catch (NoResultException ex) {
             throw new ExcepcionGenerica("No se encontro ningun dato coincidente");
         } catch (Exception ex) {
@@ -564,7 +569,7 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
 
     /**
      * Metodo que trae los datos del usuario con el parametro cedula para llamar
-     * la consulta que busca la lista de actividades del usuario
+     * la consulta que busca la lista de actividades del usuario activas
      *
      * @param numeroDocumento
      * @return
@@ -633,6 +638,11 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         }
     }
 
+    /**Metodo que comprueba la existencia del modulo en la lista de redireccion
+     * @param modulos
+     * @param id
+     * @return 
+     */
     public boolean comprobarExistencia(List<ModuloPOJO> modulos, int id) {
         for (ModuloPOJO m : modulos) {
             if (id == m.getIdModulo()) {
@@ -656,7 +666,6 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             if (!usuariosResultado.isEmpty()) {
                 return usuariosResultado;
             } else {
-                //vencio el token o no esta registrado
                 return null;
             }
         } catch (Exception ex) {
@@ -695,7 +704,6 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             } else {
                 throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
             }
-
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (NoResultException ex) {
@@ -709,8 +717,7 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
     }
 
     /**
-     * Metodo que llama a la consulta para cambiar contraseña interna del
-     * usuario
+     * Metodo que llama a la consulta para devolver el correo del usuario
      *
      * @param token
      * @return
@@ -730,7 +737,7 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
                 throw new ExcepcionGenerica("No se encontro el usuario");
             }
         } catch (NullPointerException ex) {
-            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la modificacion del usuario ");
+            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta de usuario ");
         } catch (NoResultException ex) {
             throw new ExcepcionGenerica("El usuario no existe");
         } catch (Exception ex) {

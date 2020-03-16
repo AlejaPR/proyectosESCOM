@@ -1,16 +1,10 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.superadministrador.ejb;
-
 import java.util.List;
 import javax.persistence.EntityManager;
-
 /**
- *
- * @author aleja
+ * Esta es la interfaz padre para los metodos de JPA
+ * @author Alejandra Pabon, Jeison Gaona
+ * Universidad de Cundinamarca
  */
 public abstract class AbstractFacade<T> {
     private Class<T> entityClass;

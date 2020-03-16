@@ -1,11 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.superadministrador.logica;
-
-import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import com.mycompany.superadministrador.POJO.ModuloPOJO;
 import com.mycompany.superadministrador.POJO.ReportePOJO;
@@ -21,31 +14,35 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
-
 /**
- *
- * @author jeiso
+ * Esta es la clase encargada de la logica de bitacora
+ * @author Alejandra Pabon, Jeison Gaona
+ * Universidad de Cundinamarca
  */
 @Stateless
 public class LogicaBitacora implements LogicaBitacoraFacadeLocal {
 
+    /**Inyeccion de la interfaz de actividad**/
     @EJB
     ActividadFacadeLocal actividadDB;
 
+    /**Inyeccion de la interfaz de usuario**/
     @EJB
     UsuarioFacadeLocal usuarioDB;
 
+    /**Inyeccion de la interfaz de modulo**/
     @EJB
     ModuloFacadeLocal moduloDB;
 
+    /**Inyeccion de la interfaz de bitacora**/
     @EJB
     BitacoraFacadeLocal bitacoraDB;
 
+    /**Inyeccion de la interfaz de logica usuario**/
     @EJB
     LogicaUsuarioFacadeLocal usuarioLogica;
 
-    /**
-     *
+    /**Metodo que registra los datos en bitacora
      * @param solicitud
      */
     @Override

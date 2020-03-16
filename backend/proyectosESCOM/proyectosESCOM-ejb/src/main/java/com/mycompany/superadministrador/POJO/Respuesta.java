@@ -1,26 +1,26 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.superadministrador.POJO;
-
 /**
- *
- * @author jeiso
+ * Esta es la clase respuesta para el manejo de mensajes
+ * @author Alejandra Pabon, Jeison Gaona
+ * Universidad de Cundinamarca
  */
 public class Respuesta {
     
+    /**Variable para los mensajes*/
     private String respuesta;
 
+     /**Constructor con variables
+     * @param respuesta
+      */
     public Respuesta(String respuesta) {
         this.respuesta = respuesta;
     }
 
+    /**Constructor vacio de la clase*/
     public Respuesta() {
     }
 
-    
+     /**Metodos get y set de la  variable*/
     public String getRespuesta() {
         return respuesta;
     }

@@ -1,10 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.superadministrador.entity;
-
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -15,44 +9,61 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-
 /**
- *
- * @author aleja
+ * Esta es la clase de la entidad bitacora
+ * Contiene todos los campos para la persistencia
+ * @author Alejandra Pabon, Jeison Gaona
+ * Universidad de Cundinamarca
  */
 @Entity
 @Table(name = "TBL_BITACORA")
 public class Bitacora implements Serializable{
     
+    /**Variable id**/
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "PK_BTC_IDBITACORA")
     private Integer idBitacora;
     
+    /**Variable operacion realizada**/
     @Column(name = "BTC_OPERACION")
     private String operacion;
     
+    /**Variable id usuario**/
     @Column(name = "FK_BTC_IDUSUARIO")
     private Integer idUsuario;
     
+    /**Variable tabla involucrada**/
     @Column(name = "BTC_TABLAINVOLUCRADA")
     private String tablaInvolucrada;
     
+    /**Variable fecha de operacion**/
     @Column(name = "BTC_FECHABITACORA")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaBitacora;
     
+    /**Variable id modulo**/
     @Column(name = "FK_BTC_IDMODULO")
     private Integer idModulo;
 
+    /**Variable ip**/
     @Column(name = "BTC_IP")
     private String ip;
     
+    /**Constructor vacio de la clase**/
     public Bitacora(){
         
     }
 
+    /**Constructor con variables
+     * @param operacion
+     * @param idUsuario
+     * @param tablaInvolucrada
+     * @param fechaBitacora
+     * @param idModulo
+     * @param ip
+     **/
     public Bitacora(String operacion, Integer idUsuario, String tablaInvolucrada, Date fechaBitacora, Integer idModulo, String ip) {
         this.operacion = operacion;
         this.idUsuario = idUsuario;
@@ -62,6 +73,7 @@ public class Bitacora implements Serializable{
         this.ip = ip;
     }
 
+    /**Metodos get y set de las variables**/
     public Integer getIdBitacora() {
         return idBitacora;
     }

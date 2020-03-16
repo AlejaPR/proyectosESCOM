@@ -1,10 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.superadministrador.entity;
-
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -20,10 +14,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
-
 /**
- *
- * @author aleja
+ * Esta es la clase de la entidad usuario
+ * Contiene todos los campos para la persistencia y consultas named query
+ * @author Alejandra Pabon, Jeison Gaona
+ * Universidad de Cundinamarca
  */
 @Entity
 @Table(name = "TBL_USUARIO")
@@ -48,63 +43,92 @@ import javax.validation.constraints.Size;
 })
 public class Usuario implements Serializable {
 
+    /**Variable id usuario**/
     @Id
     @Column(name = "PK_USR_IDUSUARIO")
     private Integer idUsuario;
 
+    /**Variable token**/
     @Size(max = 300)
     @Column(name = "USR_TOKEN")
     private String token;
 
+    /**Variable numero documento**/
     @Column(name = "USR_NUMERODOCUMENTO")
     private Integer numeroDocumento;
 
+    /**Variable apellido**/
     @Size(max = 50)
     @Column(name = "USR_APELLIDO")
     private String apellido;
 
+    /**Variable estado usuario**/
     @Size(max = 20)
     @Column(name = "USR_ESTADO")
     private String estado;
 
+    /**Variable fecha nacimiento**/
     @Column(name = "USR_FECHANACIMIENTO")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaNacimiento;
 
+    /**Variable numero intentos**/
     @Column(name = "USR_NUMEROINTENTOS")
     private Integer numeroIntentos;
 
+    /**Variable nombre**/
     @Size(max = 50)
     @Column(name = "USR_NOMBRE")
     private String nombre;
 
+    /**Variable ultima modificacion**/
     @Column(name = "USR_ULTIMAMODIFICACION")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ultimaModificacion;
 
+    /**Variable correo electronico**/
     @Size(max = 50)
     @Column(name = "USR_CORREOELECTRONICO")
     private String correoElectronico;
 
+    /**Variable contraseña**/
     @Size(max = 300)
     @Column(name = "USR_CONTRASENA")
     private String contrasena;
     
+    /**Variable facha ingreso**/
     @Column(name = "USR_FECHAINGRESO")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaIngreso;
 
+    /**Variable para la relacion con la entidad tipo documento**/
     @JoinColumn(name = "FK_USR_IDTIPODOCUMENTO", referencedColumnName = "PK_TIP_IDTIPODOCUMENTO")
     @ManyToOne
     private TipoDocumento tipoDocumento;
 
+    /**Variable para la relacion con la entidad  usuario actividad**/
     @OneToMany(mappedBy = "usuario")
     private List<UsuarioActividad> listaUsuarioActividad;
 
+    /**Constructor vacio de la clase**/
     public Usuario() {
 
     }
 
+    /**Constructor con variables
+     * @param token
+     * @param numeroDocumento
+     * @param apellido
+     * @param estado
+     * @param fechaNacimiento
+     * @param numeroIntentos
+     * @param nombre
+     * @param ultimaModificacion
+     * @param correoElectronico
+     * @param contrasena
+     * @param tipoDocumento
+     * @param fechaIngreso
+     **/
     public Usuario(String token, Integer numeroDocumento, String apellido, String estado, Date fechaNacimiento, Integer numeroIntentos,
             String nombre, Date ultimaModificacion, String correoElectronico, String contrasena, TipoDocumento tipoDocumento, Date fechaIngreso) {
         this.token = token;
@@ -120,7 +144,8 @@ public class Usuario implements Serializable {
         this.tipoDocumento = tipoDocumento;
         this.fechaIngreso = fechaIngreso;
     }
-
+ 
+    /**Metodos get y set de las variables**/
     public Integer getIdUsuario() {
         return idUsuario;
     }

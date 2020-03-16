@@ -1,26 +1,39 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.superadministrador.POJO;
-
 /**
- *
- * @author aleja
+ * Esta es la clase POJO de la entidad configuracion
+ * contiene las variables de la tabla sin anotaciones
+ * @author Alejandra Pabon, Jeison Gaona
+ * Universidad de Cundinamarca
  */
 public class ConfiguracionPOJO {
     
+    /**Variable id*/
     private int idConfiguracion;
+    /**Variable para almacenar imagen logo*/
     private byte[] logo;
+    /**Variable para almacenar imagen login*/
     private byte[] imagenLogin;
+    /**Variable para color de barra superior*/
     private String barraSuperior;
+    /**Variable para color de barra lateral*/
     private String barraLateral;
+    /**Variable para color de botones*/
     private String botones;
+    /**Variable datos solicitud para el registro de bitacora*/
     private DatosSolicitudPOJO datosSolicitud;
+    
+    /**Constructor vacio de la clase*/
     public ConfiguracionPOJO() {
     }
 
+    /**Constructor con variables
+     * @param idConfiguracion
+     * @param logo
+     * @param imagenLogin
+     * @param barraSuperior
+     * @param barraLateral
+     * @param botones
+     */
     public ConfiguracionPOJO(int idConfiguracion,byte[] logo, byte[] imagenLogin, String barraSuperior, String barraLateral, String botones) {
         this.idConfiguracion = idConfiguracion;
         this.logo = logo;
@@ -30,6 +43,7 @@ public class ConfiguracionPOJO {
         this.botones = botones;
     }
 
+    /**Metodos get y set de las variables*/
     public int getIdConfiguracion() {
         return idConfiguracion;
     }

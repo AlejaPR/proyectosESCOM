@@ -1,5 +1,4 @@
 package com.mycompany.superadministrador.logica;
-
 import com.mycompany.superadministrador.POJO.ConfiguracionPOJO;
 import com.mycompany.superadministrador.entity.Configuracion;
 import com.mycompany.superadministrador.interfaces.ConfiguracionFacadeLocal;
@@ -11,21 +10,23 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
-
 /**
- * Clase encargada de la logica de la configuracion
- *
- * @author jeison gaona - alejandra pabon
+ * Esta es la clase encargada de la logica de configuracion
+ * @author Alejandra Pabon, Jeison Gaona
+ * Universidad de Cundinamarca
  */
 @Stateless
 public class LogicaConfiguracion implements LogicaConfiguracionFacadeLocal {
     
+    /**Inyeccion de la interfaz de configuracion**/
     @EJB
     ConfiguracionFacadeLocal configuracionDB;
     
+    /**Inyeccion de la interfaz de bitacora**/
     @EJB
     UtilitarioFacadeLocal bitacora;
     
+    /**Variable para registro en bitacora**/
     private static final String TABLA = "TBL_CONFIGURACION";
 
     /**

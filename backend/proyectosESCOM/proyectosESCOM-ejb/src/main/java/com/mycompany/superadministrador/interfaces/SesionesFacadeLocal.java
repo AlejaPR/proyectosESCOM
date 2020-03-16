@@ -1,17 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.superadministrador.interfaces;
-
 import java.util.Calendar;
 import java.util.Map;
 import javax.ejb.Local;
-
 /**
- *
- * @author jeiso
+ * Esta es la interfaz para la clase sesiones
+ * Contiene todos los metodos requeridos para el manejo de sesiones
+ * @author Alejandra Pabon, Jeison Gaona
+ * Universidad de Cundinamarca
  */
 @Local
 public interface SesionesFacadeLocal {

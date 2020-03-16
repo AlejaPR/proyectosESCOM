@@ -1,17 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.superadministrador.utilitarios;
-
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import com.mycompany.superadministrador.POJO.GestorBitacora;
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
-import com.mycompany.superadministrador.interfaces.BitacoraFacadeLocal;
 import com.mycompany.superadministrador.interfaces.LogicaBitacoraFacadeLocal;
 import com.mycompany.superadministrador.interfaces.LogicaUsuarioFacadeLocal;
-import com.mycompany.superadministrador.interfaces.UsuarioFacadeLocal;
 import com.mycompany.superadministrador.interfaces.UtilitarioFacadeLocal;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,37 +11,54 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-
 /**
- *
- * @author jeiso
+ * Esta es la clase encargada del manejo de metodos requeridos por los modulos
+ * @author Alejandra Pabon, Jeison Gaona
+ * Universidad de Cundinamarca
  */
 @Stateless
 public class UtiliariosModulos implements UtilitarioFacadeLocal {
     
+    /**Inyeccion de la interfaz de logica de usuario*/
     @EJB
     LogicaUsuarioFacadeLocal usuarioLogica;
     
+    /**Inyeccion de la interfaz de logica de bitacora*/
     @EJB
     LogicaBitacoraFacadeLocal bitacoraLogica;
     
+    /**Variable para la gestion del logger*/
     static Logger bitacora = GestorBitacora.getBitacora("com.mycompany.superadministrador.services.Login", "./bitacoraADMIN.txt", Level.SEVERE);
-    
+
+    /**Metodo para devolver la informacion del usuario(id, numero documento, correo)
+     * Recibe el token 
+     * @param token
+     * @return 
+     */
     @Override
     public UsuarioPOJO devolverInformacionDeUsuario(String token){
         return usuarioLogica.devolverDatosUsuario(token);
     }
     
+    /**Metodo para regitrar los errores en logger
+     * @param error
+     */
     @Override
     public void registroLogger(String error){
         bitacora.severe(error);
     }
     
+    /**Metodo para el registro en bitacora de los metodos de los modulos
+     * @param solicitud
+     */
     @Override
     public void registrarEnBitacora(DatosSolicitudPOJO solicitud){
         bitacoraLogica.registrarEnBitacora(solicitud);
     }
     
+    /**Metodo para devolver los usuarios registrados
+     * @return 
+     */
     @Override
     public List<UsuarioPOJO> devolverUsuariosModulo(){
         List<UsuarioPOJO> listaUsuariosModulo = new ArrayList();
