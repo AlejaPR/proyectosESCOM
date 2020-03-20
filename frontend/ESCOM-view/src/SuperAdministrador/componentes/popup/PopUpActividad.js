@@ -9,7 +9,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
-import { generarInput, generarTextArea } from '../../utilitario/GenerarInputs.js'
+import { generarInput, generarArea } from '../../utilitario/GenerarInputs.js'
 import { seleccione, validacionCuarentaCaracteres, validacionDoscientosCaracteres, requerido } from '../../utilitario/validacionCampos.js';
 import AddIcon from '@material-ui/icons/Add';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
@@ -43,12 +43,43 @@ class PopUpActividad extends React.Component {
         switch (this.props.mensaje) {
             case 'actividad registrada':
                 NotificationManager.success('Actividad registrada correctamente');
-                this.props.actualizarMensajeRegistrar('');
+                // this.props.actualizarMensajeRegistrar('');
                 break;
             case 'Sin permiso':
                 NotificationManager.error('No tiene permisos sucifientes para registrar una actividad');
                 this.props.actualizarMensajeRegistrar('');
                 break;
+            case 'La actividad ya se encuentra registrada':
+                NotificationManager.error('La actividad se encuentra registrada intente de nuevo con otro nombre');
+                this.props.actualizarMensajeRegistrar('');
+                break;
+            case 'El modulo no se encuentra registrado':
+                NotificationManager.error('El modulo seleccionado no se encuentra registrado');
+                this.props.actualizarMensajeRegistrar('');
+                break;
+            case 'Ocurrio un error en el servidor':
+                NotificationManager.error('Ocurrio un error en el servidor');
+                break;
+            case 'Servidor fuera de servicio temporalmente':
+                NotificationManager.error('Servidor fuera de servicio temporalmente');
+                break;
+            case 'Token requerido':
+                localStorage.removeItem('Token');
+                window.location.href = "/";
+                break;
+            case 'token vencido':
+                localStorage.removeItem('Token');
+                window.location.href = "/";
+                break;
+            case 'token no registrado':
+                localStorage.removeItem('Token');
+                window.location.href = "/";
+                break;
+            case 'token incorrecto':
+                localStorage.removeItem('Token');
+                window.location.href = "/";
+                break;
+
             default:
                 break;
         }
@@ -103,14 +134,12 @@ class PopUpActividad extends React.Component {
                                     <Field name="nombre" validate={[requerido, validacionCuarentaCaracteres]} component={generarInput} label="Nombre" />
                                 </div>
                             </div>
-                            <br />
                             <div className="row">
                                 <div className="col-sm-12">
-                                    <Field name="descripcion" component={generarTextArea} filas={4} validate={[requerido, validacionDoscientosCaracteres]} label="descripcion" />
+                                    <Field name="descripcion" component={generarArea} filas={4} validate={[requerido, validacionDoscientosCaracteres]} label="Descripcion" />
                                 </div>
                             </div>
-                            <br />
-                            <div className="row">
+                            <div className="row" style={{ paddingTop: "9px" }}>
                                 <div className="col-sm-12">
                                     <Field name="modulo" validate={[seleccione]} component={ReduxFormSelect} options={this.opciones()} />
                                 </div>

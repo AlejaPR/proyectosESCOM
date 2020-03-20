@@ -1,6 +1,16 @@
 import axios from 'axios';
 import { desencriptar } from '../componentes/general/Encriptar.js';
-import { mensajesDeError } from '../utilitario/MensajesError.js';
+import {campo} from '../utilitario/GenerarInputs.js'
+
+import {
+    mensajeCambiarEstadoDeActividades,
+    mensajeDeRegistro,
+    mensajeDeCambiarEstado,
+    mensajeDeEditar,
+    mensajeDeInformacion,
+    mensajeDeListar,
+    mensajeDeListarActividades
+} from '../mensajesDeError/MensajesDeErrorModulo'
 
 export const MOSTRAR_MODULOS = 'MOSTRAR_USUARIOS';
 export const ESTADO_MODULOS = 'ESTADO_MODULOS';
@@ -54,7 +64,7 @@ export function actionAgregarModulo(modulo, token) {
                 } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
+                        let respuesta = mensajeDeRegistro(o.respuesta);
                         if (respuesta !== '') {
                             dispatch({
                                 type: MENSAJE_REGISTRAR_MODULO,
@@ -88,19 +98,24 @@ export function actionConsultarModulos(token) {
 
             }).catch((error) => {
                 if (error.request.response === '') {
-
-
+                    dispatch({
+                        type: MENSAJE_REGISTRAR_MODULO,
+                        mensaje: 'Servidor fuera de servicio temporalmente'
+                    });
                 } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
+                        let respuesta = mensajeDeListar(o.respuesta);
                         if (respuesta === 'Sin permiso') {
                             dispatch({
                                 type: ESTADO_MODULOS,
                                 estado: true
                             });
                         } else {
-                            //
+                            dispatch({
+                                type: MENSAJE_REGISTRAR_MODULO,
+                                mensaje: respuesta
+                            });
                         }
                     }
                 }
@@ -117,9 +132,17 @@ export function actionCargarInformacionDeModulo(codigoModulo, token) {
     return (dispatch, getState) => {
         axios.get(`${URL_BASE}/proyectosESCOM-web/api/modulos/datos/${codigoModulo}`, { headers: headers })
             .then(response => {
+                debugger;
+                let info = {
+                    'descripcionModulo': response.data.descripcionModulo,
+                    'estadoModulo': response.data.estadoModulo,
+                    'idModulo': response.data.idModulo,
+                    'imagenModulo': campo(response.data.imagenModulo),
+                    'nombreModulo':response.data.nombreModulo,
+                }
                 dispatch({
                     type: INFORMACION_MODULO,
-                    informacionModulo: response.data
+                    informacionModulo:info
                 });
             }).catch((error) => {
                 if (error.request.response === '') {
@@ -130,16 +153,11 @@ export function actionCargarInformacionDeModulo(codigoModulo, token) {
                 } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
+                        let respuesta = mensajeDeInformacion(o.respuesta);
                         if (respuesta !== '') {
                             dispatch({
                                 type: MENSAJE_EDITAR_MODULO,
                                 mensaje: respuesta
-                            });
-                        } else {
-                            dispatch({
-                                type: MENSAJE_EDITAR_MODULO,
-                                mensaje: 'Sin acceso al servicio'
                             });
                         }
                     }
@@ -171,16 +189,11 @@ export function actionConsultarActividadesModulo(codigoModulo, token) {
                 } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
+                        let respuesta = mensajeDeListarActividades(o.respuesta);
                         if (respuesta !== '') {
                             dispatch({
                                 type: MENSAJE_ACTIVIDADES,
                                 mensaje: respuesta
-                            });
-                        } else {
-                            dispatch({
-                                type: MENSAJE_ACTIVIDADES,
-                                mensaje: 'Sin acceso al servicio'
                             });
                         }
                     }
@@ -205,16 +218,14 @@ export function actionSuspenderActivarModulo(codigoModulo, token, actualizados) 
         axios.put(`${URL_BASE}/proyectosESCOM-web/api/modulos/cambiarEstado/${codigoModulo}`, datosSolicitud, { headers: headers })
             .then(response => {
                 dispatch({
-                    type: MENSAJE_SUSPENDER_MODULO,
-                    mensaje: 'Operacion hecha con exito'
-                });
-                dispatch({
                     type: ACTUALIZAR_MODULOS,
                     modulo: actualizados
                 });
+                dispatch({
+                    type: MENSAJE_SUSPENDER_MODULO,
+                    mensaje: 'Operacion hecha con exito'
+                });
             }).catch((error) => {
-                console.log(error);
-
                 if (error.request.response === '') {
                     dispatch({
                         type: MENSAJE_SUSPENDER_MODULO,
@@ -223,17 +234,11 @@ export function actionSuspenderActivarModulo(codigoModulo, token, actualizados) 
                 } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
-                        console.log('respuesta', respuesta);
+                        let respuesta = mensajeDeCambiarEstado(o.respuesta);
                         if (respuesta !== '') {
                             dispatch({
                                 type: MENSAJE_SUSPENDER_MODULO,
                                 mensaje: respuesta
-                            });
-                        } else {
-                            dispatch({
-                                type: MENSAJE_SUSPENDER_MODULO,
-                                mensaje: 'Sin acceso al servicio'
                             });
                         }
                     }
@@ -274,17 +279,11 @@ export function actionCambiarEstadoActividades(actividades, token) {
                 } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
-                        console.log('respuesta', respuesta);
+                        let respuesta = mensajeCambiarEstadoDeActividades(o.respuesta);
                         if (respuesta !== '') {
                             dispatch({
                                 type: MENSAJE_ACTIVIDADES,
                                 mensaje: respuesta
-                            });
-                        } else {
-                            dispatch({
-                                type: MENSAJE_ACTIVIDADES,
-                                mensaje: 'Sin acceso al servicio'
                             });
                         }
                     }
@@ -303,7 +302,7 @@ export function actionEditarModulo(modulo, codigoModulo, token) {
         'TokenAuto': desencriptar(token),
         'Permiso': PERMISO_EDITAR_MODULOS
     }
-    modulo.datosSolicitud = {     
+    modulo.datosSolicitud = {
         'ip': localStorage.getItem('Ip'),
         'token': desencriptar(token),
         'operacion': PERMISO_EDITAR_MODULOS
@@ -324,16 +323,11 @@ export function actionEditarModulo(modulo, codigoModulo, token) {
                 } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
+                        let respuesta = mensajeDeEditar(o.respuesta);
                         if (respuesta !== '') {
                             dispatch({
                                 type: MENSAJE_EDITAR_MODULO,
-                                mensaje: 'Sin acceso al servicio'
-                            });
-                        } else {
-                            dispatch({
-                                type: MENSAJE_EDITAR_MODULO,
-                                mensaje: 'Sin acceso al servicio'
+                                mensaje: respuesta
                             });
                         }
                     }
@@ -361,7 +355,7 @@ export function actualizarMensajeActividades(mensaje) {
     };
 }
 
-export function actionAsignarModulo(codigoModulo) {
+export function actionAsignarCodigoModulo(codigoModulo) {
     return (dispatch, getState) => {
         dispatch({
             type: ANADIR_CODIGO_EDITAR,
@@ -369,7 +363,14 @@ export function actionAsignarModulo(codigoModulo) {
         });
     }
 }
-
+export function actionAsignarModulo(info) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: INFORMACION_MODULO,
+            informacionModulo:info
+        });
+    }
+}
 export function actualizarMensajeEditar(mensaje) {
     return (dispatch, getState) => {
         dispatch({

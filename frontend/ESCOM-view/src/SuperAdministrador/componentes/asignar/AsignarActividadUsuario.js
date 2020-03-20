@@ -1,10 +1,5 @@
 import React from 'react';
 
-//estilos
-import '../../css/business-casual.css'
-import '../../css/estilos.css'
-import '../../css/bootstrap.min.css'
-import '../../css/menu.css'
 import 'react-notifications/lib/notifications.css';
 
 //componentes
@@ -16,7 +11,6 @@ import { withRouter } from 'react-router-dom';
 import { seleccione } from '../../utilitario/validacionCampos.js';
 import MaterialTable from 'material-table';
 import Barra from '../general/BarraDirecciones.js';
-
 
 import Divider from '@material-ui/core/Divider';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
@@ -44,29 +38,72 @@ class AsignarActividadUsuario extends React.Component {
     componentDidMount() {
         if (this.props.cedula === undefined || this.props.cedula.length === 0) {
             this.props.history.push('/adminUsuario');
+        }else{
+            this.props.actionConsultarModulos(localStorage.getItem('Token'));
+            this.props.actionConsultarActividadesUsuario(this.props.cedula, localStorage.getItem('Token'));
         }
-        this.props.actionConsultarModulos(localStorage.getItem('Token'));
-        this.props.actionConsultarActividadesUsuario(this.props.cedula, localStorage.getItem('Token'));
     }
     componentDidUpdate() {
-        switch (this.props.mensaje) {
-            case 'Actividad asignada':
-                NotificationManager.success('Actividad asignada');
-                this.setState({ valor: null });
-                this.props.actualizarMensajeAsignar('');
-                this.props.actionConsultarActividadesUsuario(this.props.cedula, localStorage.getItem('Token'));
-                this.props.actionConsultarActividadesSinAsignar(localStorage.getItem('Token'), this.props.cedula, this.state.selectedOption.value);
-                break;
-            case 'Actividades eliminadas':
-                NotificationManager.success('Actividades eliminadas');
-                this.props.actualizarMensajeAsignar('');
-                this.props.actionConsultarActividadesUsuario(this.props.cedula, localStorage.getItem('Token'));
-                if (this.state.selectedOption.value !== undefined) {
+        if (this.props.mensaje !== '') {
+            switch (this.props.mensaje) {
+                case 'Actividad asignada':
+                    NotificationManager.success('Actividad asignada');
+                    this.setState({ valor: null });
+                    this.props.actualizarMensajeAsignar('');
+                    this.props.actionConsultarActividadesUsuario(this.props.cedula, localStorage.getItem('Token'));
                     this.props.actionConsultarActividadesSinAsignar(localStorage.getItem('Token'), this.props.cedula, this.state.selectedOption.value);
-                }
-                break;
-            default:
-                break;
+                    break;
+                case 'Actividades eliminadas':
+                    NotificationManager.success('Actividades eliminadas');
+                    this.props.actualizarMensajeAsignar('');
+                    this.props.actionConsultarActividadesUsuario(this.props.cedula, localStorage.getItem('Token'));
+                    if (this.state.selectedOption.value !== undefined) {
+                        this.props.actionConsultarActividadesSinAsignar(localStorage.getItem('Token'), this.props.cedula, this.state.selectedOption.value);
+                    }
+                    break;
+                case 'No se encontraron datos de modulos':
+                    NotificationManager.error('No se encontraron datos de modulos');
+                    this.props.actualizarMensajeAsignar('');
+                    break;
+                case 'No se encontraron datos del usuario':
+                    NotificationManager.error('No se encontraron actividades asociadas al usuario');
+                    this.props.actualizarMensajeAsignar('');
+
+                    break;
+                case 'Ocurrio un error en el servidor':
+                    NotificationManager.error('Ocurrio un error en el servidor');
+                    this.props.actualizarMensajeAsignar('');
+
+                    break;
+                case 'Servidor fuera de servicio temporalmente':
+                    NotificationManager.error('Servidor fuera de servicio temporalmente');
+                    this.props.actualizarMensajeAsignar('');
+
+                    break;
+                case 'Ocurrio un error al momento de asignar actividad al usuario':
+                    NotificationManager.error('Ocurrio un error al momento de asignar actividad al usuario');
+                    this.props.actualizarMensajeAsignar('');
+
+                    break;
+                case 'Token requerido':
+                    localStorage.removeItem('Token');
+                    window.location.href = "/";
+                    break;
+                case 'token vencido':
+                    localStorage.removeItem('Token');
+                    window.location.href = "/";
+                    break;
+                case 'token no registrado':
+                    localStorage.removeItem('Token');
+                    window.location.href = "/";
+                    break;
+                case 'token incorrecto':
+                    localStorage.removeItem('Token');
+                    window.location.href = "/";
+                    break;
+                default:
+                    break;
+            }
         }
 
     }
@@ -119,7 +156,7 @@ class AsignarActividadUsuario extends React.Component {
 
     onClickCancelar = (event) => {
         event.preventDefault();
-        this.props.history.push('/adminUsuario');
+        this.props.history.goBack();
     }
 
     handleSubmit = formValues => {
@@ -180,7 +217,7 @@ class AsignarActividadUsuario extends React.Component {
                                         <br />
                                         <br />
                                         <div className="row">
-                                            <div className="col-md-6" style={{paddingLeft:"350px"}}>
+                                            <div className="col-md-6" style={{ paddingLeft: "350px" }}>
                                                 <Button
                                                     style={{ background: this.props.configuracion.botones, fontSize: "14px", fontFamily: "sans-serif", textTransform: "none" }}
                                                     className="btn btn-dark"
@@ -189,7 +226,7 @@ class AsignarActividadUsuario extends React.Component {
                                                     startIcon={<AddCircleOutlineIcon />}
                                                 >Añadir</Button>
                                             </div>
-                                            <div className="col-md-6" style={{paddingLeft:"39px"}}>
+                                            <div className="col-md-6" style={{ paddingLeft: "39px" }}>
                                                 <Button
                                                     type="submit"
                                                     variant="contained"
@@ -270,6 +307,7 @@ export const ReduxFormSelect = props => {
         <>
             <Select
                 {...input}
+                styles={customStyles}
                 maxMenuHeight={185}
                 isSearchable={true}
                 placeholder='Seleccione un modulo'
@@ -290,6 +328,7 @@ export const ReduxFormSelectDos = props => {
         <div>
             <Select
                 {...input}
+                styles={customStyles}
                 maxMenuHeight={185}
                 isSearchable={true}
                 value={props.valor}
@@ -302,6 +341,19 @@ export const ReduxFormSelectDos = props => {
             {touched && ((error && <span className="text-danger letra form-group">{error}</span>))}
         </div>
     )
+}
+
+const customStyles = {
+    option: (provided, state) => ({
+        ...provided,
+        fontSize: 13
+    }),
+    control: styles => ({ ...styles, backgroundColor: 'white', fontSize: 13, fontFamily: 'sans-serif' }),
+    singleValue: (provided, state) => {
+        const opacity = state.isDisabled ? 0.5 : 1;
+        const transition = 'opacity 300ms';
+        return { ...provided, opacity, transition };
+    }
 }
 
 const estiloCabecera = {

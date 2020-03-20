@@ -13,7 +13,7 @@ import { Field, reduxForm } from "redux-form";
 import PropTypes from "prop-types";
 import Barra from '../general/BarraDirecciones.js';
 import { connect } from 'react-redux';
-import { consultarConfiguracion, actionActualizarBarraLateral,actualizarMensaje, actualizarFotoLogin, actualizarFotoLogo, actionActualizarConfiguracion, actionActualizarBarraSuperior, actionActualizarBotones, actionConsultarConfiguracionCompleta } from '../../actions/actionConfiguracion.js'
+import { consultarConfiguracion, actionActualizarBarraLateral, actualizarMensaje, actualizarFotoLogin, actualizarFotoLogo, actionActualizarConfiguracion, actionActualizarBarraSuperior, actionActualizarBotones, actionConsultarConfiguracionCompleta } from '../../actions/actionConfiguracion.js'
 import { campo } from '../../utilitario/GenerarInputs.js'
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import Alert from '@material-ui/lab/Alert';
@@ -39,14 +39,47 @@ class Configuracion extends React.Component {
     }
 
     componentDidUpdate() {
-        switch (this.props.mensaje) {
-            case 'Configuracion actualizada':
-                NotificationManager.success('Configuracion de aspecto actualizada');
-                break;
-            case '':
-                break;
-            default:
-                break;
+        if (this.props.mensaje !== '') {
+            switch (this.props.mensaje) {
+                case 'Configuracion actualizada':
+                    NotificationManager.success('Configuracion de aspecto actualizada');
+                    this.props.actualizarMensaje('');
+                    break;
+                case 'Ocurrio un error al momento de registrar la configuracion':
+                    NotificationManager.error('Ocurrio un error al momento de registrar la configuracion');
+                    this.props.actualizarMensaje('');
+                    break;
+                case 'No se encontraron datos':
+                    NotificationManager.error('No se encontraron datos de la configuracion');
+                    this.props.actualizarMensaje('');
+                    break;
+                case 'Ocurrio un error en el servidor':
+                    NotificationManager.error('Ocurrio un error en el servidor');
+                    this.props.actualizarMensaje('');
+                    break;
+                case 'Servidor fuera de servicio temporalmente':
+                    NotificationManager.error('Servidor fuera de servicio temporalmente');
+                    this.props.actualizarMensaje('');
+                    break;
+                case 'Token requerido':
+                    localStorage.removeItem('Token');
+                    window.location.href = "/";
+                    break;
+                case 'token vencido':
+                    localStorage.removeItem('Token');
+                    window.location.href = "/";
+                    break;
+                case 'token no registrado':
+                    localStorage.removeItem('Token');
+                    window.location.href = "/";
+                    break;
+                case 'token incorrecto':
+                    localStorage.removeItem('Token');
+                    window.location.href = "/";
+                    break;
+                default:
+                    break;
+            }
         }
         this.props.actualizarMensaje('');
     }
@@ -117,9 +150,7 @@ class Configuracion extends React.Component {
                             name="image"
                             type="file"
                             validate={[
-                                this.validateImageWeight,
-                                this.validarAnchoImagenLogin,
-                                this.validarAltoImagenLogin,
+                                this.validarPesoImagenLogin,
                                 this.validateImageFormat
                             ]}
                             component={this.renderFileInput}
@@ -142,9 +173,7 @@ class Configuracion extends React.Component {
                                 name="imagenDos"
                                 type="file"
                                 validate={[
-                                    this.validateImageWeight,
-                                    this.validarAnchoImagenLogo,
-                                    this.validarAltoImagenLogo,
+                                    this.validarPesoLogo,
                                     this.validateImageFormat
                                 ]}
                                 component={this.renderFileInputLogo}
@@ -229,7 +258,8 @@ class Configuracion extends React.Component {
     static propTypes = {
         previewLogoUrl: PropTypes.string,
         tipoDeImagen: PropTypes.string,
-        pesoMaximo: PropTypes.number,
+        pesoMaximoLogo: PropTypes.number,
+        pesoMaximoLogin: PropTypes.number,
         anchuraMaxima: PropTypes.number,
         alturaMaxima: PropTypes.number,
         handleSubmit: PropTypes.func.isRequired
@@ -238,66 +268,29 @@ class Configuracion extends React.Component {
     static defaultProps = {
         previewLogoUrl: "https://imgplaceholder.com/400x300",
         tipoDeImagen: "image/jpeg, image/png",
-        pesoMaximo: 100,
+        pesoMaximoLogo: 300,
+        pesoMaximoLogin: 500,
         anchuraMaxima: 100,
         alturaMaxima: 100
     };
-    validateImageWeight = imageFile => {
+    validarPesoLogo = imageFile => {
         if (imageFile && imageFile.size) {
             const imageFileKb = imageFile.size / 1024;
-            const { pesoMaximo } = this.props;
+            const { pesoMaximoLogo } = this.props;
 
-            if (imageFileKb > pesoMaximo) {
-                return `El peso de la imagen debe ser menor o igual a ${pesoMaximo}kb`;
-            }
-        }
-    };
-    validarAnchoImagenLogin = imageFile => {
-        if (imageFile) {
-            if (imageFile.width > 750) {
-                return `El ancho de la imagen debe ser menor o igual a 750px`;
+            if (imageFileKb > pesoMaximoLogo) {
+                return `El peso de la imagen debe ser menor o igual a ${pesoMaximoLogo}kb`;
             }
         }
     };
 
-    validarAltoImagenLogin = imageFile => {
-        if (imageFile) {
-            if (imageFile.height > 780) {
-                return `La altura de la imagen debe ser menor o igual a 780px`;
-            }
-        }
-    };
+    validarPesoImagenLogin = imageFile => {
+        if (imageFile && imageFile.size) {
+            const imageFileKb = imageFile.size / 1024;
+            const { pesoMaximoLogin } = this.props;
 
-    validarAnchoImagenLogo = imageFile => {
-        if (imageFile) {
-            if (imageFile.width > 400) {
-                return `El ancho de la imagen debe ser menor o igual a 400px`;
-            }
-        }
-    };
-
-    validarAltoImagenLogo = imageFile => {
-        if (imageFile) {
-            if (imageFile.height > 170) {
-                return `La altura de la imagen debe ser menor o igual a 170px`;
-            }
-        }
-    };
-
-    validateImageWidth = imageFile => {
-        if (imageFile) {
-            const { anchuraMaxima } = this.props;
-            if (imageFile.width > anchuraMaxima) {
-                return `El ancho de la imagen debe ser menor o igual a ${anchuraMaxima}px`;
-            }
-        }
-    };
-    validateImageHeight = imageFile => {
-        if (imageFile) {
-            const { alturaMaxima } = this.props;
-
-            if (imageFile.height > alturaMaxima) {
-                return `La altura de la imagen debe ser menor o igual a ${alturaMaxima}px`;
+            if (imageFileKb > pesoMaximoLogin) {
+                return `El peso de la imagen debe ser menor o igual a ${pesoMaximoLogin}kb`;
             }
         }
     };
@@ -322,25 +315,30 @@ class Configuracion extends React.Component {
         const { tipoDeImagen } = this.props;
         if (imageFile) {
             if (!tipoDeImagen.includes(imageFile.type)) {
-                //  NotificationManager.error('Seleccione un archivo de imagen .jpg o .png');
+                NotificationManager.error('Seleccione un archivo de imagen .jpg o .png');
                 event.target.value = null;
             } else {
+                var peso = this.validarPesoImagenLogin(imageFile);
+                if (peso !== undefined) {
+                    NotificationManager.error(`El peso de la imagen debe ser menor a ${this.props.pesoMaximoLogin} Kb`);
+                    event.target.value = null;
+                } else {
+                    const localImageUrl = URL.createObjectURL(imageFile);
+                    const imageObject = new window.Image();
 
-                const localImageUrl = URL.createObjectURL(imageFile);
-                const imageObject = new window.Image();
+                    imageObject.onload = () => {
+                        imageFile.width = imageObject.naturalWidth;
+                        imageFile.height = imageObject.naturalHeight;
+                        input.onChange(imageFile);
+                        URL.revokeObjectURL(imageFile);
+                    };
+                    imageObject.src = localImageUrl;
+                    this.getBase64(imageFile, (result) => {
+                        this.props.actualizarFotoLogin(result);
+                    });
 
-                imageObject.onload = () => {
-                    imageFile.width = imageObject.naturalWidth;
-                    imageFile.height = imageObject.naturalHeight;
-                    input.onChange(imageFile);
-                    URL.revokeObjectURL(imageFile);
-                };
-                imageObject.src = localImageUrl;
-                this.getBase64(imageFile, (result) => {
-                    this.props.actualizarFotoLogin(result);
-                });
-
-                this.handlePreview(localImageUrl);
+                    this.handlePreview(localImageUrl);
+                }
             }
         }
     };
@@ -355,25 +353,30 @@ class Configuracion extends React.Component {
         let imageFile = event.target.files[0];
         const { tipoDeImagen } = this.props;
         if (imageFile) {
+            var peso = this.validarPesoLogo(imageFile);
             if (!tipoDeImagen.includes(imageFile.type)) {
-                // NotificationManager.error('Seleccione un archivo de imagen .jpg o .png');
+                NotificationManager.error('Seleccione un archivo de imagen .jpg o .png');
                 event.target.value = null;
             } else {
+                if (peso !== undefined) {
+                    NotificationManager.error(`El peso de la imagen debe ser menor a ${this.props.pesoMaximoLogo} Kb`);
+                    event.target.value = null;
+                } else {
+                    const localImageUrl = URL.createObjectURL(imageFile);
+                    const imageObject = new window.Image();
 
-                const localImageUrl = URL.createObjectURL(imageFile);
-                const imageObject = new window.Image();
-
-                imageObject.onload = () => {
-                    imageFile.width = imageObject.naturalWidth;
-                    imageFile.height = imageObject.naturalHeight;
-                    input.onChange(imageFile);
-                    URL.revokeObjectURL(imageFile);
-                };
-                imageObject.src = localImageUrl;
-                this.getBase64(imageFile, (result) => {
-                    this.props.actualizarFotoLogo(result);                   
-                });
-                this.handlePreviewLogo(localImageUrl);
+                    imageObject.onload = () => {
+                        imageFile.width = imageObject.naturalWidth;
+                        imageFile.height = imageObject.naturalHeight;
+                        input.onChange(imageFile);
+                        URL.revokeObjectURL(imageFile);
+                    };
+                    imageObject.src = localImageUrl;
+                    this.getBase64(imageFile, (result) => {
+                        this.props.actualizarFotoLogo(result);
+                    });
+                    this.handlePreviewLogo(localImageUrl);
+                }
             }
         }
     };
@@ -435,10 +438,6 @@ class Configuracion extends React.Component {
 
 
     handleSubmitForm = values => {
-        // if(this.completedSteps() === this.totalSteps() - 1){
-        //     debugger;
-        // }
-        console.log(this.state.completed);
     }
 
 
@@ -457,7 +456,7 @@ class Configuracion extends React.Component {
                 }}>
                     <div className="container shadow" style={{ background: "white" }} >
                         {
-                            this.props.habilitado ? <div className="col-sm-12" style={{padding:"50px"}}>
+                            this.props.habilitado ? <div className="col-sm-12" style={{ padding: "50px" }}>
                                 <Alert severity="error" variant="outlined">
                                     <AlertTitle>Sin permiso</AlertTitle>
                                     No tiene permisos suficientes para configurar el aspecto</Alert>
@@ -500,6 +499,7 @@ class Configuracion extends React.Component {
                                                             <div className="col-md-4">
                                                                 <Button
                                                                     variant="contained"
+                                                                    type='submit'
                                                                     onClick={this.handleNext}
                                                                     startIcon={<NavigateNextIcon />}
                                                                     className="btn btn-dark"
@@ -511,9 +511,6 @@ class Configuracion extends React.Component {
                                                                 (this.state.completed[this.state.activeStep] ? (
                                                                     <div className="col-md-4">
                                                                         <Alert severity="success">Paso {this.state.activeStep + 1} guardado</Alert>
-                                                                        {/* <Typography variant="caption" className={this.useStyles.completed}>
-                                                                <DoneIcon/>Paso {this.state.activeStep + 1} guardado
-                                                            </Typography> */}
                                                                     </div>
                                                                 ) : (
                                                                         <div className="col-md-4">
@@ -562,5 +559,5 @@ let formularioConfiguracion = reduxForm({
 })(Configuracion);
 
 
-export default connect(mapStateToProps, { consultarConfiguracion,actualizarMensaje, actionActualizarBarraLateral, actualizarFotoLogin, actualizarFotoLogo, actionActualizarConfiguracion, actionActualizarBarraSuperior, actionActualizarBotones, actionConsultarConfiguracionCompleta })(formularioConfiguracion);
+export default connect(mapStateToProps, { consultarConfiguracion, actualizarMensaje, actionActualizarBarraLateral, actualizarFotoLogin, actualizarFotoLogo, actionActualizarConfiguracion, actionActualizarBarraSuperior, actionActualizarBotones, actionConsultarConfiguracionCompleta })(formularioConfiguracion);
 

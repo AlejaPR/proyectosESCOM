@@ -34,23 +34,53 @@ class AsignarActividadModulo extends React.Component {
     }
 
     componentDidUpdate() {
-        switch (this.props.mensaje) {
-            case 'Operacion hecha con exito':
-                NotificationManager.success('Operacion hecha con exito');
-                this.props.actionConsultarActividadesModulo(this.props.codigoModulo, localStorage.getItem('Token'));
-                this.props.actualizarMensajeActividades('');
-                break;
-            case 'Sin permiso':
-                if (!this.state.habilitado) { this.setState({ habilitado: true }) };
-                break;
-            default:
-                break;
+        if (this.props.mensaje !== '') {
+            switch (this.props.mensaje) {
+                case 'Operacion hecha con exito':
+                    NotificationManager.success('Operacion hecha con exito');
+                    this.props.actionConsultarActividadesModulo(this.props.codigoModulo, localStorage.getItem('Token'));
+                    this.props.actualizarMensajeActividades('');
+                    break;
+                case 'No se encontraron datos del modulo':
+                    NotificationManager.warning('No se encontraron datos del modulo');
+                    break;
+                case 'No se encontraron datos de la actividad':
+                    NotificationManager.error('No se encontraron datos de la actividad intentelo de nuevo');
+                    break;
+                case 'Sin permiso':
+                    if (!this.state.habilitado) { this.setState({ habilitado: true }) };
+                    break;
+                case 'Ocurrio un error en el servidor':
+                    NotificationManager.error('Ocurrio un error en el servidor');
+                    break;
+                case 'Servidor fuera de servicio temporalmente':
+                    NotificationManager.error('Servidor fuera de servicio temporalmente');
+                    break;
+                case 'Token requerido':
+                    localStorage.removeItem('Token');
+                    window.location.href = "/";
+                    break;
+                case 'token vencido':
+                    localStorage.removeItem('Token');
+                    window.location.href = "/";
+                    break;
+                case 'token no registrado':
+                    localStorage.removeItem('Token');
+                    window.location.href = "/";
+                    break;
+                case 'token incorrecto':
+                    localStorage.removeItem('Token');
+                    window.location.href = "/";
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
     onClickCancelar = (event) => {
         event.preventDefault();
-        this.props.history.push('/adminModulo');
+        this.props.history.goBack();
     }
 
 
@@ -110,8 +140,8 @@ class AsignarActividadModulo extends React.Component {
                                                 }
                                             }}
                                             columns={[
-                                                { title: 'Nombre de modulo', field: 'idActividad', headerStyle: estiloCabecera, cellStyle: estiloFila },
-                                                { title: 'Descripcion del modulo', field: 'nombre', headerStyle: estiloCabecera, cellStyle: estiloFila },
+                                                { title: 'Codigo de la actividad', field: 'idActividad', headerStyle: estiloCabecera, cellStyle: estiloFila },
+                                                { title: 'Nombre de la actividad', field: 'nombre', headerStyle: estiloCabecera, cellStyle: estiloFila },
                                                 {
                                                     title: 'Estado', field: 'estado',
                                                     render: rowData => {
@@ -159,10 +189,10 @@ class AsignarActividadModulo extends React.Component {
                                                 }
                                             ]}
                                         />
-                                        <br/>
+                                        <br />
                                         <Divider variant="middle" />
-                                        <br/>
-                                        <div style={{paddingLeft:"415px"}}>
+                                        <br />
+                                        <div style={{ paddingLeft: "415px" }}>
                                             <Button
                                                 startIcon={<CancelIcon />}
                                                 style={fondoBotonCancelar}

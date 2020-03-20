@@ -1,7 +1,6 @@
 import axios from 'axios';
-import {desencriptar } from '../componentes/general/Encriptar.js';
-import { mensajesDeError } from '../utilitario/MensajesError.js';
-
+import { desencriptar } from '../componentes/general/Encriptar.js';
+import { mensajeDeConsulta } from '../mensajesDeError/MensajesDeErrorReporte.js';
 
 export const REPORTES = 'REPORTES';
 export const MENSAJE_REPORTE = 'MENSAJE_REPORTE';
@@ -27,7 +26,7 @@ export function actionConsultarReporte(token, reporte) {
             .then(response => {
                 dispatch({
                     type: REPORTES,
-                    reporte:response.data
+                    reporte: response.data
                 });
             }).catch((error) => {
                 if (error.request.response === '') {
@@ -39,18 +38,11 @@ export function actionConsultarReporte(token, reporte) {
                     if (error.request) {
                         debugger;
                         var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
-                        if (respuesta !== '') {
-                            dispatch({
-                                type: MENSAJE_REPORTE,
-                                mensaje: respuesta
-                            });
-                        } else {
-                            dispatch({
-                                type: MENSAJE_REPORTE,
-                                mensaje: 'No se encontraron reportes'
-                            });
-                        }
+                        let respuesta = mensajeDeConsulta(o.respuesta);
+                        dispatch({
+                            type: MENSAJE_REPORTE,
+                            mensaje: respuesta
+                        });
                     }
                 }
 

@@ -1,4 +1,5 @@
 package com.mycompany.superadministrador.logica;
+
 import com.google.gson.Gson;
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.POJO.ClavePOJO;
@@ -31,43 +32,60 @@ import javax.ejb.EJB;
 import javax.ejb.EJBTransactionRolledbackException;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
+
 /**
  * Esta es la clase encargada de la logica de usuario
- * @author Alejandra Pabon, Jeison Gaona
- * Universidad de Cundinamarca
+ *
+ * @author Alejandra Pabon, Jeison Gaona Universidad de Cundinamarca
  */
 @Stateless
 public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
 
-    /**Inyeccion de la interfaz usuario**/
+    /**
+     * Inyeccion de la interfaz usuario*
+     */
     @EJB
     UsuarioFacadeLocal usuarioDB;
 
-    /**Inyeccion de la interfaz de tipo documento**/
+    /**
+     * Inyeccion de la interfaz de tipo documento*
+     */
     @EJB
     TipoDocumentoFacadeLocal tipoDocumentoDB;
 
-    /**Inyeccion de la interfaz de actividad**/
+    /**
+     * Inyeccion de la interfaz de actividad*
+     */
     @EJB
     ActividadFacadeLocal actividadDB;
 
-    /**Inyeccion de la interfaz de usuario-actividad**/
+    /**
+     * Inyeccion de la interfaz de usuario-actividad*
+     */
     @EJB
     UsuarioActividadFacadeLocal usuarioActividadDB;
 
-    /**Inyeccion de la interfaz de modulo**/
+    /**
+     * Inyeccion de la interfaz de modulo*
+     */
     @EJB
     ModuloFacadeLocal moduloDB;
 
-    /**Inyeccion de la interfaz de sesiones**/
+    /**
+     * Inyeccion de la interfaz de sesiones*
+     */
     @EJB
     SesionesFacadeLocal sesiones;
 
-    /**Inyeccion de la interfaz de bitacora**/
+    /**
+     * Inyeccion de la interfaz de bitacora*
+     */
     @EJB
     UtilitarioFacadeLocal bitacora;
 
-    /**Variable para el registro en bitacora**/
+    /**
+     * Variable para el registro en bitacora*
+     */
     private static final String TABLA = "TBL_USUARIO";
 
     /**
@@ -162,7 +180,7 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             }
 
         } catch (NullPointerException ex) {
-            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer el login del usuario ");
+            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer el login del usuario");
         } catch (NoResultException ex) {
             throw new ExcepcionGenerica("No se encontro ninguna credencial que coincida");
         } catch (ExcepcionGenerica ex) {
@@ -170,7 +188,7 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         } catch (EJBTransactionRolledbackException ex) {
             throw new ExcepcionGenerica("No se encontro ninguna credencial que coincida");
         } catch (Exception ex) {
-            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor ");
         }
         return null;
     }
@@ -208,14 +226,16 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
                 usuario.getDatosSolicitud().setTablaInvolucrada(TABLA);
                 bitacora.registrarEnBitacora(usuario.getDatosSolicitud());
             } else {
-                throw new NoResultException("El correo o numero de documento ya esta registrado");
+                throw new ExcepcionGenerica("El correo o numero de documento ya esta registrado");
             }
         } catch (NullPointerException ex) {
-            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer el registro del usuario ");
+            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer el registro del usuario");
         } catch (NoResultException ex) {
             throw new ExcepcionGenerica("No se encontro ningun dato coincidente");
-        } catch (Exception ex) {
-            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+        }  catch (ExcepcionGenerica ex) {
+            throw new ExcepcionGenerica(ex.getMessage());
+        }catch (Exception ex) {
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
 
@@ -312,7 +332,7 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
-            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
 
@@ -336,7 +356,7 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
-            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
 
     }
@@ -364,7 +384,7 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
-            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
 
@@ -401,15 +421,17 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
                     bitacora.registrarEnBitacora(usuarioEditar.getDatosSolicitud());
                 }
             } else {
-                throw new NoResultException("El correo o numero de documento ya esta registrado");
+                throw new ExcepcionGenerica("El correo o numero de documento ya esta registrado");
             }
 
         } catch (NullPointerException ex) {
-            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la modificacion del usuario ");
+            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la modificacion del usuario");
         } catch (NoResultException ex) {
             throw new ExcepcionGenerica("El usuario no existe");
+        }catch (ExcepcionGenerica ex) {
+            throw new ExcepcionGenerica(ex.getMessage());
         } catch (Exception ex) {
-            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
 
     }
@@ -444,7 +466,7 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
-            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
 
@@ -472,7 +494,7 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
-            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
 
@@ -501,7 +523,7 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
-            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
 
@@ -533,7 +555,7 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
-            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
 
@@ -559,11 +581,11 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             actividad.getDatosSolicitud().setTablaInvolucrada(TABLA);
             bitacora.registrarEnBitacora(actividad.getDatosSolicitud());
         } catch (NullPointerException ex) {
-            throw new ExcepcionGenerica("Ocurrio un error al momento de asignar actividad al usuario ");
+            throw new ExcepcionGenerica("Ocurrio un error al momento de asignar actividad al usuario");
         } catch (NoResultException ex) {
             throw new ExcepcionGenerica("No se encontro ningun dato coincidente");
         } catch (Exception ex) {
-            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
 
@@ -630,18 +652,21 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             } else {
                 throw new ExcepcionGenerica("No hay permisos asociados");
             }
-
+        } catch (ExcepcionGenerica ex) {
+            throw new ExcepcionGenerica(ex.getMessage());
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
-            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
 
-    /**Metodo que comprueba la existencia del modulo en la lista de redireccion
+    /**
+     * Metodo que comprueba la existencia del modulo en la lista de redireccion
+     *
      * @param modulos
      * @param id
-     * @return 
+     * @return
      */
     public boolean comprobarExistencia(List<ModuloPOJO> modulos, int id) {
         for (ModuloPOJO m : modulos) {
@@ -691,7 +716,7 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             clavePOJO.setNuevaClave(Seguridad.generarHash(clavePOJO.getNuevaClave()));
             if (usuario != null) {
                 if (!clavePOJO.getAntiguaClave().equals(clavePOJO.getNuevaClave())) {
-                    if (!clavePOJO.getAntiguaClave().equals(usuario.getContrasena())) {
+                    if (clavePOJO.getAntiguaClave().equals(usuario.getContrasena())) {
                         usuarioDB.cambiarClaveInterna(clavePOJO.getNuevaClave(), usuario);
                         clavePOJO.getDatosSolicitud().setTablaInvolucrada(TABLA);
                         bitacora.registrarEnBitacora(clavePOJO.getDatosSolicitud());
@@ -708,10 +733,10 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (NoResultException ex) {
             throw new ExcepcionGenerica("El usuario no existe");
-        }catch (ExcepcionGenerica ex) {
+        } catch (ExcepcionGenerica ex) {
             throw new ExcepcionGenerica(ex.getMessage());
-        }catch (Exception ex) {
-            throw new ExcepcionGenerica(ex.getMessage());
+        } catch (Exception ex) {
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
 
     }
@@ -736,12 +761,14 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             } else {
                 throw new ExcepcionGenerica("No se encontro el usuario");
             }
+        } catch (ExcepcionGenerica ex) {
+            throw new ExcepcionGenerica(ex.getMessage());
         } catch (NullPointerException ex) {
-            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta de usuario ");
+            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta de usuario");
         } catch (NoResultException ex) {
             throw new ExcepcionGenerica("El usuario no existe");
         } catch (Exception ex) {
-            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
 
     }

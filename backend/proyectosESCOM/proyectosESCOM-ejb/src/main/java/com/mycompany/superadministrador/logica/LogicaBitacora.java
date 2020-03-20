@@ -131,7 +131,7 @@ public class LogicaBitacora implements LogicaBitacoraFacadeLocal {
         } catch (NoResultException ex) {
             throw new ExcepcionGenerica("No se encontro ningun dato coincidente");
         } catch (Exception ex) {
-            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
         return null;
     }

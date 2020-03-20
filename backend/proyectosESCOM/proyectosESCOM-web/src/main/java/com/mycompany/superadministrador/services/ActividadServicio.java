@@ -48,7 +48,7 @@ public class ActividadServicio {
             List<ActividadPOJO> listaActividades = actividadLogica.devolverActividades();
             return Response.status(Response.Status.OK).entity(listaActividades).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("Sin acceso al servicio");
+            respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
         } catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error en el servidor");
@@ -73,7 +73,7 @@ public class ActividadServicio {
             respuesta.setRespuesta("Actividad registrada");
             return Response.status(Response.Status.OK).entity(actividadR).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("Ya existen los datos registrados previamente");
+            respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.NOT_ACCEPTABLE).entity(respuesta).build();
         } catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error interno del servidor");
@@ -97,7 +97,7 @@ public class ActividadServicio {
             respuesta.setRespuesta("Actividad modificada correctamente");
             return Response.status(Response.Status.OK).entity(respuesta).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("Ya existen los datos registrados previamente");
+            respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.NOT_ACCEPTABLE).entity(respuesta).build();
         } catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error interno del servidor");
@@ -121,7 +121,7 @@ public class ActividadServicio {
             respuesta.setRespuesta("Estado de actividad modificado correctamente");
             return Response.status(Response.Status.OK).entity(respuesta).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("Ya existen los datos registrados previamente");
+            respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.NOT_ACCEPTABLE).entity(respuesta).build();
         } catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error interno del servidor");
@@ -144,7 +144,7 @@ public class ActividadServicio {
             ActividadPOJO actividadDatos = actividadLogica.traerActividadEspecifica(idActividad);
             return Response.status(Response.Status.OK).entity(actividadDatos).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("Sin acceso al servicio");
+            respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
         } catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error en el servidor");

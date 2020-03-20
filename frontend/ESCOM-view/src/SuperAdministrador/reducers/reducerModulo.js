@@ -44,7 +44,6 @@ export function reducerModulo(state = initialState, action) {
             return Object.assign({}, state, { mensajeRegistrarModulo: action.mensaje })
         case ACTUALIZAR_MODULOS:
             return Object.assign({}, state, { modulosRegistrados: action.modulo })
-
         default:
             return state
     }

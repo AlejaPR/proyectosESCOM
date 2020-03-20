@@ -14,7 +14,7 @@ import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
-
+import {contrasena} from '../../utilitario/validacionCampos.js';
 
 
 
@@ -95,6 +95,34 @@ class BarraSuperior extends React.Component {
 					NotificationManager.error('La contraseña ingresada no es la correcta');
 					this.props.reset();
 					break;
+				case 'Ocurrio un error al momento de hacer la consulta':
+					NotificationManager.error('Ocurrio un error al momento de hacer la consulta');
+					break;
+				case 'Servidor fuera de servicio temporalmente':
+					NotificationManager.error('Servidor fuera de servicio temporalmente');
+					break;
+				case 'Ocurrio un error en el servidor':
+					NotificationManager.error('Ocurrio un error en el servidor');
+					break;
+				case 'No se encontro el usuario':
+					NotificationManager.error('Ocurrio un error ntentelo de nuevo mas tarde');
+					break;
+				case 'Token requerido':
+					localStorage.removeItem('Token');
+					window.location.href = "/";
+					break;
+				case 'token vencido':
+					localStorage.removeItem('Token');
+					window.location.href = "/";
+					break;
+				case 'token no registrado':
+					localStorage.removeItem('Token');
+					window.location.href = "/";
+					break;
+				case 'token incorrecto':
+					localStorage.removeItem('Token');
+					window.location.href = "/";
+					break;
 				default:
 					break;
 			}
@@ -170,9 +198,9 @@ class BarraSuperior extends React.Component {
 												<ModalHeader toggle={this.toggle} className="center">Cambiar contraseña</ModalHeader>
 												<ModalBody>
 													<form onSubmit={this.props.handleSubmit(this.handleSubmitForm)}>
-														<Field name="contrasenaActual" component={RenderPasword} validate={[requerido]} label="Contraseña actual" />
-														<Field name="nuevaContrasena" component={RenderPasword} validate={[requerido]} label="Nueva contraseña" />
-														<Field name="verificacionNueva" component={RenderPasword} validate={[requerido]} label="Confirmar nueva contraseña" />
+														<Field name="contrasenaActual" component={RenderPasword} validate={[requerido,contrasena]} label="Contraseña actual" />
+														<Field name="nuevaContrasena" component={RenderPasword} validate={[requerido,contrasena]} label="Nueva contraseña" />
+														<Field name="verificacionNueva" component={RenderPasword} validate={[requerido,contrasena]} label="Confirmar nueva contraseña" />
 														<ModalFooter>
 															<div style={{ paddingRight: "120px" }}>
 																<Button

@@ -1,47 +1,53 @@
 
 import {
-    MOSTRAR_USUARIOS,
-    ESTADO_USUARIOS,
-    MENSAJE_EDITAR, MOSTRAR_ACTIVIDADES_USUARIO,
-    MOSTRAR_DOCUMENTOS,
-    MENSAJE_REGISTRAR,
+    ACTIVIDADES_SIN_ASIGNAR,
+    ACTUALIZAR_USUARIOS,
     AGREGAR_USUARIO,
-    INFORMACION_USUARIO,
     ANADIR_CEDULA_EDITAR,
     EDITAR_USUARIO,
-    ACTUALIZAR_USUARIOS,
-    ACTIVIDADES_SIN_ASIGNAR,
-    MENSAJE_LOGIN,
-    MENSAJE_SUSPENDER, MODULOS_REGISTRADOS, ESTADO_ASIGNAR, MENSAJE_ASIGNAR,
-    MENSAJE_CERRAR_SESION,
-    MODULOS_ACCESO,
-    NOMBRE_USUARIO,
     EMAIL_USUARIO,
-    MENSAJE_CONTRASENA
+    ESTADO_ASIGNAR,
+    ESTADO_USUARIOS,
+    INFORMACION_USUARIO,
+    MENSAJE_ASIGNAR,
+    MENSAJE_CERRAR_SESION,
+    MENSAJE_CONTRASENA,
+    MENSAJE_EDITAR,
+    MENSAJE_INICIO,
+    MENSAJE_LOGIN,
+    MENSAJE_REGISTRAR,
+    MENSAJE_SUSPENDER,
+    MODULOS_ACCESO,
+    MODULOS_REGISTRADOS,
+    MOSTRAR_ACTIVIDADES_USUARIO,
+    MOSTRAR_DOCUMENTOS,
+    MOSTRAR_USUARIOS,
+    NOMBRE_USUARIO
 } from '../actions/actionsUsuario.js'
 
 
 const initialState = {
-    usuariosRegistrados: [],
-    estadoUsuarios: false,
-    estadoAsignar: false,
+    actividadesSinAsignar: [],
     actividadesUsuario: [],
-    nombreUsuario: [],
-    tiposDocumento: [],
-    usuarioEditar: [],
     cedula: [],
-    redireccionLogin: [],
-    mensajeLogin: [],
-    mensajeRegistrar: '',
-    mensajeEditar: '',
-    mensajeSuspender: '',
+    emailUsuario: [],
+    estadoAsignar: false,
+    estadoUsuarios: false,
     mensajeAsignar: '',
     mensajeCerrarSesion: '',
     mensajeContrasena: '',
-    modulosAsignar: [],
-    actividadesSinAsignar: [],
+    mensajeEditar: '',
+    mensajeLogin: '',
+    mensajeRegistrar: '',
+    mensajeSuspender: '',
+    mensajeInicio:'',
     modulosAcceso: [],
-    emailUsuario: []
+    modulosAsignar: [],
+    nombreUsuario: [],
+    redireccionLogin: [],
+    tiposDocumento: [],
+    usuarioEditar: [],
+    usuariosRegistrados: [],
 }
 
 
@@ -66,6 +72,8 @@ export function reducerUsuario(state = initialState, action) {
             }
         case MENSAJE_CONTRASENA:
             return Object.assign({}, state, { mensajeContrasena: action.mensaje })
+            case MENSAJE_INICIO:
+                return Object.assign({}, state, { mensajeInicio: action.mensaje })
         case MENSAJE_REGISTRAR:
             return Object.assign({}, state, { mensajeRegistrar: action.mensaje })
         case MENSAJE_EDITAR:

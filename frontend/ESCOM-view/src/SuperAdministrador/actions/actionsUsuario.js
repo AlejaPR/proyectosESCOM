@@ -1,31 +1,45 @@
 import axios from 'axios';
 import { encriptar, desencriptar } from '../componentes/general/Encriptar.js';
-import { mensajesDeError } from '../utilitario/MensajesError.js';
+import {
+    mensajesDeErrorModulosAcceso,
+    mensajesDeErrorRegistroUsuarios,
+    mensajesDeErrorListarUsuarios,
+    mensajesDeErrorCambiarEstadoUsuario,
+    mensajesDeErrorCargarInformacion,
+    mensajesDeErrorEditarUsuario,
+    mensajesDeErrorConsultarModulosUsuario,
+    mensajesDeErrorConsultarActividadesUsuario,
+    mensajesDeErrorAsignarActividad,
+    mensajesDeErrorConsultarCorreo,
+    
+    mensajesDeErrorCambiarContrasena
+} from '../mensajesDeError/MensajesDeErrorUsuario.js';
 
-export const MOSTRAR_USUARIOS = 'MOSTRAR_USUARIOS';
-export const MODULOS_ACCESO = 'MODULOS_ACCESO';
-export const ESTADO_USUARIOS = 'ESTADO_USUARIOS';
-export const MOSTRAR_DOCUMENTOS = 'MOSTRAR_DOCUMENTOS';
 export const ACTIVIDADES_SIN_ASIGNAR = 'ACTIVIDADES_SIN_ASIGNAR';
-export const MOSTRAR_ACTIVIDADES_USUARIO = 'MOSTRAR_ACTIVIDADES_USUARIO';
-export const AGREGAR_USUARIO = 'AGREGAR_USUARIO';
+export const ACTUALIZAR_USUARIOS = 'ACTUALIZAR_USUARIOS';
 export const AGREGAR_ACTIVIDAD = 'AGREGAR_ACTIVIDAD';
-export const INFORMACION_USUARIO = 'INFORMACION_USUARIO';
+export const AGREGAR_USUARIO = 'AGREGAR_USUARIO';
 export const ANADIR_CEDULA_EDITAR = "ANADIR_CEDULA_EDITAR";
 export const EDITAR_USUARIO = "EDITAR_USUARIO";
-export const ACTUALIZAR_USUARIOS = 'ACTUALIZAR_USUARIOS';
+export const EMAIL_USUARIO = 'EMAIL_USUARIO';
+export const ESTADO_ASIGNAR = 'ESTADO_ASIGNAR';
+export const ESTADO_USUARIOS = 'ESTADO_USUARIOS';
+export const INFORMACION_USUARIO = 'INFORMACION_USUARIO';
+export const MENSAJE_ASIGNAR = 'MENSAJE_ASIGNAR';
+export const MENSAJE_CERRAR_SESION = 'MENSAJE_CERRAR_SESION';
+export const MENSAJE_CONTRASENA = 'MENSAJE_CONTRASENA';
+export const MENSAJE_EDITAR = 'MENSAJE_EDITAR';
+export const MENSAJE_INICIO = 'MENSAJE_INICIO';
 export const MENSAJE_LOGIN = 'MENSAJE_LOGIN';
 export const MENSAJE_REGISTRAR = 'MENSAJE_REGISTRAR';
-export const MENSAJE_ASIGNAR = 'MENSAJE_ASIGNAR';
-export const MENSAJE_EDITAR = 'MENSAJE_EDITAR';
-export const MENSAJE_CERRAR_SESION = 'MENSAJE_CERRAR_SESION';
 export const MENSAJE_SUSPENDER = 'MENSAJE_SUSPENDER';
-export const REDIRECCIONAR_LOGIN = 'REDIRECCIONAR_LOGIN';
-export const ESTADO_ASIGNAR = 'ESTADO_ASIGNAR';
+export const MODULOS_ACCESO = 'MODULOS_ACCESO';
 export const MODULOS_REGISTRADOS = 'MODULOS_REGISTRADOS';
+export const MOSTRAR_ACTIVIDADES_USUARIO = 'MOSTRAR_ACTIVIDADES_USUARIO';
+export const MOSTRAR_DOCUMENTOS = 'MOSTRAR_DOCUMENTOS';
+export const MOSTRAR_USUARIOS = 'MOSTRAR_USUARIOS';
 export const NOMBRE_USUARIO = 'NOMBRE_USUARIO';
-export const EMAIL_USUARIO = 'EMAIL_USUARIO';
-export const MENSAJE_CONTRASENA = 'MENSAJE_CONTRASENA';
+export const REDIRECCIONAR_LOGIN = 'REDIRECCIONAR_LOGIN';
 
 const URL_BASE = 'http://localhost:9090';
 const PERMISO_REGISTRAR = 'SA_Registrar usuarios';
@@ -92,11 +106,38 @@ export function actionCerrarSesion(token) {
                     mensaje: 'cerrada'
                 });
             }).catch(function (error) {
-                console.log('error', error);
                 dispatch({
                     type: MENSAJE_CERRAR_SESION,
                     mensaje: 'cerrada'
                 });
+            });
+    }
+}
+
+export function actionCerrarSesionInicio(token) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token)
+    }
+    return (dispatch, getState) => {
+        axios.delete(`${URL_BASE}/proyectosESCOM-web/api/login/cerrarSesion/${desencriptar(token)}`, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: MENSAJE_INICIO,
+                    mensaje: 'sesion cerrada'
+                });
+            }).catch(function (error) {
+                if (error.request.response === '') {
+                    dispatch({
+                        type: MENSAJE_INICIO,
+                        mensaje: 'sesion cerrada'
+                    });
+                } else {
+                    dispatch({
+                        type: MENSAJE_INICIO,
+                        mensaje: 'sesion cerrada'
+                    });
+                }
             });
     }
 }
@@ -117,19 +158,18 @@ export function actionConsultarCorreo(token) {
                 });
             }).catch((error) => {
                 if (error.request.response === '') {
-
+                    dispatch({
+                        type: MENSAJE_CONTRASENA,
+                        mensaje: 'Servidor fuera de servicio temporalmente'
+                    });
                 } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
-                        if (respuesta === 'Sin permiso') {
-                            dispatch({
-                                type: EMAIL_USUARIO,
-                                email: true
-                            });
-                        } else {
-                            //
-                        }
+                        let respuesta = mensajesDeErrorConsultarCorreo(o.respuesta);
+                        dispatch({
+                            type: MENSAJE_CONTRASENA,
+                            mensaje: respuesta
+                        });
                     }
                 }
             });
@@ -151,18 +191,24 @@ export function actionConsultarUsuarios(token) {
                 });
             }).catch((error) => {
                 if (error.request.response === '') {
-
+                    dispatch({
+                        type: MENSAJE_SUSPENDER,
+                        mensaje: 'Servidor fuera de servicio temporalmente'
+                    });
                 } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
+                        let respuesta = mensajesDeErrorListarUsuarios(o.respuesta);
                         if (respuesta === 'Sin permiso') {
                             dispatch({
                                 type: ESTADO_USUARIOS,
                                 estado: true
                             });
                         } else {
-                            //
+                            dispatch({
+                                type: MENSAJE_SUSPENDER,
+                                mensaje: respuesta
+                            });
                         }
                     }
                 }
@@ -200,18 +246,14 @@ export function actionCambiarContrasena(clave, correo, token) {
                         mensaje: 'Servidor fuera de servicio temporalmente'
                     });
                 } else {
+                    debugger;
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
+                        let respuesta = mensajesDeErrorCambiarContrasena(o.respuesta);
                         if (respuesta !== '') {
                             dispatch({
                                 type: MENSAJE_CONTRASENA,
                                 mensaje: respuesta
-                            });
-                        } else {
-                            dispatch({
-                                type: MENSAJE_CONTRASENA,
-                                mensaje: o.respuesta
                             });
                         }
                     }
@@ -235,20 +277,18 @@ export function actionConsultarModulosAcceso(token) {
                 });
             }).catch((error) => {
                 if (error.request.response === '') {
-
+                    dispatch({
+                        type: MENSAJE_INICIO,
+                        mensaje: 'Servidor fuera de servicio temporalmente'
+                    });
                 } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
-                        if (respuesta === 'Sin permiso') {
+                        let respuesta = mensajesDeErrorModulosAcceso(o.respuesta);
+                        if (respuesta !== '') {
                             dispatch({
-                                type: MODULOS_ACCESO,
-                                respuesta: []
-                            });
-                        } else {
-                            dispatch({
-                                type: MODULOS_ACCESO,
-                                respuesta: []
+                                type: MENSAJE_INICIO,
+                                mensaje: respuesta
                             });
                         }
                     }
@@ -271,7 +311,24 @@ export function actionConsultarActividadesUsuario(numeroDocumento, token) {
                     respuesta: response.data
                 });
             }).catch((error) => {
-                console.log('errors', error);
+                if (error.request.response === '') {
+                    dispatch({
+                        type: MENSAJE_ASIGNAR,
+                        mensaje: 'Servidor fuera de servicio temporalmente'
+                    });
+                } else {
+                    if (error.request) {
+                        debugger;
+                        var o = JSON.parse(error.request.response);
+                        let respuesta = mensajesDeErrorConsultarActividadesUsuario(o.respuesta);
+                        if (respuesta !== '') {
+                            dispatch({
+                                type: MENSAJE_ASIGNAR,
+                                mensaje: respuesta
+                            });
+                        }
+                    }
+                }
             });
     };
 }
@@ -289,6 +346,29 @@ export function actionConsultarDocumentos(token) {
                     type: MOSTRAR_DOCUMENTOS,
                     respuesta: response.data
                 });
+            }).catch((error) => {
+                if (error.request.response === '') {
+                    dispatch({
+                        type: MENSAJE_REGISTRAR,
+                        mensaje: 'Servidor fuera de servicio temporalmente'
+                    });
+                } else {
+                    let cedula = {
+                        'idTipoDocumento': '1',
+                        'tipoDocumento': 'Cedula'
+                    }
+                    let tarjetaIdentidad = {
+                        'idTipoDocumento': '2',
+                        'tipoDocumento': 'Tarjeta de identidad'
+                    }
+                    var documentos = [cedula, tarjetaIdentidad];
+                    if (error.request) {
+                        dispatch({
+                            type: MOSTRAR_DOCUMENTOS,
+                            respuesta: documentos
+                        });
+                    }
+                }
             });
     };
 }
@@ -298,9 +378,11 @@ export function actionAsignarIp() {
         axios.get("https://api.ipify.org/?format=json")
             .then(response => {
                 localStorage.setItem('Ip', response.data.ip)
-            }).then(
-
-            );
+            }).catch((error) => {
+                if (error.request.response === '') {
+                    localStorage.setItem('Ip', '999.999.999');
+                }
+            });
     };
 }
 
@@ -335,16 +417,12 @@ export function actionAgregarUsuario(usuario, token) {
                 } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
+                        let respuesta = mensajesDeErrorRegistroUsuarios(o.respuesta);
+                        debugger;
                         if (respuesta !== '') {
                             dispatch({
                                 type: MENSAJE_REGISTRAR,
                                 mensaje: respuesta
-                            });
-                        } else {
-                            dispatch({
-                                type: MENSAJE_REGISTRAR,
-                                mensaje: 'Ya existen los datos registrados previamente'
                             });
                         }
                     }
@@ -382,27 +460,21 @@ export function actionAsignarActividad(token, numeroDocumento, actividad) {
                 } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
+                        let respuesta = mensajesDeErrorAsignarActividad(o.respuesta);
                         if (respuesta !== '') {
                             dispatch({
                                 type: MENSAJE_ASIGNAR,
                                 mensaje: respuesta
-                            });
-                        } else {
-                            dispatch({
-                                type: MENSAJE_ASIGNAR,
-                                mensaje: 'Ya existen los datos registrados previamente'
                             });
                         }
                     }
                 }
 
             });
-
     }
 }
 
-export function actionSuspenderActivarUsuario(cedula, token, actualizados, registrados) {
+export function actionSuspenderActivarUsuario(cedula, token, actualizados) {
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': desencriptar(token),
@@ -424,6 +496,7 @@ export function actionSuspenderActivarUsuario(cedula, token, actualizados, regis
                     type: ACTUALIZAR_USUARIOS,
                     usuario: actualizados
                 });
+                
             }).catch((error) => {
                 if (error.request.response === '') {
                     dispatch({
@@ -433,16 +506,11 @@ export function actionSuspenderActivarUsuario(cedula, token, actualizados, regis
                 } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
+                        let respuesta = mensajesDeErrorCambiarEstadoUsuario(o.respuesta);
                         if (respuesta !== '') {
                             dispatch({
                                 type: MENSAJE_SUSPENDER,
                                 mensaje: respuesta
-                            });
-                        } else {
-                            dispatch({
-                                type: MENSAJE_SUSPENDER,
-                                mensaje: 'Sin acceso al servicio'
                             });
                         }
                     }
@@ -475,16 +543,11 @@ export function actionCargarInformacionDeUsuario(cedula, token) {
                 } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
+                        let respuesta = mensajesDeErrorCargarInformacion(o.respuesta);
                         if (respuesta !== '') {
                             dispatch({
                                 type: MENSAJE_EDITAR,
                                 mensaje: respuesta
-                            });
-                        } else {
-                            dispatch({
-                                type: MENSAJE_EDITAR,
-                                mensaje: 'Sin acceso al servicio'
                             });
                         }
                     }
@@ -494,6 +557,7 @@ export function actionCargarInformacionDeUsuario(cedula, token) {
 }
 
 export function actionConsultarModulos(token) {
+
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': desencriptar(token),
@@ -509,19 +573,24 @@ export function actionConsultarModulos(token) {
 
             }).catch((error) => {
                 if (error.request.response === '') {
-
-
+                    dispatch({
+                        type: MENSAJE_ASIGNAR,
+                        mensaje: 'Servidor fuera de servicio temporalmente'
+                    });
                 } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
+                        let respuesta = mensajesDeErrorConsultarModulosUsuario(o.respuesta);
                         if (respuesta === 'Sin permiso') {
                             dispatch({
                                 type: ESTADO_ASIGNAR,
                                 estado: true
                             });
                         } else {
-                            //
+                            dispatch({
+                                type: MENSAJE_ASIGNAR,
+                                mensaje: respuesta
+                            });
                         }
                     }
                 }
@@ -561,17 +630,11 @@ export function actionEliminarActividades(actividades, token, numeroDocumento) {
                 } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
-                        console.log('respuesta', respuesta);
+                        let respuesta = mensajesDeErrorConsultarActividadesUsuario(o.respuesta);
                         if (respuesta !== '') {
                             dispatch({
                                 type: MENSAJE_ASIGNAR,
                                 mensaje: respuesta
-                            });
-                        } else {
-                            dispatch({
-                                type: MENSAJE_ASIGNAR,
-                                mensaje: 'Sin acceso al servicio'
                             });
                         }
                     }
@@ -598,19 +661,24 @@ export function actionConsultarActividadesSinAsignar(token, numeroDocumento, cod
 
             }).catch((error) => {
                 if (error.request.response === '') {
-
-
+                    dispatch({
+                        type: MENSAJE_ASIGNAR,
+                        mensaje: 'Servidor fuera de servicio temporalmente'
+                    });
                 } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
+                        let respuesta = mensajesDeErrorConsultarActividadesUsuario(o.respuesta);
                         if (respuesta === 'Sin permiso') {
                             dispatch({
                                 type: ESTADO_ASIGNAR,
                                 estado: true
                             });
                         } else {
-                            //
+                            dispatch({
+                                type: MENSAJE_ASIGNAR,
+                                mensaje: respuesta
+                            });
                         }
                     }
                 }
@@ -650,16 +718,15 @@ export function actionEditarUsuario(usuario, cedula, token) {
                 } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
+                        let respuesta = mensajesDeErrorEditarUsuario(o.respuesta);
                         if (respuesta !== '') {
+                            dispatch({
+                                type: EDITAR_USUARIO,
+                                payload: usuario
+                            });
                             dispatch({
                                 type: MENSAJE_EDITAR,
                                 mensaje: respuesta
-                            });
-                        } else {
-                            dispatch({
-                                type: MENSAJE_EDITAR,
-                                mensaje: 'Ya existen los datos registrados previamente'
                             });
                         }
                     }
@@ -673,6 +740,15 @@ export function actualizarMensajeCerrar(mensaje) {
     return (dispatch, getState) => {
         dispatch({
             type: MENSAJE_CERRAR_SESION,
+            mensaje: mensaje
+        });
+    };
+}
+
+export function actualizarMensajeInicio(mensaje) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: MENSAJE_INICIO,
             mensaje: mensaje
         });
     };
@@ -759,7 +835,6 @@ export function actionAsignarActividades() {
         });
     }
 }
-
 
 
 export function actionActualizarUsuarios(usuarios) {

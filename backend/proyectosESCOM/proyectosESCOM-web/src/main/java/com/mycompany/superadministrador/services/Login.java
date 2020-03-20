@@ -74,7 +74,7 @@ public class Login {
             respuesta.setRespuesta("Sesion cerrada");
             return Response.status(Response.Status.OK).entity(respuesta).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("Ocurrio un error al eliminar el token");
+            respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.SERVICE_UNAVAILABLE).entity(respuesta).build();
         } catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error interno del servidor");

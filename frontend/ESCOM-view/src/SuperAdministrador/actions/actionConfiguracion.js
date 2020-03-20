@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { desencriptar } from '../componentes/general/Encriptar.js';
-import { mensajesDeError } from '../utilitario/MensajesError.js';
-
+import { mensajesFiltro } from '../mensajesDeError/MensajeDeErrorFiltro.js';
+import { mensajeDeCargar, mensajeDeRegistro } from '../mensajesDeError/MensajesDeErrorConfiguracion.js';
 
 export const ESTADO_CONFIGURACION = 'ESTADO_CONFIGURACION';
 export const MOSTRAR_CONFIGURACION = 'MOSTRAR_CONFIGURACION'
@@ -21,9 +21,9 @@ export function actionActualizarConfiguracion(configuracion, token) {
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': desencriptar(token),
-        'Permiso':PERMISO_CONFIGURACION
+        'Permiso': PERMISO_CONFIGURACION
     }
-    configuracion.datosSolicitud={
+    configuracion.datosSolicitud = {
         'ip': localStorage.getItem('Ip'),
         'token': desencriptar(token),
         'operacion': PERMISO_CONFIGURACION
@@ -49,18 +49,12 @@ export function actionActualizarConfiguracion(configuracion, token) {
                 } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
-                        if (respuesta !== '') {
-                            dispatch({
-                                type: MENSAJE_CONFIGURACION,
-                                mensaje: respuesta
-                            });
-                        } else {
-                            dispatch({
-                                type: MENSAJE_CONFIGURACION,
-                                mensaje: 'Ya existen los datos registrados previamente'
-                            });
-                        }
+                        let respuesta = mensajeDeRegistro(o.respuesta);
+                        dispatch({
+                            type: MENSAJE_CONFIGURACION,
+                            mensaje: respuesta
+                        });
+
                     }
                 }
 
@@ -93,7 +87,7 @@ export function consultarConfiguracion(token) {
                 } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
+                        let respuesta = mensajesFiltro(o.respuesta);
                         if (respuesta !== '') {
                             dispatch({
                                 type: MOSTRAR_CONFIGURACION,
@@ -137,19 +131,19 @@ export function consultarConfiguracionLogin() {
                         type: CONFIGURACION_LOGIN,
                         configuracion: {
                             botones: "#0E3D38",
-                            imagenLogin:undefined
+                            imagenLogin: undefined
                         }
                     });
                 } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
-                        if (respuesta !== '') {      
+                        let respuesta = mensajesFiltro(o.respuesta);
+                        if (respuesta !== '') {
                             dispatch({
                                 type: CONFIGURACION_LOGIN,
                                 configuracion: {
                                     botones: "#0E3D38",
-                                    imagenLogin:undefined
+                                    imagenLogin: undefined
                                 }
                             });
                         } else {
@@ -157,7 +151,7 @@ export function consultarConfiguracionLogin() {
                                 type: CONFIGURACION_LOGIN,
                                 configuracion: {
                                     botones: "#0E3D38",
-                                    imagenLogin:undefined
+                                    imagenLogin: undefined
                                 }
                             });
                         }
@@ -183,11 +177,14 @@ export function actionConsultarConfiguracionCompleta(token) {
                 });
             }).catch((error) => {
                 if (error.request.response === '') {
-
+                    dispatch({
+                        type: MENSAJE_CONFIGURACION,
+                        mensaje: 'Servidor fuera de servicio temporalmente'
+                    });
                 } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
+                        let respuesta = mensajeDeCargar(o.respuesta);
                         if (respuesta === 'Sin permiso') {
                             dispatch({
                                 type: ESTADO_CONFIGURACION,
@@ -196,7 +193,7 @@ export function actionConsultarConfiguracionCompleta(token) {
                         } else {
                             dispatch({
                                 type: MENSAJE_CONFIGURACION,
-                                mensaje: 'Sin acceso al servicio'
+                                mensaje: respuesta
                             });
                         }
                     }

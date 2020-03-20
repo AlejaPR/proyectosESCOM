@@ -5,7 +5,7 @@ import Barra from '../general/BarraDirecciones';
 import Button from '@material-ui/core/Button';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { withRouter } from 'react-router-dom';
-import { campo, generarInput,generarTextArea } from '../../utilitario/GenerarInputs.js';
+import { campo, generarInput,generarArea } from '../../utilitario/GenerarInputs.js';
 import PropTypes from "prop-types";
 import { requerido, validacionCuarentaCaracteres, validacionDoscientosCaracteres } from '../../utilitario/validacionCampos.js';
 import Alert from '@material-ui/lab/Alert';
@@ -42,7 +42,7 @@ class EditarModulo extends React.Component {
     static defaultProps = {
         previewLogoUrl: "https://imgplaceholder.com/400x300",
         tipoDeImagen: "image/jpeg, image/png",
-        pesoMaximo: 100,
+        pesoMaximo: 300,
         anchuraMaxima: 100,
         alturaMaxima: 100
     };
@@ -140,8 +140,7 @@ class EditarModulo extends React.Component {
                 imagenModulo: campo(this.props.initialValues.imagen),
                 estadoModulo: 'Activo'
             }
-            this.props.actionEditarModulo(modulo, this.props.codigoModulo, localStorage.getItem('Token'));
-            // this.props.actionAgregarModulo(modulo, localStorage.getItem('Token'));
+            this.props.actionEditarModulo(modulo, this.props.initialValues.id, localStorage.getItem('Token'));
         } else {
             this.getBase64(values.image, (result) => {
                 let modulo = {
@@ -150,7 +149,7 @@ class EditarModulo extends React.Component {
                     imagenModulo: result,
                     estadoModulo: 'Activo'
                 }
-                this.props.actionEditarModulo(modulo, this.props.codigoModulo, localStorage.getItem('Token'));
+                this.props.actionEditarModulo(modulo, this.props.initialValues.id, localStorage.getItem('Token'));
             });
         }
     };
@@ -170,32 +169,74 @@ class EditarModulo extends React.Component {
     }
 
     componentDidUpdate() {
-        switch (this.props.mensajeEditar) {
-            case 'Sin permiso':
-                if (!this.state.habilitado) { this.setState({ habilitado: true }) };
-                break;
-            case 'modulo editado':
-                NotificationManager.success('Informacion actualizada correctamente');
-                this.props.actionCargarInformacionDeModulo(this.props.codigoModulo, localStorage.getItem('Token'));
-                this.props.actualizarMensajeEditar('');
-                break;
-            default:
-                break;
+        if (this.props.mensajeEditar !== '') {
+
+            switch (this.props.mensajeEditar) {
+                case 'Sin permiso':
+                    if (!this.state.habilitado) { this.setState({ habilitado: true }) };
+                    break;
+                case 'modulo editado':
+                    NotificationManager.success('Informacion actualizada correctamente');
+                    this.props.actionCargarInformacionDeModulo(this.props.initialValues.id, localStorage.getItem('Token'));
+                    this.props.actualizarMensajeEditar('');
+                    break;
+                case 'El modulo no existe':
+                    NotificationManager.warning('El modulo no existe intente nuevamente');
+                    this.props.actualizarMensajeEditar('');
+                    break;
+                case 'Ocurrio un error al momento de hacer la modificacion del modulo':
+                    NotificationManager.error('Ocurrio un error al momento de hacer la modificacion del modulo');
+                    this.props.actualizarMensajeEditar('');
+                    break;
+                case 'No se encontraron datos del modulo':
+                    NotificationManager.error('No se encontraron datos del modulo');
+                    this.props.actualizarMensajeEditar('');
+                    break;
+                case 'Ocurrio un error en el servidor':
+                    NotificationManager.error('Ocurrio un error en el servidor');
+                    this.props.actualizarMensajeEditar('');
+                    break;
+                case 'Servidor fuera de servicio temporalmente':
+                    NotificationManager.error('Servidor fuera de servicio temporalmente');
+                    this.props.actualizarMensajeEditar('');
+                    break;
+                case 'Token requerido':
+                    localStorage.removeItem('Token');
+                    window.location.href = "/";
+                    break;
+                case 'token vencido':
+                    localStorage.removeItem('Token');
+                    window.location.href = "/";
+                    break;
+                case 'token no registrado':
+                    localStorage.removeItem('Token');
+                    window.location.href = "/";
+                    break;
+                case 'token incorrecto':
+                    localStorage.removeItem('Token');
+                    window.location.href = "/";
+                    break;
+                default:
+                    break;
+            }
         }
+        this.props.actualizarMensajeEditar('');
     }
 
     componentDidMount() {
-        if (this.props.codigoModulo === undefined || this.props.codigoModulo.length === 0) {
+        if (this.props.initialValues.id === undefined || this.props.initialValues.id === 0) {
             this.props.history.push('/adminModulo');
-        } else {
-            this.props.actionCargarInformacionDeModulo(this.props.codigoModulo, localStorage.getItem('Token'));
         }
+        //  else {
+        //     this.props.actionCargarInformacionDeModulo(this.props.codigoModulo, localStorage.getItem('Token'));
+        // }
     }
 
 
     onClickCancelar = (event) => {
         event.preventDefault();
-        this.props.history.push('/adminModulo');
+        this.handlePreview(null);
+        this.props.history.goBack();
     }
 
     render() {
@@ -234,7 +275,7 @@ class EditarModulo extends React.Component {
                                                 <td colspan="2" style={{ width: "65%", paddingRight: "39px", paddingLeft: "39px" }}>
                                                     <div className="row">
                                                         <div className="col-sm-12">
-                                                            
+
                                                             <Field name="nombre" validate={[requerido, validacionCuarentaCaracteres]} component={generarInput} label="Nombre" />
                                                         </div>
                                                     </div>
@@ -250,7 +291,8 @@ class EditarModulo extends React.Component {
                                                         name="image"
                                                         type="file"
                                                         validate={[
-                                                            this.validateImageWeight
+                                                            this.validateImageWeight,
+                                                            this.validateImageFormat
                                                         ]}
                                                         component={this.renderFileInput}
                                                     />
@@ -260,7 +302,7 @@ class EditarModulo extends React.Component {
                                                 <td colspan="2" style={{ width: "65%", paddingRight: "39px", paddingLeft: "39px" }}>
                                                     <div className="row">
                                                         <div className="col-sm-12">
-                                                            <Field name="descripcion" validate={[requerido, validacionDoscientosCaracteres]} component={generarTextArea} filas={10} label="Descripcion" />
+                                                            <Field name="descripcion" validate={[requerido, validacionDoscientosCaracteres]} component={generarArea} filas={10} label="Descripcion" />
                                                         </div>
                                                     </div>
                                                 </td>
@@ -314,6 +356,7 @@ function mapStateToProps(state) {
         mensajeEditar: state.mod.mensajeEditarModulo,
         configuracion: state.conf.configuracion,
         initialValues: {
+            id:state.mod.moduloEditar.idModulo,
             nombre: state.mod.moduloEditar.nombreModulo,
             descripcion: state.mod.moduloEditar.descripcionModulo,
             imagen: state.mod.moduloEditar.imagenModulo,

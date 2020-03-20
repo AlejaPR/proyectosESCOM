@@ -91,14 +91,16 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
                     }
                 }
             } else {
-                throw new NoResultException("El nombre de modulo ya esta registrado");
+                throw new ExcepcionGenerica("El nombre de modulo ya esta registrado");
             }
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer el registro de modulo");
         } catch (NoResultException ex) {
             throw new ExcepcionGenerica("No se encontro ningun dato coincidente");
-        } catch (Exception ex) {
-            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+        }catch (ExcepcionGenerica ex) {
+            throw new ExcepcionGenerica(ex.getMessage());
+        }  catch (Exception ex) {
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
 
@@ -121,7 +123,7 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
-            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
 
@@ -148,7 +150,7 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
-            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
 
@@ -172,7 +174,7 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
         } catch (NoResultException ex) {
             throw new ExcepcionGenerica("El modulo no existe");
         } catch (Exception ex) {
-            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
 
     }
@@ -207,7 +209,7 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
-            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
 
@@ -228,14 +230,14 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
             if (listaActividadesM.size() >= 0) {
                 return listaActividadesM;
             } else {
-                throw new NoResultException("Error en la consulta");
+                throw new NoResultException("No se encontraron datos del modulo");
             }
         } catch (NoResultException ex) {
             throw new ExcepcionGenerica("No se encontraron datos del modulo");
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
-            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
 
@@ -269,7 +271,7 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
-            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
 

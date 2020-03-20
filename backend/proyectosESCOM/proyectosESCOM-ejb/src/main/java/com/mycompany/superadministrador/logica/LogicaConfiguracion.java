@@ -50,7 +50,7 @@ public class LogicaConfiguracion implements LogicaConfiguracionFacadeLocal {
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de registrar la configuracion");
         } catch (Exception ex) {
-            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
 
@@ -82,7 +82,7 @@ public class LogicaConfiguracion implements LogicaConfiguracionFacadeLocal {
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
-            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
 
@@ -112,7 +112,7 @@ public class LogicaConfiguracion implements LogicaConfiguracionFacadeLocal {
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
-            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
 
@@ -145,7 +145,7 @@ public class LogicaConfiguracion implements LogicaConfiguracionFacadeLocal {
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
-            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
     

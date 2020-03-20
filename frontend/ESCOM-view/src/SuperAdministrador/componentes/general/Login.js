@@ -6,7 +6,7 @@ import '../../css/registro.css'
 import Button from '@material-ui/core/Button';
 import { reduxForm, Field } from 'redux-form';
 import Alert from '@material-ui/lab/Alert';
-import { actionLoginUsuario, actualizarMensajeLogin, asignarNombreUsuario,actionAsignarIp } from '../../actions/actionsUsuario.js'
+import { actionLoginUsuario, actualizarMensajeLogin, asignarNombreUsuario, actionAsignarIp, actualizarMensajeInicio } from '../../actions/actionsUsuario.js'
 import { consultarConfiguracionLogin } from '../../actions/actionConfiguracion.js';
 import { connect } from 'react-redux';
 import { requerido, correo } from '../../utilitario/validacionCampos.js';
@@ -23,6 +23,7 @@ class Login extends React.Component {
 
 
 	componentDidMount() {
+		this.props.actualizarMensajeInicio('');
 		this.props.consultarConfiguracionLogin();
 	}
 
@@ -52,14 +53,14 @@ class Login extends React.Component {
 	render() {
 		return (
 			<div>
-				<div className="container-fluid" style={{background:"white"}}>
+				<div className="container-fluid" style={{ background: "white" }}>
 					<div className="row no-gutter">
-						<div className="d-none d-md-flex col-md-4 col-lg-6" style={{paddingLeft:"0px"}} >
-						{
-						this.props.configuracionLogin.imagenLogin ===undefined ?<div style={{background:"white"}}><img src={imagenDefecto} alt="" style={{backgroundSize: 'cover',backgroundPosition: 'center'}} width="660px" height="695px" /></div> 
-						:
-						<img src={this.props.configuracionLogin.imagenLogin} alt="" style={{backgroundSize: 'cover',backgroundPosition: 'center'}} width="660px" height="695px" />
-						}					
+						<div className="d-none d-md-flex col-md-4 col-lg-6" style={{ paddingLeft: "0px" }} >
+							{
+								this.props.configuracionLogin.imagenLogin === undefined ? <div style={{ background: "white" }}><img src={imagenDefecto} alt="" style={{ backgroundSize: 'cover', backgroundPosition: 'center' }} width="660px" height="695px" /></div>
+									:
+									<img src={this.props.configuracionLogin.imagenLogin} alt="" style={{ backgroundSize: 'cover', backgroundPosition: 'center' }} width="660px" height="695px" />
+							}
 						</div>
 						<div className="col-md-8 col-lg-6">
 							<div className="login d-flex align-items-center py-5">
@@ -81,13 +82,13 @@ class Login extends React.Component {
 												</div>
 												<div className="row">
 													<div className="col-sm-12 center">
-													
+
 														<Field name="mensaje" component={generarMensaje} label={this.props.mensaje} />
 													</div>
 												</div>
 												<div className="row">
 													<div className="col-sm-12 center">
-														<a href="/editar" id="forget-password" style={{fontSize: "15px", fontFamily: "sans-serif"}} >¿Olvido su contraseña?</a>
+														<a href="/editar" id="forget-password" style={{ fontSize: "15px", fontFamily: "sans-serif" }} >¿Olvido su contraseña?</a>
 													</div>
 												</div>
 												<br />
@@ -125,9 +126,9 @@ const generarInput = ({ input, label, type, meta: { touched, error, warning } })
 const generarMensaje = ({ input, label, type, meta: { touched, error, warning } }) => (
 	<div>
 		<div>
-			<br/>
-			{label===undefined|label==''?<div></div>:<Alert draggable={true} severity="error">{label}</Alert>}
-			<br/>
+			<br />
+			{label === undefined | label === '' ? <div></div> : <Alert draggable={true} severity="error">{label}</Alert>}
+			<br />
 		</div>
 	</div>
 )
@@ -137,7 +138,8 @@ function mapStateToProps(state) {
 	return {
 		mensaje: state.user.mensajeLogin,
 		nombreUsuario: state.user.nombreUsuario,
-		configuracionLogin: state.conf.configuracionLogin
+		configuracionLogin: state.conf.configuracionLogin,
+		mensajeInicio: state.user.mensajeInicio
 	}
 }
 
@@ -147,4 +149,4 @@ let formulario = reduxForm({
 
 
 
-export default withRouter(connect(mapStateToProps, { actionAsignarIp,actionLoginUsuario, actualizarMensajeLogin, consultarConfiguracionLogin, asignarNombreUsuario })(formulario));
+export default withRouter(connect(mapStateToProps, { actionAsignarIp, actionLoginUsuario, actualizarMensajeInicio, actualizarMensajeLogin, consultarConfiguracionLogin, asignarNombreUsuario })(formulario));

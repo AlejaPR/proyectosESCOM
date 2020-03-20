@@ -52,7 +52,7 @@ public class ModuloServicio {
             respuesta.setRespuesta("Modulo registrado");
             return Response.status(Response.Status.OK).entity(respuesta).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("Ya existen los datos registrados previamente");
+            respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.NOT_ACCEPTABLE).entity(respuesta).build();
         } catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error interno del servidor");
@@ -73,10 +73,10 @@ public class ModuloServicio {
             List<ModuloPOJO> listaModulos = moduloLogica.devolverModulos();
             return Response.status(Response.Status.OK).entity(listaModulos).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("Sin acceso al servicio");
+            respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
         } catch (Exception e) {
-            respuesta.setRespuesta("Ocurrio un error en el servidor ");
+            respuesta.setRespuesta("Ocurrio un error en el servidor");
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }
@@ -95,7 +95,7 @@ public class ModuloServicio {
             ModuloPOJO moduloDatos = moduloLogica.traerModuloId(idModulo);
             return Response.status(Response.Status.OK).entity(moduloDatos).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("Sin acceso al servicio");
+            respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
         } catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error en el servidor ");
@@ -119,7 +119,7 @@ public class ModuloServicio {
             respuesta.setRespuesta("Modulo modificado correctamente");
             return Response.status(Response.Status.OK).entity(respuesta).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("No se ha podido modificar el modulo");
+            respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.NOT_ACCEPTABLE).entity(respuesta).build();
         } catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error interno del servidor");
@@ -142,7 +142,7 @@ public class ModuloServicio {
             respuesta.setRespuesta("Estado de modulo cambiado correctamente");
             return Response.status(Response.Status.OK).entity(respuesta).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("Sin acceso al servicio");
+            respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
         } catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error en el servidor ");
@@ -165,7 +165,7 @@ public class ModuloServicio {
             List<ActividadPOJO> listaActividadesM = moduloLogica.listarActividadesModulo(idModulo);
             return Response.status(Response.Status.OK).entity(listaActividadesM).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("Sin acceso al servicio");
+            respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
         } catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error en el servidor ");
@@ -190,7 +190,7 @@ public class ModuloServicio {
             respuesta.setRespuesta("Estado de actividad del modulo cambiado correctamente");
             return Response.status(Response.Status.OK).entity(respuesta).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("No se ha podido modificar la actividad");
+            respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.NOT_ACCEPTABLE).entity(respuesta).build();
         } catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error interno del servidor");

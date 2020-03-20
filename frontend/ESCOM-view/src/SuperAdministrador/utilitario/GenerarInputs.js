@@ -131,12 +131,6 @@ export const generarTextArea = ({
       required={true}
       rows={filas}
       multiline={true}
-      // InputLabelProps={
-      //   {
-      //     style: {
-      //     fontSize:'13px'
-      // }}
-      // }
       variant='outlined'
       size='small'
     />
@@ -237,7 +231,8 @@ const CssTextField = withStyles({
     },
     '& .MuiOutlinedInput-root': {
       '& fieldset': {
-        borderColor: 'gray'
+        borderColor: 'gray',
+        fontSize:'13px'
       }
     },
   },
@@ -272,6 +267,22 @@ const stylesDate = {
     "&$labelFocused": {
       color: "purple",
       fontSize: 10
+    }
+  },
+  labelFocused: {}
+};
+
+const stylesArea = {
+  inputRoot: {
+    fontSize: 14
+  },
+  labelRoot: {
+    fontSize: 14,
+    color: "gray",
+    heigth: '3px',
+    "&$labelFocused": {
+      color: "purple",
+      fontSize: 14
     }
   },
   labelFocused: {}
@@ -337,5 +348,37 @@ function renderDate({
   )
 }
 
+function renderArea({
+  input,filas,
+  label, classes,
+  meta: { touched, error },
+  ...custom
+}) {
+  return (
+    <TextField
+      fullWidth
+      label={label}
+      InputProps={{ classes: { root: classes.inputRoot } }}
+      InputLabelProps={{
+        classes: {
+          root: classes.labelRoot,
+          focused: classes.labelFocused
+        }
+      }}
+      error={(touched && error) ? true : false}
+      helperText={touched && error}
+      required={true}
+      {...input}
+      {...custom}
+      multiline={true}
+      rows={filas}
+      variant='outlined'
+      margin="normal"
+      size='small'
+    />
+  )
+}
+
 export const generarInput = withStyles(styles)(renderAlgo);
 export const generarDate = withStyles(stylesDate)(renderDate);
+export const generarArea=withStyles(stylesArea)(renderArea);

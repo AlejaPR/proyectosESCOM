@@ -54,9 +54,8 @@ public class BitacoraServicio {
                 respuesta.setRespuesta("No se encontraron reportes");
                 return Response.status(Response.Status.NOT_FOUND).entity(respuesta).build();
             }
-
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("No se encontraron resultados con los parametros ingresados");
+            respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.NOT_FOUND).entity(respuesta).build();
         } catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error interno del servidor");

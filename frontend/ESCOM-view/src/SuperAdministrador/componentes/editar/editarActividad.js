@@ -17,7 +17,7 @@ import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
 import SaveIcon from '@material-ui/icons/Save';
 import CancelIcon from '@material-ui/icons/Cancel';
 //redux
-import { actionCargarInformacionDeActividad ,actionEditarUsuario,actualizarMensajeEditar} from '../../actions/actionActividad.js'
+import { actionCargarInformacionDeActividad, actionEditarUsuario, actualizarMensajeEditar } from '../../actions/actionActividad.js'
 import { connect } from "react-redux";
 import { reduxForm, Field } from 'redux-form';
 
@@ -29,28 +29,62 @@ class EditarActividad extends React.Component {
     }
 
     clickAceptar() {
-        this.props.history.push('/adminUsuario');
+        this.props.history.goBack();
     }
 
     componentDidUpdate() {
-        switch (this.props.mensajeEditar) {
-            case 'Sin permiso':
-                if (!this.state.habilitado) { this.setState({ habilitado: true }) };
-                break;
-            case 'Modificado':
-                NotificationManager.success('Informacion actualizada');
-                this.props.actionCargarInformacionDeActividad(this.props.codigoActividad, localStorage.getItem('Token'));
-                this.props.actualizarMensajeEditar('');
-                break;
-            default:
-                break;
-            // this.props.history.push('/adminUsuario');
+        if (this.props.mensajeEditar !== '') {
+            switch (this.props.mensajeEditar) {
+                case 'Sin permiso':
+                    if (!this.state.habilitado) { this.setState({ habilitado: true }) };
+                    break;
+                case 'Modificado':
+                    NotificationManager.success('Informacion actualizada');
+                    this.props.actionCargarInformacionDeActividad(this.props.codigoActividad, localStorage.getItem('Token'));
+                    this.props.actualizarMensajeEditar('');
+                    break;
+                case 'Ocurrio un error al momento de hacer la modificacion de la actividad':
+                    NotificationManager.error('Ocurrio un error al momento de hacer la modificacion de la actividad');
+                    this.props.actualizarMensajeEditar('');
+                    break;
+                case 'No se encontraron datos de la actividad':
+                    NotificationManager.error('No se encontro informacion de la actividad');
+                    this.props.actualizarMensajeEditar('');
+                    break;
+                case 'Ocurrio un error en el servidor':
+                    NotificationManager.error('Ocurrio un error en el servidor');
+                    this.props.actualizarMensajeEditar('');
+                    break;
+                case 'Servidor fuera de servicio temporalmente':
+                    NotificationManager.error('Servidor fuera de servicio temporalmente');
+                    this.props.actualizarMensajeEditar('');
+                    break;
+                case 'Token requerido':
+                    localStorage.removeItem('Token');
+                    window.location.href = "/";
+                    break;
+                case 'token vencido':
+                    localStorage.removeItem('Token');
+                    window.location.href = "/";
+                    break;
+                case 'token no registrado':
+                    localStorage.removeItem('Token');
+                    window.location.href = "/";
+                    break;
+                case 'token incorrecto':
+                    localStorage.removeItem('Token');
+                    window.location.href = "/";
+                    break;
+
+                default:
+                    break;
+
+            }
         }
 
     }
 
     componentDidMount() {
-
         if (this.props.codigoActividad === undefined || this.props.codigoActividad.length === 0) {
             this.props.history.push('/adminActividad');
         } else {
@@ -60,7 +94,7 @@ class EditarActividad extends React.Component {
 
     onClickCancelar = (event) => {
         event.preventDefault();
-        this.props.history.push('/adminActividad');
+        this.props.history.goBack();
     }
 
     handleSubmit = formValues => {
@@ -185,5 +219,5 @@ let formularioEditar = reduxForm({
     enableReinitialize: true
 })(EditarActividad)
 
-export default withRouter(connect(mapStateToProps, { actionCargarInformacionDeActividad,actionEditarUsuario ,actualizarMensajeEditar})(formularioEditar));
+export default withRouter(connect(mapStateToProps, { actionCargarInformacionDeActividad, actionEditarUsuario, actualizarMensajeEditar })(formularioEditar));
 

@@ -77,16 +77,41 @@ class ContenidoReportes extends React.Component {
 		return opciones;
 	}
 	componentDidUpdate() {
-		switch (this.props.mensaje) {
-			case 'No se encontraron reportes':
-				NotificationManager.warning('No se encontraron resultados');
-				break;
-			case 'Sin permiso':
-				NotificationManager.warning('No tiene permisos para realizar reportes');
-				break;
-			default:
-				break;
+		if (this.props.mensaje !== '') {
 
+			switch (this.props.mensaje) {
+				case 'No se encontraron reportes':
+					NotificationManager.warning('No se encontraron resultados');
+					break;
+				case 'Sin permiso':
+					NotificationManager.error('No tiene permisos para realizar reportes');
+					break;
+				case 'Ocurrio un error en el servidor':
+					NotificationManager.error('Ocurrio un error en el servidor');
+					break;
+				case 'Servidor fuera de servicio temporalmente':
+					NotificationManager.error('Servidor fuera de servicio temporalmente');
+					break;
+				case 'Token requerido':
+					localStorage.removeItem('Token');
+					window.location.href = "/";
+					break;
+				case 'token vencido':
+					localStorage.removeItem('Token');
+					window.location.href = "/";
+					break;
+				case 'token no registrado':
+					localStorage.removeItem('Token');
+					window.location.href = "/";
+					break;
+				case 'token incorrecto':
+					localStorage.removeItem('Token');
+					window.location.href = "/";
+					break;
+				default:
+					break;
+
+			}
 		}
 		this.props.actualizarMensaje('');
 	}
@@ -141,57 +166,62 @@ class ContenidoReportes extends React.Component {
 	}
 
 	exportPDF = () => {
-		if (this.props.reporte.length === 0 | this.props.reporte === undefined) {
-			NotificationManager.error('No hay datos para exportar');
-		}
-		else {
-			var doc = new jsPDF()
-			var totalPagesExp = this.calcularNumeroDePaginas();
-			const headers = [["OPERACION", "MODULO", "TABLA INVOLUCRADA", "FECHA BITACORA", "CORREO DEL RESPONSABLE", "IP         "]];
-			const data = this.props.reporte.map(elt => [elt.operacion, elt.nombreModulo, elt.tablaInvolucrada, elt.fechaBitacora, elt.correo, elt.ip]);
-			const logo = this.props.configuracion.logo;
-			let fechaHoy = new Date();
-			const fecha = this.devolverFechaString(fechaHoy);
-			const fechaInicio = this.devolverFechaString(this.state.fechaInicio);
-			const fechaFin = this.devolverFechaString(this.state.fechaFin);
-			doc.autoTable({
+		try {
+			if (this.props.reporte.length === 0 | this.props.reporte === undefined) {
+				NotificationManager.error('No hay datos para exportar');
+			}
+			else {
+				var doc = new jsPDF()
+				var totalPagesExp = this.calcularNumeroDePaginas();
+				const headers = [["OPERACION", "MODULO", "TABLA INVOLUCRADA", "FECHA BITACORA", "CORREO DEL RESPONSABLE", "IP         "]];
+				const data = this.props.reporte.map(elt => [elt.operacion, elt.nombreModulo, elt.tablaInvolucrada, elt.fechaBitacora, elt.correo, elt.ip]);
+				const logo = this.props.configuracion.logo;
+				let fechaHoy = new Date();
+				const fecha = this.devolverFechaString(fechaHoy);
+				const fechaInicio = this.devolverFechaString(this.state.fechaInicio);
+				const fechaFin = this.devolverFechaString(this.state.fechaFin);
+				doc.autoTable({
 
-				head: headers,
-				body: data,
-				headStyles: {
-					fontSize: 8,
-				},
-				bodyStyles: {
-					fontSize: 8,
-				},
-				alternateRowStyles: {
-					fontSize: 8,
-				},
-				didDrawPage: function (data) {
-					// Header
-					doc.setFontSize(10);
-					doc.setTextColor(40);
-					doc.setFontStyle('normal');
-					doc.addImage(logo, 'PNG', data.settings.margin.left, 8, 43, 15);
-					doc.text('Fecha de generacion: ' + fecha, data.settings.margin.left + 125, 12);
-					doc.text('Fecha de inicio: ' + fechaInicio, data.settings.margin.left + 125, 16);
-					doc.text('Fecha de fin: ' + fechaFin, data.settings.margin.left + 125, 20);
-					// Footer
-					var str = 'Pagina ' + doc.internal.getNumberOfPages()
-					// Total page number plugin only available in jspdf v1.0+
-					if (typeof doc.putTotalPages === 'function') {
-						str = str + ' de ' + totalPagesExp
-					}
-					doc.setFontSize(10)
+					head: headers,
+					body: data,
+					headStyles: {
+						fontSize: 8,
+					},
+					bodyStyles: {
+						fontSize: 8,
+					},
+					alternateRowStyles: {
+						fontSize: 8,
+					},
+					didDrawPage: function (data) {
+						// Header
+						doc.setFontSize(10);
+						doc.setTextColor(40);
+						doc.setFontStyle('normal');
+						doc.addImage(logo, 'PNG', data.settings.margin.left, 8, 43, 15);
+						doc.text('Fecha de generacion: ' + fecha, data.settings.margin.left + 125, 12);
+						doc.text('Fecha de inicio: ' + fechaInicio, data.settings.margin.left + 125, 16);
+						doc.text('Fecha de fin: ' + fechaFin, data.settings.margin.left + 125, 20);
+						// Footer
+						var str = 'Pagina ' + doc.internal.getNumberOfPages()
+						// Total page number plugin only available in jspdf v1.0+
+						if (typeof doc.putTotalPages === 'function') {
+							str = str + ' de ' + totalPagesExp
+						}
+						doc.setFontSize(10)
 
-					// jsPDF 1.4+ uses getWidth, <1.4 uses .width
-					var pageSize = doc.internal.pageSize
-					var pageHeight = pageSize.height ? pageSize.height : pageSize.getHeight()
-					doc.text(str, data.settings.margin.left, pageHeight - 10)
-				},
-				margin: { top: 30 },
-			})
-			doc.save('myrepo.pdf');
+						// jsPDF 1.4+ uses getWidth, <1.4 uses .width
+						var pageSize = doc.internal.pageSize
+						var pageHeight = pageSize.height ? pageSize.height : pageSize.getHeight()
+						doc.text(str, data.settings.margin.left, pageHeight - 10)
+					},
+					margin: { top: 30 },
+				})
+
+				doc.save(`reporte de ${fecha}.pdf`);
+			}
+		} catch (error) {
+			NotificationManager.error('Ocurrio un error intentelo de nuevo');
 		}
 	}
 
@@ -213,13 +243,13 @@ class ContenidoReportes extends React.Component {
 					paddingTop: "7px",
 					paddingRight: "44px",
 					paddingLeft: "40px",
-					paddingBottom: "20px",
+					paddingBottom: "0px",
 					margin: "0px 0px 32px"
 				}}>
 					<div className="container shadow" style={{ background: "white", padding: "27px" }}>
 						<form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
 							<div className="row">
-								<div className="col-sm-4" style={{ paddingTop: "15px" ,zIndex:'2'}}>
+								<div className="col-sm-4" style={{ paddingTop: "15px", zIndex: '2' }}>
 									<Field name="actividad" validate={[seleccione]} valor={this.retornarValor()} onChange={this.handleChangeDos} component={ReduxFormSelectDos} options={this.actividades()} />
 								</div>
 								<div className="col-sm-8" >
@@ -234,7 +264,7 @@ class ContenidoReportes extends React.Component {
 							}}>
 
 								<div className="row">
-									<div className="col-sm-6" style={{zIndex:'0'}}>
+									<div className="col-sm-6" style={{ zIndex: '0' }}>
 
 										<Field name="fechaInicio" type="date" component={generarDate} label="Fecha de inicio" />
 									</div>
@@ -311,7 +341,7 @@ class ContenidoReportes extends React.Component {
 							}}
 						/>
 						<br />
-						<div style={{ paddingLeft: "400px"}}>
+						<div style={{ paddingLeft: "400px" }}>
 							<Button
 								onClick={() => this.exportPDF()}
 								startIcon={<PictureAsPdfIcon />}
@@ -336,7 +366,7 @@ export const ReduxFormSelectDos = props => {
 			...provided,
 			fontSize: 13
 		}),
-		control: styles => ({ ...styles, backgroundColor: 'white', fontSize: 13, fontFamily: 'sans-serif',zIndex:"0" }),
+		control: styles => ({ ...styles, backgroundColor: 'white', fontSize: 13, fontFamily: 'sans-serif', zIndex: "0" }),
 		singleValue: (provided, state) => {
 			const opacity = state.isDisabled ? 0.5 : 1;
 			const transition = 'opacity 300ms';

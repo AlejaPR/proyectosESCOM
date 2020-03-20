@@ -183,7 +183,6 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
      */
     @Override
     public ActividadPOJO registrarActividad(ActividadPOJO actividad, String nombreActividad, Modulo modulo) {
-        
         em.createNativeQuery("INSERT INTO TBL_ACTIVIDAD (ACT_ESTADO,ACT_DESCRIPCIONACTIVIDAD,ACT_ULTIMAMODIFICACION,"
                 + "ACT_NOMBREACTIVIDAD,FK_ACT_IDMODULO) VALUES (?,?,?,?,?)")
                 .setParameter(1, "Activo")

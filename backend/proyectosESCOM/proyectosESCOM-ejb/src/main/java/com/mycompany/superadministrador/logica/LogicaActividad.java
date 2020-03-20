@@ -69,7 +69,7 @@ public class LogicaActividad implements LogicaActividadFacadeLocal {
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
-            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
 
@@ -108,7 +108,7 @@ public class LogicaActividad implements LogicaActividadFacadeLocal {
         } catch (NoResultException ex) {
             throw new ExcepcionGenerica("No se encontro ningun dato coincidente");
         } catch (Exception ex) {
-            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
 
@@ -131,7 +131,7 @@ public class LogicaActividad implements LogicaActividadFacadeLocal {
         } catch (NoResultException ex) {
             throw new ExcepcionGenerica("La actividad no existe");
         } catch (Exception ex) {
-            throw new ExcepcionGenerica("Ocurrio una excepcion");
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
 
     }
@@ -165,7 +165,7 @@ public class LogicaActividad implements LogicaActividadFacadeLocal {
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
-            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
 
     }
@@ -193,7 +193,7 @@ public class LogicaActividad implements LogicaActividadFacadeLocal {
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
-            throw new ExcepcionGenerica("Ocurrio una excepcion ");
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
 }

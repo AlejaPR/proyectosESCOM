@@ -1,12 +1,13 @@
 import React from 'react';
 
 //iconos
-import Persona from '@icons/material/AccountIcon.js';
-import Folder from '@icons/material/LibraryIcon';
-import Bombillo from '@icons/material/LightbulbOnIcon';
-import Libro from  '@icons/material/FileIcon';
-import Configuracion from '@icons/material/PaletteIcon';
+import Persona from '@material-ui/icons/Person';
+import Folder from '@material-ui/icons/LocalLibrary';
+import Bombillo from '@material-ui/icons/EmojiObjects';
+import Libro from  '@material-ui/icons/Description';
+import Configuracion from '@material-ui/icons/Palette';
 import logoDefecto from '../../imagenes/defectoLogo.png';
+import HomeIcon from '@material-ui/icons/Home';
 
 import { connect } from 'react-redux';
 import { consultarConfiguracion } from '../../actions/actionConfiguracion.js'
@@ -59,9 +60,17 @@ class MenuLateral extends React.Component {
 					</div>
 				</div>
 				<li className="nav-item"  style={{height:"65px"}}>
+					<a href="/inicio" name="hoverUsuario" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
+					 style={this.fondoBarr()}>
+						<HomeIcon />
+						<br />
+						<span className="title letra">Inicio</span>
+					</a>
+				</li>
+				<li className="nav-item"  style={{height:"65px"}}>
 					<a href="/AdminUsuario" name="hoverUsuario" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
 					 style={this.fondoBarr()}>
-						<Persona color="#CBC7C7"/>
+						<Persona />
 						<br />
 						<span className="title letra">Administrar usuario</span>
 					</a>
@@ -69,7 +78,7 @@ class MenuLateral extends React.Component {
 				<li className="nav-item"  style={{height:"65px"}}>
 					<a href="/AdminModulo" name="hoverModulo" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center" 
 					style={this.fondoBarr()}>
-						<Folder color="#CBC7C7"/>
+						<Folder/>
 						<br />
 						<span className="title letra">Administrar modulo</span>
 					</a>
@@ -77,7 +86,7 @@ class MenuLateral extends React.Component {
 				<li className="nav-item"  style={{height:"65px"}}>
 					<a href="/AdminActividad" name="hoverActividad" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
 					style={this.fondoBarr()} >
-						<Bombillo color="#CBC7C7"/>
+						<Bombillo/>
 						<br />
 						<span className="title letra">Administrar actividad</span>
 					</a>
@@ -85,7 +94,7 @@ class MenuLateral extends React.Component {
 				<li className="nav-item"  style={{height:"65px"}}>
 					<a href="/reportes" name="hoverReportes" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff}   className="list-group-item list-group-item-action text-light text-center" 
 					style={this.fondoBarr()}>
-						<Libro color="#CBC7C7"/>
+						<Libro/>
 						<br />
 						<span className="title letra">Reportes</span>
 					</a>
@@ -93,7 +102,7 @@ class MenuLateral extends React.Component {
 				<li className="nav-item"  style={{height:"65px"}}>
 					<a href="/configuracion" name="hoverReportes" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff}   className="list-group-item list-group-item-action text-light text-center" 
 					style={this.fondoBarr()}>
-						<Configuracion color="#CBC7C7"/>
+						<Configuracion/>
 						<br />
 						<span className="title letra">Configuracion</span>
 					</a>

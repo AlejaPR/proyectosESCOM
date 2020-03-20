@@ -15,25 +15,78 @@ import AlertTitle from '@material-ui/lab/AlertTitle';
 
 //redux conexion
 import { connect } from 'react-redux';
-import { actionConsultarActividades,actionSuspenderActivarActividad,actionAsignarCodigoActividad, actualizarMensajeSuspender } from '../../actions/actionActividad.js'
+import { actionConsultarActividades, actionSuspenderActivarActividad,actualizarMensajeRegistrar, actionAsignarCodigoActividad, actualizarMensajeSuspender } from '../../actions/actionActividad.js'
 import { withRouter } from 'react-router-dom';
 
 class ContenidoAdminActividad extends React.Component {
 
 
 	componentDidUpdate() {
+		debugger;
+		if (this.props.mensajeEditar !== '') {
+			if(this.props.mensajeEditar==='actividad registrada'){
+                NotificationManager.success('Actividad registrada correctamente');
+				this.props.actionConsultarActividades(localStorage.getItem('Token'));
+				this.props.actualizarMensajeRegistrar('');
+			}
+		}
 		if (this.props.mensajeSuspender !== '') {
 			switch (this.props.mensajeSuspender) {
 				case 'Sin permiso':
 					NotificationManager.error('No tiene permisos para suspender/activar los usuarios');
+					this.props.actualizarMensajeSuspender('');
 					break;
 				case 'Operacion hecha con exito':
+					this.props.actionConsultarActividades(localStorage.getItem('Token'));
 					NotificationManager.success('Operacion realizada con exito');
+					this.props.actualizarMensajeSuspender('');
 					break;
+				case 'La actividad ya se encuentra registrada':
+					NotificationManager.warning('La actividad ya se encuentra registrada intente con otro nombre');
+					this.props.actualizarMensajeSuspender('');
+					break;
+				case 'El modulo no se encuentra registrado':
+					NotificationManager.error('El modulo asociado no se encuentra registrado');
+					this.props.actualizarMensajeSuspender('');
+					break;
+				case 'No se encontraron datos':
+					NotificationManager.warning('No se encontraron modulos registrados');
+					this.props.actualizarMensajeSuspender('');
+					break;
+				case 'No se encontraron datos de la actividad':
+					NotificationManager.warning('No se encontraron modulos registrados');
+					this.props.actualizarMensajeSuspender('');
+					break;
+				case 'Ocurrio un error en el servidor':
+					NotificationManager.error('Ocurrio un error en el servidor');
+					this.props.actualizarMensajeSuspender('');
+					break;
+				case 'Servidor fuera de servicio temporalmente':
+					NotificationManager.error('Servidor fuera de servicio temporalmente');
+					this.props.actualizarMensajeSuspender('');
+					break;
+				case 'Token requerido':
+					localStorage.removeItem('Token');
+					window.location.href = "/";
+					break;
+				case 'token vencido':
+					localStorage.removeItem('Token');
+					window.location.href = "/";
+					break;
+				case 'token no registrado':
+					localStorage.removeItem('Token');
+					window.location.href = "/";
+					break;
+				case 'token incorrecto':
+					localStorage.removeItem('Token');
+					window.location.href = "/";
+					break;
+
 				default:
 					break;
 			}
 		}
+		this.props.actualizarMensajeSuspender('');
 	}
 
 
@@ -46,7 +99,13 @@ class ContenidoAdminActividad extends React.Component {
 					label: 'Si',
 					onClick: () => {
 						this.props.actualizarMensajeSuspender('');
-						this.props.actionSuspenderActivarActividad(codigo, localStorage.getItem('Token'), this.actualizarActividades(codigo));
+						debugger;
+						if (codigo === undefined) {
+							this.props.actionConsultarActividades(localStorage.getItem('Token'));
+						}else{
+							this.props.actionSuspenderActivarActividad(codigo, localStorage.getItem('Token'), this.actualizarActividades(codigo));
+
+						}
 					}
 				},
 				{
@@ -108,14 +167,14 @@ class ContenidoAdminActividad extends React.Component {
 				</div>
 				<div className="container" style={{
 					paddingTop: "7px",
-					paddingRight: "12px",
+					paddingRight: "44px",
 					paddingLeft: "40px",
-					paddingBottom: "20px",
+					paddingBottom: "0px",
 					margin: "0px 0px 32px"
 				}}>
 					<div className="container shadow" style={{ background: "#FFFFFF", padding: "30px" }}>
 						<br />
-						<div className="jumbotron p-1 jumbotron-fluid" style={{background:"white"}}>
+						<div className="jumbotron p-1 jumbotron-fluid" style={{ background: "white" }}>
 							{
 								this.props.habilitado ? <div className="col-sm-12">
 									<Alert severity="error" variant="outlined">
@@ -255,10 +314,11 @@ function mapStateToProps(state) {
 		actividades: state.act.actividadesRegistradas,
 		habilitado: state.act.estadoActividades,
 		configuracion: state.conf.configuracion,
-		codigoActividad:state.act.codigoActividad,
-		mensajeSuspender:state.act.mensajeSuspender
+		codigoActividad: state.act.codigoActividad,
+		mensajeSuspender: state.act.mensajeSuspender,
+		mensajeEditar:state.act.mensajeRegistrar,
 	}
 }
 
 
-export default withRouter(connect(mapStateToProps, { actionConsultarActividades, actionSuspenderActivarActividad,actionAsignarCodigoActividad, actualizarMensajeSuspender })(ContenidoAdminActividad));
+export default withRouter(connect(mapStateToProps, { actionConsultarActividades,actualizarMensajeRegistrar, actionSuspenderActivarActividad, actionAsignarCodigoActividad, actualizarMensajeSuspender })(ContenidoAdminActividad));

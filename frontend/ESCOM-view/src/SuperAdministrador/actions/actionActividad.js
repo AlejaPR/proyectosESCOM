@@ -1,7 +1,13 @@
 import axios from 'axios';
 import { desencriptar } from '../componentes/general/Encriptar.js';
-import { mensajesDeError } from '../utilitario/MensajesError.js';
-
+import {
+    mensajeDeEditar,
+    mensajeDeCargar,
+    mensajeDeListar,
+    mensajeDeRegistro,
+    mensajeDeSuspender
+} from '../mensajesDeError/MensajesDeErrorActividad.js';
+import { mensajeDeListar as mensajeDelistarModulos } from '../mensajesDeError/MensajesDeErrorModulo.js';
 export const MOSTRAR_ACTIVIDADES = 'MOSTRAR_ACTIVIDADES';
 export const ESTADO_ACTIVIDADES = 'ESTADO_ACTIVIDADES';
 export const AGREGAR_ACTIVIDAD = 'AGREGAR_ACTIVIDAD';
@@ -37,19 +43,24 @@ export function actionConsultarActividades(token) {
                 });
             }).catch((error) => {
                 if (error.request.response === '') {
-
+                    dispatch({
+                        type: MENSAJE_REGISTRAR,
+                        mensaje: 'Servidor fuera de servicio temporalmente'
+                    });
                 } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
+                        let respuesta = mensajeDeListar(o.respuesta);
                         if (respuesta === 'Sin permiso') {
-
                             dispatch({
                                 type: ESTADO_ACTIVIDADES,
                                 estado: true
                             });
                         } else {
-                            //
+                            dispatch({
+                                type: MENSAJE_REGISTRAR,
+                                mensaje: respuesta
+                            });
                         }
                     }
                 }
@@ -89,18 +100,11 @@ export function actionAgregarActividad(actividad, token) {
                 } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
-                        if (respuesta !== '') {
-                            dispatch({
-                                type: MENSAJE_REGISTRAR,
-                                mensaje: respuesta
-                            });
-                        } else {
-                            dispatch({
-                                type: MENSAJE_REGISTRAR,
-                                mensaje: 'Ya existen los datos registrados previamente'
-                            });
-                        }
+                        let respuesta = mensajeDeRegistro(o.respuesta);
+                        dispatch({
+                            type: MENSAJE_REGISTRAR,
+                            mensaje: respuesta
+                        });
                     }
                 }
 
@@ -125,19 +129,24 @@ export function actionConsultarModulos(token) {
 
             }).catch((error) => {
                 if (error.request.response === '') {
-
-
+                    dispatch({
+                        type: MENSAJE_REGISTRAR,
+                        mensaje: 'Servidor fuera de servicio temporalmente'
+                    });
                 } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
+                        let respuesta = mensajeDelistarModulos(o.respuesta);
                         if (respuesta === 'Sin permiso') {
                             dispatch({
                                 type: ESTADO_ACTIVIDADES,
                                 estado: true
                             });
                         } else {
-                            //
+                            dispatch({
+                                type: MENSAJE_REGISTRAR,
+                                mensaje: respuesta
+                            });
                         }
                     }
                 }
@@ -160,16 +169,14 @@ export function actionSuspenderActivarActividad(codigoActividad, token, actualiz
         axios.put(`${URL_BASE}/proyectosESCOM-web/api/actividades/cambiarEstado/${codigoActividad}`, datosSolicitud, { headers: headers })
             .then(response => {
                 dispatch({
-                    type: MENSAJE_SUSPENDER,
-                    mensaje: 'Operacion hecha con exito'
-                });
-                dispatch({
                     type: ACTUALIZAR_ACTIVIDADES,
                     actividad: actualizados
                 });
+                dispatch({
+                    type: MENSAJE_SUSPENDER,
+                    mensaje: 'Operacion hecha con exito'
+                });
             }).catch((error) => {
-                console.log(error);
-
                 if (error.request.response === '') {
                     dispatch({
                         type: MENSAJE_SUSPENDER,
@@ -178,21 +185,13 @@ export function actionSuspenderActivarActividad(codigoActividad, token, actualiz
                 } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
-                        if (respuesta !== '') {
-                            dispatch({
-                                type: MENSAJE_SUSPENDER,
-                                mensaje: respuesta
-                            });
-                        } else {
-                            dispatch({
-                                type: MENSAJE_SUSPENDER,
-                                mensaje: 'Sin acceso al servicio'
-                            });
-                        }
+                        let respuesta = mensajeDeSuspender(o.respuesta);
+                        dispatch({
+                            type: MENSAJE_SUSPENDER,
+                            mensaje: respuesta
+                        });
                     }
                 }
-
             });
 
     }
@@ -221,18 +220,12 @@ export function actionCargarInformacionDeActividad(codigoActividad, token) {
                 } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
-                        if (respuesta !== '') {
-                            dispatch({
-                                type: MENSAJE_EDITAR,
-                                mensaje: respuesta
-                            });
-                        } else {
-                            dispatch({
-                                type: MENSAJE_EDITAR,
-                                mensaje: 'Sin acceso al servicio'
-                            });
-                        }
+                        let respuesta = mensajeDeCargar(o.respuesta);
+                        dispatch({
+                            type: MENSAJE_EDITAR,
+                            mensaje: respuesta
+                        });
+
                     }
                 }
             });
@@ -271,18 +264,11 @@ export function actionEditarUsuario(actividad, token) {
                 } else {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeError(o.respuesta);
-                        if (respuesta !== '') {
-                            dispatch({
-                                type: MENSAJE_EDITAR,
-                                mensaje: respuesta
-                            });
-                        } else {
-                            dispatch({
-                                type: MENSAJE_EDITAR,
-                                mensaje: 'Ya existen los datos registrados previamente'
-                            });
-                        }
+                        let respuesta = mensajeDeEditar(o.respuesta);
+                        dispatch({
+                            type: MENSAJE_EDITAR,
+                            mensaje: respuesta
+                        });
                     }
                 }
 

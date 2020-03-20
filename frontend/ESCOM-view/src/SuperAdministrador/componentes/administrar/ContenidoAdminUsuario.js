@@ -35,10 +35,39 @@ class ContenidoAdminUsuario extends React.Component {
 				case 'Operacion hecha con exito':
 					NotificationManager.success('Operacion realizada con exito');
 					break;
+				case 'No se encontraron datos':
+					NotificationManager.error('No se encontraron datos registrados');
+					break;
+				case 'No se encontraron datos del usuario':
+					NotificationManager.error('No se encontraron datos del usuario');
+					break;
+				case 'Ocurrio un error en el servidor':
+					NotificationManager.error('Ocurrio un error en el servidor');
+					break;
+				case 'Servidor fuera de servicio temporalmente':
+					NotificationManager.error('Servidor fuera de servicio temporalmente');
+					break;
+				case 'Token requerido':
+					localStorage.removeItem('Token');
+					window.location.href = "/";
+					break;
+				case 'token vencido':
+					localStorage.removeItem('Token');
+					window.location.href = "/";
+					break;
+				case 'token no registrado':
+					localStorage.removeItem('Token');
+					window.location.href = "/";
+					break;
+				case 'token incorrecto':
+					localStorage.removeItem('Token');
+					window.location.href = "/";
+					break;
 				default:
 					break;
 			}
 		}
+		this.props.actualizarMensajeSuspender('');
 	}
 
 	actualizarUsuarios(numeroDocumento) {
@@ -79,7 +108,7 @@ class ContenidoAdminUsuario extends React.Component {
 					onClick: () => {
 						if (this.state.cedula === 0) { this.setState({ cedula: cedula }) };
 						this.props.actualizarMensajeSuspender('');
-						this.props.actionSuspenderActivarUsuario(cedula, localStorage.getItem('Token'), this.actualizarUsuarios(cedula), this.props.usuarios);
+						this.props.actionSuspenderActivarUsuario(cedula, localStorage.getItem('Token'), this.actualizarUsuarios(cedula));
 					}
 				},
 				{
@@ -106,13 +135,13 @@ class ContenidoAdminUsuario extends React.Component {
 				}}>
 				</div>
 				<div className="container" style={{
-					paddingTop: "7px",
-					paddingRight: "44px",
+					paddingTop: "5px",
+					paddingRight: "43px",
 					paddingLeft: "40px",
-					paddingBottom: "20px",
+					paddingBottom: "0px",
 					margin: "0px 0px 32px"
 				}}>
-					<div className="container shadow" style={fondoBarraSuperior}> 
+					<div className="container shadow" style={fondoBarraSuperior}>
 						<div>
 							{
 								this.props.habilitado ? <div className="col-sm-12">

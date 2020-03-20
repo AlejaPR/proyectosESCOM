@@ -9,10 +9,12 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
-import { generarInput, generarSelect, generarDate} from '../../utilitario/GenerarInputs.js'
+import { generarInput, generarDate } from '../../utilitario/GenerarInputs.js'
 import AddIcon from '@material-ui/icons/Add';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import CancelIcon from '@material-ui/icons/Cancel';
+import Select from 'react-select';
+import { formatoFecha } from '../../utilitario/MensajesError.js'
 
 //redux
 import { actionAgregarUsuario, actionConsultarDocumentos, actualizarMensajeRegistrar } from '../../actions/actionsUsuario.js'
@@ -37,6 +39,7 @@ class PopUpUsuario extends React.Component {
 
 
   componentDidUpdate() {
+    debugger;
     if (this.props.mensaje !== '') {
       switch (this.props.mensaje) {
         case 'Usuario registrado':
@@ -48,7 +51,7 @@ class PopUpUsuario extends React.Component {
           this.props.reset();
           this.props.actualizarMensajeRegistrar('');
           break;
-        case 'Ya existen los datos registrados previamente':
+        case 'El correo o numero de documento ya esta registrado':
           NotificationManager.error('El correo o numero de identificacion ya estan registrados');
           this.props.reset();
           this.props.actualizarMensajeRegistrar('');
@@ -58,11 +61,32 @@ class PopUpUsuario extends React.Component {
           this.props.reset();
           this.props.actualizarMensajeRegistrar('');
           break;
+        case 'Ocurrio un error en el servidor':
+          NotificationManager.error('Ocurrio un error en el servidor');
+          this.props.actualizarMensajeRegistrar('');
+          break;
+        case 'Token requerido':
+          localStorage.removeItem('Token');
+          window.location.href = "/";
+          break;
+        case 'token vencido':
+          localStorage.removeItem('Token');
+          window.location.href = "/";
+          break;
+        case 'token no registrado':
+          localStorage.removeItem('Token');
+          window.location.href = "/";
+          break;
+        case 'token incorrecto':
+          localStorage.removeItem('Token');
+          window.location.href = "/";
+          break;
         default:
-          this.props.history.push('/');
           break;
       }
     }
+    this.props.actualizarMensajeRegistrar('');
+
   }
 
   componentWillMount() {
@@ -75,22 +99,20 @@ class PopUpUsuario extends React.Component {
       var crypto = require('crypto');
       var contrasenaEncryp = crypto.createHmac('sha256', formValues.correo).update(formValues.contrasena).digest('hex');
       let date = new Date(formValues.fechaNacimiento);
-      debugger;
       let usuario = {
         'nombre': formValues.nombre,
         'apellido': formValues.apellido,
-        'tipoDocumento': formValues.tipoDocumento,
+        'tipoDocumento': formValues.tipoDocumento.value,
         'numeroDocumento': formValues.numeroDocumento,
         'correoElectronico': formValues.correo,
         'contrasena': contrasenaEncryp,
-        'fechaNacimiento': date,
+        'fechaNacimiento': formatoFecha(date),
         'estado': 'Activo',
         'datosSolicitud': null
       };
       this.props.actionAgregarUsuario(usuario, localStorage.getItem('Token'));
       this.props.reset();
     } catch (error) {
-      console.log(error)
       NotificationManager.error('Ingrese todos los datos');
     }
   }
@@ -98,27 +120,17 @@ class PopUpUsuario extends React.Component {
   opciones = () => {
     let respuesta = [];
     this.props.documentos.forEach(
-        documento => {
-          const { idTipoDocumento, tipoDocumento } = documento
-            let objeto = {
-                label: tipoDocumento,
-                value:idTipoDocumento,
-            }
-            respuesta.push(objeto);
+      documento => {
+        const { idTipoDocumento, tipoDocumento } = documento
+        let objeto = {
+          label: tipoDocumento,
+          value: idTipoDocumento,
         }
+        respuesta.push(objeto);
+      }
     )
     return respuesta;
-}
-
-  cargarDocumentos() {
-    return this.props.documentos.map((documento, index) => {
-      const { idTipoDocumento, tipoDocumento } = documento
-      return (
-        <option className="letra" style={{ height: "35px", fontSize: "13px" }} value={idTipoDocumento}>{tipoDocumento}</option>
-      )
-    })
   }
-
 
   render() {
     return (
@@ -143,20 +155,13 @@ class PopUpUsuario extends React.Component {
                   </div>
                 </div>
 
-                <div className="row">
-                  <div className="col-sm-5">
-                    <span style={{ fontSize: "13px" }}>Tipo de documento </span>
-                  </div>
-                  <div className="col-sm-7">
-                    <Field name="tipoDocumento" validate={[seleccione]} style={{ height: "35px", fontSize: "13px" }} className="form-control" component={generarSelect} label="Username">
-                      <option className="letra" style={{ height: "35px", fontSize: "13px" }} value="0">Seleccione</option>
-                      {this.props.documentos.map(documento => <option key={documento.idTipoDocumento} className="letra" style={{ height: "35px", fontSize: "13px" }} value={documento.idTipoDocumento}>{documento.tipoDocumento}</option>)}
-                    </Field>
+                <div className="row" style={{ paddingTop: '9px' }}>
+                  <div className="col-sm-12" style={{ zIndex: '2' }}>
+                    <Field name="tipoDocumento" validate={[seleccione]} component={ReduxFormSelect} options={this.opciones()} />
                   </div>
                 </div>
                 <div className="row">
                   <div className="col-sm-12">
-                    {/* <Field name="numeroDocumento" validate={[seleccione]} component={ReduxFormSelect} options={this.opciones()} /> */}
                     <Field name="numeroDocumento" type="number" validate={[requerido, documentoIdentificacion]} component={generarInput} label="Numero de documento" />
                   </div>
                 </div>
@@ -175,7 +180,7 @@ class PopUpUsuario extends React.Component {
 
                 <div className="row">
                   <div className="col-sm-12">
-                    <Field name="fechaNacimiento" type='date'   validate={[requerido,fechaNacimiento]} component={generarDate} label="Fecha de nacimiento" />
+                    <Field name="fechaNacimiento" type='date' validate={[requerido, fechaNacimiento]} component={generarDate} label="Fecha de nacimiento" />
                   </div>
                 </div>
                 <br />
@@ -193,6 +198,38 @@ class PopUpUsuario extends React.Component {
   }
 }
 
+const ReduxFormSelect = props => {
+  const customStyles = {
+    option: (provided, state) => ({
+      ...provided,
+      fontSize: 13
+    }),
+    control: styles => ({ ...styles, backgroundColor: 'white', fontSize: 13, fontFamily: 'sans-serif' }),
+    singleValue: (provided, state) => {
+      const opacity = state.isDisabled ? 0.5 : 1;
+      const transition = 'opacity 300ms';
+      return { ...provided, opacity, transition };
+    }
+  }
+  const { input, options } = props;
+  const { touched, error } = props.meta;
+  return (
+    <>
+      <Select
+        {...input}
+
+        styles={customStyles}
+        isSearchable={false}
+        placeholder='Seleccione el tipo de documento'
+        onChange={value => input.onChange(value)}
+        onBlur={() => input.onBlur(input.value)}
+        noOptionsMessage={() => 'No hay tipo de documento registrado'}
+        options={options}
+      />
+      {touched && ((error && <span className="text-danger form-group" style={{ fontSize: '12px', fontFamily: 'sans-serif' }}>{error}</span>))}
+    </>
+  )
+}
 
 const fondoBotonCancelar = {
   background: "gray",

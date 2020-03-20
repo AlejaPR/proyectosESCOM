@@ -10,13 +10,13 @@ import PropTypes from "prop-types";
 import { requerido, validacionCuarentaCaracteres, validacionDoscientosCaracteres } from '../../utilitario/validacionCampos.js';
 import AddIcon from '@material-ui/icons/Add';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
-import { generarInput, generarTextArea } from '../../utilitario/GenerarInputs.js'
+import { generarInput,generarArea } from '../../utilitario/GenerarInputs.js'
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import CancelIcon from '@material-ui/icons/Cancel';
 
 import { withRouter } from 'react-router-dom';
 import { Field, reduxForm } from "redux-form";
-import { actionAgregarModulo,actualizarMensajeRegistrar } from '../../actions/actionsModulo.js';
+import { actionAgregarModulo, actualizarMensajeRegistrar } from '../../actions/actionsModulo.js';
 import { connect } from 'react-redux';
 
 class PopUpModulo extends React.Component {
@@ -45,6 +45,35 @@ class PopUpModulo extends React.Component {
           this.props.reset();
           this.props.actualizarMensajeRegistrar('');
           break;
+        case 'El nombre de modulo ya esta registrado':
+          NotificationManager.error('El nombre del modulo ya esta registrado intente nuevamente con otro');
+          this.props.reset();
+          this.props.actualizarMensajeRegistrar('');
+          break;
+        case 'Ocurrio un error en el servidor':
+          NotificationManager.error('Ocurrio un error en el servidor');
+          this.props.actualizarMensajeRegistrar('');
+          break;
+        case 'Servidor fuera de servicio temporalmente':
+          NotificationManager.error('Servidor fuera de servicio temporalmente');
+          this.props.actualizarMensajeRegistrar('');
+          break;
+        case 'Token requerido':
+          localStorage.removeItem('Token');
+          window.location.href = "/";
+          break;
+        case 'token vencido':
+          localStorage.removeItem('Token');
+          window.location.href = "/";
+          break;
+        case 'token no registrado':
+          localStorage.removeItem('Token');
+          window.location.href = "/";
+          break;
+        case 'token incorrecto':
+          localStorage.removeItem('Token');
+          window.location.href = "/";
+          break;
         default:
           break;
       }
@@ -55,17 +84,13 @@ class PopUpModulo extends React.Component {
     previewLogoUrl: PropTypes.string,
     tipoDeImagen: PropTypes.string,
     pesoMaximo: PropTypes.number,
-    anchuraMaxima: PropTypes.number,
-    alturaMaxima: PropTypes.number,
     handleSubmit: PropTypes.func.isRequired
   };
 
   static defaultProps = {
     previewLogoUrl: "https://imgplaceholder.com/400x300",
     tipoDeImagen: "image/jpeg, image/png",
-    pesoMaximo: 100,
-    anchuraMaxima: 100,
-    alturaMaxima: 100
+    pesoMaximo: 300,
   };
   validateImageWeight = imageFile => {
     if (imageFile && imageFile.size) {
@@ -74,23 +99,6 @@ class PopUpModulo extends React.Component {
 
       if (imageFileKb > pesoMaximo) {
         return `El tamaño de la imagen debe ser menor o igual a ${pesoMaximo}kb`;
-      }
-    }
-  };
-  validateImageWidth = imageFile => {
-    if (imageFile) {
-      const { anchuraMaxima } = this.props;
-      if (imageFile.width > anchuraMaxima) {
-        return `El ancho de la imagen debe ser menor o igual a ${anchuraMaxima}px`;
-      }
-    }
-  };
-  validateImageHeight = imageFile => {
-    if (imageFile) {
-      const { alturaMaxima } = this.props;
-
-      if (imageFile.height > alturaMaxima) {
-        return `La altura de la imagen debe ser menor o igual a ${alturaMaxima}px`;
       }
     }
   };
@@ -209,16 +217,14 @@ class PopUpModulo extends React.Component {
                 ]}
                 component={this.renderFileInput}
               />
-              <br />
               <div className="row">
                 <div className="col-sm-12">
                   <Field name="nombre" validate={[requerido, validacionCuarentaCaracteres]} component={generarInput} label="Nombre" />
                 </div>
               </div>
-              <br />
               <div className="row">
                 <div className="col-sm-12">
-                  <Field name="descripcion" validate={[requerido, validacionDoscientosCaracteres]} filas={4} component={generarTextArea} label="Descripcion" />
+                  <Field name="descripcion" validate={[requerido, validacionDoscientosCaracteres]} filas={4} component={generarArea} label="Descripcion" />
                 </div>
               </div>
               <ModalFooter>
@@ -269,4 +275,4 @@ let formularioModulo = reduxForm({
   form: "formularioModulo"
 })(PopUpModulo);
 
-export default withRouter(connect(mapStateToProps, { actionAgregarModulo ,actualizarMensajeRegistrar})(formularioModulo));
+export default withRouter(connect(mapStateToProps, { actionAgregarModulo, actualizarMensajeRegistrar })(formularioModulo));

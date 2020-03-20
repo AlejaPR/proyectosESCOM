@@ -85,99 +85,79 @@ class App extends React.Component {
 							</>
 						</RutaProtegida>
 
-						<RutaProtegida path="/adminUsuario">
+						<RutaProtegidaMenus path="/adminUsuario">
 							<>
-								<MenuLateral />
-								<MenuSuperior />
 								<div id="wrapper">
 									<RedireccionarUsuario />
 								</div>
 							</>
-						</RutaProtegida>
+						</RutaProtegidaMenus>
 
-						<RutaProtegida path="/editarUsuario">
+						<RutaProtegidaMenus path="/editarUsuario">
 							<>
 								<div id="wrapper">
-									<MenuLateral />
-									<MenuSuperior />
 									<EditarUsuario />
 								</div>
 							</>
-						</RutaProtegida>
-						<RutaProtegida path="/asignarActividadUsuario">
+						</RutaProtegidaMenus>
+						<RutaProtegidaMenus path="/asignarActividadUsuario">
 							<>
 								<div id="wrapper">
-									<MenuLateral />
-									<MenuSuperior />
 									<AsignarActividadUsuario />
 								</div>
 							</>
-						</RutaProtegida>
+						</RutaProtegidaMenus>
 
-						<RutaProtegida path="/adminModulo">
+						<RutaProtegidaMenus path="/adminModulo">
 							<>
-								<MenuLateral />
-								<MenuSuperior />
 								<div id="wrapper">
 									<AdminModulo />
 								</div>
 							</>
-						</RutaProtegida>
+						</RutaProtegidaMenus>
 
-						<RutaProtegida path="/editarModulo">
+						<RutaProtegidaMenus path="/editarModulo">
 							<>
 								<div id="wrapper">
-									<MenuLateral />
-									<MenuSuperior />
 									<EditarModulo />
 								</div>
 							</>
-						</RutaProtegida>
-						<RutaProtegida path="/asignarActividadModulo">
+						</RutaProtegidaMenus>
+						<RutaProtegidaMenus path="/asignarActividadModulo">
 							<>
 								<div id="wrapper">
-									<MenuLateral />
-									<MenuSuperior />
 									<AsignarActividadModulo />
 								</div>
 							</>
-						</RutaProtegida>
-						<RutaProtegida path="/adminActividad">
+						</RutaProtegidaMenus>
+						<RutaProtegidaMenus path="/adminActividad">
 							<>
-								<MenuLateral />
-								<MenuSuperior />
 								<div id="wrapper">
 									<Actividad />
 								</div>
 							</>
-						</RutaProtegida>
-						<RutaProtegida path="/editarActividad">
+						</RutaProtegidaMenus>
+						<RutaProtegidaMenus path="/editarActividad">
 							<>
-								<MenuLateral />
-								<MenuSuperior />
 								<div id="wrapper">
 									<EditarActividad />
 								</div>
 							</>
-						</RutaProtegida>
-						<RutaProtegida path="/reportes">
+						</RutaProtegidaMenus>
+						<RutaProtegidaMenus path="/reportes">
 							<>
-								<MenuLateral />
-								<MenuSuperior />
 								<div id="wrapper">
 									<ContenidoReportes />
 								</div>
 							</>
-						</RutaProtegida>
-						<RutaProtegida path="/configuracion">
+						</RutaProtegidaMenus>
+						<RutaProtegidaMenus path="/configuracion">
 							<>
-								<MenuLateral />
-								<MenuSuperior />
 								<div id="wrapper">
 									<Configuracion />
 								</div>
 							</>
-						</RutaProtegida>
+						</RutaProtegidaMenus>
 					</Switch>
 				</Router>
 
@@ -204,6 +184,35 @@ class App extends React.Component {
 		window.location.href = "/";
 	}
 }
+
+function RutaProtegidaMenus({ children, ...rest }) {
+	let atributo = false;
+	let token = localStorage.getItem('Token');
+	if (token !== ' ') {
+		atributo = true;
+	}
+	return (
+		<Route
+			{...rest}
+			render={({ location }) =>
+				atributo ? (
+					<>
+						<MenuLateral />
+						<MenuSuperior />
+						{children}
+					</>
+				) : (
+						<Redirect
+							to={{
+								pathname: "/"
+							}}
+						/>
+					)
+			}
+		/>
+	);
+}
+
 
 function RutaProtegida({ children, ...rest }) {
 	let atributo = false;

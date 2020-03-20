@@ -55,7 +55,7 @@ public class UsuarioServicio {
             respuesta.setRespuesta("Usuario registrado");
             return Response.status(Response.Status.OK).entity(respuesta).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("Ya existen los datos registrados previamente");
+            respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.NOT_ACCEPTABLE).entity(respuesta).build();
         } catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error interno del servidor");
@@ -76,10 +76,10 @@ public class UsuarioServicio {
             List<UsuarioPOJO> listaUsuarios = usuarioLogica.devolverUsuarios();
             return Response.status(Response.Status.OK).entity(listaUsuarios).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("Sin acceso al servicio");
+            respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
         } catch (Exception e) {
-            respuesta.setRespuesta("Ocurrio un error en el servidor ");
+            respuesta.setRespuesta("Ocurrio un error en el servidor");
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }
@@ -97,7 +97,7 @@ public class UsuarioServicio {
             List<TipoDocumentoPOJO> listaDocumentos = usuarioLogica.devolverDocumentos();
             return Response.status(Response.Status.OK).entity(listaDocumentos).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("Sin acceso al servicio");
+            respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
         } catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error en el servidor ");
@@ -120,7 +120,7 @@ public class UsuarioServicio {
             UsuarioPOJO usuarioDatos = usuarioLogica.traerUsuarioCedula(cedula);
             return Response.status(Response.Status.OK).entity(usuarioDatos).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("Sin acceso al servicio");
+            respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
         } catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error en el servidor");
@@ -144,7 +144,7 @@ public class UsuarioServicio {
             respuesta.setRespuesta("Usuario modificado correctamente");
             return Response.status(Response.Status.OK).entity(respuesta).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("Ya existen los datos registrados previamente");
+            respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.NOT_ACCEPTABLE).entity(respuesta).build();
         } catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error interno del servidor");
@@ -169,7 +169,7 @@ public class UsuarioServicio {
             respuesta.setRespuesta("Estado cambiado correctamente");
             return Response.status(Response.Status.OK).entity(respuesta).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("Sin acceso al servicio");
+            respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
         } catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error en el servidor ");
@@ -192,10 +192,10 @@ public class UsuarioServicio {
             List<ActividadPOJO> listaActividades = usuarioLogica.listarActividadesUsuario(cedula);
             return Response.status(Response.Status.OK).entity(listaActividades).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("Sin acceso al servicio");
+            respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
         } catch (Exception e) {
-            respuesta.setRespuesta("Ocurrio un error en el servidor ");
+            respuesta.setRespuesta("Ocurrio un error en el servidor");
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }
@@ -217,10 +217,10 @@ public class UsuarioServicio {
             List<ActividadPOJO> listaActividades = usuarioLogica.listarActividadesNoAsociadasUsuario(numeroDocumento,idModulo);
             return Response.status(Response.Status.OK).entity(listaActividades).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("Sin acceso al servicio");
+            respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
         } catch (Exception e) {
-            respuesta.setRespuesta("Ocurrio un error en el servidor ");
+            respuesta.setRespuesta("Ocurrio un error en el servidor");
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }
@@ -242,7 +242,7 @@ public class UsuarioServicio {
             respuesta.setRespuesta("Actividad eliminada correctamente");
             return Response.status(Response.Status.OK).entity(respuesta).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("Sin acceso al servicio");
+            respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
         } catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error en el servidor ");
@@ -267,10 +267,10 @@ public class UsuarioServicio {
             respuesta.setRespuesta("Actividad asignada");
             return Response.status(Response.Status.OK).entity(respuesta).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("Ya existen los datos registrados previamente");
+            respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.NOT_ACCEPTABLE).entity(respuesta).build();
         } catch (Exception e) {
-            respuesta.setRespuesta("Ocurrio un error interno del servidor");
+            respuesta.setRespuesta("Ocurrio un error en el servidor");
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }
@@ -291,10 +291,10 @@ public class UsuarioServicio {
            List<ModuloPOJO> listaModulo= usuarioLogica.redireccionUsuario(token);
             return Response.status(Response.Status.OK).entity(listaModulo).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("Sin acceso al servicio");
+            respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
         } catch (Exception e) {
-            respuesta.setRespuesta("Ocurrio un error en el servidor ");
+            respuesta.setRespuesta("Ocurrio un error en el servidor");
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }
@@ -318,7 +318,7 @@ public class UsuarioServicio {
             respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
         } catch (Exception e) {
-            respuesta.setRespuesta("Ocurrio un error en el servidor ");
+            respuesta.setRespuesta("Ocurrio un error en el servidor");
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }
@@ -338,10 +338,10 @@ public class UsuarioServicio {
            String correoUsuario= usuarioLogica.devolverCorreo(token);
             return Response.status(Response.Status.OK).entity(correoUsuario).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("Sin acceso al servicio");
+            respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
         } catch (Exception e) {
-            respuesta.setRespuesta("Ocurrio un error en el servidor ");
+            respuesta.setRespuesta("Ocurrio un error en el servidor");
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }

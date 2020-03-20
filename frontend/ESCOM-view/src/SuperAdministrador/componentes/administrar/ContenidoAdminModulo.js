@@ -14,7 +14,7 @@ import { campo } from '../../utilitario/GenerarInputs.js';
 
 //redux conexion
 import { connect } from 'react-redux';
-import { actionConsultarModulos, actionAsignarModulo, actionSuspenderActivarModulo, actualizarMensajeSuspenderModulo } from '../../actions/actionsModulo.js';
+import { actionConsultarModulos, actionAsignarModulo, actionAsignarCodigoModulo, actionSuspenderActivarModulo,actualizarMensajeRegistrar, actualizarMensajeSuspenderModulo } from '../../actions/actionsModulo.js';
 import { withRouter } from 'react-router-dom';
 
 class ContenidoAdminModulo extends React.Component {
@@ -33,7 +33,7 @@ class ContenidoAdminModulo extends React.Component {
 						estadoModulo: "Activo",
 						nombreModulo: task.nombreModulo,
 						descripcionModulo: task.descripcionModulo,
-						imagenModulo:task.imagenModulo
+						imagenModulo: task.imagenModulo
 					}
 					nuevo.push(modulo);
 				} else {
@@ -42,7 +42,7 @@ class ContenidoAdminModulo extends React.Component {
 						idModulo: task.idModulo,
 						descripcionModulo: task.descripcionModulo,
 						estadoModulo: "Suspendido",
-						imagenModulo:task.imagenModulo
+						imagenModulo: task.imagenModulo
 					}
 					nuevo.push(modulo);
 				}
@@ -59,6 +59,13 @@ class ContenidoAdminModulo extends React.Component {
 	}
 
 	componentDidUpdate() {
+		if (this.props.mensajeRegistrar !== '') {
+			if (this.props.mensajeRegistrar) {
+				NotificationManager.success('Modulo registrado correctamente');
+				this.props.actionConsultarModulos(localStorage.getItem('Token'));
+				this.props.actualizarMensajeRegistrar('');
+			}
+		}
 		if (this.props.mensajeSuspender !== '') {
 			switch (this.props.mensajeSuspender) {
 				case 'Sin permiso':
@@ -67,10 +74,44 @@ class ContenidoAdminModulo extends React.Component {
 				case 'Operacion hecha con exito':
 					NotificationManager.success('Operacion realizada con exito');
 					break;
+				case 'Ocurrio un error en el servidor':
+					NotificationManager.error('Ocurrio un error en el servidor');
+					this.props.actualizarMensajeSuspenderModulo('');
+					break;
+				case 'Servidor fuera de servicio temporalmente':
+					NotificationManager.error('Servidor fuera de servicio temporalmente');
+					this.props.actualizarMensajeSuspenderModulo('');
+					break;
+				case 'No se encontraron datos':
+					NotificationManager.warning('Aun no se encuentran modulos registrados');
+					this.props.actualizarMensajeSuspenderModulo('');
+					break;
+				case 'No se encontraron datos del modulo':
+					NotificationManager.error('Ocurrio un error al procesar los datos del modulo');
+					this.props.actualizarMensajeSuspenderModulo('');
+					break;
+				case 'Token requerido':
+					localStorage.removeItem('Token');
+					window.location.href = "/";
+					break;
+				case 'token vencido':
+					localStorage.removeItem('Token');
+					window.location.href = "/";
+					break;
+				case 'token no registrado':
+					localStorage.removeItem('Token');
+					window.location.href = "/";
+					break;
+				case 'token incorrecto':
+					localStorage.removeItem('Token');
+					window.location.href = "/";
+					break;
 				default:
 					break;
+
 			}
 		}
+		this.props.actualizarMensajeSuspenderModulo('');
 	}
 
 
@@ -114,7 +155,7 @@ class ContenidoAdminModulo extends React.Component {
 					paddingTop: "7px",
 					paddingRight: "44px",
 					paddingLeft: "40px",
-					paddingBottom: "20px",
+					paddingBottom: "0px",
 					margin: "0px 0px 32px"
 				}}>
 					<div className="container shadow" style={{ background: "#FFFFFF", padding: "30px" }}>
@@ -192,7 +233,13 @@ class ContenidoAdminModulo extends React.Component {
 											icon: 'edit',
 											tooltip: 'Editar informacion',
 											onClick: (event, rowData) => {
-												this.props.actionAsignarModulo(rowData.idModulo);
+												let moduloEdit = {
+													'idModulo': rowData.idModulo,
+													'imagenModulo': rowData.imagenModulo,
+													'nombreModulo': rowData.nombreModulo,
+													'descripcionModulo': rowData.descripcionModulo,
+												}
+												this.props.actionAsignarModulo(moduloEdit);
 												this.props.history.push('/editarModulo');
 											}
 										},
@@ -205,7 +252,7 @@ class ContenidoAdminModulo extends React.Component {
 											icon: 'assignmentInd',
 											tooltip: 'Administrar actividades',
 											onClick: (event, rowData) => {
-												this.props.actionAsignarModulo(rowData.idModulo);
+												this.props.actionAsignarCodigoModulo(rowData.idModulo);
 												this.props.history.push('/asignarActividadModulo')
 											}
 										}
@@ -267,9 +314,10 @@ function mapStateToProps(state) {
 		modulosRegistrados: state.mod.modulosRegistrados,
 		habilitado: state.mod.estadoModulos,
 		codigoModulo: state.mod.codigoModulo,
-		mensajeSuspender: state.mod.mensajeSuspenderModulo
+		mensajeSuspender: state.mod.mensajeSuspenderModulo,
+		mensajeRegistrar: state.mod.mensajeRegistrarModulo,
 	}
 }
 
-export default withRouter(connect(mapStateToProps, { actionConsultarModulos, actionAsignarModulo, actionSuspenderActivarModulo, actualizarMensajeSuspenderModulo })(ContenidoAdminModulo));
+export default withRouter(connect(mapStateToProps, { actionConsultarModulos, actionAsignarModulo, actionAsignarCodigoModulo, actionSuspenderActivarModulo,actualizarMensajeRegistrar, actualizarMensajeSuspenderModulo })(ContenidoAdminModulo));
 

@@ -48,7 +48,7 @@ public class ConfiguracionServicio {
             respuesta.setRespuesta("Configuracion registrada");
             return Response.status(Response.Status.OK).entity(respuesta).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("Error al registrar la configuracion");
+            respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.NOT_ACCEPTABLE).entity(respuesta).build();
         } catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error interno del servidor");
@@ -69,7 +69,7 @@ public class ConfiguracionServicio {
             List<ConfiguracionPOJO> listaEntorno = configuracionLogica.listarEntorno();
             return Response.status(Response.Status.OK).entity(listaEntorno).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("Sin acceso al servicio");
+            respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
         } catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error en el servidor ");
@@ -90,7 +90,7 @@ public class ConfiguracionServicio {
             List<ConfiguracionPOJO> listaInicio = configuracionLogica.listarInicio();
             return Response.status(Response.Status.OK).entity(listaInicio).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("Sin acceso al servicio");
+            respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
         } catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error en el servidor ");
@@ -110,10 +110,10 @@ public class ConfiguracionServicio {
             List<ConfiguracionPOJO> listaEntorno = configuracionLogica.listarConfiguracionCompleta();
             return Response.status(Response.Status.OK).entity(listaEntorno).build();
         } catch (ExcepcionGenerica e) {
-            respuesta.setRespuesta("Sin acceso al servicio");
+            respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
         } catch (Exception e) {
-            respuesta.setRespuesta("Ocurrio un error en el servidor ");
+            respuesta.setRespuesta("Ocurrio un error en el servidor");
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }

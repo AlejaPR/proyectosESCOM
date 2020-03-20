@@ -1,16 +1,58 @@
 import React from 'react';
+import 'react-notifications/lib/notifications.css';
 
 import { Modal, ModalBody, ModalFooter } from 'reactstrap';
 import MaterialTable from 'material-table';
+import { campo } from '../../utilitario/GenerarInputs.js';
 import { withRouter } from 'react-router-dom';
+import { NotificationManager, NotificationContainer } from 'react-notifications';
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 
-import { actionConsultarModulosAcceso } from '../../actions/actionsUsuario.js'
+import Button from '@material-ui/core/Button';
+import { actionConsultarModulosAcceso, actionCerrarSesionInicio, actualizarMensajeInicio } from '../../actions/actionsUsuario.js'
 import { connect } from 'react-redux';
 
 class ContenidoInicio extends React.Component {
 
+	state = {
+		habilitado: false
+	}
+
 	componentDidUpdate() {
-		console.log('modiulos', this.props.modulosAcceso);
+		debugger;
+		if (this.props.mensaje !== '') {
+			switch (this.props.mensaje) {
+				case 'Token requerido':
+					return this.props.history.push('/');
+				case 'Sin permiso':
+					return NotificationManager.error('No tiene los permisos sucifientes');
+				case 'token vencido':
+					return this.props.history.push('/');
+				case 'token no registrado':
+					return this.props.history.push('/');
+				case 'token incorrecto':
+					return this.props.history.push('/');
+				case 'Ocurrio un error en el servidor':
+					return NotificationManager.error('Ocurrio un error en el servidor');
+				case 'Ocurrio un error al momento de hacer la consulta':
+					return NotificationManager.error('Ocurrio un error en el servidor');
+				case 'No hay permisos asociados':
+					if (!this.state.habilitado) {
+						this.setState({ habilitado: true });
+					}
+					return NotificationManager.error('No tiene modulos para acceder');
+				case 'sesion cerrada':
+					return this.props.history.go('/');
+				case 'Servidor fuera de servicio temporalmente':
+					NotificationManager.error('Servidor fuera de servicio temporalmente');
+					break;
+				default:
+					return NotificationManager.warning('error desconocido');;
+			}
+		}
+		this.props.actualizarMensajeInicio('');
 	}
 
 	componentWillMount() {
@@ -18,67 +60,103 @@ class ContenidoInicio extends React.Component {
 	}
 
 	onClickCancelar = (event) => {
-
+		event.preventDefault();
+		this.props.actionCerrarSesionInicio(localStorage.getItem('Token'));
 	}
 
 	render() {
 		return (
 			<>
+				{
+					this.state.habilitado ?
 
-				<Modal isOpen={true}
-					toggle={this.toggle}
-					className={this.props.className}
-					size="col-md-6"
-				>
-					<ModalBody>
-						<MaterialTable
-							title="Modulos disponibles"
-							localization={{
-								header: {
-									actions: ' '
-								},
-								pagination: {
-									nextTooltip: 'Siguiente ',
-									previousTooltip: 'Anterior',
-									labelDisplayedRows: '{from}-{to} de {count}',
-									lastTooltip: 'Ultima pagina',
-									firstTooltip: 'Primera pagina',
-									labelRowsSelect: 'Registros',
-									firstAriaLabel: 'oooo'
-								},
-								body: {
-									emptyDataSourceMessage: 'No se encontraron modulos disponibles'
-								},
-								toolbar: {
-									searchTooltip: 'Buscar',
-									searchPlaceholder: 'Buscar'
-								}
-							}}
-							columns={[
-								{ title: '', field: 'nombreModulo', headerStyle: estiloCabecera, cellStyle: estiloFila }
-							]}
-							data={this.props.modulosAcceso}
-							options={{
-								search: false,
-								rowStyle: estiloFila
-							}}
-							actions={[
-								{
-									icon: 'subdirectory_arrow_right',
-									tooltip: 'Ir',
-									onClick: (event, rowData) => {
-										event.preventDefault();
-										this.props.history.push(rowData.url);
-									}
-								}
-							]}
-						/>
-						<ModalFooter>
+						<Modal isOpen={true}
+							toggle={this.toggle}
+							className={this.props.className}
+							size="col-md-6">
+							<ModalBody>
+								<div className="col-sm-12">
+									<Alert severity="warning" variant="outlined">
+										<AlertTitle>Aun no hay modulos disponibles</AlertTitle>
+									Aun no tiene permisos asignados en alguno de los diferentes modulos</Alert>
+									<br />
+									<div style={{ paddingLeft: '120px' }}>
+										<Button
+											type="submit"
+											variant="contained"
+											className="btn btn-dark"
+											style={{
+												background: "gray",
+												fontSize: "14px",
+												fontFamily: "sans-serif",
+												textTransform: "none"
+											}}
+											onClick={this.onClickCancelar}
+											startIcon={<ExitToAppIcon />}
+										>Cerrar sesion</Button>
+									</div>
+								</div>
+							</ModalBody>
+						</Modal>
+						: <><Modal isOpen={true}
+							toggle={this.toggle}
+							className={this.props.className}
+							size="col-md-6"
+						>
+							<ModalBody>
+								<MaterialTable
+									title="Modulos disponibles"
+									localization={{
+										header: {
+											actions: ' '
+										},
+										pagination: {
+											nextTooltip: 'Siguiente ',
+											previousTooltip: 'Anterior',
+											labelDisplayedRows: '{from}-{to} de {count}',
+											lastTooltip: 'Ultima pagina',
+											firstTooltip: 'Primera pagina',
+											labelRowsSelect: 'Registros',
+											firstAriaLabel: 'oooo'
+										},
+										body: {
+											emptyDataSourceMessage: 'No se encontraron modulos disponibles'
+										},
+										toolbar: {
+											searchTooltip: 'Buscar',
+											searchPlaceholder: 'Buscar'
+										}
 
-						</ModalFooter>
+									}}
+									columns={[
+										{ title: '', field: 'imagenModulo', render: rowData => { return <img src={campo(rowData.imagenModulo)} alt='' style={{ width: 60, borderRadius: '50%' }} /> } },
+										{ title: '', field: 'nombreModulo', headerStyle: estiloCabecera, cellStyle: estiloFila },
+									]}
+									data={this.props.modulosAcceso}
+									options={{
+										search: false,
+										rowStyle: estiloFila
+									}}
+									actions={[
+										{
+											icon: 'subdirectory_arrow_right',
+											tooltip: 'Ir',
+											onClick: (event, rowData) => {
+												event.preventDefault();
+												this.props.history.push(rowData.url);
+											}
+										}
+									]}
+								/>
+								<ModalFooter>
 
-					</ModalBody>
-				</Modal>
+								</ModalFooter>
+
+							</ModalBody>
+						</Modal>
+							<NotificationContainer />
+						</>
+				}
 			</>
 		);
 	}
@@ -95,7 +173,7 @@ const estiloCabecera = {
 }
 
 const estiloFila = {
-	fontSize: '12px',
+	fontSize: '14px',
 	fontFamily: 'sans-serif',
 	padding: '8px',
 }
@@ -104,8 +182,9 @@ const estiloFila = {
 function mapStateToProps(state) {
 	return {
 		configuracion: state.conf.configuracion,
-		modulosAcceso: state.user.modulosAcceso
+		modulosAcceso: state.user.modulosAcceso,
+		mensaje: state.user.mensajeInicio
 	}
 }
 
-export default withRouter(connect(mapStateToProps, { actionConsultarModulosAcceso })(ContenidoInicio));
+export default withRouter(connect(mapStateToProps, { actionConsultarModulosAcceso, actionCerrarSesionInicio, actualizarMensajeInicio })(ContenidoInicio));
