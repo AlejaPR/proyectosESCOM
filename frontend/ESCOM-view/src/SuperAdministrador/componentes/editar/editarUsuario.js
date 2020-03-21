@@ -89,7 +89,7 @@ class editar extends React.Component {
 
   componentDidMount() {
     if (this.props.cedula === undefined || this.props.cedula.length === 0) {
-      this.props.history.push('/adminUsuario');
+      this.props.history.goBack();
     } else {
       this.props.actionCargarInformacionDeUsuario(this.props.cedula, localStorage.getItem('Token'));
       this.props.actionConsultarDocumentos(localStorage.getItem('Token'));

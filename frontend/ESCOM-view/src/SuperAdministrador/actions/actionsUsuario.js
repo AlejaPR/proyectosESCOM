@@ -284,7 +284,7 @@ export function actionConsultarUsuarios(token) {
         'Permiso': PERMISO_CONSULTAR_USUARIOS
     }
     return (dispatch, getState) => {
-        axios.get(`${URL_BASE}/proyectosESCOM-web/api/usuarios/listar`, { headers: headers })
+        axios.get(`${URL_BASE}/proyectosESCOM-web/api/usuarios/listar/${desencriptar(token)}`, { headers: headers })
             .then(response => {
                 dispatch({
                     type: MOSTRAR_USUARIOS,

@@ -7,10 +7,10 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import Defecto from '../../imagenes/defecto.jpg';
 import PropTypes from "prop-types";
-import { requerido, validacionCuarentaCaracteres, validacionDoscientosCaracteres } from '../../utilitario/validacionCampos.js';
+import { requerido, validacionCuarentaCaracteres, validacionDoscientosCaracteres, validacionTreintaCaracteres } from '../../utilitario/validacionCampos.js';
 import AddIcon from '@material-ui/icons/Add';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
-import { generarInput, generarArea } from '../../utilitario/GenerarInputs.js'
+import { generarInput, generarArea, generarInputStart } from '../../utilitario/GenerarInputs.js'
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import CancelIcon from '@material-ui/icons/Cancel';
 
@@ -35,6 +35,7 @@ class PopUpModulo extends React.Component {
   }
 
   componentDidUpdate() {
+    debugger;
     if (this.props.mensajeRegistrar !== '') {
       switch (this.props.mensaje) {
         case 'modulo registrado':
@@ -42,8 +43,8 @@ class PopUpModulo extends React.Component {
           break;
         case 'La url del modulo ya esta registrada':
           NotificationManager.error('El link de acceso ya esta en uso pruebe con otro nombre');
-          this.props.reset();
           this.props.actualizarMensajeRegistrar('');
+          break;
         case 'Sin permiso':
           NotificationManager.error('No tiene los permisos suficientes para registrar un modulo');
           this.props.reset();
@@ -169,18 +170,24 @@ class PopUpModulo extends React.Component {
 
 
   handleSubmitForm = values => {
-    if (!(values.image === undefined | values.image === null)) {
-      this.getBase64(values.image, (result) => {
-        let modulo = {
-          nombreModulo: values.nombre,
-          descripcionModulo: values.descripcion,
-          imagenModulo: result,
-          estadoModulo: 'Activo'
-        }
-        this.props.actionAgregarModulo(modulo, localStorage.getItem('Token'));
-      });
-    } else {
-      NotificationManager.error('Seleccione un archivo de imagen .jpg o .png');
+    var linkFiltrado = values.link.replace('/', '');
+    if(linkFiltrado===''){
+      NotificationManager.error('Ingrese un link de acceso valido');
+    }else{
+      if (!(values.image === undefined | values.image === null)) {
+        this.getBase64(values.image, (result) => {
+          let modulo = {
+            nombreModulo: values.nombre,
+            descripcionModulo: values.descripcion,
+            url: `/${linkFiltrado}`,
+            imagenModulo: result,
+            estadoModulo: 'Activo'
+          }
+          this.props.actionAgregarModulo(modulo, localStorage.getItem('Token'));
+        });
+      } else {
+        NotificationManager.error('Seleccione un archivo de imagen .jpg o .png');
+      }
     }
   };
 
@@ -224,6 +231,11 @@ class PopUpModulo extends React.Component {
               <div className="row">
                 <div className="col-sm-12">
                   <Field name="nombre" validate={[requerido, validacionCuarentaCaracteres]} component={generarInput} label="Nombre" />
+                </div>
+              </div>
+              <div className="row">
+                <div className="col-sm-12">
+                  <Field name="link" validate={[requerido, validacionTreintaCaracteres]} component={generarInputStart} label="Link de acceso" />
                 </div>
               </div>
               <div className="row">

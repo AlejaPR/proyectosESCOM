@@ -49,4 +49,5 @@ public interface ActividadFacadeLocal {
     
     List<ActividadPOJO> listarActividadesUsuarioActivas(Integer idUsuario);
 
+    public List<ActividadPOJO> listarActividadesUsuarioSuper(Integer idUsuario);
 }

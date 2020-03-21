@@ -63,6 +63,7 @@ export function actionAgregarModulo(modulo, token) {
                     });
                 } else {
                     if (error.request) {
+                        debugger;
                         var o = JSON.parse(error.request.response);
                         let respuesta = mensajeDeRegistro(o.respuesta);
                         if (respuesta !== '') {
@@ -139,6 +140,7 @@ export function actionCargarInformacionDeModulo(codigoModulo, token) {
                     'idModulo': response.data.idModulo,
                     'imagenModulo': campo(response.data.imagenModulo),
                     'nombreModulo':response.data.nombreModulo,
+                    'url':response.data.url.replace('/', '')
                 }
                 dispatch({
                     type: INFORMACION_MODULO,

@@ -33,7 +33,9 @@ import javax.validation.constraints.NotNull;
     @NamedQuery(name = "consultaActividadesUsuario", query = "SELECT ac from Actividad ac,Usuario us, UsuarioActividad ua WHERE us.idUsuario = ua.usuario.idUsuario AND ac.idActividad =ua.actividad.idActividad AND us.numeroDocumento=:numeroDocumento"),
     @NamedQuery(name = "consultaActividadesNoAsociadasUsuario", query = "SELECT act FROM Actividad act WHERE act.estado='Activo' AND act.modulo.idModulo=:idModulo  AND act NOT IN(SELECT ac from Actividad ac,Usuario us, UsuarioActividad ua WHERE us.idUsuario = ua.usuario.idUsuario AND ac.idActividad =ua.actividad.idActividad AND ac.estado='Activo' AND us.numeroDocumento=:numeroDocumento AND ac.modulo.idModulo=:idModulo)"),
     @NamedQuery(name = "consultaActividadPorNombre", query = "SELECT a from Actividad a WHERE a.nombreActividad = :nombreActividad"),
-    @NamedQuery(name = "consultaActividadesUsuarioActivas", query = "SELECT ac from Actividad ac,Usuario us, UsuarioActividad ua WHERE us.idUsuario = ua.usuario.idUsuario AND ac.idActividad =ua.actividad.idActividad AND ac.estado='Activo' AND us.numeroDocumento=:numeroDocumento"),})
+    @NamedQuery(name = "consultaActividadesUsuarioActivas", query = "SELECT ac from Actividad ac,Usuario us, UsuarioActividad ua WHERE us.idUsuario = ua.usuario.idUsuario AND ac.idActividad =ua.actividad.idActividad AND ac.estado='Activo' AND us.numeroDocumento=:numeroDocumento"),
+    @NamedQuery(name = "consultaActividadesUsuarioSuper", query = "SELECT ac from Actividad ac,Usuario us, UsuarioActividad ua WHERE us.idUsuario = ua.usuario.idUsuario AND ac.idActividad =ua.actividad.idActividad AND us.numeroDocumento=:numeroDocumento"),})
+
 
 public class Actividad implements Serializable {
 

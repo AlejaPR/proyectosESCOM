@@ -334,6 +334,38 @@ function renderAlgo({
   )
 }
 
+function renderAlgoStart({
+  input,
+  label, classes,filas,
+  meta: { touched, error },
+  ...custom
+}) {
+  return (
+    <TextField
+      fullWidth
+      label={label}
+      InputProps={{ classes: { root: classes.inputRoot },
+      startAdornment:<InputAdornment position="start" style={{fontSize:'14px',color:'black'}}>/</InputAdornment>
+    }}
+      InputLabelProps={{
+        classes: {
+          root: classes.labelRoot,
+          focused: classes.labelFocused
+        }
+      }}
+      error={(touched && error) ? true : false}
+      helperText={touched && error}
+      required={true}
+      
+      {...input}
+      {...custom}
+      variant='outlined'
+      margin="normal"
+      size='small'
+    />
+  )
+}
+
 function renderDate({
   input,
   label, classes,
@@ -395,6 +427,7 @@ function renderArea({
   )
 }
 
+export const generarInputStart = withStyles(styles)(renderAlgoStart);
 export const generarInput = withStyles(styles)(renderAlgo);
 export const generarInputLogin = withStyles(stylesLogin)(renderAlgo);
 export const generarDate = withStyles(stylesDate)(renderDate);

@@ -5,9 +5,9 @@ import Barra from '../general/BarraDirecciones';
 import Button from '@material-ui/core/Button';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { withRouter } from 'react-router-dom';
-import { campo, generarInput,generarArea } from '../../utilitario/GenerarInputs.js';
+import { campo, generarInput, generarArea, generarInputStart } from '../../utilitario/GenerarInputs.js';
 import PropTypes from "prop-types";
-import { requerido, validacionCuarentaCaracteres, validacionDoscientosCaracteres } from '../../utilitario/validacionCampos.js';
+import { requerido, validacionCuarentaCaracteres, validacionDoscientosCaracteres, validacionTreintaCaracteres } from '../../utilitario/validacionCampos.js';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
@@ -134,23 +134,35 @@ class EditarModulo extends React.Component {
 
     handleSubmitForm = values => {
         if (values.image === undefined | values.image === null) {
-            let modulo = {
-                nombreModulo: values.nombre,
-                descripcionModulo: values.descripcion,
-                imagenModulo: campo(this.props.initialValues.imagen),
-                estadoModulo: 'Activo'
-            }
-            this.props.actionEditarModulo(modulo, this.props.initialValues.id, localStorage.getItem('Token'));
-        } else {
-            this.getBase64(values.image, (result) => {
+            var linkFiltrado = values.url.replace('/', '');
+            if (linkFiltrado === '') {
+                NotificationManager.error('Ingrese un link de acceso valido');
+            } else {
                 let modulo = {
                     nombreModulo: values.nombre,
                     descripcionModulo: values.descripcion,
-                    imagenModulo: result,
-                    estadoModulo: 'Activo'
+                    imagenModulo: campo(this.props.initialValues.imagen),
+                    estadoModulo: 'Activo',
+                    url:`/${linkFiltrado}`
                 }
                 this.props.actionEditarModulo(modulo, this.props.initialValues.id, localStorage.getItem('Token'));
-            });
+            }
+        } else {
+             linkFiltrado = values.url.replace('/', '');
+            if (linkFiltrado === '') {
+                NotificationManager.error('Ingrese un link de acceso valido');
+            } else {
+                this.getBase64(values.image, (result) => {
+                    let modulo = {
+                        nombreModulo: values.nombre,
+                        descripcionModulo: values.descripcion,
+                        imagenModulo: result,
+                        estadoModulo: 'Activo',
+                        url:`${linkFiltrado}`
+                    }
+                    this.props.actionEditarModulo(modulo, this.props.initialValues.id, localStorage.getItem('Token'));
+                });
+            }
         }
     };
 
@@ -174,6 +186,11 @@ class EditarModulo extends React.Component {
             switch (this.props.mensajeEditar) {
                 case 'Sin permiso':
                     if (!this.state.habilitado) { this.setState({ habilitado: true }) };
+                    break;
+                case 'La url o el nombre del modulo ya esta registrada':
+                    NotificationManager.error('El link de acceso o el nombre ya esta en uso intentelo de nuevo');
+                    this.props.actionCargarInformacionDeModulo(this.props.initialValues.id, localStorage.getItem('Token'));
+                    this.props.actualizarMensajeEditar('');
                     break;
                 case 'modulo editado':
                     NotificationManager.success('Informacion actualizada correctamente');
@@ -225,7 +242,7 @@ class EditarModulo extends React.Component {
 
     componentDidMount() {
         if (this.props.initialValues.id === undefined || this.props.initialValues.id === 0) {
-            this.props.history.push('/adminModulo');
+            this.props.history.goBack();
         }
         //  else {
         //     this.props.actionCargarInformacionDeModulo(this.props.codigoModulo, localStorage.getItem('Token'));
@@ -275,12 +292,11 @@ class EditarModulo extends React.Component {
                                                 <td colspan="2" style={{ width: "65%", paddingRight: "39px", paddingLeft: "39px" }}>
                                                     <div className="row">
                                                         <div className="col-sm-12">
-
-                                                            <Field name="nombre" validate={[requerido, validacionCuarentaCaracteres]} component={generarInput} label="Nombre" />
+                                                            <Field name="url" validate={[requerido, validacionTreintaCaracteres]} component={generarInputStart} label="Link de acceso" />
                                                         </div>
                                                     </div>
                                                 </td>
-                                                <td colspan="2" rowspan="2">
+                                                <td colspan="2" rowspan="3">
                                                     <label>Imagen</label>
                                                     <div style={{ padding: "30px 30px 30px 77px" }}>
                                                         <img src={campo(this.props.initialValues.imagen)} alt="preview"
@@ -296,6 +312,15 @@ class EditarModulo extends React.Component {
                                                         ]}
                                                         component={this.renderFileInput}
                                                     />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2" style={{ width: "65%", paddingRight: "39px", paddingLeft: "39px" }}>
+                                                    <div className="row">
+                                                        <div className="col-sm-12">
+                                                            <Field name="nombre" validate={[requerido, validacionCuarentaCaracteres]} component={generarInput} label="Nombre" />
+                                                        </div>
+                                                    </div>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -356,10 +381,11 @@ function mapStateToProps(state) {
         mensajeEditar: state.mod.mensajeEditarModulo,
         configuracion: state.conf.configuracion,
         initialValues: {
-            id:state.mod.moduloEditar.idModulo,
+            id: state.mod.moduloEditar.idModulo,
             nombre: state.mod.moduloEditar.nombreModulo,
             descripcion: state.mod.moduloEditar.descripcionModulo,
             imagen: state.mod.moduloEditar.imagenModulo,
+            url: state.mod.moduloEditar.url
         }
     }
 }

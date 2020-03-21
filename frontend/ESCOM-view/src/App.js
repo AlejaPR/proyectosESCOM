@@ -26,6 +26,7 @@ import Actividad from './SuperAdministrador/componentes/administrar/ContenidoAdm
 
 import RedireccionarUsuario from './SuperAdministrador/componentes/redirecciones/RedireccionarUsuario.js';
 import ContenidoReportes from './SuperAdministrador/componentes/reportes/ContenidoReportes.js';
+import NotFound from './SuperAdministrador/componentes/general/Pagina 404.js';
 // import Color from './SuperAdministrador/componentes/color.js';
 
 //estilos
@@ -83,8 +84,7 @@ class App extends React.Component {
 							</div>
 						}}>
 						</Route>
-
-						<RutaProtegida path="/inicio">
+						<RutaProtegida exact path="/inicio">
 							<>
 								<div id="wrapper">
 									<Inicio />
@@ -173,6 +173,7 @@ class App extends React.Component {
 								</div>
 							</>
 						</RutaProtegidaMenus>
+						<Route component={NotFound} />
 					</Switch>
 				</Router>
 

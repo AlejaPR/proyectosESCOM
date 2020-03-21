@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 import { reduxForm, Field } from 'redux-form';
 import Alert from '@material-ui/lab/Alert';
 import { generarInputLogin } from '../../utilitario/GenerarInputs.js';
-import { actionLoginUsuario, actualizarMensajeLogin, asignarNombreUsuario, actionAsignarIp, actionRecuperarContrasena,actualizarMensajeInicio } from '../../actions/actionsUsuario.js'
+import { actionLoginUsuario, actualizarMensajeLogin, asignarNombreUsuario, actionAsignarIp, actionRecuperarContrasena, actualizarMensajeInicio } from '../../actions/actionsUsuario.js'
 import { consultarConfiguracionLogin } from '../../actions/actionConfiguracion.js';
 import { connect } from 'react-redux';
 import { requerido, correo, validacionCincuentaCaracteres, validacionTreintaCaracteres } from '../../utilitario/validacionCampos.js';
@@ -19,7 +19,8 @@ class Login extends React.Component {
 
 	state = {
 		habilitado: false,
-		recuperar: false
+		recuperar: false,
+		severidad: 'error'
 	}
 
 
@@ -34,6 +35,11 @@ class Login extends React.Component {
 			case 'Login correcto':
 				this.props.actionAsignarIp();
 				this.props.history.push('/inicio');
+				break;
+			case 'Se enviaron las instrucciones para recuperar la contraseña a su correo':
+				if (this.state.severidad !== 'success') {
+					this.setState({ severidad: 'success' });
+				}
 				break;
 			default:
 				break;
@@ -52,7 +58,7 @@ class Login extends React.Component {
 			this.props.actionLoginUsuario(formValues.correo, formValues.contrasena, this.habilitarBoton);
 			this.props.reset();
 		} else {
-			this.props.actionRecuperarContrasena(formValues.correoRecuperar,this.habilitarBoton);
+			this.props.actionRecuperarContrasena(formValues.correoRecuperar, this.habilitarBoton);
 			this.props.reset();
 		}
 	}
@@ -97,16 +103,16 @@ class Login extends React.Component {
 													<div className="row">
 														<div className="col-sm-12 center">
 
-															<Field name="mensaje" component={generarMensaje} label={this.props.mensaje} />
+															<Field name="mensaje" component={generarMensaje} type={this.state.severidad} label={this.props.mensaje} />
 														</div>
 													</div>
 													<br />
 													<div className="row">
-														<div className="col-sm-6 center">
+														<div className="col-sm-6">
 															<Button style={{ background: 'gray', fontSize: "15px", fontFamily: "sans-serif", textTransform: "none" }} className="btn btn-dark" variant="contained" disabled={this.state.habilitado} onClick={this.onClickCancelar}>Cancelar</Button>
 
 														</div>
-														<div className="col-sm-6 center">
+														<div className="col-sm-4">
 															<Button style={{ background: this.props.configuracionLogin.botones, fontSize: "15px", fontFamily: "sans-serif", textTransform: "none" }} className="btn btn-dark" variant="contained" disabled={this.state.habilitado} type="submit">Enviar</Button>
 
 														</div>
@@ -130,7 +136,7 @@ class Login extends React.Component {
 														</div>
 														<div className="row">
 															<div className="col-sm-12 center">
-																<Field name="mensaje" component={generarMensaje} label={this.props.mensaje} />
+																<Field name="mensaje" component={generarMensaje} type={this.state.severidad} label={this.props.mensaje} />
 															</div>
 														</div>
 														<br />
@@ -163,20 +169,11 @@ class Login extends React.Component {
 	}
 }
 
-const generarInput = ({ input, label, type, meta: { touched, error, warning } }) => (
-	<div>
-		<div>
-			<input {...input} placeholder={label} type={type} className="form-control letra form-control-solid placeholder-no-fix" />
-			{touched && ((error && <span className="text-danger letra form-group">{error}</span>) || (warning && <span>{warning}</span>))}
-		</div>
-	</div>
-)
-
 const generarMensaje = ({ input, label, type, meta: { touched, error, warning } }) => (
 	<div>
 		<div>
 			<br />
-			{label === undefined | label === '' ? <div></div> : <Alert draggable={true} severity="error">{label}</Alert>}
+			{label === undefined | label === '' ? <div></div> : <Alert draggable={true} severity={type}>{label}</Alert>}
 			<br />
 		</div>
 	</div>
@@ -198,4 +195,4 @@ let formulario = reduxForm({
 
 
 
-export default withRouter(connect(mapStateToProps, { actionAsignarIp, actionLoginUsuario, actualizarMensajeInicio, actionRecuperarContrasena,actualizarMensajeLogin, consultarConfiguracionLogin, asignarNombreUsuario })(formulario));
+export default withRouter(connect(mapStateToProps, { actionAsignarIp, actionLoginUsuario, actualizarMensajeInicio, actionRecuperarContrasena, actualizarMensajeLogin, consultarConfiguracionLogin, asignarNombreUsuario })(formulario));

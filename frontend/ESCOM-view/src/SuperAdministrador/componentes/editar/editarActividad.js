@@ -86,7 +86,7 @@ class EditarActividad extends React.Component {
 
     componentDidMount() {
         if (this.props.codigoActividad === undefined || this.props.codigoActividad.length === 0) {
-            this.props.history.push('/adminActividad');
+            this.props.history.goBack();
         } else {
             this.props.actionCargarInformacionDeActividad(this.props.codigoActividad, localStorage.getItem('Token'));
         }

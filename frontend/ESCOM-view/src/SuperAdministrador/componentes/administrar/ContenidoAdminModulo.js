@@ -14,7 +14,7 @@ import { campo } from '../../utilitario/GenerarInputs.js';
 
 //redux conexion
 import { connect } from 'react-redux';
-import { actionConsultarModulos, actionAsignarModulo, actionAsignarCodigoModulo, actionSuspenderActivarModulo,actualizarMensajeRegistrar, actualizarMensajeSuspenderModulo } from '../../actions/actionsModulo.js';
+import { actionConsultarModulos, actionAsignarModulo, actionAsignarCodigoModulo, actionSuspenderActivarModulo, actualizarMensajeRegistrar, actualizarMensajeSuspenderModulo } from '../../actions/actionsModulo.js';
 import { withRouter } from 'react-router-dom';
 
 class ContenidoAdminModulo extends React.Component {
@@ -60,7 +60,8 @@ class ContenidoAdminModulo extends React.Component {
 
 	componentDidUpdate() {
 		if (this.props.mensajeRegistrar !== '') {
-			if (this.props.mensajeRegistrar) {
+			debugger;
+			if (this.props.mensajeRegistrar === 'modulo registrado') {
 				NotificationManager.success('Modulo registrado correctamente');
 				this.props.actionConsultarModulos(localStorage.getItem('Token'));
 				this.props.actualizarMensajeRegistrar('');
@@ -233,11 +234,13 @@ class ContenidoAdminModulo extends React.Component {
 											icon: 'edit',
 											tooltip: 'Editar informacion',
 											onClick: (event, rowData) => {
+												
 												let moduloEdit = {
 													'idModulo': rowData.idModulo,
 													'imagenModulo': rowData.imagenModulo,
 													'nombreModulo': rowData.nombreModulo,
 													'descripcionModulo': rowData.descripcionModulo,
+													'url': rowData.url.replace('/', '')
 												}
 												this.props.actionAsignarModulo(moduloEdit);
 												this.props.history.push('/editarModulo');
@@ -319,5 +322,5 @@ function mapStateToProps(state) {
 	}
 }
 
-export default withRouter(connect(mapStateToProps, { actionConsultarModulos, actionAsignarModulo, actionAsignarCodigoModulo, actionSuspenderActivarModulo,actualizarMensajeRegistrar, actualizarMensajeSuspenderModulo })(ContenidoAdminModulo));
+export default withRouter(connect(mapStateToProps, { actionConsultarModulos, actionAsignarModulo, actionAsignarCodigoModulo, actionSuspenderActivarModulo, actualizarMensajeRegistrar, actualizarMensajeSuspenderModulo })(ContenidoAdminModulo));
 

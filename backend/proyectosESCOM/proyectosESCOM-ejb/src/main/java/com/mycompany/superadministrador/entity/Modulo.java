@@ -27,9 +27,9 @@ import javax.validation.constraints.Size;
 @NamedQueries({
     @NamedQuery(name = "consultaModulos", query = "SELECT m FROM Modulo m"),
     @NamedQuery(name = "consultaModuloEsp", query = "SELECT m from Modulo m WHERE m.idModulo=:idModulo"),
-    @NamedQuery(name = "consultarExistenciaModulo", query = "SELECT m from Modulo m WHERE m.nombreModulo=:nombreModulo"),
+    @NamedQuery(name = "consultarExistenciaModulo", query = "SELECT m from Modulo m WHERE LOWER(m.nombreModulo)=:nombreModulo"),
     @NamedQuery(name = "consultarAcronimo", query = "SELECT m from Modulo m WHERE m.acronimo=:acronimo"),
-    @NamedQuery(name = "consultarExistenciaUrl", query = "SELECT m from Modulo m WHERE m.url=:urlModulo"),
+    @NamedQuery(name = "consultarExistenciaUrl", query = "SELECT m from Modulo m WHERE  LOWER(m.url)=:urlModulo"),
 
 })
 public class Modulo implements Serializable {

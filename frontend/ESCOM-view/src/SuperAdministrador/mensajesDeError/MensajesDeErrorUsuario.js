@@ -241,6 +241,8 @@ export const mensajesDeCambiarContrasenaExterna = respuesta => {
                 return 'Se vencio el plazo de 24h genere una nueva solicitud';
             case 'No se encontro un correo asociado':
                 return respuesta;
+            case 'Enlace no valido':
+                return 'Este enlace ya no es valido';
             default:
                 break;
         }
@@ -259,8 +261,8 @@ export const mensajesDeValidarToken = respuesta => {
                 return 'Ocurrio un problema con la solicitud intentelo de nuevo';
             case 'Token vencido':
                 return 'Se vencio el plazo de 24h genere una nueva solicitud';
-                case 'Enlace no valido':
-                    return 'Este enlace ya ha no es valido'
+            case 'Enlace no valido':
+                return 'Este enlace ya no es valido'
             default:
                 break;
         }

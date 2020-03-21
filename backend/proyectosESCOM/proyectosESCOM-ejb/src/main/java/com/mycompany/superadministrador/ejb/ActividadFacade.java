@@ -276,4 +276,20 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
         }
         return respuesta;
     }
+    
+    //consultaActividadesUsuarioSuper
+    @Override
+    public List<ActividadPOJO> listarActividadesUsuarioSuper(Integer idUsuario) {
+        List<Actividad> listaActividades = new ArrayList<>();
+        TypedQuery<Actividad> listaAct = em.createNamedQuery("consultaActividadesUsuarioSuper", Actividad.class);
+        listaAct.setParameter("numeroDocumento", idUsuario);
+        listaActividades = listaAct.getResultList();
+        List<ActividadPOJO> respuesta = new ArrayList<>();
+        for (Actividad act : listaActividades) {
+            String actividadConAcronimo=act.getNombreActividad();
+            String actividadSinAcronimo=actividadConAcronimo.substring(3);
+            respuesta.add(new ActividadPOJO(act.getIdActividad(), actividadSinAcronimo,act.getModulo().getIdModulo()));
+        }
+        return respuesta;
+    }
 }

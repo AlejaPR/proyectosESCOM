@@ -182,13 +182,33 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
     @Override
     public void editarModulo(int idModulo, ModuloPOJO moduloEditar) throws ExcepcionGenerica {
         try {
-            moduloDB.editarModulo(idModulo, moduloEditar);
-            moduloEditar.getDatosSolicitud().setTablaInvolucrada(TABLA);
-            bitacora.registrarEnBitacora(moduloEditar.getDatosSolicitud());
+            List<Modulo> modulosFiltro = new ArrayList<>();
+            for (Modulo modulo : moduloDB.findAll()) {
+                if (modulo.getIdModulo() != idModulo) {
+                    modulosFiltro.add(modulo);
+                }
+            }
+            boolean datosExistentes = false;
+            for (Modulo modulo : modulosFiltro) {
+                if (modulo.getUrl().toLowerCase().equals(moduloEditar.getUrl().toLowerCase()) | modulo.getNombreModulo().toLowerCase().equals(moduloEditar.getNombreModulo().toLowerCase())) {
+                    datosExistentes = true;
+                    break;
+                }
+            }
+            if (!datosExistentes) {
+                moduloDB.editarModulo(idModulo, moduloEditar);
+                moduloEditar.getDatosSolicitud().setTablaInvolucrada(TABLA);
+                bitacora.registrarEnBitacora(moduloEditar.getDatosSolicitud());
+            } else {
+                throw new ExcepcionGenerica("La url o el nombre del modulo ya esta registrada");
+            }
+
         } catch (NullPointerException ex) {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la modificacion del modulo");
         } catch (NoResultException ex) {
             throw new ExcepcionGenerica("El modulo no existe");
+        } catch (ExcepcionGenerica ex) {
+            throw new ExcepcionGenerica(ex.getMessage());
         } catch (Exception ex) {
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }

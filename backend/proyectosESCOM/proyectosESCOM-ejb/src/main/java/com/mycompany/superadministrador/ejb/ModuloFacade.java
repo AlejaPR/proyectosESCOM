@@ -39,15 +39,16 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
     @Override
     public List<Modulo> consultaDatosExistentes(String nombreModulo) {
         TypedQuery<Modulo> consultaDatosM = em.createNamedQuery("consultarExistenciaModulo", Modulo.class);
-        consultaDatosM.setParameter("nombreModulo", nombreModulo);
-       
+        consultaDatosM.setParameter("nombreModulo", nombreModulo.toLowerCase());
+      
         return consultaDatosM.getResultList();
     }
     
     @Override
     public List<Modulo> consultaDatosExistentesUrlModulo(String urlModulo) {
+        
         TypedQuery<Modulo> consultaDatosM = em.createNamedQuery("consultarExistenciaUrl", Modulo.class);
-        consultaDatosM.setParameter("urlModulo", urlModulo);
+        consultaDatosM.setParameter("urlModulo", urlModulo.toLowerCase());
         return consultaDatosM.getResultList();
     }
        
@@ -98,6 +99,7 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
             modulo.setImagenModulo(m.getImagen());
             modulo.setNombreModulo(m.getNombreModulo());
             modulo.setDescripcionModulo(m.getDescripcionModulo());
+            modulo.setUrl(m.getUrl());
             modulo.setAcronimo(m.getAcronimo());
             listaModulos.add(modulo);
         }
@@ -133,7 +135,6 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
        **/
     @Override
     public void editarModulo(int idModulo, ModuloPOJO moduloEditar) {
-        
         Modulo modulo = em.find(Modulo.class, idModulo);
         modulo.setEstado(moduloEditar.getEstadoModulo());
         modulo.setImagen(moduloEditar.getImagenModulo());

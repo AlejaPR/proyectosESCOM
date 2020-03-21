@@ -339,17 +339,23 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
     /**
      * Metodo que llama a la consulta para obtener la lista de usuarios
      *
+     * @param token
      * @return
      * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
      *
      */
     @Override
-    public List<UsuarioPOJO> devolverUsuarios() throws ExcepcionGenerica {
+    public List<UsuarioPOJO> devolverUsuarios(String token) throws ExcepcionGenerica {
         try {
+            String correoSolicitud = Seguridad.desencriptar(token).getIssuer();
             List<UsuarioPOJO> usuariosResultado = new ArrayList<>();
-            for (UsuarioPOJO usuario : usuarioDB.listarUsuarios()) {
-                if (!usuario.getCorreoElectronico().equals(CORREOSUPERADMIN)) {
-                    usuariosResultado.add(usuario);
+            if (correoSolicitud.equals(CORREOSUPERADMIN)) {
+                usuariosResultado = usuarioDB.listarUsuarios();
+            } else {
+                for (UsuarioPOJO usuario : usuarioDB.listarUsuarios()) {
+                    if (!usuario.getCorreoElectronico().equals(CORREOSUPERADMIN)) {
+                        usuariosResultado.add(usuario);
+                    }
                 }
             }
             if (!usuariosResultado.isEmpty()) {
@@ -656,23 +662,45 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
     @Override
     public List<ModuloPOJO> redireccionUsuario(String token) throws ExcepcionGenerica {
         try {
-            List<ModuloPOJO> modulosResultado = new ArrayList();
-            int id = 0;
-            Token tokenDevuelto = Seguridad.desencriptar(token);
-            String firma = tokenDevuelto.getFirma();
-            UsuarioPOJO usuario = usuarioDB.busquedaToken(firma);
-            List<ActividadPOJO> listaActividad = listarActividadesUsuarioActivas(usuario.getNumeroDocumento());
-            for (int i = 0; i < listaActividad.size(); i++) {
-                id = listaActividad.get(i).getIdModulo();
-                ModuloPOJO moduloE = moduloDB.buscarModuloEspecifico(id);
-                if (moduloE.getEstadoModulo().equals("Activo")) {
-                    modulosResultado.add(moduloE);
-                }
-            }
+            String correo = Seguridad.desencriptar(token).getIssuer();
             List<ModuloPOJO> retorno = new ArrayList<>();
-            for (ModuloPOJO m : modulosResultado) {
-                if (!comprobarExistencia(retorno, m.getIdModulo())) {
-                    retorno.add(m);
+            if (correo.equals(CORREOSUPERADMIN)) {
+                List<ModuloPOJO> modulosResultado = new ArrayList();
+                int id = 0;
+                Token tokenDevuelto = Seguridad.desencriptar(token);
+                String firma = tokenDevuelto.getFirma();
+                UsuarioPOJO usuario = usuarioDB.busquedaToken(firma);
+                List<ActividadPOJO> listaActividad = actividadDB.listarActividadesUsuarioSuper(usuario.getNumeroDocumento());
+                for (int i = 0; i < listaActividad.size(); i++) {
+                    id = listaActividad.get(i).getIdModulo();
+                    ModuloPOJO moduloE = moduloDB.buscarModuloEspecifico(id);
+                    if (moduloE.getEstadoModulo().equals("Activo") | moduloE.getEstadoModulo().equals("Suspendido")) {
+                        modulosResultado.add(moduloE);
+                    }
+                }
+                for (ModuloPOJO m : modulosResultado) {
+                    if (!comprobarExistencia(retorno, m.getIdModulo())) {
+                        retorno.add(m);
+                    }
+                }
+            } else {
+                List<ModuloPOJO> modulosResultado = new ArrayList();
+                int id = 0;
+                Token tokenDevuelto = Seguridad.desencriptar(token);
+                String firma = tokenDevuelto.getFirma();
+                UsuarioPOJO usuario = usuarioDB.busquedaToken(firma);
+                List<ActividadPOJO> listaActividad = listarActividadesUsuarioActivas(usuario.getNumeroDocumento());
+                for (int i = 0; i < listaActividad.size(); i++) {
+                    id = listaActividad.get(i).getIdModulo();
+                    ModuloPOJO moduloE = moduloDB.buscarModuloEspecifico(id);
+                    if (moduloE.getEstadoModulo().equals("Activo")) {
+                        modulosResultado.add(moduloE);
+                    }
+                }
+                for (ModuloPOJO m : modulosResultado) {
+                    if (!comprobarExistencia(retorno, m.getIdModulo())) {
+                        retorno.add(m);
+                    }
                 }
             }
             if (!retorno.isEmpty()) {
@@ -838,7 +866,9 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             throw new ExcepcionGenerica("Token en formato incorrecto");
         } catch (ExpiredJwtException ex) {
             throw new ExcepcionGenerica("Token vencido");
-        } catch (TransactionRolledbackLocalException ex) {
+        } catch (EJBTransactionRolledbackException ex) {
+            throw new ExcepcionGenerica("Enlace no valido");
+        } catch (NoResultException ex) {
             throw new ExcepcionGenerica("Enlace no valido");
         } catch (Exception ex) {
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
@@ -868,6 +898,8 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             throw new ExcepcionGenerica("Token vencido");
         } catch (NoResultException ex) {
             throw new ExcepcionGenerica("No se encontro un correo asociado");
+        } catch (EJBTransactionRolledbackException ex) {
+            throw new ExcepcionGenerica("Enlace no valido");
         } catch (Exception ex) {
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }

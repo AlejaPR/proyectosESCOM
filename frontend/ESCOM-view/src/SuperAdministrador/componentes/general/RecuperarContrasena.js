@@ -6,11 +6,9 @@ import '../../css/registro.css'
 import Button from '@material-ui/core/Button';
 import { reduxForm, Field } from 'redux-form';
 import Alert from '@material-ui/lab/Alert';
-import { generarInputLogin } from '../../utilitario/GenerarInputs.js';
 import { actionValidarToken, actionCambiarContrasenaExterna, actualizarMensajeRecuperarContrasena } from '../../actions/actionsUsuario.js'
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody } from 'reactstrap';
 import { connect } from 'react-redux';
-import imagenDefecto from '../../imagenes/defectoLogin.png';
 import { withRouter } from 'react-router-dom';
 import RenderPasword from '../../utilitario/GenerarInputs';
 import { requerido, contrasena } from '../../utilitario/validacionCampos.js';
@@ -37,6 +35,7 @@ class Recuperar extends React.Component {
                 this.props.actualizarMensajeRecuperarContrasena('');
                 break;
             case 'Contraseña actualizada':
+                if (this.state.recuperar) { this.setState({ recuperar: false }) }
                 if (this.state.severidad !== 'success') {
                     this.setState({ severidad: 'success' });
                 }
@@ -71,7 +70,7 @@ class Recuperar extends React.Component {
                     this.setState({ severidad: 'error' });
                 }
                 break;
-            case 'Este enlace ya ha no es valido':
+            case 'Este enlace ya no es valido':
                 if (this.state.severidad !== 'error') {
                     this.setState({ severidad: 'error' });
                 }

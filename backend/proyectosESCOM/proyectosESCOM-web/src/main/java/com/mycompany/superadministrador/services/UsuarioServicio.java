@@ -74,14 +74,16 @@ public class UsuarioServicio {
     /**
      * Servicio que lista los usuarios registrados
      *
+     * @param token
      * @return *
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/listar")
-    public Response listar() {
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/listar/{token}")
+    public Response listar(@PathParam("token") String token) {
         try {
-            List<UsuarioPOJO> listaUsuarios = usuarioLogica.devolverUsuarios();
+            List<UsuarioPOJO> listaUsuarios = usuarioLogica.devolverUsuarios(token);
             return Response.status(Response.Status.OK).entity(listaUsuarios).build();
         } catch (ExcepcionGenerica e) {
             respuesta.setRespuesta(e.getMessage());
