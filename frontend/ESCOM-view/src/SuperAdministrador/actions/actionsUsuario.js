@@ -11,8 +11,10 @@ import {
     mensajesDeErrorConsultarActividadesUsuario,
     mensajesDeErrorAsignarActividad,
     mensajesDeErrorConsultarCorreo,
-    
-    mensajesDeErrorCambiarContrasena
+    mensajesDeErrorGenerarToken,
+    mensajesDeErrorCambiarContrasena,
+    mensajesDeValidarToken,
+    mensajesDeCambiarContrasenaExterna
 } from '../mensajesDeError/MensajesDeErrorUsuario.js';
 
 export const ACTIVIDADES_SIN_ASIGNAR = 'ACTIVIDADES_SIN_ASIGNAR';
@@ -33,6 +35,7 @@ export const MENSAJE_INICIO = 'MENSAJE_INICIO';
 export const MENSAJE_LOGIN = 'MENSAJE_LOGIN';
 export const MENSAJE_REGISTRAR = 'MENSAJE_REGISTRAR';
 export const MENSAJE_SUSPENDER = 'MENSAJE_SUSPENDER';
+export const MENSAJE_CONTRASENA_EXTERNA = 'MENSAJE_CONTRASENA_EXTERNA';
 export const MODULOS_ACCESO = 'MODULOS_ACCESO';
 export const MODULOS_REGISTRADOS = 'MODULOS_REGISTRADOS';
 export const MOSTRAR_ACTIVIDADES_USUARIO = 'MOSTRAR_ACTIVIDADES_USUARIO';
@@ -91,7 +94,105 @@ export function actionLoginUsuario(correo, contrasena, cambiar) {
     };
 }
 
+export function actionRecuperarContrasena(correo, cambiar) {
+    cambiar(true);
+    return (dispatch, getState) => {
+        axios.post(`${URL_BASE}/proyectosESCOM-web/api/login/recuperarContrasena/${correo}`)
+            .then(response => {
+                cambiar(false);
+                dispatch({
+                    type: MENSAJE_LOGIN,
+                    mensaje: 'Se enviaron las instrucciones para recuperar la contraseña a su correo'
+                });
+            }).catch((error) => {
+                if (error.request.response === '') {
+                    dispatch({
+                        type: MENSAJE_LOGIN,
+                        mensaje: 'Servidor fuera de servicio temporalmente'
+                    });
+                    cambiar(false);
+                } else {
+                    if (error.request) {
+                        var o = JSON.parse(error.request.response);
+                        let respuesta = mensajesDeErrorGenerarToken(o.respuesta);
+                        cambiar(false);
+                        dispatch({
+                            type: MENSAJE_LOGIN,
+                            mensaje: respuesta
+                        });
+                    }
+                }
+            })
+    };
+}
 
+
+export function actionValidarToken(token) {
+    return (dispatch, getState) => {
+        axios.get(`${URL_BASE}/proyectosESCOM-web/api/login/validarTokenRecuperarContrasena/${token}`)
+            .then(response => {
+                dispatch({
+                    type: MENSAJE_CONTRASENA_EXTERNA,
+                    mensaje: 'Correcto'
+                });
+                dispatch({
+                    type: NOMBRE_USUARIO,
+                    nombre: response.data
+                });
+            }).catch((error) => {
+                if (error.request.response === '') {
+                    dispatch({
+                        type: MENSAJE_CONTRASENA_EXTERNA,
+                        mensaje: 'Servidor fuera de servicio temporalmente'
+                    });
+                } else {
+                    if (error.request) {
+                        var o = JSON.parse(error.request.response);
+                        let respuesta = mensajesDeValidarToken(o.respuesta);
+                        dispatch({
+                            type: MENSAJE_CONTRASENA_EXTERNA,
+                            mensaje: respuesta
+                        });
+                    }
+                }
+            })
+    };
+}
+
+export function actionCambiarContrasenaExterna(correo, contrasena, token) {
+    var crypto = require('crypto');
+    var contrasenaEncryp = crypto.createHmac('sha256', correo).update(contrasena).digest('hex');
+    let datosSolicitud = {
+        'ip': localStorage.getItem('Ip'),
+        'token': token,
+        'operacion': PERMISO_CAMBIAR_CONTRASENA
+    };
+    return (dispatch, getState) => {
+        axios.put(`${URL_BASE}/proyectosESCOM-web/api/login/cambiarClaveExterna/${contrasenaEncryp}/${token}`,datosSolicitud)
+            .then(response => {
+                dispatch({
+                    type: MENSAJE_CONTRASENA_EXTERNA,
+                    mensaje: 'Contraseña actualizada'
+                });
+            }).catch((error) => {
+                if (error.request.response === '') {
+                    dispatch({
+                        type: MENSAJE_CONTRASENA_EXTERNA,
+                        mensaje: 'Servidor fuera de servicio temporalmente'
+                    });
+                } else {
+                    if (error.request) {
+                        var o = JSON.parse(error.request.response);
+                        let respuesta = mensajesDeCambiarContrasenaExterna(o.respuesta);
+                        dispatch({
+                            type: MENSAJE_CONTRASENA_EXTERNA,
+                            mensaje: respuesta
+                        });
+                    }
+                }
+            })
+    };
+}
 
 export function actionCerrarSesion(token) {
     const headers = {
@@ -496,7 +597,7 @@ export function actionSuspenderActivarUsuario(cedula, token, actualizados) {
                     type: ACTUALIZAR_USUARIOS,
                     usuario: actualizados
                 });
-                
+
             }).catch((error) => {
                 if (error.request.response === '') {
                     dispatch({
@@ -758,6 +859,15 @@ export function actualizarMensajeEditar(mensaje) {
     return (dispatch, getState) => {
         dispatch({
             type: MENSAJE_EDITAR,
+            mensaje: mensaje
+        });
+    };
+}
+
+export function actualizarMensajeRecuperarContrasena(mensaje) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: MENSAJE_CONTRASENA_EXTERNA,
             mensaje: mensaje
         });
     };

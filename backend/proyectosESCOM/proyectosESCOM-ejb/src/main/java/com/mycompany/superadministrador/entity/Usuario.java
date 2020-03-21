@@ -1,4 +1,5 @@
 package com.mycompany.superadministrador.entity;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -14,11 +15,12 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
+
 /**
- * Esta es la clase de la entidad usuario
- * Contiene todos los campos para la persistencia y consultas named query
- * @author Alejandra Pabon, Jeison Gaona
- * Universidad de Cundinamarca
+ * Esta es la clase de la entidad usuario Contiene todos los campos para la
+ * persistencia y consultas named query
+ *
+ * @author Alejandra Pabon, Jeison Gaona Universidad de Cundinamarca
  */
 @Entity
 @Table(name = "TBL_USUARIO")
@@ -26,7 +28,9 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "consultaUsuarios", query = "SELECT u FROM Usuario u"),
     @NamedQuery(name = "consultaLogin", query = "SELECT u FROM Usuario u WHERE u.correoElectronico =:correo AND u.contrasena=:contrasena"),
     @NamedQuery(name = "busquedaToken", query = "SELECT u FROM Usuario u WHERE u.token = :token"),
+    @NamedQuery(name = "busquedaTokenRecuperar", query = "SELECT u FROM Usuario u WHERE u.recuperarContrasena = :token"),
     @NamedQuery(name = "editarToken", query = "UPDATE Usuario set token = :token WHERE idUsuario=:idUsuario"),
+    @NamedQuery(name = "editarTokenRecuperar", query = "UPDATE Usuario set recuperarContrasena = :token WHERE idUsuario=:idUsuario"),
     @NamedQuery(name = "editarTokenCerrar", query = "UPDATE Usuario set token = :token WHERE correoElectronico=:correo"),
     @NamedQuery(name = "consultarExistencia", query = "SELECT u from Usuario u WHERE u.correoElectronico=:correo OR u.numeroDocumento=:numeroDocumento"),
     @NamedQuery(name = "consultaUsuarioEsp", query = "SELECT u from Usuario u WHERE u.numeroDocumento=:cedula"),
@@ -38,84 +42,118 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "consultaCorreo", query = "SELECT u FROM Usuario u WHERE u.correoElectronico =:correo"),
     @NamedQuery(name = "cambiarIntentos", query = "UPDATE Usuario u set u.numeroIntentos=:numeroIntentos WHERE u.idUsuario=:idUsuario"),
     @NamedQuery(name = "cambiarFechaIngreso", query = "UPDATE Usuario u set u.fechaIngreso = :fechaIngreso WHERE u.idUsuario= :idUsuario"),
-    @NamedQuery(name = "cambiarIntentosFecha", query = "UPDATE Usuario u set u.fechaIngreso = :fechaIngreso, u.numeroIntentos=:numeroIntentos WHERE u.idUsuario= :idUsuario"),
-
-})
+    @NamedQuery(name = "cambiarIntentosFecha", query = "UPDATE Usuario u set u.fechaIngreso = :fechaIngreso, u.numeroIntentos=:numeroIntentos WHERE u.idUsuario= :idUsuario"),})
 public class Usuario implements Serializable {
 
-    /**Variable id usuario**/
+    /**
+     * Variable id usuario*
+     */
     @Id
     @Column(name = "PK_USR_IDUSUARIO")
     private Integer idUsuario;
 
-    /**Variable token**/
+    /**
+     * Variable token*
+     */
     @Size(max = 300)
     @Column(name = "USR_TOKEN")
     private String token;
 
-    /**Variable numero documento**/
+    /**
+     * Variable numero documento*
+     */
     @Column(name = "USR_NUMERODOCUMENTO")
     private Integer numeroDocumento;
 
-    /**Variable apellido**/
+    /**
+     * Variable apellido*
+     */
     @Size(max = 50)
     @Column(name = "USR_APELLIDO")
     private String apellido;
 
-    /**Variable estado usuario**/
+    /**
+     * Variable estado usuario*
+     */
     @Size(max = 20)
     @Column(name = "USR_ESTADO")
     private String estado;
 
-    /**Variable fecha nacimiento**/
+    /**
+     * Variable fecha nacimiento*
+     */
     @Column(name = "USR_FECHANACIMIENTO")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaNacimiento;
 
-    /**Variable numero intentos**/
+    /**
+     * Variable numero intentos*
+     */
     @Column(name = "USR_NUMEROINTENTOS")
     private Integer numeroIntentos;
 
-    /**Variable nombre**/
+    /**
+     * Variable nombre*
+     */
     @Size(max = 50)
     @Column(name = "USR_NOMBRE")
     private String nombre;
 
-    /**Variable ultima modificacion**/
+    /**
+     * Variable ultima modificacion*
+     */
     @Column(name = "USR_ULTIMAMODIFICACION")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ultimaModificacion;
 
-    /**Variable correo electronico**/
+    /**
+     * Variable correo electronico*
+     */
     @Size(max = 50)
     @Column(name = "USR_CORREOELECTRONICO")
     private String correoElectronico;
 
-    /**Variable contraseña**/
+    /**
+     * Variable contraseña*
+     */
     @Size(max = 300)
     @Column(name = "USR_CONTRASENA")
     private String contrasena;
-    
-    /**Variable facha ingreso**/
+
+    @Size(max = 300)
+    @Column(name = "USR_RECUPERARCONTRASENA")
+    private String recuperarContrasena;
+
+    /**
+     * Variable facha ingreso*
+     */
     @Column(name = "USR_FECHAINGRESO")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaIngreso;
 
-    /**Variable para la relacion con la entidad tipo documento**/
+    /**
+     * Variable para la relacion con la entidad tipo documento*
+     */
     @JoinColumn(name = "FK_USR_IDTIPODOCUMENTO", referencedColumnName = "PK_TIP_IDTIPODOCUMENTO")
     @ManyToOne
     private TipoDocumento tipoDocumento;
 
-    /**Variable para la relacion con la entidad  usuario actividad**/
+    /**
+     * Variable para la relacion con la entidad usuario actividad*
+     */
     @OneToMany(mappedBy = "usuario")
     private List<UsuarioActividad> listaUsuarioActividad;
 
-    /**Constructor vacio de la clase**/
+    /**
+     * Constructor vacio de la clase*
+     */
     public Usuario() {
 
     }
 
-    /**Constructor con variables
+    /**
+     * Constructor con variables
+     *
      * @param token
      * @param numeroDocumento
      * @param apellido
@@ -128,7 +166,8 @@ public class Usuario implements Serializable {
      * @param contrasena
      * @param tipoDocumento
      * @param fechaIngreso
-     **/
+     *
+     */
     public Usuario(String token, Integer numeroDocumento, String apellido, String estado, Date fechaNacimiento, Integer numeroIntentos,
             String nombre, Date ultimaModificacion, String correoElectronico, String contrasena, TipoDocumento tipoDocumento, Date fechaIngreso) {
         this.token = token;
@@ -144,8 +183,10 @@ public class Usuario implements Serializable {
         this.tipoDocumento = tipoDocumento;
         this.fechaIngreso = fechaIngreso;
     }
- 
-    /**Metodos get y set de las variables**/
+
+    /**
+     * Metodos get y set de las variables*
+     */
     public Integer getIdUsuario() {
         return idUsuario;
     }
@@ -258,6 +299,12 @@ public class Usuario implements Serializable {
         this.fechaIngreso = fechaIngreso;
     }
 
-    
+    public String getRecuperarContrasena() {
+        return recuperarContrasena;
+    }
+
+    public void setRecuperarContrasena(String recuperarContrasena) {
+        this.recuperarContrasena = recuperarContrasena;
+    }
 
 }

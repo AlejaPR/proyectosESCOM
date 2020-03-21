@@ -10,7 +10,7 @@ import PropTypes from "prop-types";
 import { requerido, validacionCuarentaCaracteres, validacionDoscientosCaracteres } from '../../utilitario/validacionCampos.js';
 import AddIcon from '@material-ui/icons/Add';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
-import { generarInput,generarArea } from '../../utilitario/GenerarInputs.js'
+import { generarInput, generarArea } from '../../utilitario/GenerarInputs.js'
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import CancelIcon from '@material-ui/icons/Cancel';
 
@@ -40,6 +40,10 @@ class PopUpModulo extends React.Component {
         case 'modulo registrado':
           NotificationManager.success('Modulo registrado correctamente');
           break;
+        case 'La url del modulo ya esta registrada':
+          NotificationManager.error('El link de acceso ya esta en uso pruebe con otro nombre');
+          this.props.reset();
+          this.props.actualizarMensajeRegistrar('');
         case 'Sin permiso':
           NotificationManager.error('No tiene los permisos suficientes para registrar un modulo');
           this.props.reset();

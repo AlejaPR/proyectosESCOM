@@ -8,7 +8,7 @@ import Divider from '@material-ui/core/Divider';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { withRouter } from 'react-router-dom';
 import { generarInput, generarTextArea } from '../../utilitario/GenerarInputs.js'
-import { requerido, validacionCuarentaCaracteres } from '../../utilitario/validacionCampos.js';
+import { requerido, validacionCuarentaCaracteres,validacionDoscientosCaracteres } from '../../utilitario/validacionCampos.js';
 
 //iconos
 import Alert from '@material-ui/lab/Alert';
@@ -142,7 +142,6 @@ class EditarActividad extends React.Component {
                                 </div> :
                                     <form className="letra" onSubmit={this.props.handleSubmit(this.handleSubmit)}>
                                         <br />
-
                                         <div className="row">
                                             <div className="col-sm-6">
                                                 <Field name="nombre" disabled={true} validate={[requerido, validacionCuarentaCaracteres]} component={generarInput} label="Nombre" />
@@ -154,7 +153,7 @@ class EditarActividad extends React.Component {
                                         <br />
                                         <div className="row">
                                             <div className="col-sm-6">
-                                                <Field name="descripcion" validate={[requerido]} filas={4} component={generarTextArea} label="Descripcion" />
+                                                <Field name="descripcion" validate={[requerido,validacionDoscientosCaracteres]} filas={4} component={generarTextArea} label="Descripcion" />
                                             </div>
                                         </div>
                                         <br />

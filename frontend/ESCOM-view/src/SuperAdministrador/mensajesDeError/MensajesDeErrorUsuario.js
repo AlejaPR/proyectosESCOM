@@ -1,4 +1,4 @@
-import {mensajesFiltro} from './MensajeDeErrorFiltro.js';
+import { mensajesFiltro } from './MensajeDeErrorFiltro.js';
 
 export const mensajesDeErrorModulosAcceso = respuesta => {
     let filtro = mensajesFiltro(respuesta);
@@ -201,6 +201,66 @@ export const mensajesDeErrorCambiarContrasena = respuesta => {
                 return respuesta;
             case 'El usuario no existe':
                 return 'Ocurrio un error en el servidor';
+            default:
+                break;
+        }
+    } else {
+        return filtro;
+    }
+};
+
+export const mensajesDeErrorGenerarToken = respuesta => {
+    let filtro = mensajesFiltro(respuesta);
+    if (filtro === '') {
+        switch (respuesta) {
+            case 'Ocurrio un error en el servidor':
+                return 'Ocurrio un error en el servidor';
+            case 'Correo electronico no registrado':
+                return respuesta;
+            case 'El correo esta en formato incorrecto':
+                return `El correo asociado a la cuenta tiene formato incorrecto o es inexistente`;
+            default:
+                break;
+        }
+    } else {
+        return filtro;
+    }
+};
+
+export const mensajesDeCambiarContrasenaExterna = respuesta => {
+    let filtro = mensajesFiltro(respuesta);
+    if (filtro === '') {
+        switch (respuesta) {
+            case 'Ocurrio un error en el servidor':
+                return 'Ocurrio un error en el servidor';
+            case 'Usuario no registrado':
+                return 'El usuario no esta registrado';
+            case 'Token en formato incorrecto':
+                return 'Ocurrio un problema con la solicitud intentelo de nuevo';
+            case 'Token vencido':
+                return 'Se vencio el plazo de 24h genere una nueva solicitud';
+            case 'No se encontro un correo asociado':
+                return respuesta;
+            default:
+                break;
+        }
+    } else {
+        return filtro;
+    }
+};
+
+export const mensajesDeValidarToken = respuesta => {
+    let filtro = mensajesFiltro(respuesta);
+    if (filtro === '') {
+        switch (respuesta) {
+            case 'Ocurrio un error en el servidor':
+                return 'Ocurrio un error en el servidor';
+            case 'Token en formato incorrecto':
+                return 'Ocurrio un problema con la solicitud intentelo de nuevo';
+            case 'Token vencido':
+                return 'Se vencio el plazo de 24h genere una nueva solicitud';
+                case 'Enlace no valido':
+                    return 'Este enlace ya ha no es valido'
             default:
                 break;
         }

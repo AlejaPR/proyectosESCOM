@@ -1,4 +1,5 @@
 package com.mycompany.superadministrador.logica;
+
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import com.mycompany.superadministrador.POJO.ModuloPOJO;
@@ -14,27 +15,36 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
+
 /**
  * Esta es la clase encargada de la logica de modulo
- * @author Alejandra Pabon, Jeison Gaona
- * Universidad de Cundinamarca
+ *
+ * @author Alejandra Pabon, Jeison Gaona Universidad de Cundinamarca
  */
 @Stateless
 public class LogicaModulo implements LogicaModuloFacadeLocal {
 
-    /**Inyeccion de la interfaz de modulo**/
+    /**
+     * Inyeccion de la interfaz de modulo*
+     */
     @EJB
     ModuloFacadeLocal moduloDB;
 
-    /**Inyeccion de la interfaz de actividad**/
+    /**
+     * Inyeccion de la interfaz de actividad*
+     */
     @EJB
     ActividadFacadeLocal actividadDB;
 
-    /**Inyeccion de la interfaz de bitacora**/
+    /**
+     * Inyeccion de la interfaz de bitacora*
+     */
     @EJB
     UtilitarioFacadeLocal bitacora;
 
-    /**Variable para el registro de bitacora**/
+    /**
+     * Variable para el registro de bitacora*
+     */
     private static final String TABLA = "TBL_MODULO";
 
     /**
@@ -48,47 +58,53 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
     public void registrarModulo(ModuloPOJO modulo) throws ExcepcionGenerica {
         try {
             List<Modulo> moduloResultado = moduloDB.consultaDatosExistentes(modulo.getNombreModulo());
+            List<Modulo> urlResultado = moduloDB.consultaDatosExistentesUrlModulo(modulo.getUrl());
+
             if (moduloResultado.isEmpty()) {
-                String primeraLetra, segundaLetra, acronimo;
-                String nombre = modulo.getNombreModulo();
-                String[] partes = nombre.split(" ");
-                if (partes.length == 1) {
-                    String parte1 = partes[0];
-                    primeraLetra = parte1.substring(0, 1);
-                    segundaLetra = parte1.substring(1, 2);
-                    acronimo = primeraLetra + segundaLetra;
-                    List<Modulo> moduloAcronimo = moduloDB.consultaAcronimo(acronimo);
-                     modulo.getDatosSolicitud().setTablaInvolucrada(TABLA);
-                    if (moduloAcronimo.isEmpty()) {
-                        moduloDB.registrarModulo(modulo, acronimo);
-                        bitacora.registrarEnBitacora(modulo.getDatosSolicitud());
-                    } else {
-                        primeraLetra = parte1.substring(1, 2);
-                        segundaLetra = parte1.substring(2, 3);
-                        acronimo = primeraLetra + segundaLetra;                      
-                        moduloDB.registrarModulo(modulo, acronimo);                    
-                        bitacora.registrarEnBitacora(modulo.getDatosSolicitud());
-                    }
-
-                } else {
-                    String parte1 = partes[0];
-                    String parte2 = partes[1];
-
-                    primeraLetra = parte1.substring(0, 1);
-                    segundaLetra = parte2.substring(0, 1);
-                    acronimo = primeraLetra + segundaLetra;
-                    List<Modulo> moduloAcronimo = moduloDB.consultaAcronimo(acronimo);
-                     modulo.getDatosSolicitud().setTablaInvolucrada(TABLA);
-                    if (moduloAcronimo.isEmpty()) {
-                        moduloDB.registrarModulo(modulo, acronimo);
-                        bitacora.registrarEnBitacora(modulo.getDatosSolicitud());
-                    } else {
+                if (urlResultado.isEmpty()) {
+                    String primeraLetra, segundaLetra, acronimo;
+                    String nombre = modulo.getNombreModulo();
+                    String[] partes = nombre.split(" ");
+                    if (partes.length == 1) {
+                        String parte1 = partes[0];
                         primeraLetra = parte1.substring(0, 1);
-                        segundaLetra = parte2.substring(1, 2);
+                        segundaLetra = parte1.substring(1, 2);
                         acronimo = primeraLetra + segundaLetra;
-                        moduloDB.registrarModulo(modulo, acronimo);                     
-                        bitacora.registrarEnBitacora(modulo.getDatosSolicitud());
+                        List<Modulo> moduloAcronimo = moduloDB.consultaAcronimo(acronimo);
+                        modulo.getDatosSolicitud().setTablaInvolucrada(TABLA);
+                        if (moduloAcronimo.isEmpty()) {
+                            moduloDB.registrarModulo(modulo, acronimo);
+                            bitacora.registrarEnBitacora(modulo.getDatosSolicitud());
+                        } else {
+                            primeraLetra = parte1.substring(1, 2);
+                            segundaLetra = parte1.substring(2, 3);
+                            acronimo = primeraLetra + segundaLetra;
+                            moduloDB.registrarModulo(modulo, acronimo);
+                            bitacora.registrarEnBitacora(modulo.getDatosSolicitud());
+                        }
+
+                    } else {
+                        String parte1 = partes[0];
+                        String parte2 = partes[1];
+
+                        primeraLetra = parte1.substring(0, 1);
+                        segundaLetra = parte2.substring(0, 1);
+                        acronimo = primeraLetra + segundaLetra;
+                        List<Modulo> moduloAcronimo = moduloDB.consultaAcronimo(acronimo);
+                        modulo.getDatosSolicitud().setTablaInvolucrada(TABLA);
+                        if (moduloAcronimo.isEmpty()) {
+                            moduloDB.registrarModulo(modulo, acronimo);
+                            bitacora.registrarEnBitacora(modulo.getDatosSolicitud());
+                        } else {
+                            primeraLetra = parte1.substring(0, 1);
+                            segundaLetra = parte2.substring(1, 2);
+                            acronimo = primeraLetra + segundaLetra;
+                            moduloDB.registrarModulo(modulo, acronimo);
+                            bitacora.registrarEnBitacora(modulo.getDatosSolicitud());
+                        }
                     }
+                } else {
+                    throw new ExcepcionGenerica("La url del modulo ya esta registrada");
                 }
             } else {
                 throw new ExcepcionGenerica("El nombre de modulo ya esta registrado");
@@ -97,9 +113,9 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer el registro de modulo");
         } catch (NoResultException ex) {
             throw new ExcepcionGenerica("No se encontro ningun dato coincidente");
-        }catch (ExcepcionGenerica ex) {
+        } catch (ExcepcionGenerica ex) {
             throw new ExcepcionGenerica(ex.getMessage());
-        }  catch (Exception ex) {
+        } catch (Exception ex) {
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
@@ -189,7 +205,7 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
      *
      */
     @Override
-    public void cambiarEstadoModulo(int idModulo,DatosSolicitudPOJO datosSolicitud) throws ExcepcionGenerica {
+    public void cambiarEstadoModulo(int idModulo, DatosSolicitudPOJO datosSolicitud) throws ExcepcionGenerica {
         try {
             ModuloPOJO moduloResultado = moduloDB.buscarModuloEspecifico(idModulo);
             datosSolicitud.setTablaInvolucrada(TABLA);

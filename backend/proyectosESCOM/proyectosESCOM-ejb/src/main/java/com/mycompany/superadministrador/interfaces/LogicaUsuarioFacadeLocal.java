@@ -1,4 +1,5 @@
 package com.mycompany.superadministrador.interfaces;
+
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.POJO.ClavePOJO;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
@@ -8,11 +9,12 @@ import com.mycompany.superadministrador.POJO.UsuarioPOJO;
 import com.mycompany.superadministrador.utilitarios.ExcepcionGenerica;
 import java.util.List;
 import javax.ejb.Local;
+
 /**
- * Esta es la interfaz para la clase logica usuario
- * Contiene todos los metodos requeridos para la conexion de la logica con la entidad usuario
- * @author Alejandra Pabon, Jeison Gaona
- * Universidad de Cundinamarca
+ * Esta es la interfaz para la clase logica usuario Contiene todos los metodos
+ * requeridos para la conexion de la logica con la entidad usuario
+ *
+ * @author Alejandra Pabon, Jeison Gaona Universidad de Cundinamarca
  */
 @Local
 public interface LogicaUsuarioFacadeLocal {
@@ -46,11 +48,17 @@ public interface LogicaUsuarioFacadeLocal {
     public List<ActividadPOJO> listarActividadesUsuarioActivas(int cedula) throws ExcepcionGenerica;
 
     public List<ModuloPOJO> redireccionUsuario(String token) throws ExcepcionGenerica;
-    
+
     public List<UsuarioPOJO> devolverUsuariosModuloDocumental();
-    
-    public void cambiarClaveInterna(ClavePOJO clavePOJO) throws ExcepcionGenerica ;
-    
-    public String devolverCorreo(String token) throws ExcepcionGenerica ;
+
+    public void cambiarClaveInterna(ClavePOJO clavePOJO) throws ExcepcionGenerica;
+
+    public String devolverCorreo(String token) throws ExcepcionGenerica;
+
+    public String cambiarContrasenaExterna(String nuevaContrasena, String token, DatosSolicitudPOJO datos) throws ExcepcionGenerica;
+
+    public String generarTokenRecuperarContrasena(String correoElectronico) throws ExcepcionGenerica;
+
+    public String validarTokenRecuperarContrasena(String token) throws ExcepcionGenerica;
 
 }

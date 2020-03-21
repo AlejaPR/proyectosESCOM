@@ -1,4 +1,5 @@
 package com.mycompany.superadministrador.ejb;
+
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
 import com.mycompany.superadministrador.entity.Actividad;
 import com.mycompany.superadministrador.entity.TipoDocumento;
@@ -15,11 +16,12 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+
 /**
- * Este es el bean de la entidad usuario
- * Contiene todos los metodos para la persistencia y consultas a la base de datos
- * @author Alejandra Pabon, Jeison Gaona
- * Universidad de Cundinamarca
+ * Este es el bean de la entidad usuario Contiene todos los metodos para la
+ * persistencia y consultas a la base de datos
+ *
+ * @author Alejandra Pabon, Jeison Gaona Universidad de Cundinamarca
  */
 @Stateless
 public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFacadeLocal {
@@ -33,7 +35,9 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         return em;
     }
 
-    /**Inyeccion a la interfaz de sesiones facade*/
+    /**
+     * Inyeccion a la interfaz de sesiones facade
+     */
     @EJB
     SesionesFacadeLocal sesiones;
 
@@ -60,7 +64,20 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         usuarioRespuesta.setContrasena(usuarioDB.getContrasena());
         return usuarioRespuesta;
     }
-
+    
+//busquedaTokenRecuperar
+    @Override
+    public UsuarioPOJO busquedaTokenRecuperar(String firma) {
+        TypedQuery<Usuario> consulta = em.createNamedQuery("busquedaTokenRecuperar", Usuario.class);
+        consulta.setParameter("token", firma);
+        Usuario usuarioDB = consulta.getSingleResult();
+        UsuarioPOJO usuarioRespuesta = new UsuarioPOJO();
+        usuarioRespuesta.setId(usuarioDB.getIdUsuario());
+        usuarioRespuesta.setCorreoElectronico(usuarioDB.getCorreoElectronico());
+        usuarioRespuesta.setNumeroDocumento(usuarioDB.getNumeroDocumento());
+        usuarioRespuesta.setContrasena(usuarioDB.getContrasena());
+        return usuarioRespuesta;
+    }
     /**
      * Metodo que realiza la consulta de correo y contraseña para el login
      *
@@ -71,13 +88,13 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
      */
     @Override
     public List<Usuario> consultaLogin(String correo, String contrasena) {
-        
+
         List<Usuario> listaUsuario = new ArrayList();
         TypedQuery<Usuario> consultaLogin = em.createNamedQuery("consultaLogin", Usuario.class);
         consultaLogin.setParameter("correo", correo);
         consultaLogin.setParameter("contrasena", contrasena);
         listaUsuario = consultaLogin.getResultList();
-       
+
         return listaUsuario;
     }
 
@@ -113,6 +130,15 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         return editarToken.executeUpdate();
     }
 
+    //editarTokenRecuperar
+    @Override
+    public int editarTokenRecuperarContrasena(String token, int idUsuario) {
+        TypedQuery<Usuario> editarToken = em.createNamedQuery("editarTokenRecuperar", Usuario.class);
+        editarToken.setParameter("token", token);
+        editarToken.setParameter("idUsuario", idUsuario);
+        return editarToken.executeUpdate();
+    }
+
     /**
      * Metodo que realiza la consulta para editar el token al cerrar sesion
      *
@@ -141,9 +167,22 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         TypedQuery<Actividad> consultaActividadesUsuario = em.createNamedQuery("consultaActividades", Actividad.class);
         consultaActividadesUsuario.setParameter("idUsuario", idUsuario);
         String[] actividades = new String[consultaActividadesUsuario.getResultList().size()];
-        int control=0;
+        int control = 0;
         for (Actividad a : consultaActividadesUsuario.getResultList()) {
-            actividades[control]=a.getNombreActividad();
+            actividades[control] = a.getNombreActividad();
+            control++;
+        }
+        return actividades;
+    }
+
+    @Override
+    public String[] consultarTodasActividades(int idUsuario) {
+        TypedQuery<Actividad> consultaActividadesUsuario = em.createNamedQuery("consultaTodasActividades", Actividad.class);
+        consultaActividadesUsuario.setParameter("idUsuario", idUsuario);
+        String[] actividades = new String[consultaActividadesUsuario.getResultList().size()];
+        int control = 0;
+        for (Actividad a : consultaActividadesUsuario.getResultList()) {
+            actividades[control] = a.getNombreActividad();
             control++;
         }
         return actividades;
@@ -177,8 +216,8 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
     }
 
     /**
-     * Metodo que realiza la consulta a la tabla usuario 
-     * Devuelve una lista con los usuarios registrados
+     * Metodo que realiza la consulta a la tabla usuario Devuelve una lista con
+     * los usuarios registrados
      *
      * @return
      *
@@ -202,8 +241,8 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
     }
 
     /**
-     * Metodo que realiza la consulta a la tabla usuario 
-     * Devuelve los datos de un usuario registrado con la cedula enviada
+     * Metodo que realiza la consulta a la tabla usuario Devuelve los datos de
+     * un usuario registrado con la cedula enviada
      *
      * @param cedula
      * @return
@@ -243,8 +282,8 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
     }
 
     /**
-     * Metodo que realiza la modificacion de un usuario 
-     * Recibe cedula para filtrar la busqueda
+     * Metodo que realiza la modificacion de un usuario Recibe cedula para
+     * filtrar la busqueda
      *
      * @param idUsuario
      * @param usuarioEditar
@@ -266,8 +305,8 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
     }
 
     /**
-     * Metodo que realiza el cambio de estado de un usuario 
-     * Recibe cedula para filtrar la busqueda y el valor del estado
+     * Metodo que realiza el cambio de estado de un usuario Recibe cedula para
+     * filtrar la busqueda y el valor del estado
      *
      * @param idUsuario
      * @param estado
@@ -281,10 +320,10 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         usuario.setEstado(estado);
         em.merge(usuario);
     }
-    
+
     /**
-     * Metodo que realiza la consulta a la tabla usuario 
-     * Devuelve una lista con los usuarios registrados para el modulo documental 
+     * Metodo que realiza la consulta a la tabla usuario Devuelve una lista con
+     * los usuarios registrados para el modulo documental
      *
      * @return
      *
@@ -298,21 +337,21 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         for (Usuario u : consultaUsuariosRegistrados.getResultList()) {
             UsuarioPOJO usuario = new UsuarioPOJO();
 
-            String nombre= u.getNombre();
-            String apellido= u.getApellido();
-            String nombreCompleto= nombre + " " + apellido;
-            
+            String nombre = u.getNombre();
+            String apellido = u.getApellido();
+            String nombreCompleto = nombre + " " + apellido;
+
             usuario.setNombre(nombreCompleto);
             usuario.setId(u.getIdUsuario());
-            
+
             listaUsuarios.add(usuario);
         }
         return listaUsuarios;
     }
-    
+
     /**
-     * Metodo que realiza la consulta a la tabla usuario 
-     * Devuelve los datos de un usuario registrado para la bitacora recibiendo el correo
+     * Metodo que realiza la consulta a la tabla usuario Devuelve los datos de
+     * un usuario registrado para la bitacora recibiendo el correo
      *
      * @param palabraBusqueda
      * @return
@@ -326,7 +365,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         TypedQuery<Usuario> usuarioEspDB = em.createQuery("select u from Usuario u where (Lower(u.correoElectronico)  =:busqueda)", Usuario.class);
         usuarioEspDB.setParameter("busqueda", busqueda);
         lista = usuarioEspDB.getSingleResult();
-        
+
         UsuarioPOJO usuario = new UsuarioPOJO();
         usuario.setId(lista.getIdUsuario());
         usuario.setNumeroDocumento(lista.getNumeroDocumento());
@@ -334,10 +373,10 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
 
         return usuario;
     }
-    
-     /**
-     * Metodo que realiza la consulta a la tabla usuario 
-     * Devuelve los datos de un usuario registrado para la bitacora, recibe el numero de documento
+
+    /**
+     * Metodo que realiza la consulta a la tabla usuario Devuelve los datos de
+     * un usuario registrado para la bitacora, recibe el numero de documento
      *
      * @param documentoBusqueda
      * @return
@@ -350,7 +389,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         TypedQuery<Usuario> usuarioEspDB = em.createQuery("select u from Usuario u where u.numeroDocumento =:documentoBusqueda", Usuario.class);
         usuarioEspDB.setParameter("documentoBusqueda", documentoBusqueda);
         lista = usuarioEspDB.getSingleResult();
-        
+
         UsuarioPOJO usuario = new UsuarioPOJO();
         usuario.setId(lista.getIdUsuario());
         usuario.setNumeroDocumento(lista.getNumeroDocumento());
@@ -359,9 +398,9 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         return usuario;
     }
 
-     /**
-     * Metodo que realiza la consulta a la tabla usuario 
-     * Devuelve los datos de un usuario registrado para la bitacora, recibe el id de usuario
+    /**
+     * Metodo que realiza la consulta a la tabla usuario Devuelve los datos de
+     * un usuario registrado para la bitacora, recibe el id de usuario
      *
      * @param idUsuario
      * @return
@@ -374,7 +413,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         TypedQuery<Usuario> usuarioEspDB = em.createQuery("select u from Usuario u where u.idUsuario =:idUsuario", Usuario.class);
         usuarioEspDB.setParameter("idUsuario", idUsuario);
         lista = usuarioEspDB.getSingleResult();
-        
+
         UsuarioPOJO usuario = new UsuarioPOJO();
         usuario.setId(lista.getIdUsuario());
         usuario.setNumeroDocumento(lista.getNumeroDocumento());
@@ -385,14 +424,16 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         return usuario;
     }
 
-    /**Metodo que edita la clave del usuario
-     * Recibe la nueva clave y el id del usuario
+    /**
+     * Metodo que edita la clave del usuario Recibe la nueva clave y el id del
+     * usuario
+     *
      * @param nuevaClave
      * @param usuario
      */
     @Override
     public void cambiarClaveInterna(String nuevaClave, UsuarioPOJO usuario) {
-        
+
         TypedQuery<Usuario> cambiarContraseña = em.createNamedQuery("cambiarClaveInterna", Usuario.class);
         cambiarContraseña.setParameter("clave", nuevaClave);
         cambiarContraseña.setParameter("idUsuario", usuario.getId());
@@ -412,51 +453,62 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         TypedQuery<Usuario> consultaLogin = em.createNamedQuery("consultaCorreo", Usuario.class);
         consultaLogin.setParameter("correo", correo);
         devolverUsuario = consultaLogin.getResultList();
-        
+
         List<UsuarioPOJO> listaUsuario = new ArrayList();
-        for(Usuario u: devolverUsuario){
+        for (Usuario u : devolverUsuario) {
             UsuarioPOJO usuario = new UsuarioPOJO();
             usuario.setId(u.getIdUsuario());
+            usuario.setNombre(u.getNombre());
             usuario.setFechaIngreso(u.getFechaIngreso());
             usuario.setNumeroIntentos(u.getNumeroIntentos());
             listaUsuario.add(usuario);
         }
-        
+
         return listaUsuario;
     }
-    
-    /**Metodo que modifica el campo numero de intentos del usuario
+
+    /**
+     * Metodo que modifica el campo numero de intentos del usuario
+     *
      * @param numeroIntentos
      * @param idUsuario
-     **/
+     *
+     */
     @Override
     public void cambiarNumeroIntentos(int numeroIntentos, int idUsuario) {
-        
+
         TypedQuery<Usuario> cambiarIntentos = em.createNamedQuery("cambiarIntentos", Usuario.class);
         cambiarIntentos.setParameter("numeroIntentos", numeroIntentos);
         cambiarIntentos.setParameter("idUsuario", idUsuario);
         cambiarIntentos.executeUpdate();
     }
-    
-    /**Metodo que modifica el campo fecha ingreso del usuario
+
+    /**
+     * Metodo que modifica el campo fecha ingreso del usuario
+     *
      * @param fechaIngreso
      * @param usuario
-     **/
+     *
+     */
     @Override
     public void cambiarFechaIngreso(Date fechaIngreso, UsuarioPOJO usuario) {
-        
+
         TypedQuery<Usuario> cambiarFecha = em.createNamedQuery("cambiarFechaIngreso", Usuario.class);
         cambiarFecha.setParameter("fechaIngreso", fechaIngreso);
         cambiarFecha.setParameter("idUsuario", usuario.getId());
         cambiarFecha.executeUpdate();
     }
-    
-    /**Metodo que modifica el campo fecha ingreso y numero de intentos para el login
+
+    /**
+     * Metodo que modifica el campo fecha ingreso y numero de intentos para el
+     * login
+     *
      * @param usuario
-     **/
+     *
+     */
     @Override
     public void cambiarIntentosConFecha(Usuario usuario) {
-        
+
         TypedQuery<Usuario> cambiarFecha = em.createNamedQuery("cambiarIntentosFecha", Usuario.class);
         cambiarFecha.setParameter("fechaIngreso", null);
         cambiarFecha.setParameter("numeroIntentos", 0);

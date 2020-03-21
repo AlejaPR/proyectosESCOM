@@ -44,4 +44,5 @@ public interface ModuloFacadeLocal {
     
     public ModuloPOJO buscarModuloBitacoraId(int idModulo);
     
+    public List<Modulo> consultaDatosExistentesUrlModulo(String urlModulo);
 }

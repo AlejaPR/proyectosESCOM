@@ -17,6 +17,7 @@ import {
     MENSAJE_LOGIN,
     MENSAJE_REGISTRAR,
     MENSAJE_SUSPENDER,
+    MENSAJE_CONTRASENA_EXTERNA,
     MODULOS_ACCESO,
     MODULOS_REGISTRADOS,
     MOSTRAR_ACTIVIDADES_USUARIO,
@@ -40,7 +41,8 @@ const initialState = {
     mensajeLogin: '',
     mensajeRegistrar: '',
     mensajeSuspender: '',
-    mensajeInicio:'',
+    mensajeInicio: '',
+    mensajeContrasenaExterna: '',
     modulosAcceso: [],
     modulosAsignar: [],
     nombreUsuario: [],
@@ -72,8 +74,10 @@ export function reducerUsuario(state = initialState, action) {
             }
         case MENSAJE_CONTRASENA:
             return Object.assign({}, state, { mensajeContrasena: action.mensaje })
-            case MENSAJE_INICIO:
-                return Object.assign({}, state, { mensajeInicio: action.mensaje })
+        case MENSAJE_CONTRASENA_EXTERNA:
+            return Object.assign({}, state, { mensajeContrasenaExterna: action.mensaje })
+        case MENSAJE_INICIO:
+            return Object.assign({}, state, { mensajeInicio: action.mensaje })
         case MENSAJE_REGISTRAR:
             return Object.assign({}, state, { mensajeRegistrar: action.mensaje })
         case MENSAJE_EDITAR:

@@ -29,6 +29,16 @@ export const validacionCuarentaCaracteres = value => {
 
 }
 
+export const validacionTresCientosVeinte = value => {
+    if (value !== undefined) {
+        if (value.length > 320) {
+            return 'El limite es de 320 caracteres';
+        }
+    }
+
+}
+
+
 export const validacionDoscientosCaracteres = value => {
     if (value !== undefined) {
         if (value.length > 200) {
@@ -38,10 +48,29 @@ export const validacionDoscientosCaracteres = value => {
 
 }
 
+export const validacionTreintaCaracteres = value => {
+    if (value !== undefined) {
+        if (value.length > 30) {
+            return 'El limite es de 30 caracteres';
+        }
+    }
+
+}
+
+
+export const validacionCincuentaCaracteres = value => {
+    if (value !== undefined) {
+        if (value.length > 50) {
+            return 'El limite es de 50 caracteres';
+        }
+    }
+
+}
+
 
 export const documentoIdentificacion = value => {
     if (value !== undefined) {
-        if (value.length < 6) {
+        if (value.length < 5 | value.length > 15) {
             return 'ingrese un numero de documento valido';
         }
     }
@@ -49,7 +78,7 @@ export const documentoIdentificacion = value => {
 
 export const correo = value => value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? 'Correo electronico en formato incorrecto' : undefined;
 
-export const contrasena = value => value && !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/i.test(value) ? 'La contraseña debe tener minimo ocho caracteres, al menos una letra mayúscula, una letra minuscula y un numero' : undefined;
+export const contrasena = value => value && !/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/i.test(value) ? 'La contraseña debe tener minimo ocho caracteres y un maximo de dieciseis caracteres, al menos una letra mayúscula, una letra minuscula y un numero' : undefined;
 
 export const fechaNacimiento = value => {
     var x = new Date(value);

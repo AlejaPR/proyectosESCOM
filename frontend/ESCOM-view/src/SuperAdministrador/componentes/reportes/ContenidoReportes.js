@@ -12,6 +12,7 @@ import { generarInput, generarDate } from '../../utilitario/GenerarInputs.js'
 import Barra from '../general/BarraDirecciones.js'
 import { formatoFecha } from '../../utilitario/MensajesError.js';
 import { seleccione } from '../../utilitario/validacionCampos.js';
+import {validacionDoscientosCaracteres,requerido} from '../../utilitario/validacionCampos.js'
 import Select from 'react-select'
 import SearchIcon from '@material-ui/icons/Search';
 import ReplayIcon from '@material-ui/icons/Replay';
@@ -253,7 +254,7 @@ class ContenidoReportes extends React.Component {
 									<Field name="actividad" validate={[seleccione]} valor={this.retornarValor()} onChange={this.handleChangeDos} component={ReduxFormSelectDos} options={this.actividades()} />
 								</div>
 								<div className="col-sm-8" >
-									<Field name="palabraBusqueda" component={generarInput} className="form-control" label={this.state.textoAyuda} />
+									<Field name="palabraBusqueda" component={generarInput} validate={[validacionDoscientosCaracteres,requerido]} className="form-control" label={this.state.textoAyuda} />
 								</div>
 							</div>
 							<div className="col-sm-12" style={{
@@ -266,11 +267,11 @@ class ContenidoReportes extends React.Component {
 								<div className="row">
 									<div className="col-sm-6" style={{ zIndex: '0' }}>
 
-										<Field name="fechaInicio" type="date" component={generarDate} label="Fecha de inicio" />
+										<Field name="fechaInicio" type="date" validate={[requerido]} component={generarDate} label="Fecha de inicio" />
 									</div>
 									<div className="col-sm-6">
 
-										<Field name="fechaFin" type="date" component={generarDate} label="Fecha de fin" />
+										<Field name="fechaFin" type="date" component={generarDate} validate={[requerido]} label="Fecha de fin" />
 									</div>
 								</div>
 							</div>

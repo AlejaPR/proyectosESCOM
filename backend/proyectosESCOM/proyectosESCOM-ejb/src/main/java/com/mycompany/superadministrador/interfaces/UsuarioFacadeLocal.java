@@ -31,10 +31,16 @@ public interface UsuarioFacadeLocal {
     public List<Usuario> consultaLogin(String correo, String contrasena);
 
     public String[] consultarActividadesUsuario(int idUsuario);
+    
+    public String[] consultarTodasActividades(int idUsuario);
 
     public int editarToken(String token, int idUsuario);
+    
+    public int editarTokenRecuperarContrasena(String token, int idUsuario);
 
     public UsuarioPOJO busquedaToken(String firma);
+    
+    public UsuarioPOJO busquedaTokenRecuperar(String firma);
 
     public int editarTokenCerrarSesion(String firma, String correo);
 

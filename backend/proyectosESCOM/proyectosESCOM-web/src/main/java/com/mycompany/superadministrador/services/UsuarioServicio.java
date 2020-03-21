@@ -1,4 +1,5 @@
 package com.mycompany.superadministrador.services;
+
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.POJO.ClavePOJO;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
@@ -19,6 +20,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 /**
  * Clase encargada de manejar de servicios de la entidad usuario
  *
@@ -28,14 +30,20 @@ import javax.ws.rs.core.Response;
 @Path("usuarios")
 public class UsuarioServicio {
 
-    /**Inyeccion de la interfaz logica usuario**/
+    /**
+     * Inyeccion de la interfaz logica usuario*
+     */
     @EJB
     LogicaUsuarioFacadeLocal usuarioLogica;
 
-    /**Variable para manejo de mensajes**/
+    /**
+     * Variable para manejo de mensajes*
+     */
     private final Respuesta respuesta = new Respuesta();
 
-    /**Constructor vacio de la clase**/
+    /**
+     * Constructor vacio de la clase*
+     */
     public UsuarioServicio() {
     }
 
@@ -43,7 +51,7 @@ public class UsuarioServicio {
      * Servicio que registra usuarios
      *
      * @param usuario
-     * @return  *
+     * @return *
      */
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -66,7 +74,7 @@ public class UsuarioServicio {
     /**
      * Servicio que lista los usuarios registrados
      *
-     * @return  *
+     * @return *
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -87,7 +95,7 @@ public class UsuarioServicio {
     /**
      * Servicio que lista los tipos de documento
      *
-     * @return  *
+     * @return *
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -110,7 +118,7 @@ public class UsuarioServicio {
      * cedula
      *
      * @param cedula
-     * @return  *
+     * @return *
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -133,7 +141,7 @@ public class UsuarioServicio {
      *
      * @param cedula
      * @param usuarioEditar
-     * @return  *
+     * @return *
      */
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
@@ -165,7 +173,7 @@ public class UsuarioServicio {
     @Path("/cambiarEstado/{cedula}")
     public Response cambiarEstado(@PathParam("cedula") int cedula, DatosSolicitudPOJO datosSolicitud) {
         try {
-            usuarioLogica.cambiarEstadoUsuario(cedula,datosSolicitud);
+            usuarioLogica.cambiarEstadoUsuario(cedula, datosSolicitud);
             respuesta.setRespuesta("Estado cambiado correctamente");
             return Response.status(Response.Status.OK).entity(respuesta).build();
         } catch (ExcepcionGenerica e) {
@@ -182,7 +190,7 @@ public class UsuarioServicio {
      * parametro la cedula
      *
      * @param cedula
-     * @return  *
+     * @return *
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -199,22 +207,22 @@ public class UsuarioServicio {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }
-    
+
     /**
-     * Servicio que lista las actividades no asociadas de un usuario especifico, recibe como
-     * parametro la cedula y el codigo del modulo 
+     * Servicio que lista las actividades no asociadas de un usuario especifico,
+     * recibe como parametro la cedula y el codigo del modulo
      *
      * @param numeroDocumento
      * @param idModulo
-     * 
-     * @return  *
+     *
+     * @return *
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/listarActividadesNoAsociadas/{numeroDocumento}/{codigoModulo}")
     public Response listarActividadesNoAsociadas(@PathParam("numeroDocumento") int numeroDocumento, @PathParam("codigoModulo") int idModulo) {
         try {
-            List<ActividadPOJO> listaActividades = usuarioLogica.listarActividadesNoAsociadasUsuario(numeroDocumento,idModulo);
+            List<ActividadPOJO> listaActividades = usuarioLogica.listarActividadesNoAsociadasUsuario(numeroDocumento, idModulo);
             return Response.status(Response.Status.OK).entity(listaActividades).build();
         } catch (ExcepcionGenerica e) {
             respuesta.setRespuesta(e.getMessage());
@@ -231,7 +239,7 @@ public class UsuarioServicio {
      *
      * @param cedula
      * @param listaActividad
-     * @return  *
+     * @return *
      */
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
@@ -249,19 +257,19 @@ public class UsuarioServicio {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }
-    
+
     /**
-     * Servicio que asigna actividades a usuarios 
+     * Servicio que asigna actividades a usuarios
      *
      * @param numeroDocumento
      * @param actividad
-     * 
-     * @return  *
+     *
+     * @return *
      */
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/asignarActividad/{numeroDocumento}")
-    public Response asignarActividad(@PathParam("numeroDocumento") int numeroDocumento,ActividadPOJO actividad) {
+    public Response asignarActividad(@PathParam("numeroDocumento") int numeroDocumento, ActividadPOJO actividad) {
         try {
             usuarioLogica.asignarActividadAUsuario(numeroDocumento, actividad);
             respuesta.setRespuesta("Actividad asignada");
@@ -276,19 +284,19 @@ public class UsuarioServicio {
     }
 
     /**
-     * Servicio que sirve para la redireccion de permisos, devuelve lista de modulos 
-     * asignados a usuario y reciben token 
+     * Servicio que sirve para la redireccion de permisos, devuelve lista de
+     * modulos asignados a usuario y reciben token
      *
      * @param token
-     * 
-     * @return  *
+     *
+     * @return *
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/redireccion/{token}")
     public Response redireccion(@PathParam("token") String token) {
         try {
-           List<ModuloPOJO> listaModulo= usuarioLogica.redireccionUsuario(token);
+            List<ModuloPOJO> listaModulo = usuarioLogica.redireccionUsuario(token);
             return Response.status(Response.Status.OK).entity(listaModulo).build();
         } catch (ExcepcionGenerica e) {
             respuesta.setRespuesta(e.getMessage());
@@ -303,7 +311,7 @@ public class UsuarioServicio {
      * Servicio para el cambio de contraseña interna
      *
      * @param clavePOJO
-     * @return  *
+     * @return *
      */
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -322,20 +330,20 @@ public class UsuarioServicio {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }
-    
+
     /**
      * Servicio que devuelve correo y recibe token
      *
      * @param token
-     * 
-     * @return  *
+     *
+     * @return *
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/devolverCorreo/{token}")
     public Response devolverCorreo(@PathParam("token") String token) {
         try {
-           String correoUsuario= usuarioLogica.devolverCorreo(token);
+            String correoUsuario = usuarioLogica.devolverCorreo(token);
             return Response.status(Response.Status.OK).entity(correoUsuario).build();
         } catch (ExcepcionGenerica e) {
             respuesta.setRespuesta(e.getMessage());

@@ -9,7 +9,7 @@ import { NotificationContainer, NotificationManager } from 'react-notifications'
 import { withRouter } from 'react-router-dom';
 import { generarInput, generarSelect, generarDate } from '../../utilitario/GenerarInputs.js'
 import { formatoFecha } from '../../utilitario/MensajesError.js'
-import { nombre, requerido, seleccione, apellido, fechaNacimiento, correo, documentoIdentificacion } from '../../utilitario/validacionCampos.js';
+import { nombre, requerido, seleccione, apellido, fechaNacimiento, validacionCuarentaCaracteres,validacionCincuentaCaracteres, documentoIdentificacion } from '../../utilitario/validacionCampos.js';
 
 //iconos
 import Alert from '@material-ui/lab/Alert';
@@ -159,11 +159,11 @@ class editar extends React.Component {
                     <div className="row">
                       <div className="col-sm-6">
 
-                        <Field name="nombre" validate={[requerido, nombre]} component={generarInput} label="Nombre" />
+                        <Field name="nombre" validate={[requerido, nombre,validacionCuarentaCaracteres]} component={generarInput} label="Nombre" />
                       </div>
                       <div className="col-sm-6">
 
-                        <Field name="apellido" validate={[requerido, apellido]} component={generarInput} label="Apellido" />
+                        <Field name="apellido" validate={[requerido, apellido,validacionCuarentaCaracteres]} component={generarInput} label="Apellido" />
                       </div>
                     </div>
                     <br />
@@ -183,7 +183,7 @@ class editar extends React.Component {
                     <br />
                     <div className="row">
                       <div className="col-sm-6">
-                        <Field name="correo" validate={[requerido, correo]} component={generarInput} label="Correo electronico" />
+                        <Field name="correo" validate={[requerido, validacionCincuentaCaracteres]} type="email" component={generarInput} label="Correo electronico" />
                       </div>
                       <div className="col-sm-6">
                         <Field name="fechaNacimiento" type="date" validate={[requerido, fechaNacimiento]} component={generarDate} label="Fecha de nacimiento" />

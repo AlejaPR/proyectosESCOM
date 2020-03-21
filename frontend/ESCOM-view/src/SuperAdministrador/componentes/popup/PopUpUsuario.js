@@ -19,7 +19,7 @@ import { formatoFecha } from '../../utilitario/MensajesError.js'
 //redux
 import { actionAgregarUsuario, actionConsultarDocumentos, actualizarMensajeRegistrar } from '../../actions/actionsUsuario.js'
 import { connect } from 'react-redux';
-import { fechaNacimiento, seleccione, nombre, apellido, contrasena, correo, documentoIdentificacion, requerido } from '../../utilitario/validacionCampos.js';
+import { fechaNacimiento, seleccione, nombre, apellido, contrasena, documentoIdentificacion, requerido ,validacionCincuentaCaracteres, validacionCuarentaCaracteres} from '../../utilitario/validacionCampos.js';
 
 class PopUpUsuario extends React.Component {
   constructor(props) {
@@ -145,13 +145,13 @@ class PopUpUsuario extends React.Component {
               <div className="contenedor-inputs">
                 <div className="row">
                   <div className="col-sm-12">
-                    <Field name="nombre" type="text" validate={[requerido, nombre]} component={generarInput} label="Nombre" />
+                    <Field name="nombre" type="text" validate={[requerido, nombre,validacionCuarentaCaracteres]} component={generarInput} label="Nombre" />
                   </div>
                 </div>
 
                 <div className="row">
                   <div className="col-sm-12">
-                    <Field name="apellido" type="text" validate={[requerido, apellido]} component={generarInput} label="Apellido" />
+                    <Field name="apellido" type="text" validate={[requerido, apellido,validacionCuarentaCaracteres]} component={generarInput} label="Apellido" />
                   </div>
                 </div>
 
@@ -168,7 +168,7 @@ class PopUpUsuario extends React.Component {
 
                 <div className="row">
                   <div className="col-sm-12">
-                    <Field name="correo" type="text" validate={[requerido, correo]} component={generarInput} label="Correo electronico" />
+                    <Field name="correo" validate={[requerido,validacionCincuentaCaracteres]} type='email' component={generarInput} label="Correo electronico" />
                   </div>
                 </div>
 

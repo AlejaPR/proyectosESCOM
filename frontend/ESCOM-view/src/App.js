@@ -12,6 +12,7 @@ import IdleTimer from 'react-idle-timer'
 //administrar usuario
 import EditarUsuario from './SuperAdministrador/componentes/editar/editarUsuario.js'
 import AsignarActividadUsuario from './SuperAdministrador/componentes/asignar/AsignarActividadUsuario.js'
+import Recuperar from './SuperAdministrador/componentes/general/RecuperarContrasena.js';
 
 //administrar modulo
 import AdminModulo from './SuperAdministrador/componentes/administrar/ContenidoAdminModulo.js'
@@ -73,6 +74,12 @@ class App extends React.Component {
 						<Route exact path="/" render={() => {
 							return <div>
 								<Login />
+							</div>
+						}}>
+						</Route>
+						<Route exact path="/recuperarContrasena/:token" render={() => {
+							return <div>
+								<Recuperar />
 							</div>
 						}}>
 						</Route>
@@ -155,6 +162,14 @@ class App extends React.Component {
 							<>
 								<div id="wrapper">
 									<Configuracion />
+								</div>
+							</>
+						</RutaProtegidaMenus>
+
+						<RutaProtegidaMenus path="/recuperarContrasena/:token">
+							<>
+								<div id="wrapper">
+									<Recuperar />
 								</div>
 							</>
 						</RutaProtegidaMenus>

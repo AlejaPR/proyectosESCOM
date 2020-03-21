@@ -8,6 +8,8 @@ export const mensajeDeRegistro = respuesta => {
                 return 'Ocurrio un error en el servidor';
             case 'El nombre de modulo ya esta registrado':
                 return respuesta;
+                case 'La url del modulo ya esta registrada':
+                    return respuesta;
             case 'Ocurrio un error al momento de hacer el registro de modulo':
                 return 'Ocurrio un error en el servidor';
             case 'No se encontro ningun dato coincidente':

@@ -1,4 +1,5 @@
 package com.mycompany.superadministrador.seguridad;
+
 import com.mycompany.superadministrador.POJO.Token;
 import com.mycompany.superadministrador.entity.Usuario;
 import com.mycompany.superadministrador.interfaces.SeguridadFacadeLocal;
@@ -16,21 +17,22 @@ import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
+
 /**
  * Esta es la clase encargada de generar el token con jwt
- * @author Alejandra Pabon, Jeison Gaona
- * Universidad de Cundinamarca
+ *
+ * @author Alejandra Pabon, Jeison Gaona Universidad de Cundinamarca
  */
-public class Seguridad implements SeguridadFacadeLocal{
+public class Seguridad implements SeguridadFacadeLocal {
 
-
-    /**Metodo que genera el token
-     * 
+    /**
+     * Metodo que genera el token
+     *
      * @param usuario
      * @param actividades
-     * @return 
+     * @return
      */
-    public String generarToken(Usuario usuario,String actividades) {
+    public String generarToken(Usuario usuario, String actividades) {
         Date fechaExpiracion = sumarRestarDiasFecha(new Date(), 10);
         String token = Jwts.builder()
                 .setSubject(usuario.getNombre())
@@ -38,18 +40,36 @@ public class Seguridad implements SeguridadFacadeLocal{
                 .setExpiration(fechaExpiracion)
                 .setIssuer(usuario.getCorreoElectronico())
                 .signWith(SignatureAlgorithm.HS256, "A4J7A3prcc20")
-                .claim("actividades",actividades)
+                .claim("actividades", actividades)
                 .compact();
         return token;
     }
     
+    /**
+     * Metodo que genera el token
+     *
+     * @param usuario
+     * @return
+     */
+    public String generarTokenRecuperar(String correoElectronico) {
+        Date fechaExpiracion = sumarRestarDiasFecha(new Date());
+        String token = Jwts.builder()
+                .setIssuedAt(new Date())
+                .setExpiration(fechaExpiracion)
+                .setIssuer(correoElectronico)
+                .signWith(SignatureAlgorithm.HS256, "A4J7A3prcc20")
+                .compact();
+        return token;
+    }
 
-    /**Metodo que desencripta el token
+    /**
+     * Metodo que desencripta el token
+     *
      * @param token
-     * @return 
+     * @return
      */
     public static Token desencriptar(String token) {
-        String clave="A4J7A3prcc20";
+        String clave = "A4J7A3prcc20";
         Token tokenResultado = new Token();
         Jws parseClaimsJws = Jwts.parser().setSigningKey(clave).parseClaimsJws(token);
         tokenResultado.setHeader(parseClaimsJws.getHeader().toString());
@@ -59,11 +79,14 @@ public class Seguridad implements SeguridadFacadeLocal{
         return tokenResultado;
     }
 
-    /**Metodo que suma o resta dias a la fecha del token
+    /**
+     * Metodo que suma o resta dias a la fecha del token
+     *
      * @param fecha
      * @param anos
      * @return 
-     **/
+     *
+     */
     public static Date sumarRestarDiasFecha(Date fecha, int anos) {
 
         Calendar calendar = Calendar.getInstance();
@@ -75,10 +98,31 @@ public class Seguridad implements SeguridadFacadeLocal{
         return calendar.getTime(); // Devuelve el objeto Date con los nuevos días añadidos
     }
 
-    /**Metodo que genera un hash al token para doble encriptacion
+    /**
+     * Metodo que suma o resta dias a la fecha del token
+     *
+     * @param fecha
+     * @return 
+     *
+     */
+    public static Date sumarRestarDiasFecha(Date fecha) {
+
+        Calendar calendar = Calendar.getInstance();
+
+        calendar.setTime(fecha); // Configuramos la fecha que se recibe
+
+        calendar.add(Calendar.HOUR, 24);  // numero de minutos a añadir
+
+        return calendar.getTime(); // Devuelve el objeto Date con los nuevos días añadidos
+    }
+
+    /**
+     * Metodo que genera un hash al token para doble encriptacion
+     *
      * @param texto
      * @return 
-     **/
+     *
+     */
     public static String generarHash(String texto) {
         String respuesta = "";
         try {

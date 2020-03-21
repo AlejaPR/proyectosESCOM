@@ -43,6 +43,13 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
        
         return consultaDatosM.getResultList();
     }
+    
+    @Override
+    public List<Modulo> consultaDatosExistentesUrlModulo(String urlModulo) {
+        TypedQuery<Modulo> consultaDatosM = em.createNamedQuery("consultarExistenciaUrl", Modulo.class);
+        consultaDatosM.setParameter("urlModulo", urlModulo);
+        return consultaDatosM.getResultList();
+    }
        
     /**
      * Metodo que realiza la consulta de acronimo
@@ -71,7 +78,7 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
         
         Modulo moduloN = new Modulo(new Date(), "Activo", modulo.getImagenModulo(), modulo.getNombreModulo(), 
                                     acronimo, modulo.getDescripcionModulo());
-        
+        moduloN.setUrl(modulo.getUrl());
         em.persist(moduloN);
     }
 

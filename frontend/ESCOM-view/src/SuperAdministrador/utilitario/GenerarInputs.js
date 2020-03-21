@@ -248,7 +248,23 @@ const styles = {
     color: "gray",
     heigth: '3px',
     "&$labelFocused": {
-      color: "purple",
+      color: "#3F51B5",
+      fontSize: 16
+    }
+  },
+  labelFocused: {}
+};
+
+const stylesLogin = {
+  inputRoot: {
+    fontSize: 15
+  },
+  labelRoot: {
+    fontSize: 15,
+    color: "gray",
+    heigth: '3px',
+    "&$labelFocused": {
+      color: "#3F51B5",
       fontSize: 16
     }
   },
@@ -265,7 +281,7 @@ const stylesDate = {
     color: "gray",
     heigth: '3px',
     "&$labelFocused": {
-      color: "purple",
+      color: "#3F51B5",
       fontSize: 10
     }
   },
@@ -281,7 +297,7 @@ const stylesArea = {
     color: "gray",
     heigth: '3px',
     "&$labelFocused": {
-      color: "purple",
+      color: "#3F51B5",
       fontSize: 14
     }
   },
@@ -380,5 +396,6 @@ function renderArea({
 }
 
 export const generarInput = withStyles(styles)(renderAlgo);
+export const generarInputLogin = withStyles(stylesLogin)(renderAlgo);
 export const generarDate = withStyles(stylesDate)(renderDate);
 export const generarArea=withStyles(stylesArea)(renderArea);

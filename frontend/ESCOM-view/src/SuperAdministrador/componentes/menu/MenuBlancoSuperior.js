@@ -8,13 +8,13 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { Field, reduxForm } from 'redux-form'
 import RenderPasword from '../../utilitario/GenerarInputs';
 //imagenes
-import { requerido } from '../../utilitario/validacionCampos.js';
+import { requerido ,contrasena} from '../../utilitario/validacionCampos.js';
 import { withRouter } from 'react-router-dom';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import VpnKeyIcon from '@material-ui/icons/VpnKey';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
-import {contrasena} from '../../utilitario/validacionCampos.js';
+
 
 
 

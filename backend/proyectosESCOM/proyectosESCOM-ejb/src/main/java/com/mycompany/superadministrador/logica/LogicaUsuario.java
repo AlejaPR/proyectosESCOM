@@ -21,7 +21,12 @@ import com.mycompany.superadministrador.interfaces.UsuarioFacadeLocal;
 import com.mycompany.superadministrador.interfaces.UtilitarioFacadeLocal;
 import com.mycompany.superadministrador.seguridad.Seguridad;
 import com.mycompany.superadministrador.seguridad.Sesiones;
+import com.mycompany.superadministrador.utilitarios.EnvioCorreo;
 import com.mycompany.superadministrador.utilitarios.ExcepcionGenerica;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -31,6 +36,9 @@ import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.EJBTransactionRolledbackException;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionRolledbackLocalException;
+import javax.mail.MessagingException;
+import javax.mail.internet.AddressException;
 import javax.persistence.NoResultException;
 
 /**
@@ -89,6 +97,11 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
     private static final String TABLA = "TBL_USUARIO";
 
     /**
+     * Variable para el correo del superAdmin
+     */
+    private static final String CORREOSUPERADMIN = "admistrativosis6@gmail.com";
+
+    /**
      * Metodo encargado de la logica del login de usuario
      *
      * @param correo
@@ -98,7 +111,6 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
      */
     @Override
     public UsuarioPOJO loginUsuario(String correo, String contrasena) throws ExcepcionGenerica {
-
         try {
             String contrasenaEncriptada = Seguridad.generarHash(contrasena);
             List<Usuario> listaUsuario = usuarioDB.consultaLogin(correo, contrasenaEncriptada);
@@ -135,7 +147,7 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
                 }
 
             } else {
-                //Credenciales correctas 
+                //Credenciales correctas
                 UsuarioPOJO usuarioRespuesta = new UsuarioPOJO();
                 for (Usuario usuario : listaUsuario) {
                     if (usuario.getEstado().equals("Suspendido")) {
@@ -148,7 +160,12 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
                             } else {
                                 usuarioDB.cambiarIntentosConFecha(usuario);
                                 Seguridad token = new Seguridad();
-                                String[] actividad = usuarioDB.consultarActividadesUsuario(usuario.getIdUsuario());
+                                String[] actividad;
+                                if (usuario.getCorreoElectronico().equals(CORREOSUPERADMIN)) {
+                                    actividad = usuarioDB.consultarTodasActividades(usuario.getIdUsuario());
+                                } else {
+                                    actividad = usuarioDB.consultarActividadesUsuario(usuario.getIdUsuario());
+                                }
                                 Gson gson = new Gson();
                                 String actividades = gson.toJson(actividad);
                                 String tokencin = token.generarToken(usuario, actividades);
@@ -161,8 +178,14 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
                                 return usuarioRespuesta;
                             }
                         } else {
+                            usuarioDB.cambiarIntentosConFecha(usuario);
                             Seguridad token = new Seguridad();
-                            String[] actividad = usuarioDB.consultarActividadesUsuario(usuario.getIdUsuario());
+                            String[] actividad;
+                            if (usuario.getCorreoElectronico().equals(CORREOSUPERADMIN)) {
+                                actividad = usuarioDB.consultarTodasActividades(usuario.getIdUsuario());
+                            } else {
+                                actividad = usuarioDB.consultarActividadesUsuario(usuario.getIdUsuario());
+                            }
                             Gson gson = new Gson();
                             String actividades = gson.toJson(actividad);
                             String tokencin = token.generarToken(usuario, actividades);
@@ -232,9 +255,9 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer el registro del usuario");
         } catch (NoResultException ex) {
             throw new ExcepcionGenerica("No se encontro ningun dato coincidente");
-        }  catch (ExcepcionGenerica ex) {
+        } catch (ExcepcionGenerica ex) {
             throw new ExcepcionGenerica(ex.getMessage());
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
@@ -323,7 +346,12 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
     @Override
     public List<UsuarioPOJO> devolverUsuarios() throws ExcepcionGenerica {
         try {
-            List<UsuarioPOJO> usuariosResultado = usuarioDB.listarUsuarios();
+            List<UsuarioPOJO> usuariosResultado = new ArrayList<>();
+            for (UsuarioPOJO usuario : usuarioDB.listarUsuarios()) {
+                if (!usuario.getCorreoElectronico().equals(CORREOSUPERADMIN)) {
+                    usuariosResultado.add(usuario);
+                }
+            }
             if (!usuariosResultado.isEmpty()) {
                 return usuariosResultado;
             } else {
@@ -428,7 +456,7 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la modificacion del usuario");
         } catch (NoResultException ex) {
             throw new ExcepcionGenerica("El usuario no existe");
-        }catch (ExcepcionGenerica ex) {
+        } catch (ExcepcionGenerica ex) {
             throw new ExcepcionGenerica(ex.getMessage());
         } catch (Exception ex) {
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
@@ -752,12 +780,9 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
     @Override
     public String devolverCorreo(String token) throws ExcepcionGenerica {
         try {
-            Token tokenDevuelto = Seguridad.desencriptar(token);
-            String firma = tokenDevuelto.getFirma();
-            UsuarioPOJO usuario = usuarioDB.busquedaToken(firma);
-
-            if (usuario != null) {
-                return usuario.getCorreoElectronico();
+            String correo = Seguridad.desencriptar(token).getIssuer();
+            if (!correo.equals("")) {
+                return correo;
             } else {
                 throw new ExcepcionGenerica("No se encontro el usuario");
             }
@@ -771,6 +796,81 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
 
+    }
+
+    @Override
+    public String generarTokenRecuperarContrasena(String correoElectronico) throws ExcepcionGenerica {
+        try {
+            List<UsuarioPOJO> usuario = usuarioDB.buscarCorreoUsuario(correoElectronico);
+            if (!usuario.isEmpty()) {
+                Seguridad seguridad = new Seguridad();
+                String token = seguridad.generarTokenRecuperar(correoElectronico);
+                Token tokenDevuelto = Seguridad.desencriptar(token);
+                String firma = tokenDevuelto.getFirma();
+                if (usuarioDB.editarTokenRecuperarContrasena(firma, usuario.get(0).getId()) != 1) {
+                    throw new ExcepcionGenerica("Ocurrio un error en el servidor");
+                } else {
+                    EnvioCorreo e = new EnvioCorreo();
+                    String link = "http://localhost:3000/recuperarContrasena/" + token;
+                    e.enviarCorreo(e.devolverEstructuraHTML(usuario.get(0).getNombre(), link), correoElectronico, "Recuperar contraseña");
+                    return "Correo enviado";
+                }
+            } else {
+                throw new ExcepcionGenerica("Correo electronico no registrado");
+            }
+        } catch (ExcepcionGenerica ex) {
+            throw new ExcepcionGenerica(ex.getMessage());
+        } catch (AddressException ex) {
+            throw new ExcepcionGenerica("El correo esta en formato incorrecto");
+        } catch (MessagingException ex) {
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
+        } catch (Exception ex) {
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
+        }
+    }
+
+    @Override
+    public String validarTokenRecuperarContrasena(String token) throws ExcepcionGenerica {
+        try {
+            UsuarioPOJO resultado = usuarioDB.busquedaTokenRecuperar(Seguridad.desencriptar(token).getFirma());
+            return Seguridad.desencriptar(token).getIssuer();
+        } catch (MalformedJwtException | UnsupportedJwtException | SignatureException ex) {
+            throw new ExcepcionGenerica("Token en formato incorrecto");
+        } catch (ExpiredJwtException ex) {
+            throw new ExcepcionGenerica("Token vencido");
+        } catch (TransactionRolledbackLocalException ex) {
+            throw new ExcepcionGenerica("Enlace no valido");
+        } catch (Exception ex) {
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
+        }
+    }
+
+    @Override
+    public String cambiarContrasenaExterna(String nuevaContrasena, String token, DatosSolicitudPOJO datos) throws ExcepcionGenerica {
+        try {
+            String firma = Seguridad.desencriptar(token).getFirma();
+            UsuarioPOJO resultado = usuarioDB.busquedaTokenRecuperar(firma);
+            if (resultado == null) {
+                throw new ExcepcionGenerica("Usuario no registrado");
+            } else {
+                usuarioDB.cambiarClaveInterna(Seguridad.generarHash(nuevaContrasena), resultado);
+                usuarioDB.editarTokenRecuperarContrasena(null, resultado.getId());
+                datos.setTablaInvolucrada(TABLA);
+                datos.setIdUsuario(resultado.getId());
+                bitacora.registrarEnBitacora(datos);
+                return "cambiada";
+            }
+        } catch (ExcepcionGenerica ex) {
+            throw new ExcepcionGenerica(ex.getMessage());
+        } catch (MalformedJwtException | UnsupportedJwtException | SignatureException ex) {
+            throw new ExcepcionGenerica("Token en formato incorrecto");
+        } catch (ExpiredJwtException ex) {
+            throw new ExcepcionGenerica("Token vencido");
+        } catch (NoResultException ex) {
+            throw new ExcepcionGenerica("No se encontro un correo asociado");
+        } catch (Exception ex) {
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
+        }
     }
 
 }

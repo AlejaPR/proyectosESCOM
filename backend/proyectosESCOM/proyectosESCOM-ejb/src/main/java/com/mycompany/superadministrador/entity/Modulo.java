@@ -1,4 +1,5 @@
 package com.mycompany.superadministrador.entity;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -14,11 +15,12 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
+
 /**
- * Esta es la clase de la entidad modulo
- * Contiene todos los campos para la persistencia y consultas named query
- * @author Alejandra Pabon, Jeison Gaona
- * Universidad de Cundinamarca
+ * Esta es la clase de la entidad modulo Contiene todos los campos para la
+ * persistencia y consultas named query
+ *
+ * @author Alejandra Pabon, Jeison Gaona Universidad de Cundinamarca
  */
 @Entity
 @Table(name = "TBL_MODULO")
@@ -26,69 +28,93 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "consultaModulos", query = "SELECT m FROM Modulo m"),
     @NamedQuery(name = "consultaModuloEsp", query = "SELECT m from Modulo m WHERE m.idModulo=:idModulo"),
     @NamedQuery(name = "consultarExistenciaModulo", query = "SELECT m from Modulo m WHERE m.nombreModulo=:nombreModulo"),
-    @NamedQuery(name = "consultarAcronimo", query = "SELECT m from Modulo m WHERE m.acronimo=:acronimo")
-   
+    @NamedQuery(name = "consultarAcronimo", query = "SELECT m from Modulo m WHERE m.acronimo=:acronimo"),
+    @NamedQuery(name = "consultarExistenciaUrl", query = "SELECT m from Modulo m WHERE m.url=:urlModulo"),
+
 })
-public class Modulo implements Serializable{
-    
-    /**Variable id**/
+public class Modulo implements Serializable {
+
+    /**
+     * Variable id*
+     */
     @Id
     @Basic(optional = false)
     @Column(name = "PK_MOD_IDMODULO")
     private Integer idModulo;
-    
-    /**Variable ultima modificacion**/
+
+    /**
+     * Variable ultima modificacion*
+     */
     @Column(name = "MOD_ULTIMAMODIFICACION")
     @Temporal(TemporalType.TIMESTAMP)
     private Date ultimaModificacion;
-    
-    /**Variable estado de modulo**/
+
+    /**
+     * Variable estado de modulo*
+     */
     @Size(max = 20)
     @Column(name = "MOD_ESTADO")
     private String estado;
-    
-    /**Variable para almacenar logo de modulo**/
+
+    /**
+     * Variable para almacenar logo de modulo*
+     */
     @Lob
     @Column(name = "MOD_IMAGEN")
     private byte[] imagen;
-    
-    /**Variable nombre modulo**/
+
+    /**
+     * Variable nombre modulo*
+     */
     @Size(max = 40)
     @Column(name = "MOD_NOMBREMODULO")
     private String nombreModulo;
-    
-    /**Variable acronimo**/
+
+    /**
+     * Variable acronimo*
+     */
     @Size(max = 20)
     @Column(name = "MOD_ACRONIMO")
     private String acronimo;
-    
-    /**Variable url**/
+
+    /**
+     * Variable url*
+     */
     @Size(max = 40)
     @Column(name = "MOD_URL")
     private String url;
-    
-    /**Variable descripcion modulo**/
+
+    /**
+     * Variable descripcion modulo*
+     */
     @Size(max = 200)
     @Column(name = "MOD_DESCRIPCIONMODULO")
     private String descripcionModulo;
-    
-    /**Variable para la relacion con la entidad actividad**/
+
+    /**
+     * Variable para la relacion con la entidad actividad*
+     */
     @OneToMany(mappedBy = "modulo")
     private List<Actividad> listaActividad;
 
-    /**Constructor vacio de la clase**/    
-    public Modulo(){
-        
+    /**
+     * Constructor vacio de la clase*
+     */
+    public Modulo() {
+
     }
 
-    /**Constructor con variables
+    /**
+     * Constructor con variables
+     *
      * @param ultimaModificacion
      * @param estado
      * @param imagen
      * @param nombreModulo
      * @param acronimo
      * @param descripcionModulo
-     **/
+     *
+     */
     public Modulo(Date ultimaModificacion, String estado, byte[] imagen, String nombreModulo, String acronimo, String descripcionModulo) {
         this.ultimaModificacion = ultimaModificacion;
         this.estado = estado;
@@ -98,7 +124,9 @@ public class Modulo implements Serializable{
         this.descripcionModulo = descripcionModulo;
     }
 
-    /**Metodos get y set de variables**/
+    /**
+     * Metodos get y set de variables*
+     */
     public Integer getIdModulo() {
         return idModulo;
     }
@@ -130,7 +158,6 @@ public class Modulo implements Serializable{
     public void setImagen(byte[] imagen) {
         this.imagen = imagen;
     }
-
 
     public String getNombreModulo() {
         return nombreModulo;
@@ -172,6 +199,4 @@ public class Modulo implements Serializable{
         this.url = url;
     }
 
-    
-    
 }

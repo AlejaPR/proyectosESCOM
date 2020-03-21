@@ -1,4 +1,5 @@
 package com.mycompany.superadministrador.logica;
+
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import com.mycompany.superadministrador.POJO.ModuloPOJO;
 import com.mycompany.superadministrador.POJO.ReportePOJO;
@@ -14,41 +15,56 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
+
 /**
  * Esta es la clase encargada de la logica de bitacora
- * @author Alejandra Pabon, Jeison Gaona
- * Universidad de Cundinamarca
+ *
+ * @author Alejandra Pabon, Jeison Gaona Universidad de Cundinamarca
  */
 @Stateless
 public class LogicaBitacora implements LogicaBitacoraFacadeLocal {
 
-    /**Inyeccion de la interfaz de actividad**/
+    /**
+     * Inyeccion de la interfaz de actividad*
+     */
     @EJB
     ActividadFacadeLocal actividadDB;
 
-    /**Inyeccion de la interfaz de usuario**/
+    /**
+     * Inyeccion de la interfaz de usuario*
+     */
     @EJB
     UsuarioFacadeLocal usuarioDB;
 
-    /**Inyeccion de la interfaz de modulo**/
+    /**
+     * Inyeccion de la interfaz de modulo*
+     */
     @EJB
     ModuloFacadeLocal moduloDB;
 
-    /**Inyeccion de la interfaz de bitacora**/
+    /**
+     * Inyeccion de la interfaz de bitacora*
+     */
     @EJB
     BitacoraFacadeLocal bitacoraDB;
 
-    /**Inyeccion de la interfaz de logica usuario**/
+    /**
+     * Inyeccion de la interfaz de logica usuario*
+     */
     @EJB
     LogicaUsuarioFacadeLocal usuarioLogica;
 
-    /**Metodo que registra los datos en bitacora
+    /**
+     * Metodo que registra los datos en bitacora
+     *
      * @param solicitud
      */
     @Override
     public void registrarEnBitacora(DatosSolicitudPOJO solicitud) {
         try {
-            solicitud.setIdUsuario(usuarioLogica.devolverDatosUsuario(solicitud.getToken()).getId());
+            if (solicitud.getIdUsuario() == 0) {
+                solicitud.setIdUsuario(usuarioLogica.devolverDatosUsuario(solicitud.getToken()).getId());
+            }
             String actividadConAcronimo = solicitud.getOperacion();
             String actividadSinAcronimo = solicitud.getOperacion().substring(3);
             solicitud.setOperacion(actividadSinAcronimo);
@@ -72,7 +88,7 @@ public class LogicaBitacora implements LogicaBitacoraFacadeLocal {
         try {
 
             if (reporte.getIdBusqueda() == 1) {
-                UsuarioPOJO usuario =new UsuarioPOJO();
+                UsuarioPOJO usuario = new UsuarioPOJO();
                 try {
                     int documento = Integer.parseInt(reporte.getPalabraBusqueda());
                     usuario = usuarioDB.buscarUsuarioBitacoraDocumento(documento);
