@@ -27,9 +27,5 @@ public class PruebaEJBDocumental implements PruebaEJB {
     public UsuarioPOJO recuperarDatosUsuario(String token) {
         return utilitarioDB.devolverInformacionDeUsuario(token);
     }
-    
-    public void loggerRegistro(){
-       utilitarioDB.registroLogger("");
-    }
-    
+   
 }

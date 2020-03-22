@@ -33,10 +33,10 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import javax.ejb.EJB;
 import javax.ejb.EJBTransactionRolledbackException;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionRolledbackLocalException;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import javax.persistence.NoResultException;
@@ -95,6 +95,11 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
      * Variable para el registro en bitacora*
      */
     private static final String TABLA = "TBL_USUARIO";
+
+    /**
+     * Variable para el registro de logger*
+     */
+    private static final String CLASE = "Clase Logica Usuario";
 
     /**
      * Variable para el correo del superAdmin
@@ -203,14 +208,19 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             }
 
         } catch (NullPointerException ex) {
+            bitacora.registroLogger(CLASE, "Login usuario", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer el login del usuario");
         } catch (NoResultException ex) {
+            bitacora.registroLogger(CLASE, "Login usuario", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica("No se encontro ninguna credencial que coincida");
         } catch (ExcepcionGenerica ex) {
+            bitacora.registroLogger(CLASE, "Login usuario", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica(ex.getMessage());
         } catch (EJBTransactionRolledbackException ex) {
+            bitacora.registroLogger(CLASE, "Login usuario", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("No se encontro ninguna credencial que coincida");
         } catch (Exception ex) {
+            bitacora.registroLogger(CLASE, "Login usuario", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor ");
         }
         return null;
@@ -230,6 +240,7 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             usuarioDB.editarTokenCerrarSesion(" ", tokenDesencriptado.getIssuer());
             sesiones.getMapaSesiones().remove(token);
         } catch (NullPointerException ex) {
+            bitacora.registroLogger(CLASE, "Cerrar sesion", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error al momento de cerrar la sesion");
         }
     }
@@ -252,12 +263,16 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
                 throw new ExcepcionGenerica("El correo o numero de documento ya esta registrado");
             }
         } catch (NullPointerException ex) {
+            bitacora.registroLogger(CLASE, "Registrar usuario", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer el registro del usuario");
         } catch (NoResultException ex) {
+            bitacora.registroLogger(CLASE, "Registrar usuario", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica("No se encontro ningun dato coincidente");
         } catch (ExcepcionGenerica ex) {
+            bitacora.registroLogger(CLASE, "Registrar usuario", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica(ex.getMessage());
         } catch (Exception ex) {
+            bitacora.registroLogger(CLASE, "Registrar usuario", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
@@ -364,8 +379,10 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
                 throw new NoResultException("No se encontraron datos");
             }
         } catch (NullPointerException ex) {
+            bitacora.registroLogger(CLASE, "Devolver usuarios", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
+            bitacora.registroLogger(CLASE, "Devolver usuarios", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
@@ -388,8 +405,10 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
                 throw new NoResultException("No se encontraron datos");
             }
         } catch (NullPointerException ex) {
+            bitacora.registroLogger(CLASE, "Devolver documentos", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
+            bitacora.registroLogger(CLASE, "Devolver documentos", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
 
@@ -414,10 +433,13 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
                 throw new NoResultException("No se encontraron datos del usuario");
             }
         } catch (NoResultException ex) {
+            bitacora.registroLogger(CLASE, "Traer usuario cedula", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica("No se encontraron datos del usuario");
         } catch (NullPointerException ex) {
+            bitacora.registroLogger(CLASE, "Traer usuario cedula", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
+            bitacora.registroLogger(CLASE, "Traer usuario cedula", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
@@ -459,12 +481,16 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             }
 
         } catch (NullPointerException ex) {
+            bitacora.registroLogger(CLASE, "Editar usuario", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la modificacion del usuario");
         } catch (NoResultException ex) {
+            bitacora.registroLogger(CLASE, "Editar usuario", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica("El usuario no existe");
         } catch (ExcepcionGenerica ex) {
+            bitacora.registroLogger(CLASE, "Editar usuario", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica(ex.getMessage());
         } catch (Exception ex) {
+            bitacora.registroLogger(CLASE, "Editar usuario", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
 
@@ -496,10 +522,13 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
                 throw new NoResultException("No se encontraron datos del usuario");
             }
         } catch (NoResultException ex) {
+            bitacora.registroLogger(CLASE, "Cambiar estado usuario", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica("No se encontraron datos del usuario");
         } catch (NullPointerException ex) {
+            bitacora.registroLogger(CLASE, "Cambiar estado usuario", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
+            bitacora.registroLogger(CLASE, "Cambiar estado usuario", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
@@ -524,10 +553,13 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
                 throw new NoResultException("Error en la consulta");
             }
         } catch (NoResultException ex) {
+            bitacora.registroLogger(CLASE, "Listar actividades usuario", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica("No se encontraron datos del usuario");
         } catch (NullPointerException ex) {
+            bitacora.registroLogger(CLASE, "Listar actividades usuario", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
+            bitacora.registroLogger(CLASE, "Listar actividades usuario", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
@@ -553,10 +585,13 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
                 throw new NoResultException("Error en la consulta");
             }
         } catch (NoResultException ex) {
+            bitacora.registroLogger(CLASE, "Listar actividades no asociadas usuario", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica("No se encontraron datos del usuario");
         } catch (NullPointerException ex) {
+            bitacora.registroLogger(CLASE, "Listar actividades no asociadas usuario", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
+            bitacora.registroLogger(CLASE, "Listar actividades no asociadas usuario", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
@@ -585,10 +620,13 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
                 throw new NoResultException("No se encontraron datos del usuario");
             }
         } catch (NoResultException ex) {
+            bitacora.registroLogger(CLASE, "Eliminar actividad usuario", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica("No se encontraron datos del usuario");
         } catch (NullPointerException ex) {
+            bitacora.registroLogger(CLASE, "Eliminar actividad usuario", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
+            bitacora.registroLogger(CLASE, "Eliminar actividad usuario", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
@@ -615,10 +653,13 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
             actividad.getDatosSolicitud().setTablaInvolucrada(TABLA);
             bitacora.registrarEnBitacora(actividad.getDatosSolicitud());
         } catch (NullPointerException ex) {
+            bitacora.registroLogger(CLASE, "Asignar actividad usuario", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error al momento de asignar actividad al usuario");
         } catch (NoResultException ex) {
+            bitacora.registroLogger(CLASE, "Asignar actividad usuario", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica("No se encontro ningun dato coincidente");
         } catch (Exception ex) {
+            bitacora.registroLogger(CLASE, "Asignar actividad usuario", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
@@ -643,10 +684,13 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
                 throw new NoResultException("Error en la consulta");
             }
         } catch (NoResultException ex) {
+            bitacora.registroLogger(CLASE, "Listar actividades usuario activas", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica("No se encontraron datos del usuario");
         } catch (NullPointerException ex) {
+            bitacora.registroLogger(CLASE, "Listar actividades usuario activas", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
+            bitacora.registroLogger(CLASE, "Listar actividades usuario activas", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio una excepcion ");
         }
     }
@@ -709,10 +753,13 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
                 throw new ExcepcionGenerica("No hay permisos asociados");
             }
         } catch (ExcepcionGenerica ex) {
+            bitacora.registroLogger(CLASE, "Redireccion usuario", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica(ex.getMessage());
         } catch (NullPointerException ex) {
+            bitacora.registroLogger(CLASE, "Redireccion usuario", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
+            bitacora.registroLogger(CLASE, "Redireccion usuario", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
@@ -786,12 +833,16 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
                 throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
             }
         } catch (NullPointerException ex) {
+            bitacora.registroLogger(CLASE, "Cambiar clave interna", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (NoResultException ex) {
+            bitacora.registroLogger(CLASE, "Cambiar clave interna", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica("El usuario no existe");
         } catch (ExcepcionGenerica ex) {
+            bitacora.registroLogger(CLASE, "Cambiar clave interna", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica(ex.getMessage());
         } catch (Exception ex) {
+            bitacora.registroLogger(CLASE, "Cambiar clave interna", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
 
@@ -815,12 +866,16 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
                 throw new ExcepcionGenerica("No se encontro el usuario");
             }
         } catch (ExcepcionGenerica ex) {
+            bitacora.registroLogger(CLASE, "Devolver correo", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica(ex.getMessage());
         } catch (NullPointerException ex) {
+            bitacora.registroLogger(CLASE, "Devolver correo", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta de usuario");
         } catch (NoResultException ex) {
+            bitacora.registroLogger(CLASE, "Devolver correo", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("El usuario no existe");
         } catch (Exception ex) {
+            bitacora.registroLogger(CLASE, "Devolver correo", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
 
@@ -847,12 +902,16 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
                 throw new ExcepcionGenerica("Correo electronico no registrado");
             }
         } catch (ExcepcionGenerica ex) {
+            bitacora.registroLogger(CLASE, "Generar token recuperar contraseña", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica(ex.getMessage());
         } catch (AddressException ex) {
+            bitacora.registroLogger(CLASE, "Generar token recuperar contraseña", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("El correo esta en formato incorrecto");
         } catch (MessagingException ex) {
+            bitacora.registroLogger(CLASE, "Generar token recuperar contraseña", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         } catch (Exception ex) {
+            bitacora.registroLogger(CLASE, "Generar token recuperar contraseña", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
@@ -865,12 +924,16 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         } catch (MalformedJwtException | UnsupportedJwtException | SignatureException ex) {
             throw new ExcepcionGenerica("Token en formato incorrecto");
         } catch (ExpiredJwtException ex) {
+            bitacora.registroLogger(CLASE, "Validar token recuperar contraseña", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Token vencido");
         } catch (EJBTransactionRolledbackException ex) {
+            bitacora.registroLogger(CLASE, "Validar token recuperar contraseña", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Enlace no valido");
         } catch (NoResultException ex) {
+            bitacora.registroLogger(CLASE, "Validar token recuperar contraseña", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Enlace no valido");
         } catch (Exception ex) {
+            bitacora.registroLogger(CLASE, "Validar token recuperar contraseña", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
@@ -891,16 +954,22 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
                 return "cambiada";
             }
         } catch (ExcepcionGenerica ex) {
+            bitacora.registroLogger(CLASE, "Cambiar contraseña externa", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica(ex.getMessage());
         } catch (MalformedJwtException | UnsupportedJwtException | SignatureException ex) {
+            bitacora.registroLogger(CLASE, "Cambiar contraseña externa", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Token en formato incorrecto");
         } catch (ExpiredJwtException ex) {
+            bitacora.registroLogger(CLASE, "Cambiar contraseña externa", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Token vencido");
         } catch (NoResultException ex) {
+            bitacora.registroLogger(CLASE, "Cambiar contraseña externa", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica("No se encontro un correo asociado");
         } catch (EJBTransactionRolledbackException ex) {
+            bitacora.registroLogger(CLASE, "Cambiar contraseña externa", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Enlace no valido");
         } catch (Exception ex) {
+            bitacora.registroLogger(CLASE, "Cambiar contraseña externa", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }

@@ -10,8 +10,10 @@ import com.mycompany.superadministrador.interfaces.LogicaBitacoraFacadeLocal;
 import com.mycompany.superadministrador.interfaces.LogicaUsuarioFacadeLocal;
 import com.mycompany.superadministrador.interfaces.ModuloFacadeLocal;
 import com.mycompany.superadministrador.interfaces.UsuarioFacadeLocal;
+import com.mycompany.superadministrador.interfaces.UtilitarioFacadeLocal;
 import com.mycompany.superadministrador.utilitarios.ExcepcionGenerica;
 import java.util.List;
+import java.util.logging.Level;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
@@ -55,6 +57,17 @@ public class LogicaBitacora implements LogicaBitacoraFacadeLocal {
     LogicaUsuarioFacadeLocal usuarioLogica;
 
     /**
+     * Inyeccion de la interfaz utilitarios*
+     */
+    @EJB
+    UtilitarioFacadeLocal utilitario;
+
+    /**
+     * Variable para el registro de logger*
+     */
+    private static final String CLASE = "Clase Logica Bitacora";
+
+    /**
      * Metodo que registra los datos en bitacora
      *
      * @param solicitud
@@ -71,7 +84,7 @@ public class LogicaBitacora implements LogicaBitacoraFacadeLocal {
             solicitud.setIdModulo(actividadDB.buscarActividadPorNombre(actividadConAcronimo).get(0).getModulo().getIdModulo());
             bitacoraDB.registrarUsuario(solicitud);
         } catch (Exception e) {
-
+            utilitario.registroLogger(CLASE, "Registrar en bitacora", Level.SEVERE, e.getMessage());
         }
     }
 
@@ -143,10 +156,13 @@ public class LogicaBitacora implements LogicaBitacoraFacadeLocal {
                 }
             }
         } catch (NullPointerException ex) {
+            utilitario.registroLogger(CLASE, "Consultar", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta de bitacora");
         } catch (NoResultException ex) {
+            utilitario.registroLogger(CLASE, "Consultar", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica("No se encontro ningun dato coincidente");
         } catch (Exception ex) {
+            utilitario.registroLogger(CLASE, "Consultar", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
         return null;

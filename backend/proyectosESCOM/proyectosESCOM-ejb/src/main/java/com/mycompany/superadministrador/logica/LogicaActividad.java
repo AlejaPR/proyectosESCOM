@@ -1,4 +1,5 @@
 package com.mycompany.superadministrador.logica;
+
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import com.mycompany.superadministrador.entity.Actividad;
@@ -10,31 +11,46 @@ import com.mycompany.superadministrador.interfaces.UtilitarioFacadeLocal;
 import com.mycompany.superadministrador.utilitarios.ExcepcionGenerica;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
+
 /**
  * Esta es la clase encargada de la logica de usuario
- * @author Alejandra Pabon, Jeison Gaona
- * Universidad de Cundinamarca
+ *
+ * @author Alejandra Pabon, Jeison Gaona Universidad de Cundinamarca
  */
 @Stateless
 public class LogicaActividad implements LogicaActividadFacadeLocal {
 
-    /**Inyeccion de la interfaz de actividad**/
+    /**
+     * Inyeccion de la interfaz de actividad*
+     */
     @EJB
     ActividadFacadeLocal actividadDB;
 
-    /**Inyeccion de la interfaz de modulo**/
+    /**
+     * Inyeccion de la interfaz de modulo*
+     */
     @EJB
     ModuloFacadeLocal moduloDB;
 
-    /**Inyeccion de la interfaz de utilitario**/
+    /**
+     * Inyeccion de la interfaz de utilitario*
+     */
     @EJB
     UtilitarioFacadeLocal bitacora;
 
-    /**Variable para registro en bitacora**/
+    /**
+     * Variable para registro en bitacora*
+     */
     private static final String TABLA = "TBL_ACTIVIDAD";
+
+    /**
+     * Variable para el registro de logger*
+     */
+    private static final String CLASE = "Clase Logica Actividad";
 
     /**
      * Metodo que llama a la consulta para obtener la lista de actividades
@@ -67,8 +83,10 @@ public class LogicaActividad implements LogicaActividadFacadeLocal {
                 throw new NoResultException("No se encontraron datos");
             }
         } catch (NullPointerException ex) {
+            bitacora.registroLogger(CLASE, "Devolver actividades", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
+            bitacora.registroLogger(CLASE, "Devolver actividades", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
@@ -78,7 +96,7 @@ public class LogicaActividad implements LogicaActividadFacadeLocal {
      *
      *
      * @param actividad
-     * @return 
+     * @return
      * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
      *
      */
@@ -104,10 +122,13 @@ public class LogicaActividad implements LogicaActividadFacadeLocal {
                 throw new NoResultException("El modulo no se encuentra registrado");
             }
         } catch (NullPointerException ex) {
+            bitacora.registroLogger(CLASE, "Registrar actividad", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (NoResultException ex) {
+            bitacora.registroLogger(CLASE, "Registrar actividad", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica("No se encontro ningun dato coincidente");
         } catch (Exception ex) {
+            bitacora.registroLogger(CLASE, "Registrar actividad", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
@@ -127,10 +148,13 @@ public class LogicaActividad implements LogicaActividadFacadeLocal {
             bitacora.registrarEnBitacora(actividadEditar.getDatosSolicitud());
 
         } catch (NullPointerException ex) {
+            bitacora.registroLogger(CLASE, "Editar actividad", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la modificacion de la actividad");
         } catch (NoResultException ex) {
+            bitacora.registroLogger(CLASE, "Editar actividad", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica("La actividad no existe");
         } catch (Exception ex) {
+            bitacora.registroLogger(CLASE, "Editar actividad", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
 
@@ -161,18 +185,21 @@ public class LogicaActividad implements LogicaActividadFacadeLocal {
                 throw new NoResultException("No se encontraron datos de la actividad");
             }
         } catch (NoResultException ex) {
+            bitacora.registroLogger(CLASE, "Cambiar estado actividad", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica("No se encontraron datos de la actividad");
         } catch (NullPointerException ex) {
+            bitacora.registroLogger(CLASE, "Cambiar estado actividad", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
+            bitacora.registroLogger(CLASE, "Cambiar estado actividad", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
 
     }
 
     /**
-     * Metodo que llama a la consulta que devuelve los datos de la actividad especifica
-     * recibe el id
+     * Metodo que llama a la consulta que devuelve los datos de la actividad
+     * especifica recibe el id
      *
      * @param idActividad
      * @return
@@ -189,10 +216,13 @@ public class LogicaActividad implements LogicaActividadFacadeLocal {
                 throw new NoResultException("No se encontraron datos de la actividad");
             }
         } catch (NoResultException ex) {
+            bitacora.registroLogger(CLASE, "Traer actividad especifica", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica("No se encontraron datos de la actividad");
         } catch (NullPointerException ex) {
+            bitacora.registroLogger(CLASE, "Traer actividad especifica", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
+            bitacora.registroLogger(CLASE, "Traer actividad especifica", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }

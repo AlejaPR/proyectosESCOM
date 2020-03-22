@@ -12,6 +12,7 @@ import com.mycompany.superadministrador.interfaces.UtilitarioFacadeLocal;
 import com.mycompany.superadministrador.utilitarios.ExcepcionGenerica;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
@@ -46,6 +47,11 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
      * Variable para el registro de bitacora*
      */
     private static final String TABLA = "TBL_MODULO";
+    
+    /**
+     * Variable para el registro de logger*
+     */
+    private static final String CLASE = "Clase Logica Modulo";
 
     /**
      * Metodo que llama a la consulta para registrar el modulo
@@ -110,12 +116,16 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
                 throw new ExcepcionGenerica("El nombre de modulo ya esta registrado");
             }
         } catch (NullPointerException ex) {
+            bitacora.registroLogger(CLASE,"Registrar modulo", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer el registro de modulo");
         } catch (NoResultException ex) {
+            bitacora.registroLogger(CLASE,"Registrar modulo", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica("No se encontro ningun dato coincidente");
         } catch (ExcepcionGenerica ex) {
+            bitacora.registroLogger(CLASE,"Registrar modulo", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica(ex.getMessage());
         } catch (Exception ex) {
+           bitacora.registroLogger(CLASE,"Registrar modulo", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
@@ -137,8 +147,10 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
                 throw new NoResultException("No se encontraron datos");
             }
         } catch (NullPointerException ex) {
+           bitacora.registroLogger(CLASE,"Devolver modulos", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
+            bitacora.registroLogger(CLASE,"Devolver modulos", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
@@ -162,10 +174,13 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
                 throw new NoResultException("No se encontraron datos del modulo");
             }
         } catch (NoResultException ex) {
+           bitacora.registroLogger(CLASE,"Traer modulo id", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica("No se encontraron datos del modulo");
         } catch (NullPointerException ex) {
+           bitacora.registroLogger(CLASE,"Traer modulo id", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
+           bitacora.registroLogger(CLASE,"Traer modulo id", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
@@ -204,12 +219,16 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
             }
 
         } catch (NullPointerException ex) {
+           bitacora.registroLogger(CLASE,"Editar modulo", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la modificacion del modulo");
         } catch (NoResultException ex) {
+            bitacora.registroLogger(CLASE,"Editar modulo", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica("El modulo no existe");
         } catch (ExcepcionGenerica ex) {
+            bitacora.registroLogger(CLASE,"Editar modulo", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica(ex.getMessage());
         } catch (Exception ex) {
+            bitacora.registroLogger(CLASE,"Editar modulo", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
 
@@ -241,10 +260,13 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
                 throw new NoResultException("No se encontraron datos del modulo");
             }
         } catch (NoResultException ex) {
+            bitacora.registroLogger(CLASE,"Cambiar estado modulo", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica("No se encontraron datos del modulo");
         } catch (NullPointerException ex) {
+           bitacora.registroLogger(CLASE,"Cambiar estado modulo", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
+            bitacora.registroLogger(CLASE,"Cambiar estado modulo", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
@@ -269,10 +291,13 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
                 throw new NoResultException("No se encontraron datos del modulo");
             }
         } catch (NoResultException ex) {
+           bitacora.registroLogger(CLASE,"Listar actividades modulo", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica("No se encontraron datos del modulo");
         } catch (NullPointerException ex) {
+           bitacora.registroLogger(CLASE,"Listar actividades modulo", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
+            bitacora.registroLogger(CLASE,"Listar actividades modulo", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }
@@ -303,10 +328,13 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
             listaActividad.get(0).getDatosSolicitud().setTablaInvolucrada(TABLA);
             bitacora.registrarEnBitacora(listaActividad.get(0).getDatosSolicitud());
         } catch (NoResultException ex) {
+           bitacora.registroLogger(CLASE,"Cambiar estado actividades modulo", Level.WARNING, ex.getMessage());
             throw new ExcepcionGenerica("No se encontraron datos de la actividad");
         } catch (NullPointerException ex) {
+           bitacora.registroLogger(CLASE,"Cambiar estado actividades modulo", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
         } catch (Exception ex) {
+            bitacora.registroLogger(CLASE,"Cambiar estado actividades modulo", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
     }

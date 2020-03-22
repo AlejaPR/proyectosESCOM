@@ -2,6 +2,7 @@ package com.mycompany.superadministrador.interfaces;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
 import java.util.List;
+import java.util.logging.Level;
 /**
  * Esta es la interfaz para la clase utilitarios 
  * Contiene todos los metodos requeridos por los modulos
@@ -12,7 +13,7 @@ public interface UtilitarioFacadeLocal {
     
     public UsuarioPOJO devolverInformacionDeUsuario(String token);
     
-    public void registroLogger(String error);
+    public void registroLogger(String clase, String metodo, Level nivel, String error);
     
     public void registrarEnBitacora(DatosSolicitudPOJO solicitud);
     
