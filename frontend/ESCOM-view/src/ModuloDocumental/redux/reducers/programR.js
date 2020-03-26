@@ -1,0 +1,34 @@
+import { GET_LIST_PROGRAMS, GET_PROGRAM_ID, ADD_MESSAGE_ADD, ADD_MESSAGE_EDIT, ADD_PROGRAM, EDIT_PROGRAM, DISABLE_PROGRAM, ADD_MESSAGE_DISABLE } from '../actions/programA.js'
+
+const initialState = {
+    listProgramR: [],
+    programR: [],
+    messageEdit: '',
+    messageAdd: '',
+    messageDisable: ''
+}
+
+export function reducersProgram(state = initialState, action) {
+
+    switch (action.type) {
+        case GET_LIST_PROGRAMS:
+            return Object.assign({}, state, { listProgramR: action.payload });
+        case GET_PROGRAM_ID:
+            return Object.assign({}, state, { programR: action.payload });
+        case ADD_PROGRAM:
+            return Object.assign({}, state, { messageAdd: action.payload });
+        case EDIT_PROGRAM:
+            return Object.assign({}, state, { messageEdit: action.payload });
+        case DISABLE_PROGRAM:
+            return Object.assign({}, state, { messageDisable: action.payload });
+        case ADD_MESSAGE_EDIT:
+            return Object.assign({}, state, { messageEdit: action.payload });
+        case ADD_MESSAGE_ADD:
+            return Object.assign({}, state, { messageAdd: action.payload });
+        case ADD_MESSAGE_DISABLE:
+            return Object.assign({}, state, { messageDisable: action.payload });
+        default:
+            return state;
+    }
+
+}

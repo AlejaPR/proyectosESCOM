@@ -1,0 +1,300 @@
+import axios from 'axios';
+
+import { desencriptar } from '../../../SuperAdministrador/componentes/general/Encriptar.js';
+
+export const GET_ID_DOCUMENT = 'GET_ID_DOCUMENT';
+export const GET_DOCUMENT_ID = 'GET_DOCUMENTS_ID';
+export const ADD_DOCUMENT = 'ADD_DOCUMENT';
+export const GET_DOCUMENT_ID_EDIT = 'SHOW_DOCUMENT_ID_EDIT';
+export const EDIT_DOCUMENT = 'EDIT_DOCUMENT';
+export const DISABLE_DOCUMENT = 'DISABLE_DOCUMENT';
+export const GET_LIST_DOCUMENTS = 'GET_LIST_DOCUMENTS';
+
+export const ADD_MESSAGE_ADD = 'ADD_MESSAGE_ADD';
+export const ADD_MESSAGE_EDIT = 'ADD_MESSAGE_EDIT';
+export const ADD_MESSAGE_DISABLE = 'ADD_MESSAGE_DISABLE';
+export const ADD_MESSAGE = 'ADD_MESSAGE';
+
+const URL_BASE = 'http://localhost:9090/proyectosESCOM-web';
+const PERMIT_ID_DOCUMENT = 'MD_Obtiene id documento';
+const PERMIT_GET_DOCUMENT = 'MD_Obtiene documento';
+const PERMIT_DOCUMENT_EDIT = 'MD_Documento editar';
+const PERMIT_ADD_DOCUMENT = 'MD_Agregar documento';
+const PERMIT_EDIT_DOCUMENT = 'MD_Editar documento';
+const PERMIT_LIST_DOCUMENTS = 'MD_Lista documentos ';
+const PERMIT_DISABLE_DOCUMENT = 'MD_Inhabilitar documento ';
+
+export function addMessageEdit(mensaje) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: ADD_MESSAGE_EDIT,
+            mensaje: mensaje
+        });
+    };
+}
+
+export function addMessageAdd(mensaje) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: ADD_MESSAGE_ADD,
+            mensaje: mensaje
+        });
+    };
+}
+
+export function addMessageDisable(mensaje) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: ADD_MESSAGE_DISABLE,
+            mensaje: mensaje
+        });
+    };
+}
+
+
+//MD_Obtiene id documento
+export function getIdDocument(token, id) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMIT_ID_DOCUMENT
+    }
+    return (dispatch, getState) => {
+        axios.get(`${URL_BASE}/api/document/getIdDocument/${id}`, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: GET_ID_DOCUMENT,
+                    payload: response.data
+                });
+            }).catch(error => {
+                if (error.request.response === '') {
+                    dispatch({
+                        type: ADD_MESSAGE,
+                        payload: 'error server'
+                    });
+                } else {
+                    if (error.request) {
+                        dispatch({
+                            type: ADD_MESSAGE,
+                            payload: 'error server'
+                        });
+                    }
+                }
+
+            });
+    }
+}
+
+//MD_Obtiene documento
+export function getDocumentId(token, id) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMIT_GET_DOCUMENT
+    }
+    return (dispatch, getState) => {
+        axios.get(`${URL_BASE}/api/document/getDocument/${id}`, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: GET_DOCUMENT_ID,
+                    payload: response.data
+                });
+            }).catch(error => {
+                if (error.request.response === '') {
+                    dispatch({
+                        type: ADD_MESSAGE,
+                        payload: 'error server'
+                    });
+                } else {
+                    if (error.request) {
+                        dispatch({
+                            type: ADD_MESSAGE,
+                            payload: 'error server'
+                        });
+                    }
+                }
+
+            });
+    }
+}
+
+//MD_Documento editar
+export function getDocumentIdEdit(token, id) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMIT_DOCUMENT_EDIT
+    }
+    return (dispatch, getState) => {
+        axios.get(`${URL_BASE}/api/document/documentIdEdit/${id}`, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: GET_DOCUMENT_ID_EDIT,
+                    payload: response.data
+                });
+            }).catch(error => {
+                if (error.request.response === '') {
+                    dispatch({
+                        type: ADD_MESSAGE,
+                        payload: 'error server'
+                    });
+                } else {
+                    if (error.request) {
+                        dispatch({
+                            type: ADD_MESSAGE,
+                            payload: 'error server'
+                        });
+                    }
+                }
+
+            });
+    }
+}
+
+//MD_Agregar documento
+export function addDocument(token, documentN) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMIT_ADD_DOCUMENT
+    }
+    documentN.requestData = {
+        'ip': localStorage.getItem('Ip'),
+        'token': desencriptar(token),
+        'operacion': PERMIT_ADD_DOCUMENT
+    };
+    return (dispatch, getState) => {
+        axios.post(`${URL_BASE}/api/document/add`, documentN, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: ADD_DOCUMENT,
+                    payload: response.data.data
+                });
+            }).catch(error => {
+                if (error.request.response === '') {
+                    dispatch({
+                        type: ADD_MESSAGE_ADD,
+                        payload: 'error server'
+                    });
+                } else {
+                    if (error.request) {
+                        dispatch({
+                            type: ADD_MESSAGE_ADD,
+                            payload: 'error server'
+                        });
+                    }
+                }
+
+            });
+    }
+}
+
+//MD_Editar documento
+export function editDocument(token, documentE) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMIT_EDIT_DOCUMENT
+    }
+    documentE.requestData = {
+        'ip': localStorage.getItem('Ip'),
+        'token': desencriptar(token),
+        'operacion': PERMIT_EDIT_DOCUMENT
+    };
+    return (dispatch, getState) => {
+        axios.put(`${URL_BASE}/api/document/edit`, documentE, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: EDIT_DOCUMENT,
+                    payload: response.data.data
+                });
+            }).catch(error => {
+                if (error.request.response === '') {
+                    dispatch({
+                        type: ADD_MESSAGE_EDIT,
+                        payload: 'error server'
+                    });
+                } else {
+                    if (error.request) {
+                        dispatch({
+                            type: ADD_MESSAGE_EDIT,
+                            payload: 'error server'
+                        });
+                    }
+                }
+
+            });
+    }
+}
+
+//MD_Lista documentos 
+export function getListDocuments(token) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMIT_LIST_DOCUMENTS
+    }
+    return (dispatch, getState) => {
+        axios.get(`${URL_BASE}/api/document/list`, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: GET_LIST_DOCUMENTS,
+                    payload: response.data
+                });
+            }).catch(error => {
+                if (error.request.response === '') {
+                    dispatch({
+                        type: ADD_MESSAGE,
+                        payload: 'error server'
+                    });
+                } else {
+                    if (error.request) {
+                        dispatch({
+                            type: ADD_MESSAGE,
+                            payload: 'error server'
+                        });
+                    }
+                }
+
+            });
+    }
+}
+
+//MD_Inhabilitar documento 
+//disable the selected 
+export function disableDocument(token, id) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMIT_DISABLE_DOCUMENT
+    }
+    const requestData = {
+        'ip': localStorage.getItem('Ip'),
+        'token': desencriptar(token),
+        'operacion': PERMIT_DISABLE_DOCUMENT
+    };
+    return (dispatch, getState) => {
+        axios.put(`${URL_BASE}/api/document/disable/${id}`, requestData, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: DISABLE_DOCUMENT,
+                    payload: response.data.data
+                })
+            }).catch(error => {
+                if (error.request.response === '') {
+                    dispatch({
+                        type: ADD_MESSAGE_DISABLE,
+                        payload: 'error server'
+                    });
+                } else {
+                    if (error.request) {
+                        dispatch({
+                            type: ADD_MESSAGE_DISABLE,
+                            payload: 'error server'
+                        });
+                    }
+                }
+
+            });
+    }
+}

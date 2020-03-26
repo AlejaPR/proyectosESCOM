@@ -13,4 +13,19 @@
     <properties>
     </properties>
   </persistence-unit>
+  <persistence-unit name="documentaryUnit" transaction-type="JTA">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <jta-data-source>jdbc/dbescom</jta-data-source>
+    <class>com.mycompany.modulodocumental.entity.Activity</class>
+    <class>com.mycompany.modulodocumental.entity.Annex</class>
+    <class>com.mycompany.modulodocumental.entity.AnnexVersion</class>
+    <class>com.mycompany.modulodocumental.entity.Commentary</class>
+    <class>com.mycompany.modulodocumental.entity.Condition</class>
+    <class>com.mycompany.modulodocumental.entity.Document</class>
+    <class>com.mycompany.modulodocumental.entity.DocumentVersion</class>
+    <class>com.mycompany.modulodocumental.entity.Process</class>
+    <class>com.mycompany.modulodocumental.entity.Program</class>
+    <class>com.mycompany.modulodocumental.entity.UserCondition</class>
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+  </persistence-unit>
 </persistence>
