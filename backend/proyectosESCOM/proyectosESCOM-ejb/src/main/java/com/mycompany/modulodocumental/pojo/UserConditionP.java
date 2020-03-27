@@ -10,6 +10,7 @@ import java.io.Serializable;
 public class UserConditionP implements Serializable {
 
     private int id;
+    private int idCondition;
     private int idUser;
     private DatosSolicitudPOJO requestData;
 
@@ -32,6 +33,14 @@ public class UserConditionP implements Serializable {
         this.idUser = idUser;
     }
 
+    public int getIdCondition() {
+        return idCondition;
+    }
+
+    public void setIdCondition(int idCondition) {
+        this.idCondition = idCondition;
+    }
+    
     public DatosSolicitudPOJO getRequestData() {
         return requestData;
     }

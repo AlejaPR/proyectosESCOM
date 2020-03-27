@@ -15,7 +15,9 @@ import com.mycompany.modulodocumental.utility.GenericException;
 import com.mycompany.modulodocumental.view.ConditionView;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import com.mycompany.superadministrador.interfaces.UtilitarioFacadeLocal;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import javax.ejb.EJB;
@@ -47,7 +49,25 @@ public class ConditionLogic implements ConditionLogicFacadeLocal {
             List<Condition> list = conditionFacade.listConditionDoc(idD);
             List<ConditionP> data = new ArrayList<>();
             for (Condition con : list) {
-                ConditionP conP = new ConditionP(con.getId(), con.getName(), con.getDescription(), con.getState(), con.getStartDate(), con.getFinalDate());
+                SimpleDateFormat formatoUsuario = new SimpleDateFormat("yyyy-MM-dd");
+                Date startData = null;
+                String startDataN = null;
+                if (con.getStartDate() == null) {
+                    startData = null;
+                } else {
+                    startData = con.getStartDate();
+                    startDataN = formatoUsuario.format(startData);
+                }
+                Date finalData = null;
+                String finalDataN = null;
+                if (con.getFinalDate() == null) {
+                    finalData = null;
+                } else {
+                    finalData = con.getFinalDate();
+                    finalDataN = formatoUsuario.format(finalData);
+                }
+
+                ConditionP conP = new ConditionP(con.getId(), con.getName(), con.getDescription(), con.getState(), startDataN, finalDataN,1);
                 data.add(conP);
             }
             return data;
@@ -62,12 +82,29 @@ public class ConditionLogic implements ConditionLogicFacadeLocal {
     public ConditionP getConditionId(int id) throws GenericException {
         try {
             Condition con = conditionFacade.find(id);
+            SimpleDateFormat formatoUsuario = new SimpleDateFormat("yyyy-MM-dd");
+            Date startData = null;
+            String startDataN = null;
+            if (con.getStartDate() == null) {
+                startData = null;
+            } else {
+                startData = con.getStartDate();
+                startDataN = formatoUsuario.format(startData);
+            }
+            Date finalData = null;
+            String finalDataN = null;
+            if (con.getFinalDate() == null) {
+                finalData = null;
+            } else {
+                finalData = con.getFinalDate();
+                finalDataN = formatoUsuario.format(finalData);
+            }
             ConditionP data = new ConditionP(con.getId(),
                     con.getName(),
                     con.getDescription(),
                     con.getState(),
-                    con.getStartDate(),
-                    con.getFinalDate());
+                    startDataN,
+                    finalDataN,1);
             data.setProcess(con.getFkConProcess().getId());
             return data;
         } catch (Exception ex) {

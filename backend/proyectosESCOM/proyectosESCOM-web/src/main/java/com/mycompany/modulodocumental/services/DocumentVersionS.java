@@ -5,11 +5,8 @@
  */
 package com.mycompany.modulodocumental.services;
 
-import com.mycompany.modulodocumental.entity.DocumentVersion;
-import com.mycompany.modulodocumental.interfaces.DocumentVersionFacadeLocal;
 import com.mycompany.modulodocumental.interfaces.DocumentVersionLogicFacadeLocal;
 import com.mycompany.modulodocumental.pojo.DocumentVersionP;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;

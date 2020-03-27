@@ -8,10 +8,12 @@ export const GET_CONDITION_ID = 'GET_CONDITION_ID';
 export const ADD_CONDITION = 'ADD_CONDITION';
 export const EDIT_CONDITION = 'EDIT_CONDITION';
 export const DISABLE_CONDITION = 'DISABLE_CONDITION';
+export const APPROVE_CONDITION = 'APPROVE_CONDITION';
 
 export const ADD_MESSAGE_ADD = 'ADD_MESSAGE_ADD';
 export const ADD_MESSAGE_EDIT = 'ADD_MESSAGE_EDIT';
 export const ADD_MESSAGE_DISABLE = 'ADD_MESSAGE_DISABLE';
+export const ADD_MESSAGE_APPROVE = 'ADD_MESSAGE_APPROVE';
 export const ADD_MESSAGE = 'ADD_MESSAGE';
 
 const URL_BASE = 'http://localhost:9090/proyectosESCOM-web';
@@ -21,6 +23,7 @@ const PERMIT_GET_CONDITION = 'MD_Obtiene condicion';
 const PERMIT_ADD_CONDITION = 'MD_Agregar condicion';
 const PERMIT_EDIT_CONDITION = 'MD_Editar condicion';
 const PERMIT_DISABLE_CONDITION = 'MD_Inhabilitar condicion';
+const PERMIT_APPROVE_CONDITION = 'MD_Prueba';
 
 export function addMessageEdit(mensaje) {
   return (dispatch, getState) => {
@@ -44,6 +47,15 @@ export function addMessageDisable(mensaje) {
   return (dispatch, getState) => {
     dispatch({
       type: ADD_MESSAGE_DISABLE,
+      mensaje: mensaje
+    });
+  };
+}
+
+export function addMessageApprove(mensaje) {
+  return (dispatch, getState) => {
+    dispatch({
+      type: ADD_MESSAGE_APPROVE,
       mensaje: mensaje
     });
   };
@@ -268,3 +280,42 @@ export function disableCondition(token, id) {
       });
   }
 }
+
+//MD_Aprobar condicion
+export function approveCondition(token, id) {
+  const headers = {
+    'Content-Type': 'application/json',
+    'TokenAuto': desencriptar(token),
+    'Permiso': PERMIT_APPROVE_CONDITION
+  }
+  const requestData = {
+    'ip': localStorage.getItem('Ip'),
+    'token': desencriptar(token),
+    'operacion': PERMIT_APPROVE_CONDITION
+  };
+  return (dispatch, getState) => {
+    axios.put(`${URL_BASE}/api/condition/approve/${id}`,requestData, { headers: headers })
+      .then(response => {
+        dispatch({
+          type: APPROVE_CONDITION,
+          payload: response.data.data
+        })
+      }).catch(error => {
+        if (error.request.response === '') {
+          dispatch({
+            type: ADD_MESSAGE_APPROVE,
+            payload: 'error server'
+          });
+        } else {
+          if (error.request) {
+            dispatch({
+              type: ADD_MESSAGE_APPROVE,
+              payload: 'error server'
+            });
+          }
+        }
+
+      });
+  }
+}
+

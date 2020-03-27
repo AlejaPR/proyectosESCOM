@@ -94,7 +94,7 @@ class Add extends Component {
                                     <label for="form_control_1">Proceso: </label>
                                     <div className="row">
                                         <div className="col-sm-8">
-                                            <Field name="process" validate={[select]} className="bs-select form-control" component="select">
+                                            <Field name="process" validate={[select]} className="bs-select form-control" component={generarSelect}>
                                                 <option selected value="0">Seleccione...</option>
                                                 {this.loadList()}
                                             </Field>
@@ -115,6 +115,16 @@ class Add extends Component {
     }
 }
 
+const generarSelect = ({ input, label, type, meta: { touched, error }, children }) => (
+    <div>
+        <div>
+            <select {...input} className="form-control letra" style={{ height: "35px", fontSize: "13px" }}>
+                {children}
+            </select>
+            {touched && ((error && <span className="text-danger letra form-group">{error}</span>))}
+        </div>
+    </div>
+)
 
 const generarInput = ({ input, placeholder, label, type, meta: { touched, warning, error } }) => (
     <div>

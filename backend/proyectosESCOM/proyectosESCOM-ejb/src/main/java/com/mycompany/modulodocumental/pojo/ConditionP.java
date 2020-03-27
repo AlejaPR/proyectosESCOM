@@ -21,6 +21,8 @@ public class ConditionP implements Serializable {
     private int state;
     private Date startDate;
     private Date finalDate;
+    private String startDateS;
+    private String finalDateS;
     private int process;
     private DatosSolicitudPOJO requestData;
 
@@ -35,6 +37,16 @@ public class ConditionP implements Serializable {
         this.startDate = startDate;
         this.finalDate = finalDate;
     }
+    
+    public ConditionP(int id, String name, String description, int state, String startDateS, String finalDateS, int ol) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.state = state;
+        this.startDateS = startDateS;
+        this.finalDateS = finalDateS;
+    }
+
 
     public int getId() {
         return id;
@@ -100,4 +112,21 @@ public class ConditionP implements Serializable {
         this.requestData = requestData;
     }
 
+    public String getStartDateS() {
+        return startDateS;
+    }
+
+    public void setStartDateS(String startDateS) {
+        this.startDateS = startDateS;
+    }
+
+    public String getFinalDateS() {
+        return finalDateS;
+    }
+
+    public void setFinalDateS(String finalDateS) {
+        this.finalDateS = finalDateS;
+    }
+    
+    
 }

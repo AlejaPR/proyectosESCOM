@@ -2,12 +2,12 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { getUserCondition } from '../../../redux/actions/userConditionR.js';
+import { getConditionsUser } from '../../../redux/actions/userConditionA.js';
 
 class UserCondition extends Component {
 
     componentWillMount() {
-        this.props.getUserCondition(1,sessionStorage.getItem('documentId'));
+        this.props.getConditionsUser(localStorage.getItem('Token'), sessionStorage.getItem('documentId'));
     }
 
     save(id) {
@@ -71,9 +71,9 @@ function bar(value) {
 
 function mapStateToProps(state) {
     return {
-        conditions: state.userCondition.listUserConditionR
+        conditions: state.userCondition.listConditionsUserR
     }
 }
 
 
-export default withRouter(connect(mapStateToProps, {getUserCondition })(UserCondition));
+export default withRouter(connect(mapStateToProps, { getConditionsUser })(UserCondition));

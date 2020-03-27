@@ -2,19 +2,59 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { confirmAlert } from 'react-confirm-alert';
+import { ToastContainer, toast } from 'react-toastify';
 import { getListActivities } from '../../../redux/actions/activityA.js';
-import { getConditionId } from '../../../redux/actions/conditionA.js';
+import { getConditionId, approveCondition, addMessageApprove } from '../../../redux/actions/conditionA.js';
 
 
 class ProcessCondition extends Component {
     componentWillMount() {
-        this.props.getConditionId(localStorage.getItem('Token'),sessionStorage.getItem('condition'))
-        this.props.getListActivities(localStorage.getItem('Token'),sessionStorage.getItem('condition'))
+        this.props.getConditionId(localStorage.getItem('Token'), sessionStorage.getItem('condition'))
+        this.props.getListActivities(localStorage.getItem('Token'), sessionStorage.getItem('condition'))
+    }
+
+    componentDidUpdate() {
+        if (this.props.messageApprove !== '') {
+            switch (this.props.messageApprove) {
+                case 'approve':
+                    toast.success('Se ha aprobado con éxito.');
+                    this.props.addMessageApprove('');
+                    this.props.history.push('/ProcessProgram')
+                    break;
+                case 'error server':
+                    toast.error('Se presento un error, intentelo mas tarde.');
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     save(id) {
         sessionStorage.setItem('activity', id)
         this.props.history.push('/ProcessActivity')
+    }
+
+    approveCondition(id) {
+        confirmAlert({
+          title: 'Aprobar condición',
+          message: '¿Esta seguro que quiere dar como aprobada esta condición?.',
+          buttons: [
+            {
+              label: 'Yes',
+              onClick: () => {
+                  this.props.approveCondition(localStorage.getItem('Token'),id)
+              }
+            },
+            {
+              label: 'No',
+              onClick: () => {
+
+              }
+            }
+          ]
+        });
     }
 
 
@@ -38,9 +78,13 @@ class ProcessCondition extends Component {
     render() {
         return (
             <div className="container color">
+                <ToastContainer />
                 <br />
                 <div className="card">
                     <div className="card-body">
+                        <button type="button" onClick={() => this.approveCondition(sessionStorage.getItem('condition'))} className="btn text-light btn-sm float-right naranja " >
+                            Aprobar
+                        </button>
                         <h3 className="card-title text-center" style={{ textTransform: 'uppercase' }}><strong>{this.props.conditionPro.name}</strong></h3>
                         <h5><strong>Descripcion</strong></h5>
                         <p>{this.props.conditionPro.description}</p>
@@ -73,8 +117,9 @@ class ProcessCondition extends Component {
 function mapStateToProps(state) {
     return {
         conditionPro: state.condition.conditionR,
-        listActivities: state.activity.listActivityR
+        listActivities: state.activity.listActivityR,
+        messageApprove: state.condition.messageApprove
     }
 }
 
-export default withRouter(connect(mapStateToProps, { getConditionId, getListActivities })(ProcessCondition));
+export default withRouter(connect(mapStateToProps, { getConditionId, getListActivities, approveCondition, addMessageApprove })(ProcessCondition));

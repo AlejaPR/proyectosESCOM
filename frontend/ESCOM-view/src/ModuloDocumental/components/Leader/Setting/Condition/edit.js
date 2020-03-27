@@ -143,8 +143,8 @@ function mapStateToProps(state) {
             name: state.condition.conditionR.name,
             description: state.condition.conditionR.description,
             process: state.condition.conditionR.process,
-            startDate: state.condition.conditionR.startDate,
-            finalDate: state.condition.conditionR.finalDate
+            startDate: state.condition.conditionR.startDateS,
+            finalDate: state.condition.conditionR.finalDateS
         }
     }
 

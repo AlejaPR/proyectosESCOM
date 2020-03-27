@@ -33,4 +33,6 @@ public interface UserConditionFacadeLocal {
     
     List<Condition> listCondition(int user, int document);
     
+    List<UserCondition> listUsersCondition(int id);
+       
 }

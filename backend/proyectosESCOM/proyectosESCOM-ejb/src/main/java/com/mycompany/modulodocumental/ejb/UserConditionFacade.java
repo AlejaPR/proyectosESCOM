@@ -41,10 +41,18 @@ public class UserConditionFacade extends AbstractFacade<UserCondition> implement
         queryUser.setParameter(1, user);
         queryUser.setParameter(2, document);
         List<UserCondition> auxUser = queryUser.getResultList();
-        for (UserCondition con : auxUser) {           
+        for (UserCondition con : auxUser) {
             list.add(con.getFkUcCondition());
         }
         return list;
+    }
+
+    @Override
+    public List<UserCondition> listUsersCondition(int id) {
+        Query query = em.createQuery("SELECT u FROM UserCondition u WHERE u.fkUcCondition.id =?1");
+        query.setParameter(1, id);
+        List<UserCondition> data = query.getResultList();
+        return data;
     }
 
 }
