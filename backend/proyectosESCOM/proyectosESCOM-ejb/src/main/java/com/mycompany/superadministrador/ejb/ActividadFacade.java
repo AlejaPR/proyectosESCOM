@@ -63,7 +63,7 @@ public class ActividadFacade extends AbstractFacade<Actividad> implements Activi
         for (Actividad act : listaActividades) {
             String actividadConAcronimo=act.getNombreActividad();
             String actividadSinAcronimo=actividadConAcronimo.substring(3);
-            respuesta.add(new ActividadPOJO(act.getIdActividad(), actividadSinAcronimo,act.getModulo().getIdModulo(), act.getEstado()));
+            respuesta.add(new ActividadPOJO(act.getIdActividad(), actividadSinAcronimo,act.getModulo().getIdModulo(),act.getModulo().getNombreModulo(), act.getEstado()));
         }
         return respuesta;
     }

@@ -7,7 +7,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import Defecto from '../../imagenes/defecto.jpg';
 import PropTypes from "prop-types";
-import { requerido, validacionCuarentaCaracteres, validacionDoscientosCaracteres, validacionTreintaCaracteres } from '../../utilitario/validacionCampos.js';
+import { requerido, validacionCuarentaCaracteres, dosPalabras,sinEspacios,validacionDoscientosCaracteres, validacionTreintaCaracteres } from '../../utilitario/validacionCampos.js';
 import AddIcon from '@material-ui/icons/Add';
 import PhotoCamera from '@material-ui/icons/PhotoCamera';
 import { generarInput, generarArea, generarInputStart } from '../../utilitario/GenerarInputs.js'
@@ -230,12 +230,12 @@ class PopUpModulo extends React.Component {
               />
               <div className="row">
                 <div className="col-sm-12">
-                  <Field name="nombre" validate={[requerido, validacionCuarentaCaracteres]} component={generarInput} label="Nombre" />
+                  <Field name="nombre" validate={[requerido,dosPalabras, validacionCuarentaCaracteres]} component={generarInput} label="Nombre" />
                 </div>
               </div>
               <div className="row">
                 <div className="col-sm-12">
-                  <Field name="link" validate={[requerido, validacionTreintaCaracteres]} component={generarInputStart} label="Link de acceso" />
+                  <Field name="link" validate={[requerido,sinEspacios, validacionTreintaCaracteres]} component={generarInputStart} label="Link de acceso" />
                 </div>
               </div>
               <div className="row">

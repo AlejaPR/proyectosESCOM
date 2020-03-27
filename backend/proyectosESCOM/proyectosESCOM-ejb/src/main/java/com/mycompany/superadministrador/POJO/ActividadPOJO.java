@@ -63,13 +63,15 @@ public class ActividadPOJO {
      * @param idActividad
      * @param nombre
      * @param idModulo
+     * @param moduloActividad
      * @param estado
      */
-    public ActividadPOJO(int idActividad, String nombre, int idModulo, String estado) {
+    public ActividadPOJO(int idActividad, String nombre, int idModulo,String moduloActividad, String estado) {
         this.idActividad = idActividad;
         this.nombre = nombre;
         this.idModulo = idModulo;
         this.estado = estado;
+        this.moduloActividad = moduloActividad;
     }
 
     /**Metodos get y set de las variables*/

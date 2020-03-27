@@ -7,7 +7,7 @@ import { NotificationContainer, NotificationManager } from 'react-notifications'
 import { withRouter } from 'react-router-dom';
 import { campo, generarInput, generarArea, generarInputStart } from '../../utilitario/GenerarInputs.js';
 import PropTypes from "prop-types";
-import { requerido, validacionCuarentaCaracteres, validacionDoscientosCaracteres, validacionTreintaCaracteres } from '../../utilitario/validacionCampos.js';
+import { requerido, validacionCuarentaCaracteres, dosPalabras,sinEspacios,validacionDoscientosCaracteres, validacionTreintaCaracteres } from '../../utilitario/validacionCampos.js';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
@@ -292,7 +292,7 @@ class EditarModulo extends React.Component {
                                                 <td colspan="2" style={{ width: "65%", paddingRight: "39px", paddingLeft: "39px" }}>
                                                     <div className="row">
                                                         <div className="col-sm-12">
-                                                            <Field name="url" validate={[requerido, validacionTreintaCaracteres]} component={generarInputStart} label="Link de acceso" />
+                                                            <Field name="url" validate={[requerido,sinEspacios, validacionTreintaCaracteres]} component={generarInputStart} label="Link de acceso" />
                                                         </div>
                                                     </div>
                                                 </td>
@@ -318,7 +318,7 @@ class EditarModulo extends React.Component {
                                                 <td colspan="2" style={{ width: "65%", paddingRight: "39px", paddingLeft: "39px" }}>
                                                     <div className="row">
                                                         <div className="col-sm-12">
-                                                            <Field name="nombre" validate={[requerido, validacionCuarentaCaracteres]} component={generarInput} label="Nombre" />
+                                                            <Field name="nombre" validate={[requerido,dosPalabras, validacionCuarentaCaracteres]} component={generarInput} label="Nombre" />
                                                         </div>
                                                     </div>
                                                 </td>

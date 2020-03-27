@@ -268,7 +268,8 @@ class AsignarActividadUsuario extends React.Component {
                                                 }
                                             }}
                                             columns={[
-                                                { title: 'Nombre de la actividad', field: 'nombre', headerStyle: estiloCabecera, cellStyle: estiloFila }
+                                                { title: 'Nombre de la actividad', field: 'nombre', headerStyle: estiloCabecera, cellStyle: estiloFila },
+                                                { title: 'Modulo', field: 'moduloActividad', headerStyle: estiloCabecera, cellStyle: estiloFila }
                                             ]}
                                             data={this.props.actividades}
                                             options={{

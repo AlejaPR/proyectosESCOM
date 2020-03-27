@@ -141,6 +141,7 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
         modulo.setNombreModulo(moduloEditar.getNombreModulo());
         modulo.setDescripcionModulo(moduloEditar.getDescripcionModulo());
         modulo.setAcronimo(moduloEditar.getAcronimo());
+        modulo.setUrl(moduloEditar.getUrl());
         em.merge(modulo);
     }
     
