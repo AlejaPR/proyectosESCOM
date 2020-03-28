@@ -29,7 +29,10 @@ public interface DocumentVersionFacadeLocal {
     List<DocumentVersion> findRange(int[] range);
 
     int count();
-    
-    List<DocumentVersion> listVersions(int id);
+
+    List<DocumentVersion> listCurrentVersions(int IdDocument);
+
+    List<DocumentVersion> listOldVersions(int idProgram);
     
 }
+

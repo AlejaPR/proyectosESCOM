@@ -14,7 +14,7 @@ import { reducersDocument } from '../../ModuloDocumental/redux/reducers/document
 import { reducersAnnexVersion } from '../../ModuloDocumental/redux/reducers/annexVersionR'
 import { reducersDocumentVersion } from '../../ModuloDocumental/redux/reducers/documentVersionR.js';
 import { reducersUserCondition } from "../../ModuloDocumental/redux/reducers/userConditionR.js";
-
+import { reducersCommentary } from "../../ModuloDocumental/redux/reducers/commentaryR.js";
 
 const rootReducer = combineReducers({
     rep:reducerReporte,
@@ -31,6 +31,7 @@ const rootReducer = combineReducers({
     annexVersion: reducersAnnexVersion,
     documentVersion: reducersDocumentVersion,
     userCondition: reducersUserCondition,
+    commentary: reducersCommentary,
     form:formReducer
 })
 

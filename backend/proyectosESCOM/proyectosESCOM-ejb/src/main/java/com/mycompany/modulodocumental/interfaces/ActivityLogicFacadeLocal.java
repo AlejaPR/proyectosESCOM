@@ -18,18 +18,22 @@ import javax.ejb.Local;
 @Local
 public interface ActivityLogicFacadeLocal {
 
-    public ActivityP getActivityId(int id) throws GenericException;
+    ActivityP getActivityId(int id) throws GenericException;
 
-    public void addActivity(ActivityP activitiy) throws GenericException;
+    void addActivity(ActivityP activitiy) throws GenericException;
 
-    public void editActivity(ActivityP activity) throws GenericException;
+    void editActivity(ActivityP activity) throws GenericException;
 
-    public List<ActivityP> listActivities(int id) throws GenericException;
+    List<ActivityP> listActivities(int id) throws GenericException;
 
-    public void addInformation(ActivityP activity) throws GenericException;
+    void addInformation(ActivityP activity) throws GenericException;
 
-    public String allInformation(int id) throws GenericException;
+    String allInformation(int id) throws GenericException;
 
-    public void disableActivity(int id, DatosSolicitudPOJO dataR) throws GenericException;
+    void disableActivity(int id, DatosSolicitudPOJO dataR) throws GenericException;
+
+    void changeStatus(ActivityP activity) throws GenericException;
+
+    void associateAnnex(int activity, int annex, DatosSolicitudPOJO dataS) throws GenericException;
 
 }

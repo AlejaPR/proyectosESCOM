@@ -7,6 +7,7 @@ export const GET_ACTIVITY_ID = 'SHOW_ACTIVITY_ID';
 export const ADD_ACTIVITY = 'ADD_ACTIVITY';
 export const EDIT_ACTIVITY = 'EDIT_ACTIVITY';
 export const DELETE_ACTIVITY = 'DELETE_ACTIVITY';
+export const ASSOCIATE_ANNEX = 'ASSOCIATE_ANNEX';
 
 export const ADD_INFORMATION = 'ADD_INFORMATION';
 export const GET_ALL_INFORMATION = 'GET_ALL_INFORMATION';
@@ -14,6 +15,7 @@ export const GET_ALL_INFORMATION = 'GET_ALL_INFORMATION';
 export const ADD_MESSAGE_EDIT = 'ADD_MESSAGE_EDIT';
 export const ADD_MESSAGE_ADD = 'ADD_MESSAGE_ADD';
 export const ADD_MESSAGE_DELETE = 'ADD_MESSAGE_DELETE';
+export const ADD_MESSAGE_ASSOCIATE = 'ADD_MESSAGE_ASSOCIATE';
 export const ADD_MESSAGE = 'ADD_MESSAGE';
 
 const URL_BASE = 'http://localhost:9090/proyectosESCOM-web';
@@ -23,6 +25,7 @@ const PERMIT_ADD_ACTIVITY = 'MD_Agregar actividad';
 const PERMIT_EDIT_ACTIVITY = 'MD_Editar actividad';
 const PERMIT_DELETE_ACTIVITY = 'MD_Eliminar actividad';
 const PERMIT_ADD_INFORMATION = 'MD_Agregar informacion';
+const PERMIT_ASSOCIATE_ANNEX = 'MD_Prueba';
 const PERMIT_ALL_INFORMATION = 'MD_toda informacion';
 
 export function addMessageEdit(mensaje) {
@@ -47,6 +50,15 @@ export function addMessageDelete(mensaje) {
     return (dispatch, getState) => {
         dispatch({
             type: ADD_MESSAGE_DELETE,
+            mensaje: mensaje
+        });
+    };
+}
+
+export function addMessageAssociate(mensaje) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: ADD_MESSAGE_ASSOCIATE,
             mensaje: mensaje
         });
     };
@@ -209,7 +221,7 @@ export function deleteActivity(token, id) {
         'operacion': PERMIT_DELETE_ACTIVITY
     };
     return (dispatch, getState) => {
-        axios.delete(`${URL_BASE}/api/activity/delete/${id}`,requestData, { headers: headers })
+        axios.post(`${URL_BASE}/api/activity/delete/${id}`,requestData, { headers: headers })
             .then(response => {
                 dispatch({
                     type: DELETE_ACTIVITY,
@@ -241,6 +253,11 @@ export function addInformation(token, info) {
         'TokenAuto': desencriptar(token),
         'Permiso': PERMIT_ADD_INFORMATION
     }
+    info.requestData = {
+        'ip': localStorage.getItem('Ip'),
+        'token': desencriptar(token),
+        'operacion': PERMIT_ADD_INFORMATION
+    };
     return (dispatch, getState) => {
         axios.put(`${URL_BASE}/api/activity/addInformation`, info, { headers: headers })
             .then(response => {
@@ -258,6 +275,44 @@ export function addInformation(token, info) {
                     if (error.request) {
                         dispatch({
                             type: ADD_MESSAGE,
+                            payload: 'error server'
+                        });
+                    }
+                }
+
+            });
+    }
+}
+
+//MD_Asociar anexo
+export function associateAnnex(token, activity,annexo) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMIT_ASSOCIATE_ANNEX
+    }
+    const requestData = {
+        'ip': localStorage.getItem('Ip'),
+        'token': desencriptar(token),
+        'operacion': PERMIT_ASSOCIATE_ANNEX
+    };
+    return (dispatch, getState) => {
+        axios.put(`${URL_BASE}/api/activity/associate/${activity}/${annexo}`, requestData, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: ASSOCIATE_ANNEX,
+                    payload: response.data.data
+                });
+            }).catch(error => {
+                if (error.request.response === '') {
+                    dispatch({
+                        type: ADD_MESSAGE_ASSOCIATE,
+                        payload: 'error server'
+                    });
+                } else {
+                    if (error.request) {
+                        dispatch({
+                            type: ADD_MESSAGE_ASSOCIATE,
                             payload: 'error server'
                         });
                     }

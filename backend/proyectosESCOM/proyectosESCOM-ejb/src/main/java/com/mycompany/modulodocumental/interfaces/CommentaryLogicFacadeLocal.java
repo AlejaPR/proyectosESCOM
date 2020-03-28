@@ -5,6 +5,10 @@
  */
 package com.mycompany.modulodocumental.interfaces;
 
+import com.mycompany.modulodocumental.pojo.CommentaryP;
+import com.mycompany.modulodocumental.utility.GenericException;
+import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -13,5 +17,11 @@ import javax.ejb.Local;
  */
 @Local
 public interface CommentaryLogicFacadeLocal {
-    
+
+    List<CommentaryP> listCommentary(int activity) throws GenericException;
+
+    void deleteCommentary(int id, DatosSolicitudPOJO dataS) throws GenericException;
+
+    void addCommentary(CommentaryP commentary) throws GenericException;
+
 }

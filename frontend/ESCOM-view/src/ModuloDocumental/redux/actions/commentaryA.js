@@ -1,0 +1,142 @@
+import axios from 'axios';
+import { desencriptar } from '../../../SuperAdministrador/componentes/general/Encriptar.js';
+
+export const ADD_COMMENTARY = 'ADD_COMMENTARY';
+export const GET_LIST_COMMENTS = 'GET_LIST_COMMENTS';
+export const DELETE_COMMENTARY = 'DELETE_COMMENTARY';
+
+export const ADD_MESSAGE_ADD = 'ADD_MESSAGE_ADD';
+export const ADD_MESSAGE_DELETE = 'ADD_MESSAGE_DELETE';
+export const ADD_MESSAGE = 'ADD_MESSAGE';
+
+const URL_BASE = 'http://localhost:9090/proyectosESCOM-web';
+const PERMIT_ADD_COMMENTARY = 'MD_Prueba';
+const PERMIT_LIST_COMMENTS= 'MD_Prueba';
+const PERMIT_DELETE_COMMENTARY = 'MD_Prueba';
+
+
+
+export function addMessageAdd(mensaje) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: ADD_MESSAGE_ADD,
+            mensaje: mensaje
+        });
+    };
+}
+
+export function addMessageDelete(mensaje) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: ADD_MESSAGE_DELETE,
+            mensaje: mensaje
+        });
+    };
+}
+
+//MD_Agregar comentario
+export function addCommentary(token, commentaryN) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMIT_ADD_COMMENTARY
+    }
+    commentaryN.requestData = {
+        'ip': localStorage.getItem('Ip'),
+        'token': desencriptar(token),
+        'operacion': PERMIT_ADD_COMMENTARY
+    };
+    return (dispatch, getState) => {
+        axios.post(`${URL_BASE}/api/commentary/add`, commentaryN, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: ADD_COMMENTARY,
+                    payload: response.data.data
+                });
+            }).catch(error => {
+                if (error.request.response === '') {
+                    dispatch({
+                        type: ADD_MESSAGE_ADD,
+                        payload: 'error server'
+                    });
+                } else {
+                    if (error.request) {
+                        dispatch({
+                            type: ADD_MESSAGE_ADD,
+                            payload: 'error server'
+                        });
+                    }
+                }
+            });
+    }
+}
+
+
+//MD_Lista comentarios
+export function getListComments(token, id) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMIT_LIST_COMMENTS
+    }
+    return (dispatch, getState) => {
+        axios.get(`${URL_BASE}/api/commentary/list/${id}`, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: GET_LIST_COMMENTS,
+                    payload: response.data
+                });
+            }).catch(error => {
+                if (error.request.response === '') {
+                    dispatch({
+                        type: ADD_MESSAGE,
+                        payload: 'error server'
+                    });
+                } else {
+                    if (error.request) {
+                        dispatch({
+                            type: ADD_MESSAGE,
+                            payload: 'error server'
+                        });
+                    }
+                }
+            });
+    }
+}
+
+//MD_Lista comentarios
+export function deleteCommentary(token, id) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMIT_DELETE_COMMENTARY
+    }
+    const requestData = {
+        'ip': localStorage.getItem('Ip'),
+        'token': desencriptar(token),
+        'operacion': PERMIT_DELETE_COMMENTARY
+    };
+    return (dispatch, getState) => {
+        axios.post(`${URL_BASE}/api/commentary/delete/${id}`, requestData , { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: DELETE_COMMENTARY,
+                    payload: response.data.data
+                });
+            }).catch(error => {
+                if (error.request.response === '') {
+                    dispatch({
+                        type: ADD_MESSAGE_DELETE,
+                        payload: 'error server'
+                    });
+                } else {
+                    if (error.request) {
+                        dispatch({
+                            type: ADD_MESSAGE_DELETE,
+                            payload: 'error server'
+                        });
+                    }
+                }
+            });
+    }
+}

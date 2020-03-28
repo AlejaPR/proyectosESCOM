@@ -126,7 +126,7 @@ class MenuLateral extends Component {
 						</Link>
 					</li>
 					<li className="nav-item ">
-						<Link to="/" name="hoverInicio" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
+						<Link to="/ViewCalendar" name="hoverInicio" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
 							style={this.state.hoverInicio ? fondoHover : fondoMenuLateral} >
 							<img src={next} alt="" width="15" height="15" />
 							<span className="title">Cronograma</span>

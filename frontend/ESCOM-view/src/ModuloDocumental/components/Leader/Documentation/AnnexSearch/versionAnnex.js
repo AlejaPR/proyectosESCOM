@@ -9,8 +9,8 @@ import { Link } from 'react-router-dom';
 class versionAnnex extends Component {
 
     componentWillMount() {
-        this.props.getAnnexId(sessionStorage.getItem('annex'))
-        this.props.getAnnexVersions(sessionStorage.getItem('annex'))
+        this.props.getAnnexId(localStorage.getItem('Token'),sessionStorage.getItem('annex'))
+        this.props.getAnnexVersions(localStorage.getItem('Token'),sessionStorage.getItem('annex'))
     }
 
     loadTable() {
@@ -19,8 +19,7 @@ class versionAnnex extends Component {
                 <tr key={annex.id}>
                     <td>{annex.description}</td>
                     <td>{'V-'+annex.version}</td>
-                    <td>{annex.state === 1 ? 'activo' : 'no activo'}
-                    </td>
+                    <td>{annex.state === 1 ? 'activo' : 'no activo'}</td>
                     <td><Link to={annex.location !== '' ? '/'+annex.location : ''}  target="_blank" download><i class="fas fa-download"></i></Link></td>
                 </tr>
             )

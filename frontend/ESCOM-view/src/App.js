@@ -57,6 +57,7 @@ import UserActivity from "./ModuloDocumental/components/User/Process/userActivit
 import UserCondition from "./ModuloDocumental/components/User/Process/userCondition.js";
 import Prueba from "./ModuloDocumental/components/prueba.js";
 import Classification from './ModuloDocumental/components/User/Classification/classification.js';
+import ViewCalendar from './ModuloDocumental/components/User/calendar/viewCalendar.js';
 
 //rutas
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom"
@@ -264,6 +265,16 @@ class App extends React.Component {
 								<MenuSuperior />
 								<div id="wrapper">
 									<HomeDef />
+								</div>
+							</>
+						</RutaProtegida>
+
+						<RutaProtegida path="/ViewCalendar">
+							<>
+								<HomeMenu />
+								<MenuSuperior />
+								<div id="wrapper">
+									<ViewCalendar />
 								</div>
 							</>
 						</RutaProtegida>

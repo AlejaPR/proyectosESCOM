@@ -28,15 +28,15 @@ public class DocumentVersionLogic implements DocumentVersionLogicFacadeLocal {
     private DocumentVersionFacadeLocal documentVersionFacade;
     @EJB
     private UtilitarioFacadeLocal bitacora;
-    
-    private static final String TABLE ="TBL_DOCUMENT_VERSION";
-    
+
+    private static final String TABLE = "TBL_DOCUMENT_VERSION";
+
     private static final String CLASS = "Clase logica version documento";
 
     @Override
-    public List<DocumentVersionP> listDocumentVersion(int id) throws GenericException {
+    public List<DocumentVersionP> listCurrentVersions(int idDocument) throws GenericException {
         try {
-            List<DocumentVersion> list = documentVersionFacade.listVersions(id);
+            List<DocumentVersion> list = documentVersionFacade.listCurrentVersions(idDocument);
             List<DocumentVersionP> data = new ArrayList<>();
             for (DocumentVersion aux : list) {
                 DocumentVersionP ver = new DocumentVersionP(aux.getId(), aux.getDescription(), aux.getVersion(), aux.getLocation(), aux.getState(), aux.getDate());
@@ -44,7 +44,48 @@ public class DocumentVersionLogic implements DocumentVersionLogicFacadeLocal {
             }
             return data;
         } catch (Exception ex) {
-            bitacora.registroLogger(CLASS, "Lista versiones documento", Level.SEVERE, ex.getMessage());
+            bitacora.registroLogger(CLASS, "Lista versiones actuales", Level.SEVERE, ex.getMessage());
+            throw new GenericException("error server");
+        }
+    }
+
+    @Override
+    public List<DocumentVersionP> listOldVersions(int idProgram) throws GenericException {
+        try {
+            List<DocumentVersion> list = documentVersionFacade.listOldVersions(idProgram);
+            List<DocumentVersionP> data = new ArrayList<>();
+            for (DocumentVersion aux : list) {
+                DocumentVersionP ver = new DocumentVersionP(aux.getId(), aux.getDescription(), aux.getVersion(), aux.getLocation(), aux.getState(), aux.getDate());
+                data.add(ver);
+            }
+            return data;
+        } catch (Exception ex) {
+            bitacora.registroLogger(CLASS, "Lista versiones anteriores", Level.SEVERE, ex.getMessage());
+            throw new GenericException("error server");
+        }
+    }
+
+    @Override
+    public void addVersion(DocumentVersionP version) throws GenericException {
+        try {
+            List<DocumentVersion> list = documentVersionFacade.listCurrentVersions(version.getDocument());
+            int value = 0;
+            if (list.size() > 0) {
+                value = list.get(0).getVersion() + 1;
+            } else {
+                value = 1;
+            }
+            if (list.size() > 0) {
+                DocumentVersion fin = list.get(0);
+                fin.setState(-1);
+                documentVersionFacade.edit(fin);
+            }
+            DocumentVersion data = new DocumentVersion(version.getDescription(),value , version.getLocation(), version.getState(), version.getDate());        
+            documentVersionFacade.create(data);
+            version.getRequestData().setTablaInvolucrada(TABLE);
+            bitacora.registrarEnBitacora(version.getRequestData());
+        } catch (Exception ex) {
+            bitacora.registroLogger(CLASS, "Lista versiones anteriores", Level.SEVERE, ex.getMessage());
             throw new GenericException("error server");
         }
     }

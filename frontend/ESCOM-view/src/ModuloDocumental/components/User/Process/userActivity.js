@@ -8,8 +8,8 @@ import { getConditionId } from '../../../redux/actions/conditionA.js';
 
 class ProcessCondition extends Component {
     componentWillMount() {
-        this.props.getConditionId(sessionStorage.getItem('condition'))
-        this.props.getListActivities(sessionStorage.getItem('condition'))
+        this.props.getConditionId(localStorage.getItem('Token'),sessionStorage.getItem('condition'))
+        this.props.getListActivities(localStorage.getItem('Token'),sessionStorage.getItem('condition'))
     }
 
     save(id) {

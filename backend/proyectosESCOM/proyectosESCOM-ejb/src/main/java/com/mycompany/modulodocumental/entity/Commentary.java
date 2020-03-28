@@ -13,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -21,14 +23,13 @@ import javax.persistence.TemporalType;
  *
  * @author HASHY
  */
-
 @Entity
 @Table(name = "TBL_COMMENTARY")
-public class Commentary  implements Serializable{
-    
+public class Commentary implements Serializable {
+
     @Id
     @Basic(optional = false)
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PK_COM_ID")
     private int id;
     @Column(name = "COM_MESSAGE")
@@ -36,18 +37,20 @@ public class Commentary  implements Serializable{
     @Column(name = "COM_DATE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
-    @Column(name = "COM_STATE")
-    private int state;    
     @Column(name = "FK_COM_USER")
     private int idUser;
-    
+
+    @JoinColumn(name = "FK_COM_ACTIVITY", referencedColumnName = "PK_ACT_ID")
+    @ManyToOne
+    private Activity fkComActivity;
+
     public Commentary() {
     }
 
-    public Commentary(String message, Date date, int state) {
+    public Commentary(String message, Date date, int idUser ) {
         this.message = message;
         this.date = date;
-        this.state = state;
+        this.idUser = idUser;
     }
 
     public int getId() {
@@ -74,14 +77,6 @@ public class Commentary  implements Serializable{
         this.date = date;
     }
 
-    public int getState() {
-        return state;
-    }
-
-    public void setState(int state) {
-        this.state = state;
-    }
-
     public int getIdUser() {
         return idUser;
     }
@@ -89,5 +84,12 @@ public class Commentary  implements Serializable{
     public void setIdUser(int idUser) {
         this.idUser = idUser;
     }
-    
+
+    public Activity getFkComActivity() {
+        return fkComActivity;
+    }
+
+    public void setFkComActivity(Activity fkComActivity) {
+        this.fkComActivity = fkComActivity;
+    }
 }

@@ -33,7 +33,7 @@ public class AnnexVersionFacade extends AbstractFacade<AnnexVersion> implements 
 
     @Override
     public List<AnnexVersion> listAnnexVersion(int id) {
-        Query query = em.createQuery("SELECT v FROM AnnexVersion v WHERE v.fkAvAnnex.id = ?1 ORDER BY v.state ASC");
+        Query query = em.createQuery("SELECT v FROM AnnexVersion v WHERE v.fkAvAnnex.id = ?1 ORDER BY v.state DESC");
         query.setParameter(1, id);
         List<AnnexVersion> list = query.getResultList();
         return list;

@@ -75,7 +75,7 @@ public class DocumentVersion implements Serializable{
         this.description = description;
     }
 
-    public double getVersion() {
+    public int getVersion() {
         return version;
     }
 

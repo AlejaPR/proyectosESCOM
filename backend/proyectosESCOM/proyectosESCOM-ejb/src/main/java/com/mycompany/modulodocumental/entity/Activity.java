@@ -6,6 +6,7 @@
 package com.mycompany.modulodocumental.entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,6 +16,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -40,7 +42,7 @@ public class Activity implements Serializable{
     @Column(name = "ACT_STATE")
     private int state;
     @Column(name = "ACT_TYPE")
-    private String type;
+    private int type;
     
     @JoinColumn(name = "FK_ACT_CONDITION", referencedColumnName = "PK_CON_ID")
     @ManyToOne
@@ -49,11 +51,14 @@ public class Activity implements Serializable{
     @JoinColumn(name = "FK_ACT_ANNEX", referencedColumnName = "PK_AX_ID")
     @ManyToOne
     private Annex fkActAnnex;
+    
+    @OneToMany(mappedBy = "fkComActivity")
+    private List<Commentary> listCommentary;
 
     public Activity() {
     }
 
-    public Activity(String name, String description, String information, int state,String type) {
+    public Activity(String name, String description, String information, int state,int type) {
         this.name = name;
         this.description = description;
         this.information = information;
@@ -117,12 +122,20 @@ public class Activity implements Serializable{
         this.fkActAnnex = fkActAnnex;
     }
 
-    public String getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(int type) {
         this.type = type;
     }
-    
+
+    public List<Commentary> getListCommentary() {
+        return listCommentary;
+    }
+
+    public void setListCommentary(List<Commentary> listCommentary) {
+        this.listCommentary = listCommentary;
+    }
+
 }

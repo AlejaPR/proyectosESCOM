@@ -19,18 +19,19 @@ public class ActivityP implements Serializable{
     private String information;
     private int state;    
     private int idCondition;
-    private String type;
+    private int type;
     private DatosSolicitudPOJO requestData;
 
     public ActivityP() {
     }
 
-    public ActivityP(int id, String name, String description, String information, int state) {
+    public ActivityP(int id, String name, String description, String information, int state, int type) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.information = information;
         this.state = state;
+        this.type = type;
     }
 
     public int getId() {
@@ -81,11 +82,11 @@ public class ActivityP implements Serializable{
         this.idCondition = idCondition;
     }
 
-    public String getType() {
+    public int getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(int type) {
         this.type = type;
     }
 

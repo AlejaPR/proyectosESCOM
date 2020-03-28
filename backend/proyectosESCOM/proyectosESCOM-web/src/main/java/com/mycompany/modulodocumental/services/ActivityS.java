@@ -14,7 +14,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -116,12 +115,39 @@ public class ActivityS {
         }
     }
 
-    @DELETE
+    @POST
     @Path("/delete/{id}")
     public Response deleteActivity(@PathParam("id") int id, DatosSolicitudPOJO dataR) {
         try {
             activityLogicFacade.disableActivity(id, dataR);
             JsonObject rest = Json.createObjectBuilder().add("data", "delete").build();
+            return Response.status(Response.Status.OK).entity(rest).build();
+        } catch (Exception e) {
+            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
+        }
+    }
+    
+    @PUT
+    @Path("/changeStatus")
+    public Response changeStatus( ActivityP activity ) {
+        try {
+            activityLogicFacade.changeStatus(activity);
+            JsonObject rest = Json.createObjectBuilder().add("data", "notify").build();
+            return Response.status(Response.Status.OK).entity(rest).build();
+        } catch (Exception e) {
+            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
+        }
+
+    }
+    
+    @PUT
+    @Path("/associate/{id}/{idA}")
+    public Response associateAnnex(@PathParam("id") int id,@PathParam("id") int idA, DatosSolicitudPOJO dataS){
+        try {
+            activityLogicFacade.associateAnnex(idA, idA, dataS);
+            JsonObject rest = Json.createObjectBuilder().add("data", "associate").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
             JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();

@@ -17,16 +17,17 @@ public class DocumentVersionP implements Serializable {
 
     private int id;
     private String description;
-    private double version;
+    private int version;
     private String location;
     private int state;
     private Date date;
+    private int document;
     private DatosSolicitudPOJO requestData;
 
     public DocumentVersionP() {
     }
 
-    public DocumentVersionP(int id, String description, double version, String location, int state, Date date) {
+    public DocumentVersionP(int id, String description, int version, String location, int state, Date date) {
         this.id = id;
         this.description = description;
         this.version = version;
@@ -51,11 +52,11 @@ public class DocumentVersionP implements Serializable {
         this.description = description;
     }
 
-    public double getVersion() {
+    public int getVersion() {
         return version;
     }
 
-    public void setVersion(double version) {
+    public void setVersion(int version) {
         this.version = version;
     }
 
@@ -89,6 +90,14 @@ public class DocumentVersionP implements Serializable {
 
     public void setRequestData(DatosSolicitudPOJO requestData) {
         this.requestData = requestData;
+    }
+
+    public int getDocument() {
+        return document;
+    }
+
+    public void setDocument(int document) {
+        this.document = document;
     }
 
 }

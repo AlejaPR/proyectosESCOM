@@ -18,12 +18,12 @@ class AddInformation extends Component {
             information: inf,
             requestData: null
         }
-        this.props.addInformation(info)
+        this.props.addInformation(localStorage.getItem('Token'), info)
         this.props.history.push('/UserActivity')
     }
 
     componentWillMount() {
-        this.props.getActivityId(sessionStorage.getItem('activity'))
+        this.props.getActivityId(localStorage.getItem('Token'), sessionStorage.getItem('activity'))
     }
 
     handleEditorChange = (content, editor) => {
@@ -67,7 +67,7 @@ class AddInformation extends Component {
 
                     </div>
 
-                    <button style={{width:"10%"}} onClick={() => this.saveView()} className="btn btn-sm text-light naranja">
+                    <button style={{ width: "10%" }} onClick={() => this.saveView()} className="btn btn-sm text-light naranja">
                         Guardar
                     </button>
                 </div>

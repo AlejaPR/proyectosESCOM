@@ -4,9 +4,10 @@ import { Component } from 'react';
 
 // Require Font Awesome.
 import 'font-awesome/css/font-awesome.css';
-
+import { ToastContainer } from 'react-toastify';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom'
+import ProcessCommentary from '../Process/processCommentary.js';
 import { getActivityId, addInformation } from '../../../redux/actions/activityA.js';
 
 class ProcessActivity extends Component {
@@ -22,6 +23,7 @@ class ProcessActivity extends Component {
     render() {
         return (
             <div className="container color">
+                <ToastContainer/>
                 <br />
                 <div class="card">
                     <div class="card-body">
@@ -34,6 +36,7 @@ class ProcessActivity extends Component {
                     </div>
                 </div>
                 <br />
+                <ProcessCommentary/>
             </div>
         );
     }

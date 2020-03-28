@@ -6,9 +6,11 @@
 package com.mycompany.modulodocumental.logica;
 
 import com.mycompany.modulodocumental.entity.Activity;
+import com.mycompany.modulodocumental.entity.Annex;
 import com.mycompany.modulodocumental.entity.Condition;
 import com.mycompany.modulodocumental.interfaces.ActivityFacadeLocal;
 import com.mycompany.modulodocumental.interfaces.ActivityLogicFacadeLocal;
+import com.mycompany.modulodocumental.interfaces.AnnexFacadeLocal;
 import com.mycompany.modulodocumental.interfaces.ConditionFacadeLocal;
 import com.mycompany.modulodocumental.pojo.ActivityP;
 import com.mycompany.modulodocumental.utility.GenericException;
@@ -30,21 +32,22 @@ public class ActivityLogic implements ActivityLogicFacadeLocal {
     @EJB
     private ActivityFacadeLocal activityFacade;
     @EJB
+    private AnnexFacadeLocal annexFacade;
+    @EJB
     private ConditionFacadeLocal conditionFacade;
     @EJB
     UtilitarioFacadeLocal bitacora;
 
     private static final String TABLE = "TBL_ACTIVITY";
-    
+
     private static final String CLASS = "Clase logica actividad";
 
     @Override
     public ActivityP getActivityId(int id) throws GenericException {
         try {
             Activity act = activityFacade.find(id);
-            ActivityP data = new ActivityP(act.getId(), act.getName(), act.getDescription(), act.getInformation(), act.getState());
+            ActivityP data = new ActivityP(act.getId(), act.getName(), act.getDescription(), act.getInformation(), act.getState(), act.getType());
             data.setIdCondition(act.getFkActCondition().getId());
-            data.setType(act.getType());
             return data;
         } catch (Exception ex) {
             bitacora.registroLogger(CLASS, "Obtener actividad id", Level.SEVERE, ex.getMessage());
@@ -92,7 +95,7 @@ public class ActivityLogic implements ActivityLogicFacadeLocal {
             List<Activity> list = activityFacade.listActivities(id);
             List<ActivityP> data = new ArrayList<>();
             for (Activity act : list) {
-                ActivityP aux = new ActivityP(act.getId(), act.getName(), act.getDescription(), act.getInformation(), act.getState());
+                ActivityP aux = new ActivityP(act.getId(), act.getName(), act.getDescription(), act.getInformation(), act.getState(), act.getType());
                 data.add(aux);
             }
             return data;
@@ -136,6 +139,35 @@ public class ActivityLogic implements ActivityLogicFacadeLocal {
             bitacora.registrarEnBitacora(dataR);
         } catch (Exception ex) {
             bitacora.registroLogger(CLASS, "Inhabilitar actividad", Level.SEVERE, ex.getMessage());
+            throw new GenericException("error server");
+        }
+    }
+
+    @Override
+    public void changeStatus(ActivityP activity) throws GenericException {
+        try {
+            Activity data = activityFacade.find(activity.getId());
+            data.setState(activity.getState());
+            activityFacade.edit(data);
+            activity.getRequestData().setOperacion(TABLE);
+            bitacora.registrarEnBitacora(activity.getRequestData());
+        } catch (Exception ex) {
+            bitacora.registroLogger(CLASS, "Cambiar estado", Level.SEVERE, ex.getMessage());
+            throw new GenericException("error server");
+        }
+    }
+
+    @Override
+    public void associateAnnex(int activity, int annex, DatosSolicitudPOJO dataS) throws GenericException {
+        try {
+            Activity data = activityFacade.find(activity);
+            Annex ann = annexFacade.find(annex);
+            data.setFkActAnnex(ann);
+            activityFacade.edit(data);
+            dataS.setTablaInvolucrada(TABLE);
+            bitacora.registrarEnBitacora(dataS);
+        } catch (Exception ex) {
+            bitacora.registroLogger(CLASS, "asociar anexo", Level.SEVERE, ex.getMessage());
             throw new GenericException("error server");
         }
     }

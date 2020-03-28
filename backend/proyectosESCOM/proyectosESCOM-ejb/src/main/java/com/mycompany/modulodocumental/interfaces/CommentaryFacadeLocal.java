@@ -30,4 +30,5 @@ public interface CommentaryFacadeLocal {
 
     int count();
     
+    List<Commentary> listCommentary(int activity);
 }

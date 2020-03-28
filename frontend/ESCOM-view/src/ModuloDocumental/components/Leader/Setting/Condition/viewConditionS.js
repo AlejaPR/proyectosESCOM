@@ -105,8 +105,8 @@ class ViewCondition extends Component {
 
     deleteUser(id) {
         confirmAlert({
-            title: '¿Desea Eliminar?',
-            message: 'Desea eliminar este elemento de forma permanente.',
+            title: 'Eliminar',
+            message: '¿Desea eliminar este elemento de forma permanente?',
             buttons: [
                 {
                     label: 'Si',
@@ -119,14 +119,12 @@ class ViewCondition extends Component {
                         }
                         this.props.deleteUserCondition(localStorage.getItem('Token'), userCondition)
                     },
-                    className: "btn btn-sm text-light naranja"
                 },
                 {
                     label: 'No',
                     onClick: () => { },
                 }
             ],
-            className: "btn btn-sm text-light naranja"
         })
     }
 
@@ -182,7 +180,9 @@ class ViewCondition extends Component {
             buttons: [
                 {
                     label: 'Si',
-                    onClick: () => this.props.deleteActivity(id),
+                    onClick: () => {
+                        this.props.deleteActivity(localStorage.getItem('Token'), id)
+                    },
                     className: "btn btn-sm text-light naranja"
                 },
                 {
@@ -210,7 +210,7 @@ class ViewCondition extends Component {
                 <div class="card">
                     <div class="card-body">
                         <h2 class="card-title text-center" style={{ textTransform: 'uppercase' }}><strong>{this.props.conditions.name}</strong></h2>
-                        <hr/>
+                        <hr />
                         <div className="row">
                             <div className="col-6">
                                 <h5><strong>Descripcion</strong></h5>
@@ -218,7 +218,7 @@ class ViewCondition extends Component {
                                     {this.props.conditions.description}
                                 </p>
                                 <h6><strong>Fecha</strong></h6>
-                                <p>Fecha inicio: {this.props.conditions.startDateS} <br/>Fecha final: {this.props.conditions.finalDateS}</p>
+                                <p>Fecha inicio: {this.props.conditions.startDateS} <br />Fecha final: {this.props.conditions.finalDateS}</p>
                                 <br />
                             </div>
                             <div className="col-6">

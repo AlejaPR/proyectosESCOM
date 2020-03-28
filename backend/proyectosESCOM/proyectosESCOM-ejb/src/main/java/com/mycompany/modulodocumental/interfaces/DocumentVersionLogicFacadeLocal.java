@@ -17,6 +17,10 @@ import javax.ejb.Local;
 @Local
 public interface DocumentVersionLogicFacadeLocal {
 
-    public List<DocumentVersionP> listDocumentVersion(int id) throws GenericException;
+    List<DocumentVersionP> listCurrentVersions(int idDocument) throws GenericException;
+    
+    List<DocumentVersionP> listOldVersions(int idProgram) throws GenericException;
+    
+    void addVersion(DocumentVersionP version) throws GenericException;
     
 }

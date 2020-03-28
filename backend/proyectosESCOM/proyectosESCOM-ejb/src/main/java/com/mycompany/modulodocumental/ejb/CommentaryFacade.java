@@ -7,9 +7,11 @@ package com.mycompany.modulodocumental.ejb;
 
 import com.mycompany.modulodocumental.interfaces.CommentaryFacadeLocal;
 import com.mycompany.modulodocumental.entity.Commentary;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -27,6 +29,14 @@ public class CommentaryFacade extends AbstractFacade<Commentary> implements Comm
 
     public CommentaryFacade() {
         super(Commentary.class);
+    }
+
+    @Override
+    public List<Commentary> listCommentary(int activity) {
+        Query query = em.createQuery("SELECT c FROM Commentary c WHERE c.fkComActivity.id = ?1  ORDER BY c.id DESC");
+        query.setParameter(1, activity);
+        List<Commentary> list = query.setMaxResults(4).getResultList();
+        return list;
     }
     
 }

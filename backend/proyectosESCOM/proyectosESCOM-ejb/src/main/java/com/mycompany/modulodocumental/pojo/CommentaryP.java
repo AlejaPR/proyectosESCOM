@@ -18,18 +18,18 @@ public class CommentaryP implements Serializable {
     private int id;
     private String message;
     private Date date;
-    private int state;
     private int idUser;
+    private String nameUser;
+    private int idActivity;
     private DatosSolicitudPOJO requestData;
 
     public CommentaryP() {
     }
 
-    public CommentaryP(int id, String message, Date date, int state) {
+    public CommentaryP(int id, String message, Date date) {
         this.id = id;
         this.message = message;
         this.date = date;
-        this.state = state;
     }
 
     public int getId() {
@@ -56,14 +56,6 @@ public class CommentaryP implements Serializable {
         this.date = date;
     }
 
-    public int getState() {
-        return state;
-    }
-
-    public void setState(int state) {
-        this.state = state;
-    }
-
     public int getIdUser() {
         return idUser;
     }
@@ -72,6 +64,22 @@ public class CommentaryP implements Serializable {
         this.idUser = idUser;
     }
 
+    public String getNameUser() {
+        return nameUser;
+    }
+
+    public void setNameUser(String nameUser) {
+        this.nameUser = nameUser;
+    }
+
+    public int getIdActivity() {
+        return idActivity;
+    }
+
+    public void setIdActivity(int idActivity) {
+        this.idActivity = idActivity;
+    }
+        
     public DatosSolicitudPOJO getRequestData() {
         return requestData;
     }

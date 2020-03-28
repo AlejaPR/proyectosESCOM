@@ -65,7 +65,7 @@ public class AnnexVersionLogic implements AnnexVersionLogicFacadeLocal {
             }
             if (list.size() > 0) {
                 AnnexVersion fin = list.get(0);
-                fin.setState(2);
+                fin.setState(-1);
                 annexVersionFacade.edit(fin);
             }
             AnnexVersion aux = new AnnexVersion(annexV.getDate(), annexV.getLocation(), annexV.getState(), value, annexV.getDescription());
