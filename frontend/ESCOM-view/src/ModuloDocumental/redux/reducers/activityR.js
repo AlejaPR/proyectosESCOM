@@ -1,11 +1,14 @@
-import { ADD_MESSAGE_ADD, ADD_INFORMATION, ADD_MESSAGE_DELETE, DELETE_ACTIVITY, ADD_ACTIVITY, EDIT_ACTIVITY, ADD_MESSAGE_EDIT, GET_ACTIVITY_ID, GET_ALL_INFORMATION, GET_LIST_ACTIVITIES, ADD_MESSAGE_ASSOCIATE } from '../actions/activityA.js'
+import { ADD_MESSAGE_ADD, ADD_MESSAGE_ADD_INFO, ADD_INFORMATION, ADD_MESSAGE_DELETE, DELETE_ACTIVITY, ADD_ACTIVITY, EDIT_ACTIVITY, ADD_MESSAGE_EDIT, GET_ACTIVITY_ID, GET_ALL_INFORMATION, ASSOCIATE_ANNEX, ADD_MESSAGE_ASSOCIATE, GET_ACTIVITY_ANNEX, GET_LIST_ACTIVITIES_ANNEX, GET_LIST_ACTIVITIES_INFO } from '../actions/activityA.js'
 
 
 const initialState = {
-    listActivityR: [],
+    listActivityInfoR: [],
+    listActivityAnnexR: [],
     activityR: [],
+    activityAnnexR: [],
     messageEdit: '',
     messageAdd: '',
+    messageAddInfo: '',
     messageDelete: '',
     allInformation: '',
     messageAssociate: ''
@@ -14,10 +17,14 @@ const initialState = {
 export function reducersActivity(state = initialState, action) {
 
     switch (action.type) {
-        case GET_LIST_ACTIVITIES:
-            return Object.assign({}, state, { listActivityR: action.payload })
+        case GET_LIST_ACTIVITIES_ANNEX:
+            return Object.assign({}, state, { listActivityAnnexR: action.payload })
+        case GET_LIST_ACTIVITIES_INFO:
+            return Object.assign({}, state, { listActivityInfoR: action.payload })
         case GET_ACTIVITY_ID:
             return Object.assign({}, state, { activityR: action.payload })
+        case GET_ACTIVITY_ANNEX:
+            return Object.assign({}, state, { activityAnnexR: action.payload })
         case ADD_ACTIVITY:
             return Object.assign({}, state, { messageAdd: action.payload })
         case EDIT_ACTIVITY:
@@ -25,7 +32,7 @@ export function reducersActivity(state = initialState, action) {
         case DELETE_ACTIVITY:
             return Object.assign({}, state, { messageDelete: action.payload })
         case ADD_INFORMATION:
-            return Object.assign({}, state, { messageR: action.payload })
+            return Object.assign({}, state, { messageAddInfo: action.payload })
         case ASSOCIATE_ANNEX:
             return Object.assign({}, state, { messageAssociate: action.payload })
         case GET_ALL_INFORMATION:
@@ -34,6 +41,8 @@ export function reducersActivity(state = initialState, action) {
             return Object.assign({}, state, { messageEdit: action.payload })
         case ADD_MESSAGE_ADD:
             return Object.assign({}, state, { messageAdd: action.payload })
+        case ADD_MESSAGE_ADD_INFO:
+            return Object.assign({}, state, { messageAddInfo: action.payload })
         case ADD_MESSAGE_DELETE:
             return Object.assign({}, state, { messageDelete: action.payload })
         case ADD_MESSAGE_ASSOCIATE:

@@ -5,11 +5,13 @@
  */
 package com.mycompany.modulodocumental.view;
 
+import java.io.Serializable;
+
 /**
  *
  * @author HASHY
  */
-public class AnnexView {
+public class AnnexView implements Serializable{
     
     private String name;
     private String description;

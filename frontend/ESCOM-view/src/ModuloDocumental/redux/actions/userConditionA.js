@@ -138,7 +138,7 @@ export function getListUsersCondition(token, id) {
 //MD_Asociar usuario condicion
 export function associateUserCondition(token, userCondition) {
     const headers = {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset= UTF-8',
         'TokenAuto': desencriptar(token),
         'Permiso': PERMIT_ASSOCIATE_USER_CONDITION
     }

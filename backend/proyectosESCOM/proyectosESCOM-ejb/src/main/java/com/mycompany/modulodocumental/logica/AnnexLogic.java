@@ -48,6 +48,7 @@ public class AnnexLogic implements AnnexLogicFacadeLocal {
     public void addAnnex(AnnexP annex) throws GenericException {
         try {
             Annex add = new Annex(annex.getKeywords(), annex.getDescription(), annex.getName());
+            add.setState(annex.getState());
             Program con = programFacade.find(annex.getProgram());
             add.setFkAxProgram(con);
             annexFacade.create(add);

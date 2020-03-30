@@ -2,57 +2,32 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import { getConditionId } from '../../../../redux/actions/conditionA.js';
-import { getListActivities, getActivityId, addMessageEdit, addMessageAdd, addMessageDelete, deleteActivity } from '../../../../redux/actions/activityA.js';
-import { getListUsersCondition, addMessageAssociate, deleteUserCondition, addMessageDeleteUser } from '../../../../redux/actions/userConditionA.js';
+import { getListActivitiesAnnex, getListActivitiesInfo, getActivityId, addMessageDelete, deleteActivity } from '../../../../redux/actions/activityA.js';
+import { getListUsersCondition, deleteUserCondition, addMessageDeleteUser } from '../../../../redux/actions/userConditionA.js';
 import { ToastContainer, toast } from 'react-toastify';
 import { withRouter } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
 
 import AddUser from '../Condition/addUser.js'
-import Add from '../Activity/add.js';
+import AddInfo from '../Activity/addInfo.js';
+import AddAnnex from '../Activity/addAnnex.js';
 import Edit from '../Activity/edit.js';
 import View from '../Activity/view.js';
 
 class ViewCondition extends Component {
 
     componentDidUpdate() {
-        if (this.props.messageEditA !== '') {
-            switch (this.props.messageEditA) {
-                case 'edit':
-                    toast.success('Se agrego con exito.');
-                    this.props.getListActivities(localStorage.getItem('Token'), sessionStorage.getItem('condition'));
-                    this.props.addMessageEdit('');
-                    break;
-                case 'error server':
-                    toast.error('Se presento un error, intentelo mas tarde.');
-                    break;
-                default:
-                    break;
-            }
-        }
-        if (this.props.messageAddA !== '') {
-            switch (this.props.messageAddA) {
-                case 'add':
-                    toast.success('Se agrego con exito.');
-                    this.props.getListActivities(localStorage.getItem('Token'), sessionStorage.getItem('condition'));
-                    this.props.addMessageAdd('')
-                    break;
-                case 'error server':
-                    toast.error('Se presento un error, intentelo mas tarde.');
-                    break;
-                default:
-                    break;
-            }
-        }
         if (this.props.messageDeleteA !== '') {
             switch (this.props.messageDeleteA) {
                 case 'delete':
                     toast.success('Se elimino correctamente.');
-                    this.props.getListActivities(localStorage.getItem('Token'), sessionStorage.getItem('condition'));
+                    this.props.getListActivitiesInfo(localStorage.getItem('Token'), sessionStorage.getItem('condition'));
+                    this.props.getListActivitiesAnnex(localStorage.getItem('Token'), sessionStorage.getItem('condition'));
                     this.props.addMessageDelete('')
                     break;
                 case 'error server':
                     toast.error('Se presento un error, intentelo mas tarde.');
+                    this.props.addMessageDelete('')
                     break;
                 default:
                     break;
@@ -67,42 +42,24 @@ class ViewCondition extends Component {
                     break;
                 case 'error server':
                     toast.error('Se presento un error, intentelo mas tarde.');
+                    this.props.addMessageDeleteUser('')
                     break;
                 default:
                     break;
             }
         }
-        if (this.props.messageAssociate !== '') {
-            switch (this.props.messageAssociate) {
-                case 'associate':
-                    toast.success('Usuario asociado.');
-                    this.props.getListUsersCondition(localStorage.getItem('Token'), sessionStorage.getItem('condition'));
-                    this.props.addMessageAssociate('')
-                    break;
-                case 'error server':
-                    toast.error('Se presento un error, intentelo mas tarde.');
-                    break;
-                default:
-                    break;
-            }
-        }
-
-
     }
 
     componentDidMount() {
         this.props.getConditionId(localStorage.getItem('Token'), sessionStorage.getItem('condition'))
-        this.props.getListActivities(localStorage.getItem('Token'), sessionStorage.getItem('condition'))
+        this.props.getListActivitiesAnnex(localStorage.getItem('Token'), sessionStorage.getItem('condition'))
+        this.props.getListActivitiesInfo(localStorage.getItem('Token'), sessionStorage.getItem('condition'))
         this.props.getListUsersCondition(localStorage.getItem('Token'), sessionStorage.getItem('condition'));
     }
 
-    saveView(id) {
+    save(id) {
         this.props.getActivityId(localStorage.getItem('Token'), id)
     }
-    saveEdit(id) {
-        this.props.getActivityId(localStorage.getItem('Token'), id)
-    }
-
     deleteUser(id) {
         confirmAlert({
             title: 'Eliminar',
@@ -143,8 +100,37 @@ class ViewCondition extends Component {
         })
     }
 
-    loadTable() {
-        return this.props.activities.map((activity) => {
+    loadTableInfo() {
+        return this.props.activitiesInfo.map((activity) => {
+            return (
+                <tr key={activity.id}>
+                    <td>{activity.number}</td>
+                    <td>{activity.name}</td>
+                    <td>{activity.description}</td>
+                    <td>
+                        <button onClick={() => this.save(activity.id)} className="btn btn-sm text-light naranja" data-toggle="modal" data-target="#viewModal">
+                            <i class="far fa-eye"></i>
+                        </button>
+                        <View />
+                    </td>
+                    <td>
+                        <button onClick={() => this.save(activity.id)} className="btn btn-sm text-light naranja" data-toggle="modal" data-target="#editModal">
+                            <i class="fas fa-pen"></i>
+                        </button>
+                        <Edit />
+                    </td>
+                    <td>
+                        <button onClick={() => this.submit(activity.id)} className="btn btn-sm text-light naranja">
+                            <i class="far fa-trash-alt"></i>
+                        </button>
+                    </td>
+                </tr>
+            )
+        })
+    }
+
+    loadTableAnnex() {
+        return this.props.activitiesAnnex.map((activity) => {
             return (
                 <tr key={activity.id}>
                     <td>{activity.name}</td>
@@ -170,7 +156,6 @@ class ViewCondition extends Component {
             )
         })
     }
-
 
 
     submit(id) {
@@ -200,7 +185,7 @@ class ViewCondition extends Component {
 
     render() {
         return (
-            <div className="container color" >
+            <div className="container color" style={{ width: "90%" }}>
                 <ToastContainer />
                 <br />
                 <button type="button" onClick={this.onClickCancelar} className="btn btn-danger btn-sm" >
@@ -238,8 +223,30 @@ class ViewCondition extends Component {
 
                 <div class="card">
                     <div class="card-body">
-                        <Add />
-                        <h4 class="card-title text-center">LISTA ACTIVIDADES</h4>
+                        <AddInfo />
+                        <h4 class="card-title text-center">LISTA ACTIVIDADES INFORMATIVAS</h4>
+                        <table class="table border table-striped">
+                            <thead class="colorBlue text-light">
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Actividad</th>
+                                    <th scope="col">Descrpcion</th>
+                                    <th scope="col"></th>
+                                    <th scope="col"></th>
+                                    <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {this.loadTableInfo()}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <br />
+                <div class="card">
+                    <div class="card-body">
+                        <AddAnnex />
+                        <h4 class="card-title text-center">LISTA ACTIVIDADES DE ANEXOS</h4>
                         <table class="table border table-striped">
                             <thead class="colorBlue text-light">
                                 <tr>
@@ -251,7 +258,7 @@ class ViewCondition extends Component {
                                 </tr>
                             </thead>
                             <tbody>
-                                {this.loadTable()}
+                                {this.loadTableAnnex()}
                             </tbody>
                         </table>
                     </div>
@@ -265,15 +272,13 @@ class ViewCondition extends Component {
 function mapStateToProps(state) {
     return {
         conditions: state.condition.conditionR,
-        activities: state.activity.listActivityR,
-        messageEditA: state.activity.messageEdit,
-        messageAddA: state.activity.messageAdd,
+        activitiesInfo: state.activity.listActivityInfoR,
+        activitiesAnnex: state.activity.listActivityAnnexR,
         messageDeleteA: state.activity.messageDelete,
-        messageAssociate: state.userCondition.messageAssociate,
         listUsersConditions: state.userCondition.listUsersConditionR,
         messageDeleteU: state.userCondition.messageDelete,
 
     }
 }
 
-export default withRouter(connect(mapStateToProps, { getListUsersCondition, addMessageAssociate, deleteUserCondition, addMessageDeleteUser, getConditionId, deleteActivity, addMessageDelete, getListActivities, getActivityId, addMessageEdit, addMessageAdd })(ViewCondition));
+export default withRouter(connect(mapStateToProps, { getListUsersCondition, deleteUserCondition, addMessageDeleteUser, getConditionId, deleteActivity, addMessageDelete, getListActivitiesAnnex, getListActivitiesInfo, getActivityId })(ViewCondition));

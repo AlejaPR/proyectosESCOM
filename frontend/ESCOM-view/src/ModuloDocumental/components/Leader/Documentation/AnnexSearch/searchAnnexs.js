@@ -59,7 +59,7 @@ class searchAnnexs extends Component {
 
     render() {
         return (
-            <div className="container color">
+            <div className="container color" style={{ width: "90%" }}>
                 <br />
                 <div class="card">
                     <div class="card-body">

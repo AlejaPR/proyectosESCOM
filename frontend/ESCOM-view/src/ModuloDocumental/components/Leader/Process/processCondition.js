@@ -4,14 +4,14 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
 import { ToastContainer, toast } from 'react-toastify';
-import { getListActivities } from '../../../redux/actions/activityA.js';
+import { getListActivitiesInfo, getActivityAnnex } from '../../../redux/actions/activityA.js';
 import { getConditionId, approveCondition, addMessageApprove } from '../../../redux/actions/conditionA.js';
 
-
+import ProcessAnnex from './ProcessAnnex.js';
 class ProcessCondition extends Component {
     componentWillMount() {
         this.props.getConditionId(localStorage.getItem('Token'), sessionStorage.getItem('condition'))
-        this.props.getListActivities(localStorage.getItem('Token'), sessionStorage.getItem('condition'))
+        this.props.getListActivitiesInfo(localStorage.getItem('Token'), sessionStorage.getItem('condition'))
     }
 
     componentDidUpdate() {
@@ -31,42 +31,36 @@ class ProcessCondition extends Component {
         }
     }
 
-    save(id) {
-        sessionStorage.setItem('activity', id)
-        this.props.history.push('/ProcessActivity')
-    }
-
     approveCondition(id) {
         confirmAlert({
-          title: 'Aprobar condición',
-          message: '¿Esta seguro que quiere dar como aprobada esta condición?.',
-          buttons: [
-            {
-              label: 'Yes',
-              onClick: () => {
-                  this.props.approveCondition(localStorage.getItem('Token'),id)
-              }
-            },
-            {
-              label: 'No',
-              onClick: () => {
+            title: 'Aprobar condición',
+            message: '¿Esta seguro que quiere dar como aprobada esta condición?.',
+            buttons: [
+                {
+                    label: 'Yes',
+                    onClick: () => {
+                        this.props.approveCondition(localStorage.getItem('Token'), id)
+                    }
+                },
+                {
+                    label: 'No',
+                    onClick: () => {
 
-              }
-            }
-          ]
+                    }
+                }
+            ]
         });
     }
 
-
-    loadActivities() {
-        return this.props.listActivities.map((activity) => {
+    loadActivitiesInfo() {
+        return this.props.listActivityInfo.map((activity) => {
             return (
                 <tr key={activity.id}>
+                    <td>{activity.number}</td>
                     <td>{activity.name}</td>
-                    <td>{activity.description}</td>
-                    <td>{activity.state === 1 ? 'activo' : 'no activo'}</td>
+                    <td>{activity.state === 1 ? 'Activo' : 'Finalizado'}</td>
                     <td>
-                        <button onClick={() => this.save(activity.id)} className="btn btn-sm text-light naranja">
+                        <button onClick={() => this.saveInfo(activity.id)} className="btn btn-sm text-light naranja">
                             <i class="far fa-eye"></i>
                         </button>
                     </td>
@@ -75,9 +69,36 @@ class ProcessCondition extends Component {
         })
     }
 
+    saveInfo(id) {
+        sessionStorage.setItem('activity', id)
+        this.props.history.push('/ProcessActivity')
+    }
+
+    saveAnnex(id) {
+        this.props.getActivityAnnex(localStorage.getItem('Token'), id)
+    }
+
+    loadActivitiesAnnex() {
+        return this.props.listActivityAnnex.map((activity) => {
+            return (
+                <tr key={activity.id}>
+                    <td>{activity.name}</td>
+                    <td>{activity.description}</td>
+                    <td>{activity.state === 1 ? 'Activo' : 'Finalizado'}</td>
+                    <td>
+                        <button onClick={() => this.saveAnnex(activity.id)} className="btn btn-sm text-light naranja" data-toggle="modal" data-target="#viewModal">
+                            <i class="far fa-eye"></i>
+                        </button>
+                        <ProcessAnnex />
+                    </td>
+                </tr>
+            )
+        })
+    }
+
     render() {
         return (
-            <div className="container color">
+            <div className="container color" style={{ width: "90%" }}>
                 <ToastContainer />
                 <br />
                 <div className="card">
@@ -92,20 +113,43 @@ class ProcessCondition extends Component {
                 </div>
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title text-center"><strong>Lista actividades</strong></h4>
-                        <table class="table border table-striped">
-                            <thead class="colorBlue text-light">
-                                <tr>
-                                    <th scope="col">Actividad</th>
-                                    <th scope="col">Descrpcion</th>
-                                    <th scope="col">Estado</th>
-                                    <th scope="col"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {this.loadActivities()}
-                            </tbody>
-                        </table>
+                        <h2 className="text-center">
+                            Lista actividades informativas
+                        </h2>
+                        <div className="pg">
+                            <table class="table border table-striped">
+                                <thead class="colorBlue text-light">
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Actividad</th>
+                                        <th scope="col">Estado</th>
+                                        <th scope="col">Tipo</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {this.loadActivitiesInfo()}
+                                </tbody>
+                            </table>
+                        </div>
+                        <h2 className="text-center">
+                            Lista actividades de anexos
+                        </h2>
+                        <div className="pg">
+                            <table class="table border table-striped">
+                                <thead class="colorBlue text-light">
+                                    <tr>
+                                        <th scope="col">Actividad</th>
+                                        <th scope="col">Descripcion</th>
+                                        <th scope="col">Estado</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {this.loadActivitiesAnnex()}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
                 <br />
@@ -117,9 +161,10 @@ class ProcessCondition extends Component {
 function mapStateToProps(state) {
     return {
         conditionPro: state.condition.conditionR,
-        listActivities: state.activity.listActivityR,
+        listActivityInfo: state.activity.listActivityInfoR,
+        listActivityAnnex: state.activity.listActivityAnnexR,
         messageApprove: state.condition.messageApprove
     }
 }
 
-export default withRouter(connect(mapStateToProps, { getConditionId, getListActivities, approveCondition, addMessageApprove })(ProcessCondition));
+export default withRouter(connect(mapStateToProps, { getConditionId, getActivityAnnex, getListActivitiesInfo, approveCondition, addMessageApprove })(ProcessCondition));

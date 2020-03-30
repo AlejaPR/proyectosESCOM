@@ -5,12 +5,14 @@
  */
 package com.mycompany.modulodocumental.view;
 
+import java.io.Serializable;
+
 /**
  *
  * @author HASHY
  */
 
-public class ConditionView {
+public class ConditionView implements Serializable{
     
     private int id;
     private String name;

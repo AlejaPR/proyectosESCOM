@@ -113,11 +113,6 @@ class ProcessCommentary extends Component {
                                     <div className="col-10">
                                         <p>{commentary.message}</p>
                                     </div>
-                                    <div className="col-2">
-                                        <button onClick={() => this.delete(commentary.id)} className="btn btn-sm float-right">
-                                            <i class="fas fa-ban"></i>
-                                        </button>
-                                    </div>
                                 </div>
                             </div>
                         </div>

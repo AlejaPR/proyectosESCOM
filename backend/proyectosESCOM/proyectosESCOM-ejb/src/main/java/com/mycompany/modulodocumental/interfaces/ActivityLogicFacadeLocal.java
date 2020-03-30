@@ -7,6 +7,7 @@ package com.mycompany.modulodocumental.interfaces;
 
 import com.mycompany.modulodocumental.pojo.ActivityP;
 import com.mycompany.modulodocumental.utility.GenericException;
+import com.mycompany.modulodocumental.view.ActivityAnnexView;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import java.util.List;
 import javax.ejb.Local;
@@ -24,7 +25,9 @@ public interface ActivityLogicFacadeLocal {
 
     void editActivity(ActivityP activity) throws GenericException;
 
-    List<ActivityP> listActivities(int id) throws GenericException;
+    List<ActivityP> listActivitiesInfo(int id) throws GenericException;
+    
+    List<ActivityP> listActivitiesAnnex(int id) throws GenericException;
 
     void addInformation(ActivityP activity) throws GenericException;
 
@@ -35,5 +38,7 @@ public interface ActivityLogicFacadeLocal {
     void changeStatus(ActivityP activity) throws GenericException;
 
     void associateAnnex(int activity, int annex, DatosSolicitudPOJO dataS) throws GenericException;
+    
+    ActivityAnnexView getActivityAnnex(int activity) throws GenericException;
 
 }

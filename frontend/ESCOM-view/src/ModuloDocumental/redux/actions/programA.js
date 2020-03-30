@@ -117,7 +117,7 @@ export function getProgramId(token, id) {
 //MD_Agregar programa
 export function addProgram(token, programN) {
   const headers = {
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json; charset= UTF-8',
     'TokenAuto': desencriptar(token),
     'Permiso': PERMIT_ADD_PROGRAM
   }
@@ -155,7 +155,7 @@ export function addProgram(token, programN) {
 //MD_Editar programa
 export function editProgram(token, programE) {
   const headers = {
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json; charset= UTF-8',
     'TokenAuto': desencriptar(token),
     'Permiso': PERMIT_EDIT_PROGRAM
   }

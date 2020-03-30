@@ -25,11 +25,11 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "TBL_ACTIVITY")
-public class Activity implements Serializable{
-    
+public class Activity implements Serializable {
+
     @Id
     @Basic(optional = false)
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PK_ACT_ID")
     private int id;
     @Column(name = "ACT_NAME")
@@ -43,28 +43,33 @@ public class Activity implements Serializable{
     private int state;
     @Column(name = "ACT_TYPE")
     private int type;
-    
+    @Column(name = "ACT_NUMBER")
+    private String number;
+    @Column(name = "ACT_PARENT_ACTIVITY")
+    private int parentActivity;
+
     @JoinColumn(name = "FK_ACT_CONDITION", referencedColumnName = "PK_CON_ID")
     @ManyToOne
     private Condition fkActCondition;
-    
+
     @JoinColumn(name = "FK_ACT_ANNEX", referencedColumnName = "PK_AX_ID")
     @ManyToOne
     private Annex fkActAnnex;
-    
+
     @OneToMany(mappedBy = "fkComActivity")
     private List<Commentary> listCommentary;
 
     public Activity() {
     }
 
-    public Activity(String name, String description, String information, int state,int type) {
+    public Activity(String name, String description, String information, int state, int type, String number) {
         this.name = name;
         this.description = description;
         this.information = information;
         this.state = state;
         this.type = type;
-    }   
+        this.number = number;
+    }
 
     public int getId() {
         return id;
@@ -106,6 +111,22 @@ public class Activity implements Serializable{
         this.state = state;
     }
 
+    public String getNumber() {
+        return number;
+    }
+
+    public int getParentActivity() {
+        return parentActivity;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public void setParentActivity(int parentActivity) {
+        this.parentActivity = parentActivity;
+    }
+
     public Condition getFkActCondition() {
         return fkActCondition;
     }
@@ -113,7 +134,7 @@ public class Activity implements Serializable{
     public void setFkActCondition(Condition fkActCondition) {
         this.fkActCondition = fkActCondition;
     }
-    
+
     public Annex getFkActAnnex() {
         return fkActAnnex;
     }

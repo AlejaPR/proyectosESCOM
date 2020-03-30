@@ -11,9 +11,11 @@ import com.mycompany.modulodocumental.entity.Condition;
 import com.mycompany.modulodocumental.interfaces.ActivityFacadeLocal;
 import com.mycompany.modulodocumental.interfaces.ActivityLogicFacadeLocal;
 import com.mycompany.modulodocumental.interfaces.AnnexFacadeLocal;
+import com.mycompany.modulodocumental.interfaces.AnnexVersionFacadeLocal;
 import com.mycompany.modulodocumental.interfaces.ConditionFacadeLocal;
 import com.mycompany.modulodocumental.pojo.ActivityP;
 import com.mycompany.modulodocumental.utility.GenericException;
+import com.mycompany.modulodocumental.view.ActivityAnnexView;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import com.mycompany.superadministrador.interfaces.UtilitarioFacadeLocal;
 import java.util.ArrayList;
@@ -34,6 +36,8 @@ public class ActivityLogic implements ActivityLogicFacadeLocal {
     @EJB
     private AnnexFacadeLocal annexFacade;
     @EJB
+    private AnnexVersionFacadeLocal annexVersionFacade;
+    @EJB
     private ConditionFacadeLocal conditionFacade;
     @EJB
     UtilitarioFacadeLocal bitacora;
@@ -46,7 +50,7 @@ public class ActivityLogic implements ActivityLogicFacadeLocal {
     public ActivityP getActivityId(int id) throws GenericException {
         try {
             Activity act = activityFacade.find(id);
-            ActivityP data = new ActivityP(act.getId(), act.getName(), act.getDescription(), act.getInformation(), act.getState(), act.getType());
+            ActivityP data = new ActivityP(act.getId(), act.getName(), act.getDescription(), act.getInformation(), act.getState(), act.getType(), act.getNumber());
             data.setIdCondition(act.getFkActCondition().getId());
             return data;
         } catch (Exception ex) {
@@ -59,7 +63,41 @@ public class ActivityLogic implements ActivityLogicFacadeLocal {
     @Override
     public void addActivity(ActivityP activity) throws GenericException {
         try {
-            Activity data = new Activity(activity.getName(), activity.getDescription(), "", activity.getState(), activity.getType());
+            String newNamber = "";
+            int num = 0;
+            if (activity.getType() == 1) {
+                Activity parent = activityFacade.find(activity.getParentActivity());
+                if (parent != null) {
+                    List<Activity> listAux = activityFacade.listDaughters(parent.getId(), activity.getIdCondition());
+                    if (listAux.size() > 0) {
+                        String aux = listAux.get(listAux.size() - 1).getNumber();
+                        String[] numbers = aux.split("\\.");
+                        int finalN = Integer.parseInt(numbers[numbers.length - 1]) + 1;
+                        for (int i = 0; i < numbers.length - 1; i++) {
+                            if (newNamber == "") {
+                                newNamber = numbers[i];
+                            } else {
+                                newNamber = newNamber + "." + numbers[i];
+                            }
+                        }
+                        newNamber = newNamber + "." + finalN;
+
+                    } else {
+                        newNamber = parent.getNumber() + ".1";
+                    }
+                    num = parent.getId();
+                } else {
+                    List<Activity> listAux = activityFacade.listDaughters(0, activity.getIdCondition());
+                    if (listAux.size() > 0) {
+                        int aux = Integer.parseInt(listAux.get(listAux.size() - 1).getNumber()) + 1;
+                        newNamber = aux + "";
+                    } else {
+                        newNamber = "1";
+                    }
+                }
+            }
+            Activity data = new Activity(activity.getName(), activity.getDescription(), "", activity.getState(), activity.getType(), newNamber);
+            data.setParentActivity(num);
             Condition condition = conditionFacade.find(activity.getIdCondition());
             data.setFkActCondition(condition);
             activityFacade.create(data);
@@ -90,17 +128,20 @@ public class ActivityLogic implements ActivityLogicFacadeLocal {
     }
 
     @Override
-    public List<ActivityP> listActivities(int id) throws GenericException {
+    public List<ActivityP> listActivitiesInfo(int id) throws GenericException {
         try {
-            List<Activity> list = activityFacade.listActivities(id);
+            List<Activity> list = activityFacade.listActivitiesInfo(id);
             List<ActivityP> data = new ArrayList<>();
             for (Activity act : list) {
-                ActivityP aux = new ActivityP(act.getId(), act.getName(), act.getDescription(), act.getInformation(), act.getState(), act.getType());
+                ActivityP aux = new ActivityP(act.getId(), act.getName(), act.getDescription(), act.getInformation(), act.getState(), act.getType(), act.getNumber());
+                if (act.getFkActAnnex() != null) {
+                    aux.setIdAnnex(act.getFkActAnnex().getId());
+                }
                 data.add(aux);
             }
             return data;
         } catch (Exception ex) {
-            bitacora.registroLogger(CLASS, "Lista actividades", Level.SEVERE, ex.getMessage());
+            bitacora.registroLogger(CLASS, "Lista actividades informacion", Level.SEVERE, ex.getMessage());
             throw new GenericException("error server");
         }
     }
@@ -122,7 +163,18 @@ public class ActivityLogic implements ActivityLogicFacadeLocal {
     @Override
     public String allInformation(int id) throws GenericException {
         try {
-            String data = activityFacade.allInformation(id);
+            List<Condition> conditions = conditionFacade.listConditionDoc(id);
+            int cont = 1;
+            String data = "";
+            for (Condition condition : conditions) {
+                data = data + "<h3>" + cont + "." + condition.getName() + "</h3>" + "<br/>";
+                List<ActivityP> info = listActivitiesInfo(condition.getId());
+                for (ActivityP inf : info) {
+                    data = data + "<h4>" + cont + "." + inf.getNumber() + ". " + inf.getName() + "</h4>" + "<br/>";
+                    data = data + inf.getInformation() + "<br/>";
+                }
+                cont++;
+            }
             return data;
         } catch (Exception e) {
             throw new GenericException("error server");
@@ -168,6 +220,47 @@ public class ActivityLogic implements ActivityLogicFacadeLocal {
             bitacora.registrarEnBitacora(dataS);
         } catch (Exception ex) {
             bitacora.registroLogger(CLASS, "asociar anexo", Level.SEVERE, ex.getMessage());
+            throw new GenericException("error server");
+        }
+    }
+
+    @Override
+    public ActivityAnnexView getActivityAnnex(int activity) throws GenericException {
+        try {
+            Activity act = activityFacade.find(activity);
+            int idAnnex = 0;
+            String url = "";
+            String nameAnnex = "";
+            if (act.getFkActAnnex() != null) {
+                idAnnex = act.getFkActAnnex().getId();
+                nameAnnex = act.getFkActAnnex().getName();
+                if (annexVersionFacade.listAnnexVersion(act.getFkActAnnex().getId()).size() > 0) {
+                    url = annexVersionFacade.listAnnexVersion(act.getFkActAnnex().getId()).get(0).getLocation();
+                }
+            }
+            ActivityAnnexView data = new ActivityAnnexView(activity, act.getName(), act.getDescription(), idAnnex, nameAnnex, url);
+            return data;
+        } catch (Exception ex) {
+            bitacora.registroLogger(CLASS, "Obtener actividad id", Level.SEVERE, ex.getMessage());
+            throw new GenericException("error server");
+        }
+    }
+
+    @Override
+    public List<ActivityP> listActivitiesAnnex(int id) throws GenericException {
+        try {
+            List<Activity> list = activityFacade.listActivitiesAnnex(id);
+            List<ActivityP> data = new ArrayList<>();
+            for (Activity act : list) {
+                ActivityP aux = new ActivityP(act.getId(), act.getName(), act.getDescription(), act.getInformation(), act.getState(), act.getType(), act.getNumber());
+                if (act.getFkActAnnex() != null) {
+                    aux.setIdAnnex(act.getFkActAnnex().getId());
+                }
+                data.add(aux);
+            }
+            return data;
+        } catch (Exception ex) {
+            bitacora.registroLogger(CLASS, "Lista actividades anexo", Level.SEVERE, ex.getMessage());
             throw new GenericException("error server");
         }
     }

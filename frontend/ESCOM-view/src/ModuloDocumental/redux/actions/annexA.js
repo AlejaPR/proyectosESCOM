@@ -85,7 +85,7 @@ export function getListAnnexes(token, id) {
 //MD_Buscar anexos
 export function searchAnnexS(token, searchAnn) {
   const headers = {
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json; charset= UTF-8',
     'TokenAuto': desencriptar(token),
     'Permiso': PERMIT_SEARCH_ANNEXES
   }
@@ -151,7 +151,7 @@ export function getAnnexId(token, id) {
 //MD_Agregar anexo
 export function addAnnex(token, annex) {
   const headers = {
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json; charset= UTF-8',
     'TokenAuto': desencriptar(token),
     'Permiso': PERMIT_ADD_ANNEX
   }
@@ -189,7 +189,7 @@ export function addAnnex(token, annex) {
 //MD_Editar anexo
 export function editAnnex(token, annex) {
   const headers = {
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json; charset= UTF-8',
     'TokenAuto': desencriptar(token),
     'Permiso': PERMIT_EDIT_ANNEX
   }

@@ -37,7 +37,7 @@ public class UserConditionFacade extends AbstractFacade<UserCondition> implement
     @Override
     public List<Condition> listCondition(int user, int document) {
         List<Condition> list = new ArrayList<>();
-        Query queryUser = em.createQuery("SELECT u FROM UserCondition u WHERE u.fkUcUser = ?1 AND u.fkUcCondition.fkConProcess.fkPrcDocument.id = ?2");
+        Query queryUser = em.createQuery("SELECT u FROM UserCondition u WHERE u.fkUcUser = ?1 AND u.fkUcCondition.fkConProcess.fkPrcDocument.id = ?2 ORDER BY u.fkUcCondition.id ASC");
         queryUser.setParameter(1, user);
         queryUser.setParameter(2, document);
         List<UserCondition> auxUser = queryUser.getResultList();

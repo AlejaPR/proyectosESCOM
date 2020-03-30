@@ -6,6 +6,7 @@
 package com.mycompany.modulodocumental.logica;
 
 import com.mycompany.modulodocumental.entity.Condition;
+import com.mycompany.modulodocumental.entity.Process;
 import com.mycompany.modulodocumental.interfaces.ActivityFacadeLocal;
 import com.mycompany.modulodocumental.interfaces.ConditionFacadeLocal;
 import com.mycompany.modulodocumental.interfaces.ConditionLogicFacadeLocal;
@@ -140,7 +141,7 @@ public class ConditionLogic implements ConditionLogicFacadeLocal {
     @Override
     public void addCondition(ConditionP condition) throws GenericException {
         try {
-            com.mycompany.modulodocumental.entity.Process proce = processFacade.find(condition.getProcess());
+            Process proce = processFacade.find(condition.getProcess());
             Condition data = new Condition(condition.getName(), condition.getDescription(), condition.getState(), condition.getStartDate(), condition.getFinalDate());
             data.setFkConProcess(proce);
             conditionFacade.create(data);

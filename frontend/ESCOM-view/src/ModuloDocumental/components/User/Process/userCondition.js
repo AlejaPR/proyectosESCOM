@@ -38,7 +38,7 @@ class UserCondition extends Component {
 
     render() {
         return (
-            <div className="container color" style={{ width: "80%" }}>
+            <div className="container color" style={{ width: "90%" }}>
                 <h2 className="text-center"><strong>Lista de condiciones</strong></h2>
                 <div className="pg">
                     <table class="table border table-striped">

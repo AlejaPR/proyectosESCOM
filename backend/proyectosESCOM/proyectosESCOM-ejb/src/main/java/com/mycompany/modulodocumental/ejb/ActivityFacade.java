@@ -49,16 +49,24 @@ public class ActivityFacade extends AbstractFacade<Activity> implements Activity
     }
 
     @Override
-    public List<Activity> listActivities(int id) {
-        Query query = em.createQuery("SELECT a FROM Activity a WHERE a.fkActCondition.id = ?1 AND a.state = 1");
+    public List<Activity> listActivitiesInfo(int id) {
+        Query query = em.createQuery("SELECT a FROM Activity a WHERE a.fkActCondition.id = ?1 AND a.type = 1 ORDER BY a.number ASC, a.state ASC");
         query.setParameter(1, id);
         List<Activity> list = query.getResultList();
         return list;
     }
 
     @Override
+    public List<Activity> listActivitiesAnnex(int id) {
+        Query query = em.createQuery("SELECT a FROM Activity a WHERE a.fkActCondition.id = ?1 AND a.type = 2 ORDER BY a.state ASC ");
+        query.setParameter(1, id);
+        List<Activity> list = query.getResultList();
+        return list;
+    }
+    
+    @Override
     public String allInformation(int id) {
-        Query query = em.createQuery("SELECT a FROM Activity a WHERE a.fkActCondition.fkConProcess.id = ?1 AND a.type = 1");
+        Query query = em.createQuery("SELECT a FROM Activity a WHERE a.fkActCondition.fkConProcess.id = ?1 AND a.type = 1 ORDER BY a.number ASC");
         query.setParameter(1, id);
         List<Activity> list = query.getResultList();
         String rest = "";
@@ -68,6 +76,15 @@ public class ActivityFacade extends AbstractFacade<Activity> implements Activity
             }
         }
         return rest;
+    }
+
+    @Override
+    public List<Activity> listDaughters(int id, int condition) {
+        Query query = em.createQuery("SELECT a FROM Activity a WHERE a.parentActivity = ?1 AND a.type = 1 AND a.fkActCondition.id = ?2 ORDER BY a.number ASC");
+        query.setParameter(1, id);
+        query.setParameter(2, condition);
+        List<Activity> list = query.getResultList();
+        return list;
     }
 
 }

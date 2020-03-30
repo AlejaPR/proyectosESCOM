@@ -2,11 +2,34 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
-import { addActivity } from '../../../../redux/actions/activityA.js';
+import { addActivity, addMessageAdd, getListActivitiesInfo } from '../../../../redux/actions/activityA.js';
 import { withRouter } from 'react-router-dom';
 import { required, thousand, twoHundred, minimum, select } from '../../../utilitarian/validations.js';
+import { toast } from 'react-toastify';
 
-class Add extends Component {
+class AddInfo extends Component {
+
+    componentDidMount() {
+        this.props.getListActivitiesInfo(localStorage.getItem('Token'), sessionStorage.getItem('condition'))
+    }
+
+    componentDidUpdate() {
+        if (this.props.messageAdd !== '') {
+            switch (this.props.messageAdd) {
+                case 'add':
+                    toast.success('Se agrego con exito.');
+                    this.props.getListActivitiesInfo(localStorage.getItem('Token'), sessionStorage.getItem('condition'));
+                    this.props.addMessageAdd('');
+                    break;
+                case 'error server':
+                    toast.error('Se presento un error, intentelo mas tarde.');
+                    this.props.addMessageAdd('');
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 
     handleSubmit = formValues => {
         let activityN = {
@@ -16,7 +39,8 @@ class Add extends Component {
             information: '',
             state: 1,
             idCondition: sessionStorage.getItem('condition'),
-            type: formValues.type,
+            type: 1,
+            parentActivity: formValues.type,
             requestData: null
         }
         this.props.addActivity(localStorage.getItem('Token'), activityN);
@@ -26,13 +50,21 @@ class Add extends Component {
 
     }
 
+    loadList() {
+        return this.props.activitiesInfo.map((activity) => {
+            return (
+                <option value={activity.id}>{activity.number + "." + activity.name}</option>
+            )
+        })
+    }
+
     render() {
         return (
             <div>
-                <button type="button" className="btn text-light btn-sm float-right naranja " data-toggle="modal" data-target="#addModal" >
+                <button type="button" className="btn text-light btn-sm float-right naranja " data-toggle="modal" data-target="#addModalInfo" >
                     <i class="fas fa-plus"></i> Agregar
                 </button>
-                <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade" id="addModalInfo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <form className="form-horizontal container" onSubmit={this.props.handleSubmit(this.handleSubmit)}>
@@ -46,25 +78,24 @@ class Add extends Component {
                                 <div class="modal-body">
                                     <label for="form_control_1">Nombre: </label>
                                     <div className="row">
-                                        <div className="col-sm-5">
+                                        <div className="col-sm">
                                             <Field name="name" validate={[required, minimum, twoHundred]} type="text" component={generarInput} label="Nombre" />
                                         </div>
                                     </div>
                                     <br />
                                     <label for="form_control_1">Descripcion: </label>
                                     <div className="row">
-                                        <div className="col-sm-5">
+                                        <div className="col-sm">
                                             <Field name="description" validate={[required, thousand, minimum]} type="text" component={generarText} label="Descripcion" />
                                         </div>
                                     </div>
                                     <br />
-                                    <label for="form_control_1">Tipo actividad: </label>
+                                    <label for="form_control_1">Actividad principal: </label>
                                     <div className="row">
-                                        <div className="col-sm-5">
-                                            <Field name="type" validate={[select]} className="bs-select form-control" component={generarSelect}>
+                                        <div className="col-sm">
+                                            <Field name="type" className="bs-select form-control" component={generarSelect}>
                                                 <option value="0">Seleccione...</option>
-                                                <option value="1">Informativa</option>
-                                                <option value="2">Anexo</option>
+                                                {this.loadList()}
                                             </Field>
                                         </div>
                                     </div>
@@ -115,13 +146,14 @@ const generarInput = ({ input, placeholder, label, type, meta: { touched, warnin
 
 function mapStateToProps(state) {
     return {
-        messageR: state.activity.messageAdd
+        messageAdd: state.activity.messageAdd,
+        activitiesInfo: state.activity.listActivityInfoR,
     }
 }
 
 let formAdd = reduxForm({
     form: 'addActivity',
     enableReinitialize: true
-})(Add)
+})(AddInfo)
 
-export default withRouter(connect(mapStateToProps, { addActivity })(formAdd));
+export default withRouter(connect(mapStateToProps, { addActivity, addMessageAdd, getListActivitiesInfo })(formAdd));

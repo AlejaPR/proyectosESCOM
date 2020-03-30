@@ -154,7 +154,7 @@ export function getDocumentIdEdit(token, id) {
 //MD_Agregar documento
 export function addDocument(token, documentN) {
     const headers = {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset= UTF-8',
         'TokenAuto': desencriptar(token),
         'Permiso': PERMIT_ADD_DOCUMENT
     }
@@ -192,7 +192,7 @@ export function addDocument(token, documentN) {
 //MD_Editar documento
 export function editDocument(token, documentE) {
     const headers = {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset= UTF-8',
         'TokenAuto': desencriptar(token),
         'Permiso': PERMIT_EDIT_DOCUMENT
     }

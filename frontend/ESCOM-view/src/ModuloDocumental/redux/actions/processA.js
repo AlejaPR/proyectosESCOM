@@ -116,7 +116,7 @@ export function getProcessId(token, id) {
 //MD_Agregar proceso
 export function addProcess(token, processN) {
   const headers = {
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json; charset= UTF-8',
     'TokenAuto': desencriptar(token),
     'Permiso': PERMIT_ADD_PROCESS
   }
@@ -154,7 +154,7 @@ export function addProcess(token, processN) {
 //MD_Editar proceso
 export function editProcess(token, processE) {
   const headers = {
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json; charset= UTF-8',
     'TokenAuto': desencriptar(token),
     'Permiso': PERMIT_EDIT_PROCESS
   }

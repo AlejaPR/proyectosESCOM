@@ -2,8 +2,10 @@ import axios from 'axios'
 
 import { desencriptar } from '../../../SuperAdministrador/componentes/general/Encriptar.js';
 
-export const GET_LIST_ACTIVITIES = 'GET_LIST_ACTIVITIES';
+export const GET_LIST_ACTIVITIES_INFO = 'GET_LIST_ACTIVITIES_INFO';
+export const GET_LIST_ACTIVITIES_ANNEX = 'GET_LIST_ACTIVITIES_ANNEX';
 export const GET_ACTIVITY_ID = 'SHOW_ACTIVITY_ID';
+export const GET_ACTIVITY_ANNEX = 'SHOW_ACTIVITY_ANNEX';
 export const ADD_ACTIVITY = 'ADD_ACTIVITY';
 export const EDIT_ACTIVITY = 'EDIT_ACTIVITY';
 export const DELETE_ACTIVITY = 'DELETE_ACTIVITY';
@@ -16,11 +18,14 @@ export const ADD_MESSAGE_EDIT = 'ADD_MESSAGE_EDIT';
 export const ADD_MESSAGE_ADD = 'ADD_MESSAGE_ADD';
 export const ADD_MESSAGE_DELETE = 'ADD_MESSAGE_DELETE';
 export const ADD_MESSAGE_ASSOCIATE = 'ADD_MESSAGE_ASSOCIATE';
+export const ADD_MESSAGE_ADD_INFO = 'ADD_MESSAGE_ADD_INFO';
 export const ADD_MESSAGE = 'ADD_MESSAGE';
 
 const URL_BASE = 'http://localhost:9090/proyectosESCOM-web';
-const PERMIT_LIST_ACTIVITIES = 'MD_Lista actividades';
+const PERMIT_LIST_ACTIVITIES_INFO = 'MD_Prueba';
+const PERMIT_LIST_ACTIVITIES_ANNEX = 'MD_Prueba';
 const PERMIT_GET_ACTIVITY = 'MD_Obtiene actividad';
+const PERMIT_GET_ACTIVITY_ANNEX = 'MD_Prueba';
 const PERMIT_ADD_ACTIVITY = 'MD_Agregar actividad';
 const PERMIT_EDIT_ACTIVITY = 'MD_Editar actividad';
 const PERMIT_DELETE_ACTIVITY = 'MD_Eliminar actividad';
@@ -46,6 +51,15 @@ export function addMessageAdd(mensaje) {
     };
 }
 
+export function addMessageAddInfo(mensaje) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: ADD_MESSAGE_ADD_INFO,
+            mensaje: mensaje
+        });
+    };
+}
+
 export function addMessageDelete(mensaje) {
     return (dispatch, getState) => {
         dispatch({
@@ -64,19 +78,18 @@ export function addMessageAssociate(mensaje) {
     };
 }
 
-//MD_Lista actividades
-export function getListActivities(token, id) {
+//MD_Lista actividades informacion
+export function getListActivitiesInfo(token, id) {
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': desencriptar(token),
-        'Permiso': PERMIT_LIST_ACTIVITIES
+        'Permiso': PERMIT_LIST_ACTIVITIES_INFO
     }
-    
     return (dispatch, getState) => {
-        axios.get(`${URL_BASE}/api/activity/list/${id}`, { headers: headers })
+        axios.get(`${URL_BASE}/api/activity/listInfo/${id}`, { headers: headers })
             .then(response => {
                 dispatch({
-                    type: GET_LIST_ACTIVITIES,
+                    type: GET_LIST_ACTIVITIES_INFO,
                     payload: response.data
                 });
             }).catch(error => {
@@ -97,6 +110,41 @@ export function getListActivities(token, id) {
             });
     }
 }
+
+//MD_Lista actividades anexo
+export function getListActivitiesAnnex(token, id) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMIT_LIST_ACTIVITIES_ANNEX
+    }
+
+    return (dispatch, getState) => {
+        axios.get(`${URL_BASE}/api/activity/listAnnex/${id}`, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: GET_LIST_ACTIVITIES_ANNEX,
+                    payload: response.data
+                });
+            }).catch(error => {
+                if (error.request.response === '') {
+                    dispatch({
+                        type: ADD_MESSAGE,
+                        payload: 'error server'
+                    });
+                } else {
+                    if (error.request) {
+                        dispatch({
+                            type: ADD_MESSAGE,
+                            payload: 'error server'
+                        });
+                    }
+                }
+
+            });
+    }
+}
+
 
 //MD_Obtiene actividad
 export function getActivityId(token, id) {
@@ -131,10 +179,43 @@ export function getActivityId(token, id) {
     }
 }
 
+//MD_Obtiene actividad anexo
+export function getActivityAnnex(token, id) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMIT_GET_ACTIVITY_ANNEX
+    }
+    return (dispatch, getState) => {
+        axios.get(`${URL_BASE}/api/activity/getActivityAnnex/${id}`, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: GET_ACTIVITY_ANNEX,
+                    payload: response.data
+                });
+            }).catch(error => {
+                if (error.request.response === '') {
+                    dispatch({
+                        type: ADD_MESSAGE,
+                        payload: 'error server'
+                    });
+                } else {
+                    if (error.request) {
+                        dispatch({
+                            type: ADD_MESSAGE,
+                            payload: 'error server'
+                        });
+                    }
+                }
+
+            });
+    }
+}
+
 //MD_Agregar actividad
 export function addActivity(token, activityN) {
     const headers = {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset= UTF-8',
         'TokenAuto': desencriptar(token),
         'Permiso': PERMIT_ADD_ACTIVITY
     }
@@ -172,7 +253,7 @@ export function addActivity(token, activityN) {
 //MD_Editar actividad
 export function editActivity(token, activityE) {
     const headers = {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset= UTF-8',
         'TokenAuto': desencriptar(token),
         'Permiso': PERMIT_EDIT_ACTIVITY
     }
@@ -221,7 +302,7 @@ export function deleteActivity(token, id) {
         'operacion': PERMIT_DELETE_ACTIVITY
     };
     return (dispatch, getState) => {
-        axios.post(`${URL_BASE}/api/activity/delete/${id}`,requestData, { headers: headers })
+        axios.post(`${URL_BASE}/api/activity/delete/${id}`, requestData, { headers: headers })
             .then(response => {
                 dispatch({
                     type: DELETE_ACTIVITY,
@@ -249,7 +330,7 @@ export function deleteActivity(token, id) {
 //MD_Agregar informacion
 export function addInformation(token, info) {
     const headers = {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset= UTF-8',
         'TokenAuto': desencriptar(token),
         'Permiso': PERMIT_ADD_INFORMATION
     }
@@ -263,18 +344,18 @@ export function addInformation(token, info) {
             .then(response => {
                 dispatch({
                     type: ADD_INFORMATION,
-                    payload: response.data
+                    payload: response.data.data
                 });
             }).catch(error => {
                 if (error.request.response === '') {
                     dispatch({
-                        type: ADD_MESSAGE,
+                        type: ADD_INFORMATION,
                         payload: 'error server'
                     });
                 } else {
                     if (error.request) {
                         dispatch({
-                            type: ADD_MESSAGE,
+                            type: ADD_INFORMATION,
                             payload: 'error server'
                         });
                     }
@@ -285,9 +366,9 @@ export function addInformation(token, info) {
 }
 
 //MD_Asociar anexo
-export function associateAnnex(token, activity,annexo) {
+export function associateAnnex(token, activity, annexo) {
     const headers = {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset= UTF-8',
         'TokenAuto': desencriptar(token),
         'Permiso': PERMIT_ASSOCIATE_ANNEX
     }
@@ -306,13 +387,13 @@ export function associateAnnex(token, activity,annexo) {
             }).catch(error => {
                 if (error.request.response === '') {
                     dispatch({
-                        type: ADD_MESSAGE_ASSOCIATE,
+                        type: ASSOCIATE_ANNEX,
                         payload: 'error server'
                     });
                 } else {
                     if (error.request) {
                         dispatch({
-                            type: ADD_MESSAGE_ASSOCIATE,
+                            type: ASSOCIATE_ANNEX,
                             payload: 'error server'
                         });
                     }

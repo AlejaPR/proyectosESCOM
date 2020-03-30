@@ -97,7 +97,7 @@ class ListDocument extends Component {
 
     render() {
         return (
-            <div className="container color">
+            <div className="container color" style={{ width: "90%" }}>
                 <ToastContainer />
                 <br />
                 <div class="card">

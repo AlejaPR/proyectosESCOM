@@ -7,6 +7,7 @@ package com.mycompany.modulodocumental.services;
 
 import com.mycompany.modulodocumental.interfaces.ActivityLogicFacadeLocal;
 import com.mycompany.modulodocumental.pojo.ActivityP;
+import com.mycompany.modulodocumental.view.ActivityAnnexView;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import java.util.List;
 import javax.ejb.EJB;
@@ -65,10 +66,22 @@ public class ActivityS {
     }
 
     @GET
-    @Path("/list/{id}")
-    public Response listActivities(@PathParam("id") int id) {
+    @Path("/listInfo/{id}")
+    public Response listActivitiesInfo(@PathParam("id") int id) {
         try {
-            List<ActivityP> data = activityLogicFacade.listActivities(id);
+            List<ActivityP> data = activityLogicFacade.listActivitiesInfo(id);
+            return Response.status(Response.Status.OK).entity(data).build();
+        } catch (Exception e) {
+            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
+        }
+    }
+    
+    @GET
+    @Path("/listAnnex/{id}")
+    public Response listActivitiesAnnex(@PathParam("id") int id) {
+        try {
+            List<ActivityP> data = activityLogicFacade.listActivitiesAnnex(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
             JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
@@ -144,11 +157,23 @@ public class ActivityS {
     
     @PUT
     @Path("/associate/{id}/{idA}")
-    public Response associateAnnex(@PathParam("id") int id,@PathParam("id") int idA, DatosSolicitudPOJO dataS){
+    public Response associateAnnex(@PathParam("id") int id,@PathParam("idA") int idA, DatosSolicitudPOJO dataS){
         try {
-            activityLogicFacade.associateAnnex(idA, idA, dataS);
+            activityLogicFacade.associateAnnex(id, idA, dataS);
             JsonObject rest = Json.createObjectBuilder().add("data", "associate").build();
             return Response.status(Response.Status.OK).entity(rest).build();
+        } catch (Exception e) {
+            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
+        }
+    }
+    
+    @GET
+    @Path("/getActivityAnnex/{id}")
+    public Response getActivityAnnex(@PathParam("id") int id) {
+        try {
+            ActivityAnnexView data = activityLogicFacade.getActivityAnnex(id);
+            return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
             JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();

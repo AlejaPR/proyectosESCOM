@@ -2,11 +2,29 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
-import { editActivity } from '../../../../redux/actions/activityA.js';
+import { editActivity ,addMessageEdit} from '../../../../redux/actions/activityA.js';
 import { withRouter } from 'react-router-dom';
 import { required, thousand, twoHundred, minimum, select } from '../../../utilitarian/validations.js';
+import { ToastContainer, toast } from 'react-toastify';
 
 class Edit extends Component {
+
+    componentDidUpdate() {
+        if (this.props.messageEditA !== '') {
+            switch (this.props.messageEditA) {
+                case 'edit':
+                    toast.success('Se agrego con exito.');
+                    this.props.getListActivities(localStorage.getItem('Token'), sessionStorage.getItem('condition'));
+                    this.props.addMessageEdit('');
+                    break;
+                case 'error server':
+                    toast.error('Se presento un error, intentelo mas tarde.');
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 
     handleSubmit = formValues => {
         let activityE = {
@@ -113,7 +131,7 @@ function mapStateToProps(state) {
             description: state.activity.activityR.description,
             type: state.activity.activityR.type
         },
-        messageR: state.activity.messageEdit
+        messageEditA: state.activity.messageEdit
     }
 }
 
@@ -122,4 +140,4 @@ let formEdit = reduxForm({
     enableReinitialize: true
 })(Edit)
 
-export default withRouter(connect(mapStateToProps, { editActivity })(formEdit));
+export default withRouter(connect(mapStateToProps, { editActivity, addMessageEdit })(formEdit));

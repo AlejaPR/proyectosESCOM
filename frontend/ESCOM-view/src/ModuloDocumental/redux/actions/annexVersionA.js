@@ -30,7 +30,7 @@ export function getAnnexVersions(token, id) {
 //MD_Agregar version anexo
 export function addAnnexVersion(token, data, annexN) {
     const headers = {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset= UTF-8',
         'TokenAuto': desencriptar(token),
         'Permiso': PERMIT_ADD_ANNEX_VERSION
     }

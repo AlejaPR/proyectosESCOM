@@ -53,6 +53,7 @@ import VersionAnnex from "./ModuloDocumental/components/Leader/Documentation/Ann
 import SearchAnnexs from "./ModuloDocumental/components/Leader/Documentation/AnnexSearch/searchAnnexs.js";
 import VersionDocument from "./ModuloDocumental/components/Leader/Documentation/Versioning/versionDocument.js";
 import AddInformation from "./ModuloDocumental/components/User/Process/addInformation.js";
+import AddAnnex from "./ModuloDocumental/components/User/Process/addAnnex.js";
 import UserActivity from "./ModuloDocumental/components/User/Process/userActivity.js";
 import UserCondition from "./ModuloDocumental/components/User/Process/userCondition.js";
 import Prueba from "./ModuloDocumental/components/prueba.js";
@@ -235,6 +236,16 @@ class App extends React.Component {
 								<MenuSuperior />
 								<div id="wrapper">
 									<AddInformation />
+								</div>
+							</>
+						</RutaProtegida>
+
+						<RutaProtegida path="/AddAnnex">
+							<>
+								<LeaderMenu />
+								<MenuSuperior />
+								<div id="wrapper">
+									<AddAnnex />
 								</div>
 							</>
 						</RutaProtegida>
