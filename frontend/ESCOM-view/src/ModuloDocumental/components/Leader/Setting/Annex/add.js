@@ -48,21 +48,21 @@ class Add extends Component {
 
                                     <label for="form_control_1">Nombre: </label>
                                     <div className="row">
-                                        <div className="col-sm-5">
+                                        <div className="col-sm">
                                             <Field name="nameA" validate={[required, twoHundred, minimum]} component={generarInput} label="Nombre" />
                                         </div>
                                     </div>
                                     <br />
                                     <label for="form_control_1">Descripcion: </label>
                                     <div className="row">
-                                        <div className="col-sm-5">
+                                        <div className="col-sm">
                                             <Field name="descriptionA" validate={[required, minimum, fiveHundred]} component={generarText} label="Descripcion" />
                                         </div>
                                     </div>
                                     <br />
                                     <label for="form_control_1">Palabras claves: </label>
                                     <div className="row">
-                                        <div className="col-sm-5">
+                                        <div className="col-sm">
                                             <Field name="keywordsA" validate={[required, twoHundred, minimum]} component={generarInput} label="Palabras claves" />
                                         </div>
                                     </div>

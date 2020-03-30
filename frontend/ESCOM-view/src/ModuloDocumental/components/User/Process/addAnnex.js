@@ -2,7 +2,7 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom'
-import { getActivityAnnex, associateAnnex, addMessageAssociate } from '../../../redux/actions/activityA.js';
+import { getActivityAnnex, associateAnnex, addMessageAssociate, changeStatus, addMessageChange } from '../../../redux/actions/activityA.js';
 import { getListAnnexes } from '../../../redux/actions/annexA';
 import { ToastContainer, toast } from 'react-toastify';
 import { reduxForm, Field } from 'redux-form';
@@ -32,6 +32,21 @@ class AddAnnex extends Component {
                     break;
             }
         }
+
+        if (this.props.messageChange !== '') {
+            switch (this.props.messageChange) {
+                case 'notify':
+                    toast.success('Notificada con exito.');
+                    this.props.addMessageChange('');
+                    break;
+                case 'error server':
+                    toast.error('Se presento un error, intentelo mas tarde.');
+                    this.props.addMessageChange('');
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     loadList() {
@@ -41,6 +56,15 @@ class AddAnnex extends Component {
             )
         })
     }
+    notifyActivity() {
+        let activityN = {
+            id: sessionStorage.getItem('activity'),
+            state: 3,
+            requestData: null
+        }
+        this.props.changeStatus(localStorage.getItem('Token'), activityN)
+    }
+
 
     handleSubmit = formValues => {
         this.props.associateAnnex(localStorage.getItem('Token'), sessionStorage.getItem('activity'), formValues.annex);
@@ -54,11 +78,14 @@ class AddAnnex extends Component {
                 <br />
                 <div className="card">
                     <div className="card-body">
+                        <button type="button" onClick={() => this.notifyActivity()} className="btn text-light btn-sm float-right naranja " >
+                            Notificar
+                        </button>
                         <h3 className="card-title text-center"><strong>{this.props.activityAnnex.nameActivity}</strong></h3>
                         <h5>Descripcion:</h5>
                         <p>-- {this.props.activityAnnex.descriptionActivity}</p>
                         <h5>Anexo asociado: </h5>
-                        <p>-- {this.props.activityAnnex.nameAnnex === "" ? 'Ningún anexo asociado ': this.props.activityAnnex.nameAnnex}</p>
+                        <p>-- {this.props.activityAnnex.nameAnnex === "" ? 'Ningún anexo asociado ' : this.props.activityAnnex.nameAnnex}</p>
                         {() => {
                             if (this.props.activityAnnex.url !== "") {
                                 return (
@@ -78,7 +105,7 @@ class AddAnnex extends Component {
                                     </Field>
                                 </div>
                             </div>
-                            <br/>
+                            <br />
                             <button type="submit" className="btn btn-default naranja">Agregar</button>
                         </form>
                     </div>
@@ -106,7 +133,8 @@ function mapStateToProps(state) {
     return {
         activityAnnex: state.activity.activityAnnexR,
         annexes: state.annex.listAnnexR,
-        messageAssociateA: state.activity.messageAssociate
+        messageAssociateA: state.activity.messageAssociate,
+        messageChange: state.activity.messageChange
     }
 }
 
@@ -115,4 +143,4 @@ let formAdd = reduxForm({
     enableReinitialize: true
 })(AddAnnex)
 
-export default withRouter(connect(mapStateToProps, { getActivityAnnex, associateAnnex, addMessageAssociate, getListAnnexes })(formAdd));
+export default withRouter(connect(mapStateToProps, { getActivityAnnex, changeStatus, addMessageChange, associateAnnex, addMessageAssociate, getListAnnexes })(formAdd));

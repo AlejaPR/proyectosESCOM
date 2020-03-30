@@ -3,7 +3,7 @@ import { Component } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom'
-import { getActivityId, addInformation, addMessageAddInfo } from '../../../redux/actions/activityA.js';
+import { getActivityId, addInformation, addMessageAddInfo, changeStatus, addMessageChange } from '../../../redux/actions/activityA.js';
 import ProcessCommentary from '../../Leader/Process/processCommentary.js';
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -19,6 +19,20 @@ class AddInformation extends Component {
                 case 'error server':
                     toast.error('Se presento un error, intentelo mas tarde.');
                     this.props.addMessageAddInfo('');
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (this.props.messageChange !== '') {
+            switch (this.props.messageChange) {
+                case 'notify':
+                    toast.success('Notificada con exito.');
+                    this.props.addMessageChange('');
+                    break;
+                case 'error server':
+                    toast.error('Se presento un error, intentelo mas tarde.');
+                    this.props.addMessageChange('');
                     break;
                 default:
                     break;
@@ -40,6 +54,15 @@ class AddInformation extends Component {
         this.props.addInformation(localStorage.getItem('Token'), info)
     }
 
+    notifyActivity() {
+        let activityN = {
+            id: sessionStorage.getItem('activity'),
+            state: 3,
+            requestData: null
+        }
+        this.props.changeStatus(localStorage.getItem('Token'), activityN)
+    }
+
     componentDidMount() {
         this.props.getActivityId(localStorage.getItem('Token'), sessionStorage.getItem('activity'))
     }
@@ -55,6 +78,9 @@ class AddInformation extends Component {
                 <br />
                 <div className="card">
                     <div className="card-body">
+                        <button type="button" onClick={() => this.notifyActivity()} className="btn text-light btn-sm float-right naranja " >
+                            Notificar
+                        </button>
                         <h3 className="card-title text-center">Agregar informacion</h3>
                         <h5>Descripción:</h5>
                         <p className="px-3">{this.props.dataModel.description}</p>
@@ -98,7 +124,7 @@ class AddInformation extends Component {
                     </button>
                 </div>
                 <br />
-                <ProcessCommentary/>
+                <ProcessCommentary />
             </div>
         );
     }
@@ -108,8 +134,9 @@ class AddInformation extends Component {
 function mapStateToProps(state) {
     return {
         dataModel: state.activity.activityR,
-        messageAddInfo: state.activity.messageAddInfo
+        messageAddInfo: state.activity.messageAddInfo,
+        messageChange: state.activity.messageChange
     }
 }
 
-export default withRouter(connect(mapStateToProps, { getActivityId, addInformation, addMessageAddInfo })(AddInformation));
+export default withRouter(connect(mapStateToProps, { getActivityId, addInformation, addMessageAddInfo, changeStatus, addMessageChange })(AddInformation));

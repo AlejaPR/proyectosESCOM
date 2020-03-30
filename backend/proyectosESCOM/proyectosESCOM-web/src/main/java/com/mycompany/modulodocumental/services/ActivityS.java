@@ -76,7 +76,7 @@ public class ActivityS {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
-    
+
     @GET
     @Path("/listAnnex/{id}")
     public Response listActivitiesAnnex(@PathParam("id") int id) {
@@ -140,24 +140,33 @@ public class ActivityS {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
-    
+
     @PUT
     @Path("/changeStatus")
-    public Response changeStatus( ActivityP activity ) {
+    public Response changeStatus(ActivityP activity) {
         try {
             activityLogicFacade.changeStatus(activity);
-            JsonObject rest = Json.createObjectBuilder().add("data", "notify").build();
-            return Response.status(Response.Status.OK).entity(rest).build();
+            if (activity.getState()==1) {
+                JsonObject rest = Json.createObjectBuilder().add("data", "denied").build();
+                return Response.status(Response.Status.OK).entity(rest).build();
+            } else if(activity.getState()==2) {
+                JsonObject rest = Json.createObjectBuilder().add("data", "approved").build();
+                return Response.status(Response.Status.OK).entity(rest).build();
+            }else{
+                JsonObject rest = Json.createObjectBuilder().add("data", "notify").build();
+                return Response.status(Response.Status.OK).entity(rest).build();
+            }
+
         } catch (Exception e) {
             JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 
     }
-    
+
     @PUT
     @Path("/associate/{id}/{idA}")
-    public Response associateAnnex(@PathParam("id") int id,@PathParam("idA") int idA, DatosSolicitudPOJO dataS){
+    public Response associateAnnex(@PathParam("id") int id, @PathParam("idA") int idA, DatosSolicitudPOJO dataS) {
         try {
             activityLogicFacade.associateAnnex(id, idA, dataS);
             JsonObject rest = Json.createObjectBuilder().add("data", "associate").build();
@@ -167,7 +176,7 @@ public class ActivityS {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
-    
+
     @GET
     @Path("/getActivityAnnex/{id}")
     public Response getActivityAnnex(@PathParam("id") int id) {

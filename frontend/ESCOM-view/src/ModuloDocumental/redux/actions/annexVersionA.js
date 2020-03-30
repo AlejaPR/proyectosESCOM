@@ -9,6 +9,17 @@ const URL_BASE = 'http://localhost:9090/proyectosESCOM-web';
 const PERMIT_GET_ANNEX_VERSION = 'MD_Lista version anexo';
 const PERMIT_ADD_ANNEX_VERSION = 'MD_Agregar version anexo';
 
+export const ADD_MESSAGE_ADD = 'ADD_MESSAGE_ADD';
+
+export function addMessageAdd(mensaje) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: ADD_MESSAGE_ADD,
+            mensaje: mensaje
+        });
+    };
+}
+
 //MD_Lista version anexo
 export function getAnnexVersions(token, id) {
     const headers = {
@@ -47,7 +58,7 @@ export function addAnnexVersion(token, data, annexN) {
                     .then(response => {
                         dispatch({
                             type: ADD_ANNEX_VERSION,
-                            payload: response.data
+                            payload: response.data.data
                         });
                     });
             }).catch(err => {

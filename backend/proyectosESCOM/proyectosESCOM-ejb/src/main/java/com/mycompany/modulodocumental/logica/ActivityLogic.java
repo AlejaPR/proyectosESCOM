@@ -163,20 +163,35 @@ public class ActivityLogic implements ActivityLogicFacadeLocal {
     @Override
     public String allInformation(int id) throws GenericException {
         try {
-            List<Condition> conditions = conditionFacade.listConditionDoc(id);
+            List<Condition> conditions = conditionFacade.listConditionPro(id);
             int cont = 1;
             String data = "";
+
             for (Condition condition : conditions) {
-                data = data + "<h3>" + cont + "." + condition.getName() + "</h3>" + "<br/>";
+                data = data + "<h3 style=\"font-size: 14px; font-family: arial, helvetica, sans-serif;\">" + cont + "." + condition.getName() + "</h3>";
                 List<ActivityP> info = listActivitiesInfo(condition.getId());
                 for (ActivityP inf : info) {
-                    data = data + "<h4>" + cont + "." + inf.getNumber() + ". " + inf.getName() + "</h4>" + "<br/>";
+                    data = data + "<h4 style=\"font-size: 14px; font-family: arial, helvetica, sans-serif;\">" + cont + "." + inf.getNumber() + ". " + inf.getName() + "</h4>";
+
+                }
+                cont++;
+            }
+
+            cont = 1;
+
+            data = "<br/>" + data + "<h3 style=\"font-size: 14px; font-family: arial, helvetica, sans-serif;\">" + conditions.get(0).getFkConProcess().getName() + "</h3>";
+            for (Condition condition : conditions) {
+                data = data + "<h3>" + cont + "." + condition.getName() + "</h3>";
+                List<ActivityP> info = listActivitiesInfo(condition.getId());
+                for (ActivityP inf : info) {
+                    data = data + "<h4 style=\"font-size: 14px; font-family: arial, helvetica, sans-serif;\">" + cont + "." + inf.getNumber() + ". " + inf.getName() + "</h4>" + "<br/>";
                     data = data + inf.getInformation() + "<br/>";
                 }
                 cont++;
             }
             return data;
-        } catch (Exception e) {
+        } catch (Exception ex) {
+            bitacora.registroLogger(CLASS, "Inhabilitar actividad", Level.SEVERE, ex.getMessage());
             throw new GenericException("error server");
         }
 

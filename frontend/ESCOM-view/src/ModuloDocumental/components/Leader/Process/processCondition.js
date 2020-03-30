@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
 import { ToastContainer, toast } from 'react-toastify';
-import { getListActivitiesInfo, getActivityAnnex } from '../../../redux/actions/activityA.js';
+import { getListActivitiesInfo, getActivityAnnex, addMessageChange } from '../../../redux/actions/activityA.js';
 import { getConditionId, approveCondition, addMessageApprove } from '../../../redux/actions/conditionA.js';
 
 import ProcessAnnex from './ProcessAnnex.js';
@@ -24,6 +24,24 @@ class ProcessCondition extends Component {
                     break;
                 case 'error server':
                     toast.error('Se presento un error, intentelo mas tarde.');
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (this.props.messageChange !== '') {
+            switch (this.props.messageChange) {
+                case 'approved':
+                    toast.success('Aprobada con exito.');
+                    this.props.addMessageChange('');
+                    break;
+                case 'denied':
+                    toast.success('Denegada con exito.');
+                    this.props.addMessageChange('');
+                    break;
+                case 'error server':
+                    toast.error('Se presento un error, intentelo mas tarde.');
+                    this.props.addMessageAdd('');
                     break;
                 default:
                     break;
@@ -58,7 +76,7 @@ class ProcessCondition extends Component {
                 <tr key={activity.id}>
                     <td>{activity.number}</td>
                     <td>{activity.name}</td>
-                    <td>{activity.state === 1 ? 'Activo' : 'Finalizado'}</td>
+                    <td>{ activity.state === 1 ? 'Activo' : activity.state === 2 ? 'Finalizado' :<strong>Por aprobación</strong>}</td>
                     <td>
                         <button onClick={() => this.saveInfo(activity.id)} className="btn btn-sm text-light naranja">
                             <i class="far fa-eye"></i>
@@ -84,7 +102,7 @@ class ProcessCondition extends Component {
                 <tr key={activity.id}>
                     <td>{activity.name}</td>
                     <td>{activity.description}</td>
-                    <td>{activity.state === 1 ? 'Activo' : 'Finalizado'}</td>
+                    <td>{ activity.state === 1 ? 'Activo' : activity.state === 2 ? 'Finalizado' :<strong>Por aprobación</strong>}</td>
                     <td>
                         <button onClick={() => this.saveAnnex(activity.id)} className="btn btn-sm text-light naranja" data-toggle="modal" data-target="#viewModal">
                             <i class="far fa-eye"></i>
@@ -163,8 +181,9 @@ function mapStateToProps(state) {
         conditionPro: state.condition.conditionR,
         listActivityInfo: state.activity.listActivityInfoR,
         listActivityAnnex: state.activity.listActivityAnnexR,
-        messageApprove: state.condition.messageApprove
+        messageApprove: state.condition.messageApprove,
+        messageChange: state.activity.messageChange
     }
 }
 
-export default withRouter(connect(mapStateToProps, { getConditionId, getActivityAnnex, getListActivitiesInfo, approveCondition, addMessageApprove })(ProcessCondition));
+export default withRouter(connect(mapStateToProps, { getConditionId, addMessageChange, getActivityAnnex, getListActivitiesInfo, approveCondition, addMessageApprove })(ProcessCondition));

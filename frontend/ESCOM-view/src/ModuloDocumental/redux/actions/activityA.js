@@ -9,6 +9,7 @@ export const GET_ACTIVITY_ANNEX = 'SHOW_ACTIVITY_ANNEX';
 export const ADD_ACTIVITY = 'ADD_ACTIVITY';
 export const EDIT_ACTIVITY = 'EDIT_ACTIVITY';
 export const DELETE_ACTIVITY = 'DELETE_ACTIVITY';
+export const CHANGE_STATUS = 'CHANGE_STATUS';
 export const ASSOCIATE_ANNEX = 'ASSOCIATE_ANNEX';
 
 export const ADD_INFORMATION = 'ADD_INFORMATION';
@@ -18,6 +19,7 @@ export const ADD_MESSAGE_EDIT = 'ADD_MESSAGE_EDIT';
 export const ADD_MESSAGE_ADD = 'ADD_MESSAGE_ADD';
 export const ADD_MESSAGE_DELETE = 'ADD_MESSAGE_DELETE';
 export const ADD_MESSAGE_ASSOCIATE = 'ADD_MESSAGE_ASSOCIATE';
+export const ADD_MESSAGE_CHANGE = 'ADD_MESSAGE_CHANGE';
 export const ADD_MESSAGE_ADD_INFO = 'ADD_MESSAGE_ADD_INFO';
 export const ADD_MESSAGE = 'ADD_MESSAGE';
 
@@ -31,6 +33,7 @@ const PERMIT_EDIT_ACTIVITY = 'MD_Editar actividad';
 const PERMIT_DELETE_ACTIVITY = 'MD_Eliminar actividad';
 const PERMIT_ADD_INFORMATION = 'MD_Agregar informacion';
 const PERMIT_ASSOCIATE_ANNEX = 'MD_Prueba';
+const PERMIT_CHANGE_STATUS = 'MD_Prueba';
 const PERMIT_ALL_INFORMATION = 'MD_toda informacion';
 
 export function addMessageEdit(mensaje) {
@@ -55,6 +58,15 @@ export function addMessageAddInfo(mensaje) {
     return (dispatch, getState) => {
         dispatch({
             type: ADD_MESSAGE_ADD_INFO,
+            mensaje: mensaje
+        });
+    };
+}
+
+export function addMessageChange(mensaje) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: ADD_MESSAGE_CHANGE,
             mensaje: mensaje
         });
     };
@@ -280,6 +292,45 @@ export function editActivity(token, activityE) {
                     if (error.request) {
                         dispatch({
                             type: ADD_MESSAGE_EDIT,
+                            payload: 'error server'
+                        });
+                    }
+                }
+
+            });
+    }
+}
+
+//MD_Cambiar estado
+export function changeStatus(token, activityE) {
+    const headers = {
+        'Content-Type': 'application/json; charset= UTF-8',
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMIT_CHANGE_STATUS
+    }
+    activityE.requestData = {
+        'ip': localStorage.getItem('Ip'),
+        'token': desencriptar(token),
+        'operacion': PERMIT_CHANGE_STATUS
+    };
+    return (dispatch, getState) => {
+        axios.put(`${URL_BASE}/api/activity/changeStatus`, activityE, { headers: headers })
+            .then(response => {
+                console.log(response.data)
+                dispatch({
+                    type: CHANGE_STATUS,
+                    payload: response.data.data
+                });
+            }).catch(error => {
+                if (error.request.response === '') {
+                    dispatch({
+                        type: ADD_MESSAGE_CHANGE,
+                        payload: 'error server'
+                    });
+                } else {
+                    if (error.request) {
+                        dispatch({
+                            type: ADD_MESSAGE_CHANGE,
                             payload: 'error server'
                         });
                     }

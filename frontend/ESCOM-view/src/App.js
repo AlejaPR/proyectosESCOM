@@ -282,7 +282,7 @@ class App extends React.Component {
 
 						<RutaProtegida path="/ViewCalendar">
 							<>
-								<HomeMenu />
+								<LeaderMenu />
 								<MenuSuperior />
 								<div id="wrapper">
 									<ViewCalendar />

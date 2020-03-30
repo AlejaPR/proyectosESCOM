@@ -4,20 +4,59 @@ import { Editor } from '@tinymce/tinymce-react';
 
 // Require Font Awesome.
 import 'font-awesome/css/font-awesome.css';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom'
 import ProcessCommentary from '../Process/processCommentary.js';
-import { getActivityId, addInformation } from '../../../redux/actions/activityA.js';
+import { getActivityId, addInformation, changeStatus, addMessageChange } from '../../../redux/actions/activityA.js';
 
 class ProcessActivity extends Component {
 
-    componentWillMount() {
+    componentDidMount() {
         this.props.getActivityId(localStorage.getItem('Token'), sessionStorage.getItem('activity'))
     }
 
     saveView() {
         this.props.history.push('/ProcessCondition')
+    }
+
+    componentDidUpdate() {
+        if (this.props.messageChange !== '') {
+            switch (this.props.messageChange) {
+                case 'approved':
+                    toast.success('Aprobada con exito.');
+                    this.props.addMessageChange('');
+                    break;
+                case 'denied':
+                    toast.success('Denegada con exito.');
+                    this.props.addMessageChange('');
+                    break;
+                case 'error server':
+                    toast.error('Se presento un error, intentelo mas tarde.');
+                    this.props.addMessageAdd('');
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    approveActivity() {
+        let activityN = {
+            id: sessionStorage.getItem('activity'),
+            state: 2,
+            requestData: null
+        }
+        this.props.changeStatus(localStorage.getItem('Token'), activityN)
+    }
+
+    deniedActivity() {
+        let activityN = {
+            id: sessionStorage.getItem('activity'),
+            state: 1,
+            requestData: null
+        }
+        this.props.changeStatus(localStorage.getItem('Token'), activityN)
     }
 
     render() {
@@ -27,6 +66,12 @@ class ProcessActivity extends Component {
                 <br />
                 <div class="card">
                     <div class="card-body">
+                        <button type="button" onClick={() => this.approveActivity()} className="btn text-light btn-sm float-right naranja " >
+                            Aprobar
+                        </button>
+                        <button type="button" onClick={() => this.deniedActivity()} className="btn text-light btn-sm float-right naranja " >
+                            Denegar
+                        </button>
                         <h5 class="card-title"><strong>INFORMACION ACTIVIDAD</strong></h5>
                         <h5>Descripción:</h5>
                         <p className="px-3">{this.props.dataModel.description}</p>
@@ -76,8 +121,9 @@ class ProcessActivity extends Component {
 
 function mapStateToProps(state) {
     return {
-        dataModel: state.activity.activityR
+        dataModel: state.activity.activityR,
+        messageChange: state.activity.messageChange
     }
 }
 
-export default withRouter(connect(mapStateToProps, { getActivityId, addInformation })(ProcessActivity));
+export default withRouter(connect(mapStateToProps, { getActivityId, addInformation, changeStatus, addMessageChange })(ProcessActivity));

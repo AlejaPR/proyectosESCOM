@@ -38,6 +38,19 @@ class ViewCalendar extends Component {
                     </div>
                     <div class="card-body">
                         <Calendar
+                            popup
+                            messages={{
+                              showMore: total => (
+                                <div
+                                  style={{ cursor: 'pointer' }}
+                                  onMouseOver={e => {
+                                    e.stopPropagation();
+                                    e.preventDefault();
+                                  }}
+                                >{`+${total} more`}
+                                </div>
+                              ),
+                            }}
                             localizer={localizer}
                             events={this.listEvents()}
                             startAccessor="start"

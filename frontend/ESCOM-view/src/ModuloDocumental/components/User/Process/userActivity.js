@@ -44,7 +44,16 @@ class ProcessCondition extends Component {
                 <tr key={activity.id}>
                     <td>{activity.number}</td>
                     <td>{activity.name}</td>
-                    <td>{activity.state === 1 ? 'Activo' : 'Finalizado'}</td>
+                    <td>{() => {
+                        if (activity.state === 1) {
+                            return ('Activo')
+                        } else if (activity.state === 2) {
+                            return ('Finalizado')
+                        } else {
+                            return (<strong>Por aprobación</strong>)
+                        }
+                    }
+                    }</td>
                     <td>{activity.type === 1 ? 'Informativo' : 'anexo'}</td>
                     <td>
                         <button onClick={() => this.save(activity.id)} className="btn btn-sm text-light naranja">
@@ -61,7 +70,16 @@ class ProcessCondition extends Component {
             return (
                 <tr key={activity.id}>
                     <td>{activity.name}</td>
-                    <td>{activity.state === 1 ? 'Activo' : 'Finalizado'}</td>
+                    <td>{() => {
+                        if (activity.state === 1) {
+                            return ('Activo')
+                        } else if (activity.state === 2) {
+                            return ('Finalizado')
+                        } else {
+                            return (<strong>Por aprobación</strong>)
+                        }
+                    }
+                    }</td>
                     <td>{activity.type === 1 ? 'Informativo' : 'anexo'}</td>
                     <td>{
                         <button onClick={() => this.saveAnnex(activity.id)} className="btn btn-sm text-light naranja">

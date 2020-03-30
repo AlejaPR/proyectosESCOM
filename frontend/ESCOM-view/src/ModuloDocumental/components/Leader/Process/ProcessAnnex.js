@@ -2,8 +2,28 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
+import { changeStatus } from '../../../redux/actions/activityA.js';
+
 
 class ProcessAnnex extends Component {
+
+    approveActivity() {
+        let activityN = {
+            id: sessionStorage.getItem('activity'),
+            state: 2,
+            requestData: null
+        }
+        this.props.changeStatus(localStorage.getItem('Token'), activityN)
+    }
+
+    deniedActivity() {
+        let activityN = {
+            id: sessionStorage.getItem('activity'),
+            state: 1,
+            requestData: null
+        }
+        this.props.changeStatus(localStorage.getItem('Token'), activityN)
+    }
 
     render() {
         return (
@@ -18,6 +38,12 @@ class ProcessAnnex extends Component {
                                 </button>
                             </div>
                             <div class="modal-body">
+                                <button type="button" onClick={() => this.approveActivity()} className="btn text-light btn-sm float-right naranja " >
+                                    Aprobar
+                                </button>
+                                <button type="button" onClick={() => this.deniedActivity()} className="btn text-light btn-sm float-right naranja " >
+                                    Denegar
+                                </button>
                                 <h3 className="card-title text-center"><strong>{this.props.activityAnnex.nameActivity}</strong></h3>
                                 <h5>Descripcion:</h5>
                                 <p>-- {this.props.activityAnnex.descriptionActivity}</p>
@@ -49,4 +75,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default withRouter(connect(mapStateToProps, {})(ProcessAnnex));
+export default withRouter(connect(mapStateToProps, {changeStatus})(ProcessAnnex));
