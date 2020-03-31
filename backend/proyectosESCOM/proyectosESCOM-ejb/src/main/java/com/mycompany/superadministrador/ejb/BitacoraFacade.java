@@ -84,17 +84,17 @@ public class BitacoraFacade extends AbstractFacade<Bitacora> implements Bitacora
      * Devuelve los datos de reporte del usuario solicitado con fecha de inicio
      *
      * @param reporte
-     * @param usuario
+     * @param idUsuario
      * @return
      *
      */
     @Override
-    public List<DatosSolicitudPOJO> buscarUsuarioSinFechaFin(UsuarioPOJO usuario, ReportePOJO reporte) {
+    public List<DatosSolicitudPOJO> buscarUsuarioSinFechaFin(Integer idUsuario, ReportePOJO reporte) {
 
         List<DatosSolicitudPOJO> listaBitacora = new ArrayList();
 
         TypedQuery<Bitacora> bitacora = em.createQuery("select b from Bitacora b where b.idUsuario=:idUsuario AND b.fechaBitacora >= :fechaInicio", Bitacora.class);
-        bitacora.setParameter("idUsuario", usuario.getId());
+        bitacora.setParameter("idUsuario", idUsuario);
         bitacora.setParameter("fechaInicio", reporte.getFechaInicio(), TemporalType.DATE);
         List<Bitacora> lista = bitacora.getResultList();
 
@@ -137,18 +137,18 @@ public class BitacoraFacade extends AbstractFacade<Bitacora> implements Bitacora
      * Devuelve los datos de reporte del usuario solicitado con fecha de inicio y fecha fin
      *
      * @param reporte
-     * @param usuario
+     * @param idUsuario
      * @return
      *
      */
     @Override
-    public List<DatosSolicitudPOJO> buscarUsuarioConFechaFin(UsuarioPOJO usuario, ReportePOJO reporte) {
+    public List<DatosSolicitudPOJO> buscarUsuarioConFechaFin(Integer idUsuario, ReportePOJO reporte) {
 
         List<DatosSolicitudPOJO> listaBitacora = new ArrayList();
 
         TypedQuery<Bitacora> bitacoraDos = em.createQuery("select b from Bitacora b where (b.idUsuario=:idUsuario AND b.fechaBitacora >= :fechaInicio) "
                 + "AND (b.idUsuario=:idUsuario AND b.fechaBitacora <= :fechaFin)", Bitacora.class);
-        bitacoraDos.setParameter("idUsuario", usuario.getId());
+        bitacoraDos.setParameter("idUsuario", idUsuario);
         bitacoraDos.setParameter("fechaInicio", reporte.getFechaInicio(), TemporalType.DATE);
         bitacoraDos.setParameter("fechaFin", reporte.getFechaFin(), TemporalType.DATE);
         List<Bitacora> lista = bitacoraDos.getResultList();
@@ -192,16 +192,16 @@ public class BitacoraFacade extends AbstractFacade<Bitacora> implements Bitacora
      * Devuelve los datos de reporte del modulo solicitado con fecha de inicio
      *
      * @param reporte
-     * @param modulo
+     * @param idModulo
      * @return
      *
      */
     @Override
-    public List<DatosSolicitudPOJO> buscarModuloSinFechaFin(ModuloPOJO modulo, ReportePOJO reporte) {
+    public List<DatosSolicitudPOJO> buscarModuloSinFechaFin(Integer idModulo, ReportePOJO reporte) {
 
         List<DatosSolicitudPOJO> listaBitacora = new ArrayList();
         TypedQuery<Bitacora> bitacora = em.createQuery("select b from Bitacora b where b.idModulo =:idModulo AND b.fechaBitacora >= :fechaInicio", Bitacora.class);
-        bitacora.setParameter("idModulo", modulo.getIdModulo());
+        bitacora.setParameter("idModulo", idModulo);
         bitacora.setParameter("fechaInicio", reporte.getFechaInicio(), TemporalType.DATE);
         List<Bitacora> lista = bitacora.getResultList();
         for (int i = 0; i < lista.size(); i++) {
@@ -243,18 +243,18 @@ public class BitacoraFacade extends AbstractFacade<Bitacora> implements Bitacora
      * Devuelve los datos de reporte del modulo solicitado con fecha de inicio y fecha fin
      *
      * @param reporte
-     * @param modulo
+     * @param idModulo
      * @return
      *
      */
     @Override
-    public List<DatosSolicitudPOJO> buscarModuloConFechaFin(ModuloPOJO modulo, ReportePOJO reporte) {
+    public List<DatosSolicitudPOJO> buscarModuloConFechaFin(Integer idModulo, ReportePOJO reporte) {
 
         List<DatosSolicitudPOJO> listaBitacora = new ArrayList();
 
         TypedQuery<Bitacora> bitacoraDos = em.createQuery("select b from Bitacora b where (b.idModulo=:idModulo AND b.fechaBitacora >=:fechaInicio)"
                 + " AND (b.idModulo=:idModulo AND b.fechaBitacora <=:fechaFin)", Bitacora.class);
-        bitacoraDos.setParameter("idModulo", modulo.getIdModulo());
+        bitacoraDos.setParameter("idModulo", idModulo);
         bitacoraDos.setParameter("fechaInicio", reporte.getFechaInicio(), TemporalType.DATE);
         bitacoraDos.setParameter("fechaFin", reporte.getFechaFin(), TemporalType.DATE);
         List<Bitacora> lista = bitacoraDos.getResultList();

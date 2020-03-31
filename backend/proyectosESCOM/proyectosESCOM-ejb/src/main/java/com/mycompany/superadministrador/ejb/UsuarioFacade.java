@@ -64,7 +64,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         usuarioRespuesta.setContrasena(usuarioDB.getContrasena());
         return usuarioRespuesta;
     }
-    
+
 //busquedaTokenRecuperar
     @Override
     public UsuarioPOJO busquedaTokenRecuperar(String firma) {
@@ -78,6 +78,7 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
         usuarioRespuesta.setContrasena(usuarioDB.getContrasena());
         return usuarioRespuesta;
     }
+
     /**
      * Metodo que realiza la consulta de correo y contraseña para el login
      *
@@ -358,20 +359,24 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
      *
      */
     @Override
-    public UsuarioPOJO buscarUsuarioBitacora(String palabraBusqueda) {
+    public List<UsuarioPOJO> buscarUsuarioBitacora(String palabraBusqueda) {
 
         String busqueda = palabraBusqueda.toLowerCase();
-        Usuario lista = new Usuario();
+        List<Usuario> lista = new ArrayList();
         TypedQuery<Usuario> usuarioEspDB = em.createQuery("select u from Usuario u where (Lower(u.correoElectronico)  =:busqueda)", Usuario.class);
         usuarioEspDB.setParameter("busqueda", busqueda);
-        lista = usuarioEspDB.getSingleResult();
+        lista = usuarioEspDB.getResultList();
 
-        UsuarioPOJO usuario = new UsuarioPOJO();
-        usuario.setId(lista.getIdUsuario());
-        usuario.setNumeroDocumento(lista.getNumeroDocumento());
-        usuario.setCorreoElectronico(lista.getCorreoElectronico());
+        List<UsuarioPOJO> listaUsuario = new ArrayList();
+        for (Usuario u : lista) {
+            UsuarioPOJO usuario = new UsuarioPOJO();
+            usuario.setId(u.getIdUsuario());
+            usuario.setNumeroDocumento(u.getNumeroDocumento());
+            usuario.setCorreoElectronico(u.getCorreoElectronico());
+            listaUsuario.add(usuario);
+        }
 
-        return usuario;
+        return listaUsuario;
     }
 
     /**
@@ -383,19 +388,23 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
      *
      */
     @Override
-    public UsuarioPOJO buscarUsuarioBitacoraDocumento(int documentoBusqueda) {
+    public List<UsuarioPOJO> buscarUsuarioBitacoraDocumento(int documentoBusqueda) {
 
-        Usuario lista = new Usuario();
+        List<Usuario> lista = new ArrayList();
         TypedQuery<Usuario> usuarioEspDB = em.createQuery("select u from Usuario u where u.numeroDocumento =:documentoBusqueda", Usuario.class);
         usuarioEspDB.setParameter("documentoBusqueda", documentoBusqueda);
-        lista = usuarioEspDB.getSingleResult();
+        lista = usuarioEspDB.getResultList();
 
-        UsuarioPOJO usuario = new UsuarioPOJO();
-        usuario.setId(lista.getIdUsuario());
-        usuario.setNumeroDocumento(lista.getNumeroDocumento());
-        usuario.setCorreoElectronico(lista.getCorreoElectronico());
+        List<UsuarioPOJO> listaUsuario = new ArrayList();
+        for (Usuario u : lista) {
+            UsuarioPOJO usuario = new UsuarioPOJO();
+            usuario.setId(u.getIdUsuario());
+            usuario.setNumeroDocumento(u.getNumeroDocumento());
+            usuario.setCorreoElectronico(u.getCorreoElectronico());
+            listaUsuario.add(usuario);
+        }
 
-        return usuario;
+        return listaUsuario;
     }
 
     /**

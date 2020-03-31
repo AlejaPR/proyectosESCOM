@@ -31,13 +31,13 @@ public interface BitacoraFacadeLocal {
     
     public void registrarUsuario(DatosSolicitudPOJO solicitud);
     
-    public List<DatosSolicitudPOJO> buscarUsuarioSinFechaFin(UsuarioPOJO usuario, ReportePOJO reporte);
+    public List<DatosSolicitudPOJO> buscarUsuarioSinFechaFin(Integer idUsuario, ReportePOJO reporte);
     
-    public List<DatosSolicitudPOJO> buscarUsuarioConFechaFin(UsuarioPOJO usuario, ReportePOJO reporte);
+    public List<DatosSolicitudPOJO> buscarUsuarioConFechaFin(Integer idUsuario, ReportePOJO reporte);
     
-    public List<DatosSolicitudPOJO> buscarModuloSinFechaFin(ModuloPOJO usuario, ReportePOJO reporte);
+    public List<DatosSolicitudPOJO> buscarModuloSinFechaFin(Integer idModulo, ReportePOJO reporte);
     
-    public List<DatosSolicitudPOJO> buscarModuloConFechaFin(ModuloPOJO usuario, ReportePOJO reporte);
+    public List<DatosSolicitudPOJO> buscarModuloConFechaFin(Integer idModulo, ReportePOJO reporte);
     
     public List<DatosSolicitudPOJO> buscarActividadSinFechaFin(ReportePOJO reporte);
     

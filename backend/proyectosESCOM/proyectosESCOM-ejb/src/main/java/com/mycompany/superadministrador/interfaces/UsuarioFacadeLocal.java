@@ -58,9 +58,9 @@ public interface UsuarioFacadeLocal {
     
     public List<UsuarioPOJO> listarUsuariosModuloDocumental();
      
-    public UsuarioPOJO buscarUsuarioBitacora(String palabraBusqueda);
+    public List<UsuarioPOJO> buscarUsuarioBitacora(String palabraBusqueda);
     
-    public UsuarioPOJO buscarUsuarioBitacoraDocumento(int documentoBusqueda);
+    public List<UsuarioPOJO> buscarUsuarioBitacoraDocumento(int documentoBusqueda);
     
     public UsuarioPOJO buscarUsuarioBitacoraId(int idUsuario);
     

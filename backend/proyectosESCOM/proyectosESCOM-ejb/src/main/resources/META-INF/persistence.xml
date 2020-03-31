@@ -26,6 +26,20 @@
     <class>com.mycompany.modulodocumental.entity.Process</class>
     <class>com.mycompany.modulodocumental.entity.Program</class>
     <class>com.mycompany.modulodocumental.entity.UserCondition</class>
+    <class>com.mycompany.modulodocumental.entity.Competition</class>
+    <class>com.mycompany.modulodocumental.entity.CompetitionGeneral</class>
+    <class>com.mycompany.modulodocumental.entity.DistinctiveFeature</class>
+    <class>com.mycompany.modulodocumental.entity.OccupationalProfile</class>
+    <class>com.mycompany.modulodocumental.entity.ProfessionalProfile</class>
+    <class>com.mycompany.modulodocumental.entity.ProgramThematicCore</class>
+    <class>com.mycompany.modulodocumental.entity.PtCompetitionG</class>
+    <class>com.mycompany.modulodocumental.entity.PtDistinctive</class>
+    <class>com.mycompany.modulodocumental.entity.PtOccupational</class>
+    <class>com.mycompany.modulodocumental.entity.PtProfessional</class>
+    <class>com.mycompany.modulodocumental.entity.PtThematic</class>
+    <class>com.mycompany.modulodocumental.entity.Thematic</class>
+    <class>com.mycompany.modulodocumental.entity.ThematicCore</class>
+    <class>com.mycompany.modulodocumental.entity.trainingArea</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
   </persistence-unit>
 </persistence>
