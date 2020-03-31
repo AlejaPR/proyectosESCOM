@@ -70,7 +70,7 @@ export function actionConsultarActividades(token) {
 
 export function actionAgregarActividad(actividad, token) {
     const headers = {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset=UTF-8',
         'TokenAuto': desencriptar(token),
         'Permiso': PERMISO_REGISTRAR_ACTIVIDAD
     }
@@ -91,7 +91,6 @@ export function actionAgregarActividad(actividad, token) {
                     mensaje: 'actividad registrada'
                 });
             }).catch((error) => {
-                debugger;
                 if (error.request.response === '') {
                     dispatch({
                         type: MENSAJE_REGISTRAR,
@@ -235,7 +234,7 @@ export function actionCargarInformacionDeActividad(codigoActividad, token) {
 
 export function actionEditarUsuario(actividad, token) {
     const headers = {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset=UTF-8',
         'TokenAuto': desencriptar(token),
         'Permiso': PERMISO_EDITAR_ACTIVIDAD
     }

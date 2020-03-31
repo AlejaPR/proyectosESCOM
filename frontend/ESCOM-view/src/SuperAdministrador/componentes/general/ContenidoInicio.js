@@ -21,7 +21,6 @@ class ContenidoInicio extends React.Component {
 	}
 
 	componentDidUpdate() {
-		debugger;
 		if (this.props.mensaje !== '') {
 			switch (this.props.mensaje) {
 				case 'Token requerido':

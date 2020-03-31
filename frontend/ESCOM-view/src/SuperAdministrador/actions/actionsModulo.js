@@ -35,7 +35,7 @@ const PERMISO_SUSPENDER_ACTIVAR_MODULOS = 'SA_Suspender/activar modulos';
 export function actionAgregarModulo(modulo, token) {
     var tokenRequest = desencriptar(token);
     const headers = {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset=UTF-8',
         'TokenAuto': tokenRequest,
         'Permiso': PERMISO_REGISTRAR_MODULOS
     }
@@ -63,7 +63,6 @@ export function actionAgregarModulo(modulo, token) {
                     });
                 } else {
                     if (error.request) {
-                        debugger;
                         var o = JSON.parse(error.request.response);
                         let respuesta = mensajeDeRegistro(o.respuesta);
                         if (respuesta !== '') {
@@ -133,7 +132,6 @@ export function actionCargarInformacionDeModulo(codigoModulo, token) {
     return (dispatch, getState) => {
         axios.get(`${URL_BASE}/proyectosESCOM-web/api/modulos/datos/${codigoModulo}`, { headers: headers })
             .then(response => {
-                debugger;
                 let info = {
                     'descripcionModulo': response.data.descripcionModulo,
                     'estadoModulo': response.data.estadoModulo,
@@ -271,8 +269,6 @@ export function actionCambiarEstadoActividades(actividades, token) {
                     mensaje: 'Operacion hecha con exito'
                 });
             }).catch((error) => {
-                console.log(error);
-
                 if (error.request.response === '') {
                     dispatch({
                         type: MENSAJE_ACTIVIDADES,
@@ -300,7 +296,7 @@ export function actionCambiarEstadoActividades(actividades, token) {
 
 export function actionEditarModulo(modulo, codigoModulo, token) {
     const headers = {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset=UTF-8',
         'TokenAuto': desencriptar(token),
         'Permiso': PERMISO_EDITAR_MODULOS
     }

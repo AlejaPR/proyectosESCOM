@@ -136,11 +136,9 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
     @Override
     public void editarModulo(int idModulo, ModuloPOJO moduloEditar) {
         Modulo modulo = em.find(Modulo.class, idModulo);
-        modulo.setEstado(moduloEditar.getEstadoModulo());
         modulo.setImagen(moduloEditar.getImagenModulo());
         modulo.setNombreModulo(moduloEditar.getNombreModulo());
         modulo.setDescripcionModulo(moduloEditar.getDescripcionModulo());
-        modulo.setAcronimo(moduloEditar.getAcronimo());
         modulo.setUrl(moduloEditar.getUrl());
         em.merge(modulo);
     }

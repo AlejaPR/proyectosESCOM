@@ -85,7 +85,6 @@ class Recuperar extends React.Component {
             this.props.actualizarMensajeRecuperarContrasena('Las contraseñas no coinciden');
             this.setState({ severidad: 'warning' });
         } else {
-            debugger;
             this.props.actionCambiarContrasenaExterna(this.props.correo, values.nuevaContrasena, this.props.match.params.token);
         }
     }

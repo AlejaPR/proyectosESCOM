@@ -12,7 +12,7 @@ const PERMISO_REALIZAR = 'SA_Realizar reportes';
 
 export function actionConsultarReporte(token, reporte) {
     const headers = {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset=UTF-8',
         'TokenAuto': desencriptar(token),
         'Permiso': PERMISO_REALIZAR
     }
@@ -36,7 +36,6 @@ export function actionConsultarReporte(token, reporte) {
                     });
                 } else {
                     if (error.request) {
-                        debugger;
                         var o = JSON.parse(error.request.response);
                         let respuesta = mensajeDeConsulta(o.respuesta);
                         dispatch({

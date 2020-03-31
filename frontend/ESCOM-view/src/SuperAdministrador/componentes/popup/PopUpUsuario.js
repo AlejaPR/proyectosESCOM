@@ -39,7 +39,6 @@ class PopUpUsuario extends React.Component {
 
 
   componentDidUpdate() {
-    debugger;
     if (this.props.mensaje !== '') {
       switch (this.props.mensaje) {
         case 'Usuario registrado':

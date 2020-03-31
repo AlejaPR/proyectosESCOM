@@ -347,7 +347,6 @@ export function actionCambiarContrasena(clave, correo, token) {
                         mensaje: 'Servidor fuera de servicio temporalmente'
                     });
                 } else {
-                    debugger;
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
                         let respuesta = mensajesDeErrorCambiarContrasena(o.respuesta);
@@ -419,7 +418,6 @@ export function actionConsultarActividadesUsuario(numeroDocumento, token) {
                     });
                 } else {
                     if (error.request) {
-                        debugger;
                         var o = JSON.parse(error.request.response);
                         let respuesta = mensajesDeErrorConsultarActividadesUsuario(o.respuesta);
                         if (respuesta !== '') {
@@ -489,7 +487,7 @@ export function actionAsignarIp() {
 
 export function actionAgregarUsuario(usuario, token) {
     const headers = {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset=UTF-8',
         'TokenAuto': desencriptar(token),
         'Permiso': PERMISO_REGISTRAR
     }
@@ -519,7 +517,6 @@ export function actionAgregarUsuario(usuario, token) {
                     if (error.request) {
                         var o = JSON.parse(error.request.response);
                         let respuesta = mensajesDeErrorRegistroUsuarios(o.respuesta);
-                        debugger;
                         if (respuesta !== '') {
                             dispatch({
                                 type: MENSAJE_REGISTRAR,
@@ -712,7 +709,6 @@ export function actionEliminarActividades(actividades, token, numeroDocumento) {
         'token': desencriptar(token),
         'operacion': PERMISO_ASIGNACION_ACTIVIDADES
     }
-    debugger;
     return (dispatch, getState) => {
         axios.put(`${URL_BASE}/proyectosESCOM-web/api/usuarios/eliminarActividad/${numeroDocumento}`, actividades, { headers: headers })
             .then(response => {
@@ -721,9 +717,7 @@ export function actionEliminarActividades(actividades, token, numeroDocumento) {
                     mensaje: 'Actividades eliminadas'
                 });
             }).catch((error) => {
-                console.log(error);
-
-                if (error.request.response === '') {
+                try{if (error.request.response === '') {
                     dispatch({
                         type: MENSAJE_ASIGNAR,
                         mensaje: 'Servidor fuera de servicio temporalmente'
@@ -739,6 +733,11 @@ export function actionEliminarActividades(actividades, token, numeroDocumento) {
                             });
                         }
                     }
+                }}catch(error){
+                    dispatch({
+                        type: MENSAJE_ASIGNAR,
+                        mensaje: 'Ocurrio un error en el servidor'
+                    });
                 }
 
             });
@@ -790,7 +789,7 @@ export function actionConsultarActividadesSinAsignar(token, numeroDocumento, cod
 
 export function actionEditarUsuario(usuario, cedula, token) {
     const headers = {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset=UTF-8',
         'TokenAuto': desencriptar(token),
         'Permiso': PERMISO_EDITAR_USUARIOS
     }

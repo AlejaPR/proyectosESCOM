@@ -37,7 +37,7 @@ class AsignarActividadModulo extends React.Component {
         if (this.props.mensaje !== '') {
             switch (this.props.mensaje) {
                 case 'Operacion hecha con exito':
-                    NotificationManager.success('Operacion hecha con exito');
+                    NotificationManager.success('Operacion realizada con exito');
                     this.props.actionConsultarActividadesModulo(this.props.codigoModulo, localStorage.getItem('Token'));
                     this.props.actualizarMensajeActividades('');
                     break;
@@ -88,9 +88,9 @@ class AsignarActividadModulo extends React.Component {
         return (
             <div>
                 <div class="text-left titulo" style={estiloLetrero}>
-                    <h4>Asignar actividad a modulo</h4>
+                    <h4>Administrar actividades del modulo</h4>
                 </div>
-                <Barra texto="Inicio > Asignación de actividad a modulo" />
+                <Barra texto="Administracion de modulos > Administrar actividades del modulo" />
 
 
 

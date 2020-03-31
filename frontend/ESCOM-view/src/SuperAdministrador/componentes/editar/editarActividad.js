@@ -114,7 +114,7 @@ class EditarActividad extends React.Component {
                 <div className="text-left titulo letra" style={estiloLetrero}>
                     <h4>Editar usuario</h4>
                 </div>
-                <Barra texto="Inicio > Administracion de usuarios > Editar usuario" />
+                <Barra texto="Inicio > Administracion de actividades > Editar actividad" />
                 <div className="container" style={{
                     paddingTop: "7px",
                     paddingRight: "44px",

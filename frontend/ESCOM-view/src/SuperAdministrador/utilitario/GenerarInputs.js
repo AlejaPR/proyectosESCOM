@@ -8,7 +8,11 @@ import Visibility from '@material-ui/icons/Visibility';
 import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import TextField from '@material-ui/core/TextField';
-import { withStyles } from "@material-ui/core/styles";
+import { withStyles, makeStyles } from "@material-ui/core/styles";
+import WarningIcon from '@material-ui/icons/Warning';
+import Popover from '@material-ui/core/Popover';
+import Typography from '@material-ui/core/Typography';
+
 import Select from 'react-select';
 
 export const generarSelect = ({ input, label, type, meta: { touched, error }, children }) => (
@@ -193,34 +197,34 @@ export const generarTextArea = ({
 
 export const ReduxFormSelect = props => {
   const customStyles = {
-      option: (provided, state) => ({
-          ...provided,
-          fontSize: 13
-      }),
-      control: styles => ({ ...styles, backgroundColor: 'white', fontSize: 13, fontFamily: 'sans-serif' }),
-      singleValue: (provided, state) => {
-          const opacity = state.isDisabled ? 0.5 : 1;
-          const transition = 'opacity 300ms';
-          return { ...provided, opacity, transition };
-      }
+    option: (provided, state) => ({
+      ...provided,
+      fontSize: 13
+    }),
+    control: styles => ({ ...styles, backgroundColor: 'white', fontSize: 13, fontFamily: 'sans-serif' }),
+    singleValue: (provided, state) => {
+      const opacity = state.isDisabled ? 0.5 : 1;
+      const transition = 'opacity 300ms';
+      return { ...provided, opacity, transition };
+    }
   }
   const { input, options } = props;
   const { touched, error } = props.meta;
   return (
-      <>
-          <Select
-              {...input}
+    <>
+      <Select
+        {...input}
 
-              styles={customStyles}
-              isSearchable={false}
-              placeholder='Seleccione un modulo'
-              onChange={value => input.onChange(value)}
-              onBlur={() => input.onBlur(input.value)}
-              noOptionsMessage={() => 'Aun no hay ningun modulo registrado'}
-              options={options}
-          />
-          {touched && ((error && <span className="text-danger form-group" style={{ fontSize: '12px', fontFamily: 'sans-serif' }}>{error}</span>))}
-      </>
+        styles={customStyles}
+        isSearchable={false}
+        placeholder='Seleccione un modulo'
+        onChange={value => input.onChange(value)}
+        onBlur={() => input.onBlur(input.value)}
+        noOptionsMessage={() => 'Aun no hay ningun modulo registrado'}
+        options={options}
+      />
+      {touched && ((error && <span className="text-danger form-group" style={{ fontSize: '12px', fontFamily: 'sans-serif' }}>{error}</span>))}
+    </>
   )
 }
 
@@ -232,7 +236,7 @@ const CssTextField = withStyles({
     '& .MuiOutlinedInput-root': {
       '& fieldset': {
         borderColor: 'gray',
-        fontSize:'13px'
+        fontSize: '13px'
       }
     },
   },
@@ -304,10 +308,104 @@ const stylesArea = {
   labelFocused: {}
 };
 
+const useStyles = makeStyles((theme) => ({
+  popover: {
+    pointerEvents: 'none',
+  },
+  paper: {
+    padding: theme.spacing(1),
+    width: "180px"
+  },
+  typography: {
+    fontSize: "13px",
+    display:'block',
+    textAlign:"justify",
+    fontFamily: 'sans-serif'
+  },
+}));
+
+function RenderAlgoCorreo({
+  input,
+  label, classes, filas,
+  meta: { touched, error },
+  ...custom
+}) {
+  const classesP = useStyles();
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+
+  const handlePopoverOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+
+  return (
+    <>
+      <Popover
+        id="mouse-over-popover"
+        className={classesP.popover}
+        classes={{
+          paper: classesP.paper,
+        }}
+        open={open}
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'bottom',
+          horizontal: 'center',
+        }}
+        onClose={handlePopoverClose}
+        disableRestoreFocus
+      >
+        <Typography className={classesP.typography}>Si se modifica el correo, para poder acceder el usuario tendra que recuperar la contraseña desde el iniciar sesion </Typography>
+      </Popover>
+      <TextField
+        fullWidth
+        label={label}
+        InputProps={{
+          classes: { root: classes.inputRoot },
+          endAdornment:
+            <InputAdornment position="end">
+              <IconButton
+                edge="end"
+                onMouseEnter={handlePopoverOpen}
+                onMouseLeave={handlePopoverClose}
+              >
+                <WarningIcon fontSize='small' />
+              </IconButton>
+            </InputAdornment>
+        }}
+        InputLabelProps={{
+          classes: {
+            root: classes.labelRoot,
+            focused: classes.labelFocused
+          }
+        }}
+        error={(touched && error) ? true : false}
+        helperText={touched && error}
+        required={true}
+        {...input}
+        {...custom}
+        variant='outlined'
+        margin="normal"
+        size='small'
+      />
+    </>
+  );
+}
 
 function renderAlgo({
   input,
-  label, classes,filas,
+  label, classes, filas,
   meta: { touched, error },
   ...custom
 }) {
@@ -336,7 +434,7 @@ function renderAlgo({
 
 function renderAlgoStart({
   input,
-  label, classes,filas,
+  label, classes, filas,
   meta: { touched, error },
   ...custom
 }) {
@@ -344,9 +442,10 @@ function renderAlgoStart({
     <TextField
       fullWidth
       label={label}
-      InputProps={{ classes: { root: classes.inputRoot },
-      startAdornment:<InputAdornment position="start" style={{fontSize:'14px',color:'black'}}>/</InputAdornment>
-    }}
+      InputProps={{
+        classes: { root: classes.inputRoot },
+        startAdornment: <InputAdornment position="start" style={{ fontSize: '14px', color: 'black' }}>/</InputAdornment>
+      }}
       InputLabelProps={{
         classes: {
           root: classes.labelRoot,
@@ -356,7 +455,7 @@ function renderAlgoStart({
       error={(touched && error) ? true : false}
       helperText={touched && error}
       required={true}
-      
+
       {...input}
       {...custom}
       variant='outlined'
@@ -365,6 +464,8 @@ function renderAlgoStart({
     />
   )
 }
+
+
 
 function renderDate({
   input,
@@ -397,7 +498,7 @@ function renderDate({
 }
 
 function renderArea({
-  input,filas,
+  input, filas,
   label, classes,
   meta: { touched, error },
   ...custom
@@ -429,6 +530,7 @@ function renderArea({
 
 export const generarInputStart = withStyles(styles)(renderAlgoStart);
 export const generarInput = withStyles(styles)(renderAlgo);
+export const generarInputCorreo = withStyles(styles)(RenderAlgoCorreo);
 export const generarInputLogin = withStyles(stylesLogin)(renderAlgo);
 export const generarDate = withStyles(stylesDate)(renderDate);
-export const generarArea=withStyles(stylesArea)(renderArea);
+export const generarArea = withStyles(stylesArea)(renderArea);

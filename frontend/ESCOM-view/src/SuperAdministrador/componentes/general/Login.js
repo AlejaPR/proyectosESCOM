@@ -42,6 +42,9 @@ class Login extends React.Component {
 				}
 				break;
 			default:
+				if (this.state.severidad !== 'error') {
+					this.setState({ severidad: 'error' });
+				}
 				break;
 		}
 	}
@@ -53,7 +56,6 @@ class Login extends React.Component {
 	}
 
 	handleSubmit = formValues => {
-		debugger;
 		if (formValues.correoRecuperar === undefined) {
 			this.props.actionLoginUsuario(formValues.correo, formValues.contrasena, this.habilitarBoton);
 			this.props.reset();

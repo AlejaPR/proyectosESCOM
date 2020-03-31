@@ -22,7 +22,6 @@ class ContenidoAdminActividad extends React.Component {
 
 
 	componentDidUpdate() {
-		debugger;
 		if (this.props.mensajeEditar !== '') {
 			if(this.props.mensajeEditar==='actividad registrada'){
                 NotificationManager.success('Actividad registrada correctamente');
@@ -99,7 +98,6 @@ class ContenidoAdminActividad extends React.Component {
 					label: 'Si',
 					onClick: () => {
 						this.props.actualizarMensajeSuspender('');
-						debugger;
 						if (codigo === undefined) {
 							this.props.actionConsultarActividades(localStorage.getItem('Token'));
 						}else{

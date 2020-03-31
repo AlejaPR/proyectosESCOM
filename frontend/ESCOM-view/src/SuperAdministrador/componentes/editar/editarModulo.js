@@ -259,10 +259,10 @@ class EditarModulo extends React.Component {
     render() {
         return (
             <div>
-                <div className="text-left titulo">
+                <div className="text-left titulo" style={estiloLetrero}>
                     <h4>Editar modulo</h4>
                 </div>
-                <Barra texto="Inicio > Editar modulo" />
+                <Barra texto="Inicio > Administracion de modulos > Editar modulo" />
                 <br />
                 <div className="col-sm-12" style={{
                     paddingTop: "0px",
@@ -374,6 +374,14 @@ const fondoBotonCancelar = {
     textTransform: "none"
 
 }
+
+const estiloLetrero = {
+    paddingTop: "20px",
+    paddingRight: "12px",
+    paddingLeft: "40px",
+    paddingBottom: "1px"
+}
+
 
 function mapStateToProps(state) {
     return {

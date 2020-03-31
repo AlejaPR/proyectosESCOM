@@ -35,7 +35,6 @@ class PopUpModulo extends React.Component {
   }
 
   componentDidUpdate() {
-    debugger;
     if (this.props.mensajeRegistrar !== '') {
       switch (this.props.mensaje) {
         case 'modulo registrado':

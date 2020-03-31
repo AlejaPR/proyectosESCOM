@@ -173,9 +173,9 @@ class AsignarActividadUsuario extends React.Component {
         return (
             <>
                 <div className="text-left titulo" style={estiloLetrero}>
-                    <h4>Asignar actividad a usuario</h4>
+                    <h4>Administrar actividades del usuario</h4>
                 </div>
-                <Barra texto="Inicio > Administracion de usuarios > Asignación de actividad a usuario" />
+                <Barra texto="Inicio > Administracion de usuarios > Administracion de actividades del usuario" />
                 <div className="container" style={{
                     paddingTop: "7px",
                     paddingRight: "44px",

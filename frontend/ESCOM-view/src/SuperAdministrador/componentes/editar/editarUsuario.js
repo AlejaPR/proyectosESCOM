@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { withRouter } from 'react-router-dom';
-import { generarInput, generarSelect, generarDate } from '../../utilitario/GenerarInputs.js'
+import { generarInput, generarSelect, generarDate, generarInputCorreo } from '../../utilitario/GenerarInputs.js'
 import { formatoFecha } from '../../utilitario/MensajesError.js'
 import { nombre, requerido, seleccione, apellido, fechaNacimiento, validacionCuarentaCaracteres,validacionCincuentaCaracteres, documentoIdentificacion } from '../../utilitario/validacionCampos.js';
 
@@ -169,7 +169,7 @@ class editar extends React.Component {
                     <br />
                     <div className="row">
                       <div className="col-sm-6">
-                        <label>Numero de documento</label>
+                        <label>Tipo de documento</label>
                         <Field name="tipoDocumento" validate={[seleccione]} style={{ height: "35px", fontSize: "13px" }} className="form-control" component={generarSelect} label="Username">
                           <option className="letra" style={{ height: "35px", fontSize: "13px" }} value="0">Seleccione</option>
                           {this.props.documentos.map(documento => <option key={documento.idTipoDocumento} className="letra" style={{ height: "35px", fontSize: "13px" }} value={documento.idTipoDocumento}>{documento.tipoDocumento}</option>)}
@@ -183,7 +183,7 @@ class editar extends React.Component {
                     <br />
                     <div className="row">
                       <div className="col-sm-6">
-                        <Field name="correo" validate={[requerido, validacionCincuentaCaracteres]} type="email" component={generarInput} label="Correo electronico" />
+                        <Field name="correo" validate={[requerido, validacionCincuentaCaracteres]} type="email" component={generarInputCorreo} label="Correo electronico" />
                       </div>
                       <div className="col-sm-6">
                         <Field name="fechaNacimiento" type="date" validate={[requerido, fechaNacimiento]} component={generarDate} label="Fecha de nacimiento" />

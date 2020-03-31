@@ -256,7 +256,7 @@ export const mensajesDeValidarToken = respuesta => {
     if (filtro === '') {
         switch (respuesta) {
             case 'Ocurrio un error en el servidor':
-                return 'Ocurrio un error en el servidor';
+                return 'Este enlace ya no es valido';
             case 'Token en formato incorrecto':
                 return 'Ocurrio un problema con la solicitud intentelo de nuevo';
             case 'Token vencido':

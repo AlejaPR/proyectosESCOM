@@ -60,7 +60,6 @@ class ContenidoAdminModulo extends React.Component {
 
 	componentDidUpdate() {
 		if (this.props.mensajeRegistrar !== '') {
-			debugger;
 			if (this.props.mensajeRegistrar === 'modulo registrado') {
 				NotificationManager.success('Modulo registrado correctamente');
 				this.props.actionConsultarModulos(localStorage.getItem('Token'));
