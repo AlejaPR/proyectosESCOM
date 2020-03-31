@@ -6,12 +6,12 @@ import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
 import { required } from '../../../utilitarian/validations.js';
 import { ToastContainer, toast } from 'react-toastify';
-import { getAnnexVersions, addAnnexVersion } from '../../../../redux/actions/annexVersionA.js';
+import { getAnnexVersions, addAnnexVersion, addMessageAdd } from '../../../../redux/actions/annexVersionA.js';
 
 class AddVersion extends Component {
 
     componentWillMount() {
-        this.props.getAnnexVersions(sessionStorage.getItem('annex'))
+        this.props.getAnnexVersions(localStorage.getItem('Token'),sessionStorage.getItem('annex'))
     }
 
     constructor(props) {
@@ -26,7 +26,7 @@ class AddVersion extends Component {
         let files = event.target.files
 
         let exte = files[0].name.split('.').pop()
-        if (exte !== 'docx' && exte !== 'pdf') {
+        if (exte !== 'docx' && exte !== 'pdf' && exte !== 'rtf' && exte !== 'xlsx') {
             toast.error(exte + ' is not a supported format\n')
             event.target.value = null
             return false
@@ -83,8 +83,24 @@ class AddVersion extends Component {
         }
         const data = new FormData()
         data.append('file', this.state.selectedFile[0])
-        this.props.addAnnexVersion(data, annexN);
-        this.props.showAnnexVersions(sessionStorage.getItem('annex'))
+        this.props.addAnnexVersion(localStorage.getItem('Token'), data, annexN);        
+    }
+
+    componentDidUpdate(){
+        if (this.props.messageAdd !== '') {
+            switch (this.props.messageAdd) {
+                case 'add':
+                    toast.success('Se agrego con exito.');
+                    this.props.getAnnexVersions(localStorage.getItem('Token'), sessionStorage.getItem('annex'))
+                    this.props.addMessageAdd('');
+                    break;
+                case 'error server':
+                    toast.error('Se presento un error, intentelo mas tarde.');
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     render() {
@@ -148,6 +164,7 @@ const generarInput = ({ input, placeholder, label, type, meta: { touched, warnin
 function mapStateToProps(state) {
     return {
         listAnnexVersion: state.annexVersion.listAnnexVersionR,
+        messageAdd: state.annexVersion.messageAdd,
         annexS: state.annex.annexR
     }
 }
@@ -156,4 +173,4 @@ let formAdd = reduxForm({
     form: 'addVersion',
     enableReinitialize: true
 })(AddVersion)
-export default withRouter(connect(mapStateToProps, { addAnnex, getAnnexVersions, addAnnexVersion })(formAdd));
+export default withRouter(connect(mapStateToProps, { addAnnex, getAnnexVersions, addAnnexVersion, addMessageAdd })(formAdd));

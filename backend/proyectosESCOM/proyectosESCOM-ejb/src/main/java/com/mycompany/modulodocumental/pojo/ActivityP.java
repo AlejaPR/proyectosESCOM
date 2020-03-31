@@ -9,29 +9,33 @@ import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import java.io.Serializable;
 
 /**
- *  @author HASHY
+ * @author HASHY
  */
-public class ActivityP implements Serializable{
-    
+public class ActivityP implements Serializable {
+
     private int id;
     private String name;
     private String description;
     private String information;
-    private int state;    
+    private int state;
+    private String number;
+    private int parentActivity;
     private int idCondition;
+    private int idAnnex;
     private int type;
     private DatosSolicitudPOJO requestData;
 
     public ActivityP() {
     }
 
-    public ActivityP(int id, String name, String description, String information, int state, int type) {
+    public ActivityP(int id, String name, String description, String information, int state, int type, String number) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.information = information;
         this.state = state;
         this.type = type;
+        this.number = number;
     }
 
     public int getId() {
@@ -74,6 +78,22 @@ public class ActivityP implements Serializable{
         this.state = state;
     }
 
+    public String getNumber() {
+        return number;
+    }
+
+    public int getParentActivity() {
+        return parentActivity;
+    }
+
+    public void setNumber(String number) {
+        this.number = number;
+    }
+
+    public void setParentActivity(int parentActivity) {
+        this.parentActivity = parentActivity;
+    }
+
     public int getIdCondition() {
         return idCondition;
     }
@@ -90,6 +110,14 @@ public class ActivityP implements Serializable{
         this.type = type;
     }
 
+    public int getIdAnnex() {
+        return idAnnex;
+    }
+
+    public void setIdAnnex(int idAnnex) {
+        this.idAnnex = idAnnex;
+    }
+
     public DatosSolicitudPOJO getRequestData() {
         return requestData;
     }
@@ -97,5 +125,5 @@ public class ActivityP implements Serializable{
     public void setRequestData(DatosSolicitudPOJO requestData) {
         this.requestData = requestData;
     }
-    
+
 }

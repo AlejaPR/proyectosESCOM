@@ -37,7 +37,7 @@ export function addMessageDelete(mensaje) {
 //MD_Agregar comentario
 export function addCommentary(token, commentaryN) {
     const headers = {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset= UTF-8',
         'TokenAuto': desencriptar(token),
         'Permiso': PERMIT_ADD_COMMENTARY
     }

@@ -39,7 +39,7 @@ class versionDocument extends Component {
 
     render() {
         return (
-            <div className="container color" >
+            <div className="container color" style={{ width: "90%" }}>
                 <div class="card">
                     <h2 className="text-center"><strong>{this.props.program.name}</strong></h2>
                     <h6 className="text-center">Sede:{this.props.program.campus}</h6>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { getListActivities } from '../../../redux/actions/activityA.js';
+import { getListActivitiesInfo } from '../../../redux/actions/activityA.js';
 import { reduxForm, Field, FormSection } from 'redux-form';
 
 
@@ -9,7 +9,7 @@ import { reduxForm, Field, FormSection } from 'redux-form';
 class Classification extends Component {
 
     componentWillMount() {
-        this.props.getListActivities(31)
+        this.props.getListActivitiesInfo(31)
     }
 
     handleSubmit = formValues => {
@@ -36,7 +36,7 @@ class Classification extends Component {
 
     render() {
         return (
-            <div className="container color" style={{ width: "80%" }} >
+            <div className="container color" style={{ width: "90%" }} >
                 <form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
                 <div className="">
                     <table class="table border table-striped">
@@ -83,4 +83,4 @@ let formCla = reduxForm({
     form: 'searchAnnex',
     enableReinitialize: true
 })(Classification)
-export default connect(mapStateToProps, { getListActivities })(formCla);
+export default connect(mapStateToProps, { getListActivitiesInfo })(formCla);

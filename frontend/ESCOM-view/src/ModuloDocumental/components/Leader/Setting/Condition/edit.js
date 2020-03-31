@@ -55,35 +55,35 @@ class Edit extends Component {
                                 <div class="modal-body">
                                     <label for="form_control_1">Nombre: </label>
                                     <div className="row">
-                                        <div className="col-sm-5">
+                                        <div className="col-sm">
                                             <Field name="name" validate={[required, minimum, twoHundred]} component={generarInput} label="Nombre" />
                                         </div>
                                     </div>
                                     <br />
                                     <label for="form_control_1">Descripcion: </label>
                                     <div className="row">
-                                        <div className="col-sm-5">
+                                        <div className="col-sm">
                                             <Field name="description" validate={[required, minimum, thousand]} component={generarText} label="Descripcion" />
                                         </div>
                                     </div>
                                     <br />
                                     <label for="form_control_1">Fecha inicio: </label>
                                     <div className="row">
-                                        <div className="col-sm-5">
+                                        <div className="col-sm">
                                             <Field name="startDate" validate={[required]} type="date" component={generarInput} />
                                         </div>
                                     </div>
                                     <br />
                                     <label for="form_control_1">Fecha final: </label>
                                     <div className="row">
-                                        <div className="col-sm-5">
+                                        <div className="col-sm">
                                             <Field name="finalDate" validate={[required]} type="date" component={generarInput} />
                                         </div>
                                     </div>
                                     <br />
                                     <label for="form_control_1">Proceso: </label>
                                     <div className="row">
-                                        <div className="col-sm-5">
+                                        <div className="col-sm">
                                             <Field name="process" validate={[select]} className="bs-select form-control" component={generarSelect}>
                                                 <option selected value="0">Seleccione...</option>
                                                 {this.loadList()}

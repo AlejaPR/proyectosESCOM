@@ -1,8 +1,9 @@
-import { GET_ANNEX_VERSIONS, ADD_ANNEX_VERSION } from '../actions/annexVersionA.js';
+import { GET_ANNEX_VERSIONS, ADD_ANNEX_VERSION, ADD_MESSAGE_ADD } from '../actions/annexVersionA.js';
 
 const initialState = {
     listAnnexVersionR: [],
-    messageR: []
+    messageAdd: '',
+    messageR: ''
 }
 
 export function reducersAnnexVersion(state = initialState, action) {
@@ -10,7 +11,9 @@ export function reducersAnnexVersion(state = initialState, action) {
         case GET_ANNEX_VERSIONS:
             return Object.assign({}, state, { listAnnexVersionR: action.payload })
         case ADD_ANNEX_VERSION:
-            return Object.assign({}, state, { messageR: action.payload })
+            return Object.assign({}, state, { messageAdd: action.payload })
+        case ADD_MESSAGE_ADD:
+            return Object.assign({}, state, { messageAdd: action.payload })
         default:
             return state
     }

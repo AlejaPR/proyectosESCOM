@@ -31,13 +31,26 @@ class ViewCalendar extends Component {
 
     render() {
         return (
-            <div className="container color" >
+            <div className="container color" style={{ width: "90%" }}>
                 <div class="card">
                     <div class="card-header text-center">
                         Calendario condiciones
                     </div>
                     <div class="card-body">
                         <Calendar
+                            popup
+                            messages={{
+                              showMore: total => (
+                                <div
+                                  style={{ cursor: 'pointer' }}
+                                  onMouseOver={e => {
+                                    e.stopPropagation();
+                                    e.preventDefault();
+                                  }}
+                                >{`+${total} more`}
+                                </div>
+                              ),
+                            }}
                             localizer={localizer}
                             events={this.listEvents()}
                             startAccessor="start"

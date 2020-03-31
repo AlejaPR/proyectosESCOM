@@ -167,7 +167,7 @@ export function getConditionId(token, id) {
 //add a new condition
 export function addCondition(token, conditionN) {
   const headers = {
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json; charset= UTF-8',
     'TokenAuto': desencriptar(token),
     'Permiso': PERMIT_ADD_CONDITION
   }
@@ -207,7 +207,7 @@ export function addCondition(token, conditionN) {
 //edit condition
 export function editCondition(token, conditionE) {
   const headers = {
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json; charset= UTF-8',
     'TokenAuto': desencriptar(token),
     'Permiso': PERMIT_EDIT_CONDITION
   }
@@ -284,7 +284,7 @@ export function disableCondition(token, id) {
 //MD_Aprobar condicion
 export function approveCondition(token, id) {
   const headers = {
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json; charset= UTF-8',
     'TokenAuto': desencriptar(token),
     'Permiso': PERMIT_APPROVE_CONDITION
   }

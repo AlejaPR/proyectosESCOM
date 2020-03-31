@@ -83,6 +83,7 @@ class ProcessPrograma extends Component {
                 <tr key={ConditionView.id}>
                     <td>{ConditionView.number}</td>
                     <td>{ConditionView.name}</td>
+                    <td>{ConditionView.state === 1 ? 'Activo' : 'Finalizada'}</td>
                     <td>
                         <div className="progress">
                             <div className="progress-bar" style={bar(ConditionView.percentage)} role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">{ConditionView.percentage}%</div>
@@ -100,16 +101,20 @@ class ProcessPrograma extends Component {
 
     render() {
         return (
-            <div className="container color">
+            <div className="container color" style={{ width: "90%" }}>
                 <br />
                 <div class="card">
                     <div class="card-body">
+                        <button onClick={() => this.convertHtmlToWord()} className="btn btn-sm float-right naranja">
+                            <i class="fas fa-download"></i>
+                        </button>
                         <h3 class="card-title text-center"><strong>Lista de condiciones</strong></h3>
                         <table class="table border">
                             <thead class="colorBlue text-light">
                                 <tr>
                                     <th scope="col">#</th>
                                     <th scope="col">Condición</th>
+                                    <th scope="col">Estado</th>
                                     <th scope="col">Proceso</th>
                                     <th scope="col"></th>
                                 </tr>
@@ -120,12 +125,11 @@ class ProcessPrograma extends Component {
                         </table>
                         <br />
                         <div>
+                            {/*
                             <button onClick={() => this.convertHtmlToPdf()} className="btn btn-sm naranja">
                                 PDF
                                 </button>
-                            <button onClick={() => this.convertHtmlToWord()} className="btn btn-sm naranja">
-                                WORD
-                                </button>
+                            */}
                         </div>
                     </div>
                 </div>

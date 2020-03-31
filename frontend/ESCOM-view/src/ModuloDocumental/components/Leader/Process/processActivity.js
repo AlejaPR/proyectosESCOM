@@ -1,42 +1,119 @@
 import React from 'react';
 import { Component } from 'react';
-
+import { Editor } from '@tinymce/tinymce-react';
 
 // Require Font Awesome.
 import 'font-awesome/css/font-awesome.css';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom'
 import ProcessCommentary from '../Process/processCommentary.js';
-import { getActivityId, addInformation } from '../../../redux/actions/activityA.js';
+import { getActivityId, addInformation, changeStatus, addMessageChange } from '../../../redux/actions/activityA.js';
 
 class ProcessActivity extends Component {
 
-    componentWillMount() {
-        this.props.getActivityId(localStorage.getItem('Token'),sessionStorage.getItem('activity'))
+    componentDidMount() {
+        this.props.getActivityId(localStorage.getItem('Token'), sessionStorage.getItem('activity'))
     }
 
     saveView() {
         this.props.history.push('/ProcessCondition')
     }
 
+    componentDidUpdate() {
+        if (this.props.messageChange !== '') {
+            switch (this.props.messageChange) {
+                case 'approved':
+                    toast.success('Aprobada con exito.');
+                    this.props.addMessageChange('');
+                    break;
+                case 'denied':
+                    toast.success('Denegada con exito.');
+                    this.props.addMessageChange('');
+                    break;
+                case 'error server':
+                    toast.error('Se presento un error, intentelo mas tarde.');
+                    this.props.addMessageAdd('');
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    approveActivity() {
+        let activityN = {
+            id: sessionStorage.getItem('activity'),
+            state: 2,
+            requestData: null
+        }
+        this.props.changeStatus(localStorage.getItem('Token'), activityN)
+    }
+
+    deniedActivity() {
+        let activityN = {
+            id: sessionStorage.getItem('activity'),
+            state: 1,
+            requestData: null
+        }
+        this.props.changeStatus(localStorage.getItem('Token'), activityN)
+    }
+
     render() {
         return (
-            <div className="container color">
-                <ToastContainer/>
+            <div className="container color" style={{ width: "90%" }}>
+                <ToastContainer />
                 <br />
                 <div class="card">
                     <div class="card-body">
+                        <button type="button" onClick={() => this.approveActivity()} className="btn text-light btn-sm float-right naranja " >
+                            Aprobar
+                        </button>
+                        <button type="button" onClick={() => this.deniedActivity()} className="btn text-light btn-sm float-right naranja " >
+                            Denegar
+                        </button>
                         <h5 class="card-title"><strong>INFORMACION ACTIVIDAD</strong></h5>
-                        
-                        <br />
+                        <h5>Descripción:</h5>
+                        <p className="px-3">{this.props.dataModel.description}</p>
+                        <hr />
+                        <div className="text-center">
+                            <Editor
+                                apiKey="spssdb50vwk3go6qwrl2ktj7y3ltm94smrx3pj4pg92ypbx8"
+                                initialValue={this.props.dataModel.information}
+                                init={{
+                                    language: 'es',
+                                    language_url: '../../node_modules/@tinymce/language/es.js',
+                                    height: 500,
+                                    menubar: false,
+                                    images_upload_handler: function (blobInfo, success, failure) {
+                                        success("data:" + blobInfo.blob().type + ";base64," + blobInfo.base64());
+                                    },
+                                    paste_data_images: true,
+                                    plugins: [
+                                        'uploadimage', 'image',
+                                        'advlist autolink lists link image charmap print preview anchor',
+                                        'searchreplace visualblocks code fullscreen',
+                                        'insertdatetime media table paste code help wordcount',
+                                        'table'
+                                    ],
+                                    fontsize_formats: '11px 12px 14px 16px 18px 24px 36px 48px',
+                                    font_formats: 'Andale Mono=andale mono,times; Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; Book Antiqua=book antiqua,palatino; Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Helvetica=helvetica; Impact=impact,chicago; Symbol=symbol; Tahoma=tahoma,arial,helvetica,sans-serif; Terminal=terminal,monaco; Times New Roman=times new roman,times; Trebuchet MS=trebuchet ms,geneva; Verdana=verdana,geneva; Webdings=webdings; Wingdings=wingdings,zapf dingbats',
+                                    toolbar:
+                                        'uploadimage image | undo redo | formatselect | bold italic backcolor | fontsizeselect  fontselect | \
+                                        alignleft aligncenter alignright alignjustify | table | \
+                                        bullist numlist outdent indent  | removeformat | help '
+
+                                }}
+                                onEditorChange={this.handleEditorChange}
+                            />
+                        </div>
                         <button onClick={() => this.saveView()} className="btn btn-sm text-light naranja">
                             Volver
                         </button>
                     </div>
                 </div>
                 <br />
-                <ProcessCommentary/>
+                <ProcessCommentary />
             </div>
         );
     }
@@ -44,8 +121,9 @@ class ProcessActivity extends Component {
 
 function mapStateToProps(state) {
     return {
-        dataModel: state.activity.activityR
+        dataModel: state.activity.activityR,
+        messageChange: state.activity.messageChange
     }
 }
 
-export default withRouter(connect(mapStateToProps, { getActivityId, addInformation })(ProcessActivity));
+export default withRouter(connect(mapStateToProps, { getActivityId, addInformation, changeStatus, addMessageChange })(ProcessActivity));

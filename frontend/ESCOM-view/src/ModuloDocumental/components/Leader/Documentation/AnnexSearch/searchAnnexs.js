@@ -11,8 +11,8 @@ import { Link, withRouter } from 'react-router-dom';
 class searchAnnexs extends Component {
 
     componentWillMount() {
-        this.props.getListPrograms()
-        this.props.getListAnnexes(0)
+        this.props.getListPrograms(localStorage.getItem('Token'))
+        this.props.getListAnnexes(localStorage.getItem('Token'), 0)
     }
 
     handleSubmit = formValues => {
@@ -21,7 +21,7 @@ class searchAnnexs extends Component {
             idProgram: formValues.program,
             name: formValues.name
         }
-        this.props.searchAnnexS(searchAnn)
+        this.props.searchAnnexS(localStorage.getItem('Token'), searchAnn)
     }
 
     loadList() {
@@ -48,9 +48,7 @@ class searchAnnexs extends Component {
                             <i class="far fa-eye"></i>
                         </button>
                     </td>
-                    <td>
-                        <Link to={annex.link !== '' ? '/'+annex.link : ''}  target="_blank" download><i class="fas fa-download"></i></Link>
-                    </td>
+                    <td>{annex.link !== null ? <Link to={'/' + annex.link} target="_blank" download><i class="fas fa-download"></i></Link> : ''}</td>
                 </tr>
             )
         })
@@ -59,12 +57,12 @@ class searchAnnexs extends Component {
 
     render() {
         return (
-            <div className="container color">
+            <div className="container color" style={{ width: "90%" }}>
                 <br />
                 <div class="card">
                     <div class="card-body">
                         <h3 class="card-title text-center"><strong>BUSCAR ANEXOS</strong></h3>
-                        <br/>
+                        <br />
                         <form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
                             <div className="row">
                                 <div className="input-group col-6">

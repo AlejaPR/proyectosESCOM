@@ -30,7 +30,11 @@ public interface ActivityFacadeLocal {
 
     int count();
     
-    List<Activity> listActivities(int id);
+    List<Activity> listDaughters(int id, int condition);
+    
+    List<Activity> listActivitiesInfo(int id);
+    
+    List<Activity> listActivitiesAnnex(int id);
     
     int Percentage(int id);
     
