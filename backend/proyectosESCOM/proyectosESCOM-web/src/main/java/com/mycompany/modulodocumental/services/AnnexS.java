@@ -5,7 +5,7 @@
  */
 package com.mycompany.modulodocumental.services;
 
-import com.mycompany.modulodocumental.interfaces.AnnexLogicFacadeLocal;
+import com.mycompany.modulodocumental.interfaces.logic.AnnexLogicLocal;
 import com.mycompany.modulodocumental.pojo.AnnexP;
 import com.mycompany.modulodocumental.pojo.SearchAnnP;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
@@ -35,13 +35,13 @@ import javax.ws.rs.core.Response;
 public class AnnexS {
 
     @EJB
-    private AnnexLogicFacadeLocal annexLogicFacade;
+    private AnnexLogicLocal annexLogicFacade;
 
     @POST
     @Path("/add")
-    public Response addAnnex(AnnexP annex) {
+    public Response add(AnnexP annex) {
         try {
-            annexLogicFacade.addAnnex(annex);
+            annexLogicFacade.add(annex);
             JsonObject rest = Json.createObjectBuilder().add("data", "add").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
@@ -53,9 +53,9 @@ public class AnnexS {
 
     @PUT
     @Path("/edit")
-    public Response editAnnex(AnnexP annex) {
+    public Response edit(AnnexP annex) {
         try {
-            annexLogicFacade.editAnnex(annex);
+            annexLogicFacade.edit(annex);
             JsonObject rest = Json.createObjectBuilder().add("data", "edit").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
@@ -68,7 +68,7 @@ public class AnnexS {
     @Path("/disable/{id}")
     public Response disableAnnex(@PathParam("id") int id, DatosSolicitudPOJO dataR) {
         try {
-            annexLogicFacade.disableAnnex(id, dataR);
+            annexLogicFacade.disable(id, dataR);
             JsonObject rest = Json.createObjectBuilder().add("data", "disable").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
@@ -79,9 +79,9 @@ public class AnnexS {
 
     @GET
     @Path("/list/{id}")
-    public Response listAnnex(@PathParam("id") int id) {
+    public Response getList(@PathParam("id") int id) {
         try {
-            List<AnnexP> data = annexLogicFacade.listAnnex(id);
+            List<AnnexP> data = annexLogicFacade.getList(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
             JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
@@ -90,10 +90,10 @@ public class AnnexS {
     }
 
     @GET
-    @Path("/getAnnex/{id}")
-    public Response getAnnexId(@PathParam("id") int id) {
+    @Path("/get/{id}")
+    public Response get(@PathParam("id") int id) {
         try {
-            AnnexP data = annexLogicFacade.getAnnexId(id);
+            AnnexP data = annexLogicFacade.get(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
             JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();

@@ -5,9 +5,11 @@
  */
 package com.mycompany.modulodocumental.logica;
 
+import com.mycompany.modulodocumental.entity.GeneralProgram;
 import com.mycompany.modulodocumental.entity.Program;
+import com.mycompany.modulodocumental.interfaces.GeneralProgramFacadeLocal;
 import com.mycompany.modulodocumental.interfaces.ProgramFacadeLocal;
-import com.mycompany.modulodocumental.interfaces.ProgramLogicFacadeLocal;
+import com.mycompany.modulodocumental.interfaces.logic.ProgramLogicLocal;
 import com.mycompany.modulodocumental.pojo.ProgramP;
 import com.mycompany.modulodocumental.utility.GenericException;
 import com.mycompany.superadministrador.interfaces.UtilitarioFacadeLocal;
@@ -22,10 +24,12 @@ import javax.ejb.Stateless;
  * @author hashy
  */
 @Stateless
-public class ProgramLogic implements ProgramLogicFacadeLocal {
+public class ProgramLogic implements ProgramLogicLocal {
     
     @EJB
     ProgramFacadeLocal programFacade;
+    @EJB
+    GeneralProgramFacadeLocal generalprogramFacade;
     @EJB
     UtilitarioFacadeLocal bitacora;
     
@@ -34,7 +38,7 @@ public class ProgramLogic implements ProgramLogicFacadeLocal {
     private static final String CLASS = "Clase logica programa";
     
     @Override
-    public List<ProgramP> listProgram() throws GenericException {
+    public List<ProgramP> getList() throws GenericException {
         try {
             List<Program> list = programFacade.findAll();
             List<ProgramP> data = new ArrayList<>();
@@ -50,9 +54,9 @@ public class ProgramLogic implements ProgramLogicFacadeLocal {
     }
     
     @Override
-    public ProgramP getProgramId(int id) throws GenericException {
+    public ProgramP get(int idProgram) throws GenericException {
         try {
-            Program pro = programFacade.find(id);
+            Program pro = programFacade.find(idProgram);
             ProgramP data = new ProgramP(pro.getId(), pro.getName(), pro.getLevelEducation(), pro.getInstitution(), pro.getAcademicCredits(), pro.getDuration(), pro.getMethodology(), pro.getCampus());
             return data;
         } catch (Exception ex) {
@@ -62,9 +66,11 @@ public class ProgramLogic implements ProgramLogicFacadeLocal {
     }
     
     @Override
-    public void addProgram(ProgramP program) throws GenericException {
+    public void add(ProgramP program) throws GenericException {
         try {
             Program data = new Program(program.getName(), program.getLevelEducation(), program.getInstitution(), program.getAcademicCredits(), program.getDuration(), program.getMethodology(), program.getCampus());
+            GeneralProgram general = generalprogramFacade.find(program.getIdGeneral());
+            data.setFkProGeneral(general);
             programFacade.create(data);
             program.getRequestData().setTablaInvolucrada(TABLE);
             bitacora.registrarEnBitacora(program.getRequestData());
@@ -75,7 +81,7 @@ public class ProgramLogic implements ProgramLogicFacadeLocal {
     }
     
     @Override
-    public void editProgram(ProgramP program) throws GenericException {
+    public void edit(ProgramP program) throws GenericException {
         try {
             Program data = programFacade.find(program.getId());
             data.setAcademicCredits(program.getAcademicCredits());

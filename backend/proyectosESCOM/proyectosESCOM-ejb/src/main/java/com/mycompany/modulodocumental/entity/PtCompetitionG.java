@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -20,23 +22,26 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "TBL_PT_COMPETITION_G")
-public class PtCompetitionG implements Serializable{
-    
+public class PtCompetitionG implements Serializable {
+
     @Id
     @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PK_PTC_ID")
     private int id;
-    
+
+    @JoinColumn(name = "FK_PTC_COMPETITIION_G", referencedColumnName = "PK_CG_ID")
+    @ManyToOne
     private CompetitionGeneral fkPtcCompetitionG;
-    
+
+    @JoinColumn(name = "FK_PTC_PROGRAM_THEMATIC", referencedColumnName = "PK_PT_ID")
+    @ManyToOne
     private ProgramThematicCore fkPtcProgramThematic;
 
     public PtCompetitionG() {
     }
 
-    public PtCompetitionG(int id, CompetitionGeneral fkPtcCompetitionG, ProgramThematicCore fkPtcProgramThematic) {
-        this.id = id;
+    public PtCompetitionG(CompetitionGeneral fkPtcCompetitionG, ProgramThematicCore fkPtcProgramThematic) {
         this.fkPtcCompetitionG = fkPtcCompetitionG;
         this.fkPtcProgramThematic = fkPtcProgramThematic;
     }
@@ -64,5 +69,5 @@ public class PtCompetitionG implements Serializable{
     public void setFkPtcProgramThematic(ProgramThematicCore fkPtcProgramThematic) {
         this.fkPtcProgramThematic = fkPtcProgramThematic;
     }
-    
+
 }

@@ -9,7 +9,7 @@ import com.mycompany.modulodocumental.entity.Annex;
 import com.mycompany.modulodocumental.entity.AnnexVersion;
 import com.mycompany.modulodocumental.entity.Program;
 import com.mycompany.modulodocumental.interfaces.AnnexFacadeLocal;
-import com.mycompany.modulodocumental.interfaces.AnnexLogicFacadeLocal;
+import com.mycompany.modulodocumental.interfaces.logic.AnnexLogicLocal;
 import com.mycompany.modulodocumental.interfaces.AnnexVersionFacadeLocal;
 import com.mycompany.modulodocumental.interfaces.ProgramFacadeLocal;
 import com.mycompany.modulodocumental.pojo.AnnexP;
@@ -28,7 +28,7 @@ import javax.ejb.Stateless;
  * @author hashy
  */
 @Stateless
-public class AnnexLogic implements AnnexLogicFacadeLocal {
+public class AnnexLogic implements AnnexLogicLocal {
 
     @EJB
     private AnnexFacadeLocal annexFacade;
@@ -45,7 +45,7 @@ public class AnnexLogic implements AnnexLogicFacadeLocal {
     
 
     @Override
-    public void addAnnex(AnnexP annex) throws GenericException {
+    public void add(AnnexP annex) throws GenericException {
         try {
             Annex add = new Annex(annex.getKeywords(), annex.getDescription(), annex.getName());
             add.setState(annex.getState());
@@ -61,7 +61,7 @@ public class AnnexLogic implements AnnexLogicFacadeLocal {
     }
 
     @Override
-    public void editAnnex(AnnexP annex) throws GenericException {
+    public void edit(AnnexP annex) throws GenericException {
         try {
             Annex data = annexFacade.find(annex.getId());
             data.setDescription(annex.getDescription());
@@ -77,7 +77,7 @@ public class AnnexLogic implements AnnexLogicFacadeLocal {
     }
 
     @Override
-    public void disableAnnex(int id, DatosSolicitudPOJO dataR) throws GenericException {
+    public void disable(int id, DatosSolicitudPOJO dataR) throws GenericException {
         try {
             Annex disable = annexFacade.find(id);
             disable.setState(-1);
@@ -91,9 +91,9 @@ public class AnnexLogic implements AnnexLogicFacadeLocal {
     }
 
     @Override
-    public List<AnnexP> listAnnex(int id) throws GenericException {
+    public List<AnnexP> getList(int idProgram) throws GenericException {
         try {
-            List<Annex> listAnnex = annexFacade.searchAnnex(id, null);
+            List<Annex> listAnnex = annexFacade.searchAnnex(idProgram, null);
             List<AnnexP> data = new ArrayList<>();
             for (Annex annex : listAnnex) {
                 AnnexP add = new AnnexP(annex.getId(), annex.getKeywords(), annex.getDescription(), annex.getName());
@@ -111,9 +111,9 @@ public class AnnexLogic implements AnnexLogicFacadeLocal {
     }
 
     @Override
-    public AnnexP getAnnexId(int id) throws GenericException {
+    public AnnexP get(int idAnnex) throws GenericException {
         try {
-            Annex annex = annexFacade.find(id);
+            Annex annex = annexFacade.find(idAnnex);
             AnnexP data = new AnnexP(annex.getId(), annex.getKeywords(), annex.getDescription(), annex.getName());
             return data;
         } catch (Exception ex) {

@@ -5,7 +5,7 @@
  */
 package com.mycompany.modulodocumental.services;
 
-import com.mycompany.modulodocumental.interfaces.ProgramLogicFacadeLocal;
+import com.mycompany.modulodocumental.interfaces.logic.ProgramLogicLocal;
 import com.mycompany.modulodocumental.pojo.ProgramP;
 import java.util.List;
 import javax.ejb.EJB;
@@ -33,13 +33,13 @@ import javax.ws.rs.core.Response;
 public class ProgramS {
 
     @EJB
-    ProgramLogicFacadeLocal programLogicFacade;
+    ProgramLogicLocal programLogicFacade;
 
     @GET
     @Path("/list")
-    public Response listProgram() {
+    public Response getList() {
         try {
-            List<ProgramP> data = programLogicFacade.listProgram();
+            List<ProgramP> data = programLogicFacade.getList();
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
             JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
@@ -48,10 +48,10 @@ public class ProgramS {
     }
 
     @GET
-    @Path("/getProgram/{id}")
-    public Response getProgramId(@PathParam("id") int id) {
+    @Path("/get/{id}")
+    public Response get(@PathParam("id") int id) {
         try {
-            ProgramP data = programLogicFacade.getProgramId(id);
+            ProgramP data = programLogicFacade.get(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
             JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
@@ -61,9 +61,9 @@ public class ProgramS {
 
     @POST
     @Path("/add")
-    public Response addProgram(ProgramP pro) {
+    public Response add(ProgramP pro) {
         try {
-            programLogicFacade.addProgram(pro);
+            programLogicFacade.add(pro);
             JsonObject rest = Json.createObjectBuilder().add("data", "add").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
@@ -75,9 +75,9 @@ public class ProgramS {
 
     @PUT
     @Path("/edit")
-    public Response editProgram(ProgramP pro) {
+    public Response edit(ProgramP pro) {
         try {
-            programLogicFacade.editProgram(pro);
+            programLogicFacade.edit(pro);
             JsonObject rest = Json.createObjectBuilder().add("data", "edit").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {

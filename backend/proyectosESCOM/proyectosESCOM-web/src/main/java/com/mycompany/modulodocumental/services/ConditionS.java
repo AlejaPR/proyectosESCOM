@@ -5,7 +5,7 @@
  */
 package com.mycompany.modulodocumental.services;
 
-import com.mycompany.modulodocumental.interfaces.ConditionLogicFacadeLocal;
+import com.mycompany.modulodocumental.interfaces.logic.ConditionLogicLocal;
 import com.mycompany.modulodocumental.pojo.ConditionP;
 import com.mycompany.modulodocumental.view.ConditionView;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
@@ -35,7 +35,7 @@ import javax.ws.rs.core.Response;
 public class ConditionS {
 
     @EJB
-    private ConditionLogicFacadeLocal conditionLogicFacade;
+    private ConditionLogicLocal conditionLogicFacade;
 
     /**
      * this method returns the list of conditions with active status
@@ -45,9 +45,9 @@ public class ConditionS {
      */
     @GET
     @Path("/list/{idD}")
-    public Response listCondition(@PathParam("idD") int idD) {
+    public Response getList(@PathParam("idD") int idD) {
         try {
-            List<ConditionP> data = conditionLogicFacade.listCondition(idD);
+            List<ConditionP> data = conditionLogicFacade.getList(idD);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
             JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
@@ -62,10 +62,10 @@ public class ConditionS {
      * @return
      */
     @GET
-    @Path("/getCondition/{id}")
+    @Path("/get/{id}")
     public Response getConditionId(@PathParam("id") int id) {
         try {
-            ConditionP data = conditionLogicFacade.getConditionId(id);
+            ConditionP data = conditionLogicFacade.get(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
             JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
@@ -81,9 +81,9 @@ public class ConditionS {
      */
     @GET
     @Path("/listPercentage/{idP}")
-    public Response listConditionPercentage(@PathParam("idP") int idP) {
+    public Response getListPercentage(@PathParam("idP") int idP) {
         try {
-            List<ConditionView> data = conditionLogicFacade.listConditionPercentage(idP);
+            List<ConditionView> data = conditionLogicFacade.getListPercentage(idP);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
             JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
@@ -99,9 +99,9 @@ public class ConditionS {
      */
     @POST
     @Path("/add")
-    public Response addCondition(ConditionP con) {
+    public Response add(ConditionP con) {
         try {
-            conditionLogicFacade.addCondition(con);
+            conditionLogicFacade.add(con);
             JsonObject rest = Json.createObjectBuilder().add("data", "add").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
@@ -112,9 +112,9 @@ public class ConditionS {
 
     @PUT
     @Path("/edit")
-    public Response editCondition(ConditionP con) {
+    public Response edit(ConditionP con) {
         try {
-            conditionLogicFacade.editCondition(con);
+            conditionLogicFacade.edit(con);
             JsonObject rest = Json.createObjectBuilder().add("data", "edit").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
@@ -126,9 +126,9 @@ public class ConditionS {
 
     @PUT
     @Path("/disable/{id}")
-    public Response disableCondition(@PathParam("id") int id, DatosSolicitudPOJO dataR) {
+    public Response disable(@PathParam("id") int id, DatosSolicitudPOJO dataR) {
         try {
-            conditionLogicFacade.disableCondition(id, dataR);
+            conditionLogicFacade.disable(id, dataR);
             JsonObject rest = Json.createObjectBuilder().add("data", "disable").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
@@ -140,9 +140,9 @@ public class ConditionS {
 
     @PUT
     @Path("/approve/{id}")
-    public Response approveCondition(@PathParam("id") int id, DatosSolicitudPOJO dataR) {
+    public Response approve(@PathParam("id") int id, DatosSolicitudPOJO dataR) {
         try {
-            conditionLogicFacade.approveCondition(id, dataR);
+            conditionLogicFacade.approve(id, dataR);
             JsonObject rest = Json.createObjectBuilder().add("data", "approve").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {

@@ -5,7 +5,7 @@
  */
 package com.mycompany.modulodocumental.services;
 
-import com.mycompany.modulodocumental.interfaces.DocumentVersionLogicFacadeLocal;
+import com.mycompany.modulodocumental.interfaces.logic.DocumentVersionLogicLocal;
 import com.mycompany.modulodocumental.pojo.DocumentVersionP;
 import java.util.List;
 import javax.ejb.EJB;
@@ -32,13 +32,13 @@ import javax.ws.rs.core.Response;
 public class DocumentVersionS {
 
     @EJB
-    private DocumentVersionLogicFacadeLocal documentVersionLogicFacade;
+    private DocumentVersionLogicLocal documentVersionLogicFacade;
 
     @GET
     @Path("/listCurrent/{id}")
-    public Response listCurrentVersions(@PathParam("id") int id) {
+    public Response getListCurrent(@PathParam("id") int id) {
         try {
-            List<DocumentVersionP> data = documentVersionLogicFacade.listCurrentVersions(id);
+            List<DocumentVersionP> data = documentVersionLogicFacade.getListCurrent(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
             JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
@@ -48,9 +48,9 @@ public class DocumentVersionS {
 
     @GET
     @Path("/listOld/{id}")
-    public Response listOldVersions(@PathParam("id") int id) {
+    public Response getListOld(@PathParam("id") int id) {
         try {
-            List<DocumentVersionP> data = documentVersionLogicFacade.listOldVersions(id);
+            List<DocumentVersionP> data = documentVersionLogicFacade.getListOld(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
             JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
@@ -60,9 +60,9 @@ public class DocumentVersionS {
     
     @POST
     @Path("/add")
-    public Response addVersion(DocumentVersionP version) {
+    public Response add(DocumentVersionP version) {
         try {
-            documentVersionLogicFacade.addVersion(version);
+            documentVersionLogicFacade.add(version);
             JsonObject rest = Json.createObjectBuilder().add("data", "add").build();
             return Response.status(Response.Status.CREATED).entity(rest).build();
         } catch (Exception e) {

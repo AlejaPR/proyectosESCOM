@@ -5,7 +5,7 @@
  */
 package com.mycompany.modulodocumental.services;
 
-import com.mycompany.modulodocumental.interfaces.AnnexVersionLogicFacadeLocal;
+import com.mycompany.modulodocumental.interfaces.logic.AnnexVersionLogicLocal;
 import com.mycompany.modulodocumental.pojo.AnnexVersionP;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import java.util.List;
@@ -34,13 +34,13 @@ import javax.ws.rs.core.Response;
 public class AnnexVersionS {
 
     @EJB
-    private AnnexVersionLogicFacadeLocal annexVersionLogicFacade;
+    private AnnexVersionLogicLocal annexVersionLogicFacade;
 
     @GET
     @Path("/list/{id}")
-    public Response listAnnexVersion(@PathParam("id") int id) {
+    public Response getList(@PathParam("id") int id) {
         try {
-            List<AnnexVersionP> data = annexVersionLogicFacade.listAnnexVersion(id);
+            List<AnnexVersionP> data = annexVersionLogicFacade.getList(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
             JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
@@ -50,9 +50,9 @@ public class AnnexVersionS {
 
     @POST
     @Path("/add")
-    public Response addAnnexVersion(AnnexVersionP annexV) {
+    public Response add(AnnexVersionP annexV) {
         try {
-            annexVersionLogicFacade.addAnnexVersion(annexV);
+            annexVersionLogicFacade.add(annexV);
             JsonObject rest = Json.createObjectBuilder().add("data", "add").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
@@ -64,9 +64,9 @@ public class AnnexVersionS {
 
     @DELETE
     @Path("/delete/{id}")
-    public Response deleteVersion(@PathParam("id") int id, DatosSolicitudPOJO dataR) {
+    public Response delete(@PathParam("id") int id, DatosSolicitudPOJO dataR) {
         try {
-            annexVersionLogicFacade.deleteVersion(id, dataR);
+            annexVersionLogicFacade.delete(id, dataR);
             JsonObject rest = Json.createObjectBuilder().add("data", "delete").build();
             return Response.status(Response.Status.NO_CONTENT).entity(rest).build();
         } catch (Exception e) {

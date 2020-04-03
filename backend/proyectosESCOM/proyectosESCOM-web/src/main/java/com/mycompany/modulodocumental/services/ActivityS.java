@@ -5,7 +5,7 @@
  */
 package com.mycompany.modulodocumental.services;
 
-import com.mycompany.modulodocumental.interfaces.ActivityLogicFacadeLocal;
+import com.mycompany.modulodocumental.interfaces.logic.ActivityLogicLocal;
 import com.mycompany.modulodocumental.pojo.ActivityP;
 import com.mycompany.modulodocumental.view.ActivityAnnexView;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
@@ -35,13 +35,13 @@ import javax.ws.rs.core.Response;
 public class ActivityS {
 
     @EJB
-    private ActivityLogicFacadeLocal activityLogicFacade;
+    private ActivityLogicLocal activityLogicFacade;
 
     @POST
     @Path("/add")
-    public Response addActivity(ActivityP act) {
+    public Response add(ActivityP act) {
         try {
-            activityLogicFacade.addActivity(act);
+            activityLogicFacade.add(act);
             JsonObject rest = Json.createObjectBuilder().add("data", "add").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
@@ -53,9 +53,9 @@ public class ActivityS {
 
     @PUT
     @Path("/edit")
-    public Response editActivity(ActivityP act) {
+    public Response edit(ActivityP act) {
         try {
-            activityLogicFacade.editActivity(act);
+            activityLogicFacade.edit(act);
             JsonObject rest = Json.createObjectBuilder().add("data", "edit").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
@@ -67,9 +67,9 @@ public class ActivityS {
 
     @GET
     @Path("/listInfo/{id}")
-    public Response listActivitiesInfo(@PathParam("id") int id) {
+    public Response listInfo(@PathParam("id") int id) {
         try {
-            List<ActivityP> data = activityLogicFacade.listActivitiesInfo(id);
+            List<ActivityP> data = activityLogicFacade.listInfo(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
             JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
@@ -79,9 +79,9 @@ public class ActivityS {
 
     @GET
     @Path("/listAnnex/{id}")
-    public Response listActivitiesAnnex(@PathParam("id") int id) {
+    public Response listAnnex(@PathParam("id") int id) {
         try {
-            List<ActivityP> data = activityLogicFacade.listActivitiesAnnex(id);
+            List<ActivityP> data = activityLogicFacade.listAnnex(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
             JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
@@ -104,10 +104,10 @@ public class ActivityS {
     }
 
     @GET
-    @Path("/getActivity/{id}")
-    public Response getActivityId(@PathParam("id") int id) {
+    @Path("/get/{id}")
+    public Response get(@PathParam("id") int id) {
         try {
-            ActivityP data = activityLogicFacade.getActivityId(id);
+            ActivityP data = activityLogicFacade.get(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
             JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
@@ -130,9 +130,9 @@ public class ActivityS {
 
     @POST
     @Path("/delete/{id}")
-    public Response deleteActivity(@PathParam("id") int id, DatosSolicitudPOJO dataR) {
+    public Response delete(@PathParam("id") int id, DatosSolicitudPOJO dataR) {
         try {
-            activityLogicFacade.disableActivity(id, dataR);
+            activityLogicFacade.disable(id, dataR);
             JsonObject rest = Json.createObjectBuilder().add("data", "delete").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
@@ -179,9 +179,9 @@ public class ActivityS {
 
     @GET
     @Path("/getActivityAnnex/{id}")
-    public Response getActivityAnnex(@PathParam("id") int id) {
+    public Response getAnnex(@PathParam("id") int id) {
         try {
-            ActivityAnnexView data = activityLogicFacade.getActivityAnnex(id);
+            ActivityAnnexView data = activityLogicFacade.getAnnex(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
             JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();

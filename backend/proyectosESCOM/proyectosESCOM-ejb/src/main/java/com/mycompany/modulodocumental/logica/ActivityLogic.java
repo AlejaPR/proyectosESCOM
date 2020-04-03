@@ -9,7 +9,7 @@ import com.mycompany.modulodocumental.entity.Activity;
 import com.mycompany.modulodocumental.entity.Annex;
 import com.mycompany.modulodocumental.entity.Condition;
 import com.mycompany.modulodocumental.interfaces.ActivityFacadeLocal;
-import com.mycompany.modulodocumental.interfaces.ActivityLogicFacadeLocal;
+import com.mycompany.modulodocumental.interfaces.logic.ActivityLogicLocal;
 import com.mycompany.modulodocumental.interfaces.AnnexFacadeLocal;
 import com.mycompany.modulodocumental.interfaces.AnnexVersionFacadeLocal;
 import com.mycompany.modulodocumental.interfaces.ConditionFacadeLocal;
@@ -29,7 +29,7 @@ import javax.ejb.Stateless;
  * @author hashy
  */
 @Stateless
-public class ActivityLogic implements ActivityLogicFacadeLocal {
+public class ActivityLogic implements ActivityLogicLocal {
 
     @EJB
     private ActivityFacadeLocal activityFacade;
@@ -47,9 +47,9 @@ public class ActivityLogic implements ActivityLogicFacadeLocal {
     private static final String CLASS = "Clase logica actividad";
 
     @Override
-    public ActivityP getActivityId(int id) throws GenericException {
+    public ActivityP get(int idActivity) throws GenericException {
         try {
-            Activity act = activityFacade.find(id);
+            Activity act = activityFacade.find(idActivity);
             ActivityP data = new ActivityP(act.getId(), act.getName(), act.getDescription(), act.getInformation(), act.getState(), act.getType(), act.getNumber());
             data.setIdCondition(act.getFkActCondition().getId());
             return data;
@@ -61,7 +61,7 @@ public class ActivityLogic implements ActivityLogicFacadeLocal {
     }
 
     @Override
-    public void addActivity(ActivityP activity) throws GenericException {
+    public void add(ActivityP activity) throws GenericException {
         try {
             String newNamber = "";
             int num = 0;
@@ -111,7 +111,7 @@ public class ActivityLogic implements ActivityLogicFacadeLocal {
     }
 
     @Override
-    public void editActivity(ActivityP activity) throws GenericException {
+    public void edit(ActivityP activity) throws GenericException {
         try {
             Activity data = activityFacade.find(activity.getId());
             data.setDescription(activity.getDescription());
@@ -128,9 +128,9 @@ public class ActivityLogic implements ActivityLogicFacadeLocal {
     }
 
     @Override
-    public List<ActivityP> listActivitiesInfo(int id) throws GenericException {
+    public List<ActivityP> listInfo(int idCondition) throws GenericException {
         try {
-            List<Activity> list = activityFacade.listActivitiesInfo(id);
+            List<Activity> list = activityFacade.listActivitiesInfo(idCondition);
             List<ActivityP> data = new ArrayList<>();
             for (Activity act : list) {
                 ActivityP aux = new ActivityP(act.getId(), act.getName(), act.getDescription(), act.getInformation(), act.getState(), act.getType(), act.getNumber());
@@ -161,15 +161,15 @@ public class ActivityLogic implements ActivityLogicFacadeLocal {
     }
 
     @Override
-    public String allInformation(int id) throws GenericException {
+    public String allInformation(int idCondition) throws GenericException {
         try {
-            List<Condition> conditions = conditionFacade.listConditionPro(id);
+            List<Condition> conditions = conditionFacade.listConditionPro(idCondition);
             int cont = 1;
             String data = "";
 
             for (Condition condition : conditions) {
                 data = data + "<h3 style=\"font-size: 14px; font-family: arial, helvetica, sans-serif;\">" + cont + "." + condition.getName() + "</h3>";
-                List<ActivityP> info = listActivitiesInfo(condition.getId());
+                List<ActivityP> info = listInfo(condition.getId());
                 for (ActivityP inf : info) {
                     data = data + "<h4 style=\"font-size: 14px; font-family: arial, helvetica, sans-serif;\">" + cont + "." + inf.getNumber() + ". " + inf.getName() + "</h4>";
 
@@ -182,7 +182,7 @@ public class ActivityLogic implements ActivityLogicFacadeLocal {
             data = "<br/>" + data + "<h3 style=\"font-size: 14px; font-family: arial, helvetica, sans-serif;\">" + conditions.get(0).getFkConProcess().getName() + "</h3>";
             for (Condition condition : conditions) {
                 data = data + "<h3>" + cont + "." + condition.getName() + "</h3>";
-                List<ActivityP> info = listActivitiesInfo(condition.getId());
+                List<ActivityP> info = listInfo(condition.getId());
                 for (ActivityP inf : info) {
                     data = data + "<h4 style=\"font-size: 14px; font-family: arial, helvetica, sans-serif;\">" + cont + "." + inf.getNumber() + ". " + inf.getName() + "</h4>" + "<br/>";
                     data = data + inf.getInformation() + "<br/>";
@@ -198,9 +198,9 @@ public class ActivityLogic implements ActivityLogicFacadeLocal {
     }
 
     @Override
-    public void disableActivity(int id, DatosSolicitudPOJO dataR) throws GenericException {
+    public void disable(int idActivity, DatosSolicitudPOJO dataR) throws GenericException {
         try {
-            Activity del = activityFacade.find(id);
+            Activity del = activityFacade.find(idActivity);
             activityFacade.remove(del);
             dataR.setTablaInvolucrada(TABLE);
             bitacora.registrarEnBitacora(dataR);
@@ -240,7 +240,7 @@ public class ActivityLogic implements ActivityLogicFacadeLocal {
     }
 
     @Override
-    public ActivityAnnexView getActivityAnnex(int activity) throws GenericException {
+    public ActivityAnnexView getAnnex(int activity) throws GenericException {
         try {
             Activity act = activityFacade.find(activity);
             int idAnnex = 0;
@@ -262,7 +262,7 @@ public class ActivityLogic implements ActivityLogicFacadeLocal {
     }
 
     @Override
-    public List<ActivityP> listActivitiesAnnex(int id) throws GenericException {
+    public List<ActivityP> listAnnex(int id) throws GenericException {
         try {
             List<Activity> list = activityFacade.listActivitiesAnnex(id);
             List<ActivityP> data = new ArrayList<>();

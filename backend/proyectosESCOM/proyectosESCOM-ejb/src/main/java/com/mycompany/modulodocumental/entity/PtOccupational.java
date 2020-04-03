@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -20,23 +22,26 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "TBL_PT_OCCUPATIONAL")
-public class PtOccupational implements Serializable{
-    
+public class PtOccupational implements Serializable {
+
     @Id
     @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PK_PTO_ID")
     private int id;
 
+    @JoinColumn(name = "FK_PTO_OCCUPATIONAL", referencedColumnName = "PK_OP_ID")
+    @ManyToOne
     private OccupationalProfile fkPtoOccupational;
 
+    @JoinColumn(name = "FK_PTO_PROGRAM_THEMATIC", referencedColumnName = "PK_PT_ID")
+    @ManyToOne
     private ProgramThematicCore fkPtoProgramThematic;
 
     public PtOccupational() {
     }
 
-    public PtOccupational(int id, OccupationalProfile fkPtoOccupational, ProgramThematicCore fkPtoProgramThematic) {
-        this.id = id;
+    public PtOccupational(OccupationalProfile fkPtoOccupational, ProgramThematicCore fkPtoProgramThematic) {
         this.fkPtoOccupational = fkPtoOccupational;
         this.fkPtoProgramThematic = fkPtoProgramThematic;
     }
@@ -65,5 +70,4 @@ public class PtOccupational implements Serializable{
         this.fkPtoProgramThematic = fkPtoProgramThematic;
     }
 
-    
 }

@@ -6,12 +6,16 @@
 package com.mycompany.modulodocumental.entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -20,8 +24,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "TBL_PROGRAM_THEMATIC_CORE")
-public class ProgramThematicCore implements Serializable{
-    
+public class ProgramThematicCore implements Serializable {
+
     @Id
     @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,24 +43,43 @@ public class ProgramThematicCore implements Serializable{
     private String teamContribution;
     @Column(name = "PT_OBSERVATION_FINAL")
     private String observationFinal;
-    
+
+    @JoinColumn(name = "FK_PT_PROGRAM", referencedColumnName = "PK_PRO_ID")
+    @ManyToOne
     private Program fkPtProgram;
+
+    @JoinColumn(name = "FK_PT_THEMATIC_CORE", referencedColumnName = "PK_TC_ID")
+    @ManyToOne
     private ThematicCore fkPtThematicCore;
+
+    @OneToMany(mappedBy = "fkPtcProgramThematic")
+    private List<PtCompetitionG> listPtCompetitionG;
+
+    @OneToMany(mappedBy = "fkPtdProgramThematic")
+    private List<PtDistinctive> listPtDistinctive;
+
+    @OneToMany(mappedBy = "fkPtoProgramThematic")
+    private List<PtOccupational> listPtOccupational;
+
+    @OneToMany(mappedBy = "fkPtpProgramThematic")
+    private List<PtProfessional> listPtProfessional;
+
+    @OneToMany(mappedBy = "fkPttProgramThematic")
+    private List<PtThematic> listPtThematic;
 
     public ProgramThematicCore() {
     }
 
-    public ProgramThematicCore(int id, String contributeObjetive, String contributeProfessional, String contributeOccupational, String objectiveOutput, String teamContribution, String observationFinal) {
-        this.id = id;
+    public ProgramThematicCore(String contributeObjetive, String contributeProfessional, String contributeOccupational, String objectiveOutput, String teamContribution, String observationFinal) {
         this.contributeObjetive = contributeObjetive;
         this.contributeProfessional = contributeProfessional;
         this.contributeOccupational = contributeOccupational;
         this.objectiveOutput = objectiveOutput;
         this.teamContribution = teamContribution;
         this.observationFinal = observationFinal;
-        
+
     }
-        
+
     public int getId() {
         return id;
     }
@@ -128,8 +151,45 @@ public class ProgramThematicCore implements Serializable{
     public void setFkPtThematicCore(ThematicCore fkPtThematicCore) {
         this.fkPtThematicCore = fkPtThematicCore;
     }
-    
-    
-    
-    
+
+    public List<PtCompetitionG> getListPtCompetitionG() {
+        return listPtCompetitionG;
+    }
+
+    public void setListPtCompetitionG(List<PtCompetitionG> listPtCompetitionG) {
+        this.listPtCompetitionG = listPtCompetitionG;
+    }
+
+    public List<PtDistinctive> getListPtDistinctive() {
+        return listPtDistinctive;
+    }
+
+    public void setListPtDistinctive(List<PtDistinctive> listPtDistinctive) {
+        this.listPtDistinctive = listPtDistinctive;
+    }
+
+    public List<PtOccupational> getListPtOccupational() {
+        return listPtOccupational;
+    }
+
+    public void setListPtOccupational(List<PtOccupational> listPtOccupational) {
+        this.listPtOccupational = listPtOccupational;
+    }
+
+    public List<PtProfessional> getListPtProfessional() {
+        return listPtProfessional;
+    }
+
+    public void setListPtProfessional(List<PtProfessional> listPtProfessional) {
+        this.listPtProfessional = listPtProfessional;
+    }
+
+    public List<PtThematic> getListPtThematic() {
+        return listPtThematic;
+    }
+
+    public void setListPtThematic(List<PtThematic> listPtThematic) {
+        this.listPtThematic = listPtThematic;
+    }
+
 }

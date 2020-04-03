@@ -137,7 +137,7 @@ export function getConditionId(token, id) {
     'Permiso': PERMIT_GET_CONDITION
   }
   return (dispatch, getState) => {
-    axios.get(`${URL_BASE}/api/condition/getCondition/${id}`, { headers: headers })
+    axios.get(`${URL_BASE}/api/condition/get/${id}`, { headers: headers })
       .then(response => {
         console.log(response)
         dispatch({

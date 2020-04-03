@@ -8,7 +8,7 @@ package com.mycompany.modulodocumental.logica;
 import com.mycompany.modulodocumental.entity.Document;
 import com.mycompany.modulodocumental.entity.Program;
 import com.mycompany.modulodocumental.interfaces.DocumentFacadeLocal;
-import com.mycompany.modulodocumental.interfaces.DocumentLogicFacadeLocal;
+import com.mycompany.modulodocumental.interfaces.logic.DocumentLogicLocal;
 import com.mycompany.modulodocumental.interfaces.ProgramFacadeLocal;
 import com.mycompany.modulodocumental.pojo.DocumentP;
 import com.mycompany.modulodocumental.utility.GenericException;
@@ -25,7 +25,7 @@ import javax.ejb.Stateless;
  * @author hashy
  */
 @Stateless
-public class DocumentLogic implements DocumentLogicFacadeLocal {
+public class DocumentLogic implements DocumentLogicLocal {
 
     @EJB
     DocumentFacadeLocal documentFacade;
@@ -50,9 +50,9 @@ public class DocumentLogic implements DocumentLogicFacadeLocal {
     }
 
     @Override
-    public DocumentP getDocumentId(int id) throws GenericException {
+    public DocumentP get(int idDocument) throws GenericException {
         try {
-            Document doc = documentFacade.find(id);
+            Document doc = documentFacade.find(idDocument);
             DocumentP data = new DocumentP(doc.getId(), doc.getDescription(), doc.getType(), doc.getState());
             data.setProgram(doc.getFkDocProgram().getName());
             return data;
@@ -63,7 +63,7 @@ public class DocumentLogic implements DocumentLogicFacadeLocal {
     }
 
     @Override
-    public List<DocumentP> listDocument() throws GenericException {
+    public List<DocumentP> getList() throws GenericException {
         try {
             List<Document> list = documentFacade.findAll();
             List<DocumentP> data = new ArrayList<>();
@@ -96,7 +96,7 @@ public class DocumentLogic implements DocumentLogicFacadeLocal {
     }
 
     @Override
-    public void addDocument(DocumentP document) throws GenericException {
+    public void add(DocumentP document) throws GenericException {
         try {
             List<Document> list = documentFacade.documentsProgram(Integer.parseInt(document.getProgram()));
             for (Document list1 : list) {
@@ -118,7 +118,7 @@ public class DocumentLogic implements DocumentLogicFacadeLocal {
     }
 
     @Override
-    public void editDocument(DocumentP document) throws GenericException {
+    public void edit(DocumentP document) throws GenericException {
         try {
             Document data = documentFacade.find(document.getId());
             data.setDescription(document.getDescription());
@@ -136,9 +136,9 @@ public class DocumentLogic implements DocumentLogicFacadeLocal {
     }
 
     @Override
-    public void disableDocument(int id, DatosSolicitudPOJO dataR) throws GenericException {
+    public void disable(int idDocument, DatosSolicitudPOJO dataR) throws GenericException {
         try {
-            Document data = documentFacade.find(id);
+            Document data = documentFacade.find(idDocument);
             data.setState(-1);
             documentFacade.edit(data);
             dataR.setTablaInvolucrada(TABLE);

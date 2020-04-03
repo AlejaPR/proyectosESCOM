@@ -7,7 +7,7 @@ package com.mycompany.modulodocumental.logica;
 
 import com.mycompany.modulodocumental.entity.DocumentVersion;
 import com.mycompany.modulodocumental.interfaces.DocumentVersionFacadeLocal;
-import com.mycompany.modulodocumental.interfaces.DocumentVersionLogicFacadeLocal;
+import com.mycompany.modulodocumental.interfaces.logic.DocumentVersionLogicLocal;
 import com.mycompany.modulodocumental.pojo.DocumentVersionP;
 import com.mycompany.modulodocumental.utility.GenericException;
 import com.mycompany.superadministrador.interfaces.UtilitarioFacadeLocal;
@@ -22,7 +22,7 @@ import javax.ejb.Stateless;
  * @author hashy
  */
 @Stateless
-public class DocumentVersionLogic implements DocumentVersionLogicFacadeLocal {
+public class DocumentVersionLogic implements DocumentVersionLogicLocal {
 
     @EJB
     private DocumentVersionFacadeLocal documentVersionFacade;
@@ -34,7 +34,7 @@ public class DocumentVersionLogic implements DocumentVersionLogicFacadeLocal {
     private static final String CLASS = "Clase logica version documento";
 
     @Override
-    public List<DocumentVersionP> listCurrentVersions(int idDocument) throws GenericException {
+    public List<DocumentVersionP> getListCurrent(int idDocument) throws GenericException {
         try {
             List<DocumentVersion> list = documentVersionFacade.listCurrentVersions(idDocument);
             List<DocumentVersionP> data = new ArrayList<>();
@@ -50,7 +50,7 @@ public class DocumentVersionLogic implements DocumentVersionLogicFacadeLocal {
     }
 
     @Override
-    public List<DocumentVersionP> listOldVersions(int idProgram) throws GenericException {
+    public List<DocumentVersionP> getListOld(int idProgram) throws GenericException {
         try {
             List<DocumentVersion> list = documentVersionFacade.listOldVersions(idProgram);
             List<DocumentVersionP> data = new ArrayList<>();
@@ -66,7 +66,7 @@ public class DocumentVersionLogic implements DocumentVersionLogicFacadeLocal {
     }
 
     @Override
-    public void addVersion(DocumentVersionP version) throws GenericException {
+    public void add(DocumentVersionP version) throws GenericException {
         try {
             List<DocumentVersion> list = documentVersionFacade.listCurrentVersions(version.getDocument());
             int value = 0;

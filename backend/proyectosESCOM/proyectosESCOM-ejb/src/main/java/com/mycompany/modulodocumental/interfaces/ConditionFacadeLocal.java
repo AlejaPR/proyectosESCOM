@@ -30,7 +30,7 @@ public interface ConditionFacadeLocal {
 
     int count();
     
-    List<Condition> listConditionPro(int idP);
+    List<Condition> listConditionPro(int idProcess);
     
-    List<Condition> listConditionDoc(int idD);
+    List<Condition> listConditionDoc(int idDocument);
 }

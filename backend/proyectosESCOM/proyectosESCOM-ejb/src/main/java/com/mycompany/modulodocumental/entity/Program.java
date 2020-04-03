@@ -13,6 +13,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -44,11 +46,18 @@ public class Program implements Serializable {
     @Column(name = "PRO_CAMPUS")
     private String campus;
 
+    @JoinColumn(name = "FK_PRO_GENERAL", referencedColumnName = "PK_GP_ID")
+    @ManyToOne
+    private GeneralProgram fkProGeneral;
+    
     @OneToMany(mappedBy = "fkDocProgram")
     private List<Document> listDocument;
 
     @OneToMany(mappedBy = "fkAxProgram")
     private List<Annex> listAnnex;
+    
+    @OneToMany(mappedBy = "fkPtProgram")
+    private List<ProgramThematicCore> listProgramThematicCore;
 
     public Program() {
     }
@@ -127,6 +136,14 @@ public class Program implements Serializable {
         this.campus = campus;
     }
 
+    public GeneralProgram getFkProGeneral() {
+        return fkProGeneral;
+    }
+
+    public void setFkProGeneral(GeneralProgram fkProGeneral) {
+        this.fkProGeneral = fkProGeneral;
+    }
+    
     public List<Document> getListDocument() {
         return listDocument;
     }
@@ -141,6 +158,14 @@ public class Program implements Serializable {
 
     public void setListAnnex(List<Annex> listAnnex) {
         this.listAnnex = listAnnex;
+    }
+
+    public List<ProgramThematicCore> getListProgramThematicCore() {
+        return listProgramThematicCore;
+    }
+
+    public void setListProgramThematicCore(List<ProgramThematicCore> listProgramThematicCore) {
+        this.listProgramThematicCore = listProgramThematicCore;
     }
 
 }

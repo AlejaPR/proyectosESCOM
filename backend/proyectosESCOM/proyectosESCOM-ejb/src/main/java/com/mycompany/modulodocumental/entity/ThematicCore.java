@@ -6,12 +6,16 @@
 package com.mycompany.modulodocumental.entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -20,8 +24,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "TBL_THEMATIC_CORE")
-public class ThematicCore implements Serializable{
-    
+public class ThematicCore implements Serializable {
+
     @Id
     @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,12 +37,22 @@ public class ThematicCore implements Serializable{
     private int credits;
     @Column(name = "TC_OBJECTIVE")
     private String objective;
+    
+    @JoinColumn(name = "FK_TC_GENERAL", referencedColumnName = "PK_GP_ID")
+    @ManyToOne
+    private GeneralProgram fkTcGeneral;
+
+    @OneToMany(mappedBy = "fkPtThematicCore")
+    private List<ProgramThematicCore> listProgramThematicCore;
+
+    @JoinColumn(name = "FK_PC_TRAINING_AREA", referencedColumnName = "PK_TA_ID")
+    @ManyToOne
+    private TrainingArea fkTcTrainingArea;
 
     public ThematicCore() {
     }
 
-    public ThematicCore(int id, String name, int credits, String objective) {
-        this.id = id;
+    public ThematicCore(String name, int credits, String objective) {
         this.name = name;
         this.credits = credits;
         this.objective = objective;
@@ -74,6 +88,30 @@ public class ThematicCore implements Serializable{
 
     public void setObjective(String objective) {
         this.objective = objective;
-    }    
-    
+    }
+
+    public List<ProgramThematicCore> getListProgramThematicCore() {
+        return listProgramThematicCore;
+    }
+
+    public void setListProgramThematicCore(List<ProgramThematicCore> listProgramThematicCore) {
+        this.listProgramThematicCore = listProgramThematicCore;
+    }
+
+    public TrainingArea getFkTcTrainingArea() {
+        return fkTcTrainingArea;
+    }
+
+    public void setFkTcTrainingArea(TrainingArea fkTcTrainingArea) {
+        this.fkTcTrainingArea = fkTcTrainingArea;
+    }
+
+    public GeneralProgram getFkTcGeneral() {
+        return fkTcGeneral;
+    }
+
+    public void setFkTcGeneral(GeneralProgram fkTcGeneral) {
+        this.fkTcGeneral = fkTcGeneral;
+    }
+
 }

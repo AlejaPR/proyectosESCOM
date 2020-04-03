@@ -166,7 +166,7 @@ export function getActivityId(token, id) {
         'Permiso': PERMIT_GET_ACTIVITY
     }
     return (dispatch, getState) => {
-        axios.get(`${URL_BASE}/api/activity/getActivity/${id}`, { headers: headers })
+        axios.get(`${URL_BASE}/api/activity/get/${id}`, { headers: headers })
             .then(response => {
                 dispatch({
                     type: GET_ACTIVITY_ID,

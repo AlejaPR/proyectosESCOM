@@ -88,7 +88,7 @@ export function getProcessId(token, id) {
     'Permiso': PERMIT_GET_PROCESS
   }
   return (dispatch, getState) => {
-    axios.get(`${URL_BASE}/api/process/getProcess/${id}`, { headers: headers })
+    axios.get(`${URL_BASE}/api/process/get/${id}`, { headers: headers })
       .then(response => {
         dispatch({
           type: GET_PROCESS_ID,

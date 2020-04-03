@@ -39,7 +39,8 @@
     <class>com.mycompany.modulodocumental.entity.PtThematic</class>
     <class>com.mycompany.modulodocumental.entity.Thematic</class>
     <class>com.mycompany.modulodocumental.entity.ThematicCore</class>
-    <class>com.mycompany.modulodocumental.entity.trainingArea</class>
+    <class>com.mycompany.modulodocumental.entity.TrainingArea</class>
+    <class>com.mycompany.modulodocumental.entity.GeneralProgram</class>
     <exclude-unlisted-classes>true</exclude-unlisted-classes>
   </persistence-unit>
 </persistence>

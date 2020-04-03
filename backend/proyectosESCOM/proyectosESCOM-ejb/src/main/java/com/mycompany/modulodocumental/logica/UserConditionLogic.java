@@ -10,7 +10,7 @@ import com.mycompany.modulodocumental.entity.UserCondition;
 import com.mycompany.modulodocumental.interfaces.ActivityFacadeLocal;
 import com.mycompany.modulodocumental.interfaces.ConditionFacadeLocal;
 import com.mycompany.modulodocumental.interfaces.UserConditionFacadeLocal;
-import com.mycompany.modulodocumental.interfaces.UserConditionLogicFacadeLocal;
+import com.mycompany.modulodocumental.interfaces.logic.UserConditionLogicLocal;
 import com.mycompany.modulodocumental.pojo.UserConditionP;
 import com.mycompany.modulodocumental.utility.GenericException;
 import com.mycompany.modulodocumental.view.ConditionView;
@@ -27,7 +27,7 @@ import javax.ejb.Stateless;
  * @author hashy
  */
 @Stateless
-public class UserConditionLogic implements UserConditionLogicFacadeLocal {
+public class UserConditionLogic implements UserConditionLogicLocal {
 
     @EJB
     private ActivityFacadeLocal activityFacade;
@@ -43,7 +43,7 @@ public class UserConditionLogic implements UserConditionLogicFacadeLocal {
     private static final String CLASS = "Clase logica usuario condicion";
 
     @Override
-    public List<ConditionView> listUserCondition(String token, int idP) throws GenericException {
+    public List<ConditionView> getList(String token, int idP) throws GenericException {
         try {
             UsuarioPOJO user = bitacora.devolverInformacionDeUsuario(token);
             List<Condition> list = userConditionFacade.listCondition(user.getId(), idP);
@@ -97,7 +97,7 @@ public class UserConditionLogic implements UserConditionLogicFacadeLocal {
     }
 
     @Override
-    public void associateUserCondition(UserConditionP userCondition) throws GenericException {
+    public void associate(UserConditionP userCondition) throws GenericException {
         try {
             List<UserCondition> valid = userConditionFacade.listUsersCondition(userCondition.getIdCondition());
             boolean cont = false;
@@ -122,7 +122,7 @@ public class UserConditionLogic implements UserConditionLogicFacadeLocal {
     }
 
     @Override
-    public void deleteUserCondition(UserConditionP userCondition) throws GenericException {
+    public void delete(UserConditionP userCondition) throws GenericException {
         try {
             List<UserCondition> valid = userConditionFacade.listUsersCondition(userCondition.getIdCondition());
             for (UserCondition valid1 : valid) {

@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -28,15 +30,18 @@ public class PtThematic implements Serializable{
     @Column(name = "PK_PTT_ID")
     private int id;
 
+    @JoinColumn(name = "FK_PTT_THEMATIC", referencedColumnName = "PK_TH_ID")
+    @ManyToOne
     private Thematic fkPttThematic;
 
+    @JoinColumn(name = "FK_PTT_PROGRAM_THEMATIC", referencedColumnName = "PK_PT_ID")
+    @ManyToOne
     private ProgramThematicCore fkPttProgramThematic;
 
     public PtThematic() {
     }
 
-    public PtThematic(int id, Thematic fkPttThematic, ProgramThematicCore fkPttProgramThematic) {
-        this.id = id;
+    public PtThematic(Thematic fkPttThematic, ProgramThematicCore fkPttProgramThematic) {
         this.fkPttThematic = fkPttThematic;
         this.fkPttProgramThematic = fkPttProgramThematic;
     }

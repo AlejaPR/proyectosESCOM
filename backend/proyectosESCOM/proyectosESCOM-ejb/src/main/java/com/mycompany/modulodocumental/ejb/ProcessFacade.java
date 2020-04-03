@@ -32,9 +32,9 @@ public class ProcessFacade extends AbstractFacade<Process> implements ProcessFac
     }
 
     @Override
-    public List<Process> listProcess(int id) {
+    public List<Process> listProcess(int idDocument) {
         Query query = em.createQuery("SELECT p FROM Process p WHERE p.fkPrcDocument.id = ?1 AND p.state > 0");
-        query.setParameter(1, id);
+        query.setParameter(1, idDocument);
         List<Process> list = query.getResultList();
         return list;
     }

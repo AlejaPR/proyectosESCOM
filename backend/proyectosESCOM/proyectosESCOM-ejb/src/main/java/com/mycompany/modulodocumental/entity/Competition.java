@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -29,12 +31,15 @@ public class Competition implements Serializable {
     private int id;
     @Column(name = "CT_NAME")
     private String name;
+    
+    @JoinColumn(name = "FK_CT_GENERAL", referencedColumnName = "PK_GP_ID")
+    @ManyToOne
+    private GeneralProgram fkCtGeneral;
 
     public Competition() {
     }
 
-    public Competition(int id, String name) {
-        this.id = id;
+    public Competition(String name) {
         this.name = name;
     }
 
@@ -52,6 +57,14 @@ public class Competition implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public GeneralProgram getFkCtGeneral() {
+        return fkCtGeneral;
+    }
+
+    public void setFkCtGeneral(GeneralProgram fkCtGeneral) {
+        this.fkCtGeneral = fkCtGeneral;
     }
 
 }

@@ -6,7 +6,7 @@
 package com.mycompany.modulodocumental.services;
 
 
-import com.mycompany.modulodocumental.interfaces.UserConditionLogicFacadeLocal;
+import com.mycompany.modulodocumental.interfaces.logic.UserConditionLogicLocal;
 import com.mycompany.modulodocumental.pojo.UserConditionP;
 import com.mycompany.modulodocumental.view.ConditionView;
 import com.mycompany.superadministrador.POJO.UsuarioPOJO;
@@ -37,13 +37,13 @@ import javax.ws.rs.core.Response;
 public class UserConditionS {
 
     @EJB
-    private UserConditionLogicFacadeLocal userConditionLogicFacade;
+    private UserConditionLogicLocal userConditionLogicFacade;
 
     @GET
     @Path("/list/{idP}")
-    public Response listConditionsUser(@PathParam("idP") int idP, @HeaderParam("TokenAuto") String token) {
+    public Response getList(@PathParam("idP") int idP, @HeaderParam("TokenAuto") String token) {
         try {
-            List<ConditionView> data = userConditionLogicFacade.listUserCondition(token, idP);
+            List<ConditionView> data = userConditionLogicFacade.getList(token, idP);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
             JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
@@ -77,9 +77,9 @@ public class UserConditionS {
     
     @POST
     @Path("/associate")
-    public Response associateUserCondition(UserConditionP userCondition){
+    public Response associate(UserConditionP userCondition){
         try {
-            userConditionLogicFacade.associateUserCondition(userCondition);
+            userConditionLogicFacade.associate(userCondition);
             JsonObject rest = Json.createObjectBuilder().add("data", "associate").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
@@ -90,9 +90,9 @@ public class UserConditionS {
     
     @POST
     @Path("/delete")
-    public Response deleteUserCondition(UserConditionP userCondition){
+    public Response delete(UserConditionP userCondition){
         try {
-            userConditionLogicFacade.deleteUserCondition(userCondition);
+            userConditionLogicFacade.delete(userCondition);
             JsonObject rest = Json.createObjectBuilder().add("data", "delete").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {

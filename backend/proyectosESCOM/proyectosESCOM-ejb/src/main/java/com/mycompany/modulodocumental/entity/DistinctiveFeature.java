@@ -6,12 +6,16 @@
 package com.mycompany.modulodocumental.entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -28,12 +32,18 @@ public class DistinctiveFeature implements Serializable{
     private int id;
     @Column(name = "DF_NAME")
     private String name;
-
+    
+    @JoinColumn(name = "FK_DF_GENERAL", referencedColumnName = "PK_GP_ID")
+    @ManyToOne
+    private GeneralProgram fkDfGeneral;
+    
+    @OneToMany(mappedBy = "fkPtdDistinctive")
+    private List<PtDistinctive> listPtDistinctive;
+    
     public DistinctiveFeature() {
     }
 
-    public DistinctiveFeature(int id, String name) {
-        this.id = id;
+    public DistinctiveFeature(String name) {
         this.name = name;
     }
 
@@ -51,6 +61,22 @@ public class DistinctiveFeature implements Serializable{
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<PtDistinctive> getListPtDistinctive() {
+        return listPtDistinctive;
+    }
+
+    public void setListPtDistinctive(List<PtDistinctive> listPtDistinctive) {
+        this.listPtDistinctive = listPtDistinctive;
+    }
+
+    public GeneralProgram getFkDfGeneral() {
+        return fkDfGeneral;
+    }
+
+    public void setFkDfGeneral(GeneralProgram fkDfGeneral) {
+        this.fkDfGeneral = fkDfGeneral;
     }
        
 }

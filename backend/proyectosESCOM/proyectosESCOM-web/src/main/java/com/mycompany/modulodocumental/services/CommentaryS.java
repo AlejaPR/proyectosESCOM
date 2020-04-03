@@ -5,7 +5,7 @@
  */
 package com.mycompany.modulodocumental.services;
 
-import com.mycompany.modulodocumental.interfaces.CommentaryLogicFacadeLocal;
+import com.mycompany.modulodocumental.interfaces.logic.CommentaryLogicLocal;
 import com.mycompany.modulodocumental.pojo.CommentaryP;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import java.util.List;
@@ -14,7 +14,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -34,13 +33,13 @@ import javax.ws.rs.core.Response;
 public class CommentaryS {
     
     @EJB
-    private CommentaryLogicFacadeLocal commentaryLogicFacade;
+    private CommentaryLogicLocal commentaryLogicFacade;
     
     @POST
     @Path("/add")
-    public Response addCommentary(CommentaryP commentary){
+    public Response add(CommentaryP commentary){
         try {
-            commentaryLogicFacade.addCommentary(commentary);
+            commentaryLogicFacade.add(commentary);
             JsonObject rest = Json.createObjectBuilder().add("data", "add").build();
             return Response.status(Response.Status.CREATED).entity(rest).build();
         } catch (Exception e) {
@@ -51,9 +50,9 @@ public class CommentaryS {
     
     @GET
     @Path("/list/{id}")
-    public Response listCommentary(@PathParam("id") int id){
+    public Response getList(@PathParam("id") int id){
         try {
-            List<CommentaryP> data = commentaryLogicFacade.listCommentary(id);
+            List<CommentaryP> data = commentaryLogicFacade.getList(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
             JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
@@ -64,9 +63,9 @@ public class CommentaryS {
     
     @POST
     @Path("/delete/{id}")
-    public Response deleteCommentary(@PathParam("id") int id, DatosSolicitudPOJO datosS){
+    public Response delete(@PathParam("id") int id, DatosSolicitudPOJO datosS){
         try {
-            commentaryLogicFacade.deleteCommentary(id, datosS);
+            commentaryLogicFacade.delete(id, datosS);
             JsonObject rest = Json.createObjectBuilder().add("data", "delete").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {

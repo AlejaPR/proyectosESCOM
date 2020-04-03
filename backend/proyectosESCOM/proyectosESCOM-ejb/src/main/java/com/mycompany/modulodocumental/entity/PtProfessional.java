@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -28,15 +30,18 @@ public class PtProfessional implements Serializable {
     @Column(name = "PK_PTP_ID")
     private int id;
 
+    @JoinColumn(name = "FK_PTP_PROFESSIONAL", referencedColumnName = "PK_PP_ID")
+    @ManyToOne
     private ProfessionalProfile fkPtpProfessional;
 
+    @JoinColumn(name = "FK_PTP_PROGRAM_THEMATIC", referencedColumnName = "PK_PT_ID")
+    @ManyToOne
     private ProgramThematicCore fkPtpProgramThematic;
 
     public PtProfessional() {
     }
 
-    public PtProfessional(int id, ProfessionalProfile fkPtpProfessional, ProgramThematicCore fkPtpProgramThematic) {
-        this.id = id;
+    public PtProfessional(ProfessionalProfile fkPtpProfessional, ProgramThematicCore fkPtpProgramThematic) {
         this.fkPtpProfessional = fkPtpProfessional;
         this.fkPtpProgramThematic = fkPtpProgramThematic;
     }

@@ -30,6 +30,6 @@ public interface ProcessFacadeLocal {
 
     int count();
     
-    List<Process> listProcess(int id);
+    List<Process> listProcess(int idDocument);
     
 }

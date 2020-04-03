@@ -22,6 +22,7 @@ public class ProgramP implements Serializable {
     private int duration;
     private String methodology;
     private String campus;
+    private int idGeneral;
     private DatosSolicitudPOJO requestData;
 
     public ProgramP() {
@@ -102,6 +103,14 @@ public class ProgramP implements Serializable {
         this.campus = campus;
     }
 
+    public int getIdGeneral() {
+        return idGeneral;
+    }
+
+    public void setIdGeneral(int idGeneral) {
+        this.idGeneral = idGeneral;
+    }
+    
     public DatosSolicitudPOJO getRequestData() {
         return requestData;
     }

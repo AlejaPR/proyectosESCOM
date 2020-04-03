@@ -33,9 +33,9 @@ public class ConditionFacade extends AbstractFacade<Condition> implements Condit
     }
 
     @Override
-    public List<Condition> listConditionPro(int idP) {
+    public List<Condition> listConditionPro(int idProcess) {
         Query query = em.createQuery("SELECT c FROM Condition c WHERE c.fkConProcess.id = ?1 AND c.state <> -1 ORDER BY c.id ASC");
-        query.setParameter(1, idP);
+        query.setParameter(1, idProcess);
         List<Condition> list = query.getResultList();
         return list;
     }

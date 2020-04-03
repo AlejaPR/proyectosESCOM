@@ -5,7 +5,7 @@
  */
 package com.mycompany.modulodocumental.services;
 
-import com.mycompany.modulodocumental.interfaces.ProcessLogicFacadeLocal;
+import com.mycompany.modulodocumental.interfaces.logic.ProcessLogicLocal;
 import com.mycompany.modulodocumental.pojo.ProcessP;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import java.util.List;
@@ -34,13 +34,13 @@ import javax.ws.rs.core.Response;
 public class ProcessS {
 
     @EJB
-    private ProcessLogicFacadeLocal processLogicFacadeLocal;
+    private ProcessLogicLocal processLogicFacadeLocal;
 
     @GET
     @Path("/list/{id}")
-    public Response listProcess(@PathParam("id") int id) {
+    public Response getList(@PathParam("id") int id) {
         try {
-            List<ProcessP> data = processLogicFacadeLocal.listProcess(id);
+            List<ProcessP> data = processLogicFacadeLocal.getList(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
             JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
@@ -50,10 +50,10 @@ public class ProcessS {
     }
 
     @GET
-    @Path("/getProcess/{id}")
-    public Response getProcessId(@PathParam("id") int id) {
+    @Path("/get/{id}")
+    public Response get(@PathParam("id") int id) {
         try {
-            ProcessP data = processLogicFacadeLocal.getProcessId(id);
+            ProcessP data = processLogicFacadeLocal.get(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
             JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
@@ -64,9 +64,9 @@ public class ProcessS {
 
     @POST
     @Path("/add")
-    public Response addProcess(ProcessP pro) {
+    public Response add(ProcessP pro) {
         try {
-            processLogicFacadeLocal.addProcess(pro);
+            processLogicFacadeLocal.add(pro);
             JsonObject rest = Json.createObjectBuilder().add("data", "add").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
@@ -78,9 +78,9 @@ public class ProcessS {
 
     @PUT
     @Path("/edit")
-    public Response editProcess(ProcessP pro) {
+    public Response edit(ProcessP pro) {
         try {
-            processLogicFacadeLocal.editProcess(pro);
+            processLogicFacadeLocal.edit(pro);
             JsonObject rest = Json.createObjectBuilder().add("data", "edit").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
@@ -92,9 +92,9 @@ public class ProcessS {
 
     @PUT
     @Path("/disable/{id}")
-    public Response disableProcess(@PathParam("id") int id, DatosSolicitudPOJO dataR) {
+    public Response disable(@PathParam("id") int id, DatosSolicitudPOJO dataR) {
         try {
-            processLogicFacadeLocal.disableProcess(id, dataR);
+            processLogicFacadeLocal.disable(id, dataR);
             JsonObject rest = Json.createObjectBuilder().add("data", "disable").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {

@@ -12,6 +12,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -28,15 +30,18 @@ public class PtDistinctive implements Serializable {
     @Column(name = "PK_PTD_ID")
     private int id;
 
+    @JoinColumn(name = "FK_PTD_DISTINCTIVE", referencedColumnName = "PK_DF_ID")
+    @ManyToOne
     private DistinctiveFeature fkPtdDistinctive;
 
+    @JoinColumn(name = "FK_PTC_PROGRAM_THEMATIC", referencedColumnName = "PK_PT_ID")
+    @ManyToOne
     private ProgramThematicCore fkPtdProgramThematic;
 
     public PtDistinctive() {
     }
 
-    public PtDistinctive(int id, DistinctiveFeature fkPtdDistinctive, ProgramThematicCore fkPtdProgramThematic) {
-        this.id = id;
+    public PtDistinctive(DistinctiveFeature fkPtdDistinctive, ProgramThematicCore fkPtdProgramThematic) {
         this.fkPtdDistinctive = fkPtdDistinctive;
         this.fkPtdProgramThematic = fkPtdProgramThematic;
     }

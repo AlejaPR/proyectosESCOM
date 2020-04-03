@@ -8,7 +8,7 @@ package com.mycompany.modulodocumental.logica;
 import com.mycompany.modulodocumental.entity.AnnexVersion;
 import com.mycompany.modulodocumental.interfaces.AnnexFacadeLocal;
 import com.mycompany.modulodocumental.interfaces.AnnexVersionFacadeLocal;
-import com.mycompany.modulodocumental.interfaces.AnnexVersionLogicFacadeLocal;
+import com.mycompany.modulodocumental.interfaces.logic.AnnexVersionLogicLocal;
 import com.mycompany.modulodocumental.pojo.AnnexVersionP;
 import com.mycompany.modulodocumental.utility.GenericException;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
@@ -24,7 +24,7 @@ import javax.ejb.Stateless;
  * @author hashy
  */
 @Stateless
-public class AnnexVersionLogic implements AnnexVersionLogicFacadeLocal {
+public class AnnexVersionLogic implements AnnexVersionLogicLocal {
 
     @EJB
     private AnnexVersionFacadeLocal annexVersionFacade;
@@ -38,9 +38,9 @@ public class AnnexVersionLogic implements AnnexVersionLogicFacadeLocal {
     private static final String CLASS = "Clase logica version anexo";
 
     @Override
-    public List<AnnexVersionP> listAnnexVersion(int id) throws GenericException {
+    public List<AnnexVersionP> getList(int idAnnex) throws GenericException {
         try {
-            List<AnnexVersion> list = annexVersionFacade.listAnnexVersion(id);
+            List<AnnexVersion> list = annexVersionFacade.listAnnexVersion(idAnnex);
             List<AnnexVersionP> data = new ArrayList<>();
             for (AnnexVersion aux : list) {
                 AnnexVersionP version = new AnnexVersionP(aux.getId(), aux.getDate(), aux.getLocation(), aux.getState(), aux.getVersion(), aux.getDescription());
@@ -54,7 +54,7 @@ public class AnnexVersionLogic implements AnnexVersionLogicFacadeLocal {
     }
 
     @Override
-    public void addAnnexVersion(AnnexVersionP annexV) throws GenericException {
+    public void add(AnnexVersionP annexV) throws GenericException {
         try {
             List<AnnexVersion> list = annexVersionFacade.listAnnexVersion(annexV.getAnnex());
             int value = 0;
@@ -80,9 +80,9 @@ public class AnnexVersionLogic implements AnnexVersionLogicFacadeLocal {
     }
 
     @Override
-    public void deleteVersion(int id, DatosSolicitudPOJO dataR) throws GenericException {
+    public void delete(int idAnnexVersion, DatosSolicitudPOJO dataR) throws GenericException {
         try {
-            AnnexVersion del = annexVersionFacade.find(id);
+            AnnexVersion del = annexVersionFacade.find(idAnnexVersion);
             annexVersionFacade.remove(del);
             dataR.setTablaInvolucrada(TABLE);
             bitacora.registrarEnBitacora(dataR);

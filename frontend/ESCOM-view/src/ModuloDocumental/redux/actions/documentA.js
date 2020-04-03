@@ -93,7 +93,7 @@ export function getDocumentId(token, id) {
         'Permiso': PERMIT_GET_DOCUMENT
     }
     return (dispatch, getState) => {
-        axios.get(`${URL_BASE}/api/document/getDocument/${id}`, { headers: headers })
+        axios.get(`${URL_BASE}/api/document/get/${id}`, { headers: headers })
             .then(response => {
                 dispatch({
                     type: GET_DOCUMENT_ID,

@@ -88,7 +88,7 @@ export function getProgramId(token, id) {
     'Permiso': PERMIT_GET_PROGRAM
   }
   return (dispatch, getState) => {
-    axios.get(`${URL_BASE}/api/program/getProgram/${id}`, { headers: headers })
+    axios.get(`${URL_BASE}/api/program/get/${id}`, { headers: headers })
       .then(response => {
         console.log(response.data)
         dispatch({

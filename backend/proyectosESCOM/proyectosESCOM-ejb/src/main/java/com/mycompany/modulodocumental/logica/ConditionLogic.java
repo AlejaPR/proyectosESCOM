@@ -9,7 +9,7 @@ import com.mycompany.modulodocumental.entity.Condition;
 import com.mycompany.modulodocumental.entity.Process;
 import com.mycompany.modulodocumental.interfaces.ActivityFacadeLocal;
 import com.mycompany.modulodocumental.interfaces.ConditionFacadeLocal;
-import com.mycompany.modulodocumental.interfaces.ConditionLogicFacadeLocal;
+import com.mycompany.modulodocumental.interfaces.logic.ConditionLogicLocal;
 import com.mycompany.modulodocumental.interfaces.ProcessFacadeLocal;
 import com.mycompany.modulodocumental.pojo.ConditionP;
 import com.mycompany.modulodocumental.utility.GenericException;
@@ -29,7 +29,7 @@ import javax.ejb.Stateless;
  * @author hashy
  */
 @Stateless
-public class ConditionLogic implements ConditionLogicFacadeLocal {
+public class ConditionLogic implements ConditionLogicLocal {
 
     @EJB
     private ConditionFacadeLocal conditionFacade;
@@ -45,9 +45,9 @@ public class ConditionLogic implements ConditionLogicFacadeLocal {
     private static final String CLASS = "Clase logica condicion";
 
     @Override
-    public List<ConditionP> listCondition(int idD) throws GenericException {
+    public List<ConditionP> getList(int idDocument) throws GenericException {
         try {
-            List<Condition> list = conditionFacade.listConditionDoc(idD);
+            List<Condition> list = conditionFacade.listConditionDoc(idDocument);
             List<ConditionP> data = new ArrayList<>();
             for (Condition con : list) {
                 SimpleDateFormat formatoUsuario = new SimpleDateFormat("yyyy-MM-dd");
@@ -80,9 +80,9 @@ public class ConditionLogic implements ConditionLogicFacadeLocal {
     }
 
     @Override
-    public ConditionP getConditionId(int id) throws GenericException {
+    public ConditionP get(int idCondition) throws GenericException {
         try {
-            Condition con = conditionFacade.find(id);
+            Condition con = conditionFacade.find(idCondition);
             SimpleDateFormat formatoUsuario = new SimpleDateFormat("yyyy-MM-dd");
             Date startData = null;
             String startDataN = null;
@@ -116,9 +116,9 @@ public class ConditionLogic implements ConditionLogicFacadeLocal {
     }
 
     @Override
-    public List<ConditionView> listConditionPercentage(int idP) throws GenericException {
+    public List<ConditionView> getListPercentage(int idProcess) throws GenericException {
         try {
-            List<Condition> list = conditionFacade.listConditionPro(idP);
+            List<Condition> list = conditionFacade.listConditionPro(idProcess);
             List<ConditionView> data = new ArrayList<>();
             for (Condition con : list) {
                 int aux = activityFacade.Percentage(con.getId());
@@ -139,7 +139,7 @@ public class ConditionLogic implements ConditionLogicFacadeLocal {
     }
 
     @Override
-    public void addCondition(ConditionP condition) throws GenericException {
+    public void add(ConditionP condition) throws GenericException {
         try {
             Process proce = processFacade.find(condition.getProcess());
             Condition data = new Condition(condition.getName(), condition.getDescription(), condition.getState(), condition.getStartDate(), condition.getFinalDate());
@@ -154,7 +154,7 @@ public class ConditionLogic implements ConditionLogicFacadeLocal {
     }
 
     @Override
-    public void editCondition(ConditionP condition) throws GenericException {
+    public void edit(ConditionP condition) throws GenericException {
         try {
             Condition data = conditionFacade.find(condition.getId());
             data.setDescription(condition.getDescription());
@@ -171,9 +171,9 @@ public class ConditionLogic implements ConditionLogicFacadeLocal {
     }
 
     @Override
-    public void disableCondition(int id, DatosSolicitudPOJO dataR) throws GenericException {
+    public void disable(int idCondition, DatosSolicitudPOJO dataR) throws GenericException {
         try {
-            Condition con = conditionFacade.find(id);
+            Condition con = conditionFacade.find(idCondition);
             con.setState(-1);
             conditionFacade.edit(con);
             dataR.setTablaInvolucrada(TABLE);
@@ -185,9 +185,9 @@ public class ConditionLogic implements ConditionLogicFacadeLocal {
     }
 
     @Override
-    public void approveCondition(int id, DatosSolicitudPOJO dataR) throws GenericException {
+    public void approve(int idCondition, DatosSolicitudPOJO dataR) throws GenericException {
         try {
-            Condition condition = conditionFacade.find(id);
+            Condition condition = conditionFacade.find(idCondition);
             condition.setState(2);
             conditionFacade.edit(condition);
             dataR.setTablaInvolucrada(TABLE);

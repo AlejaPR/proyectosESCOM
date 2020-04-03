@@ -5,7 +5,7 @@
  */
 package com.mycompany.modulodocumental.services;
 
-import com.mycompany.modulodocumental.interfaces.DocumentLogicFacadeLocal;
+import com.mycompany.modulodocumental.interfaces.logic.DocumentLogicLocal;
 import com.mycompany.modulodocumental.pojo.DocumentP;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import java.util.List;
@@ -34,7 +34,7 @@ import javax.ws.rs.core.Response;
 public class DocumentS {
 
     @EJB
-    DocumentLogicFacadeLocal documentLogicFacade;
+    DocumentLogicLocal documentLogicFacade;
 
     @GET
     @Path("/getIdDocument/{id}")
@@ -50,10 +50,10 @@ public class DocumentS {
     }
 
     @GET
-    @Path("/getDocument/{id}")
-    public Response getDocumentId(@PathParam("id") int id) {
+    @Path("/get/{id}")
+    public Response get(@PathParam("id") int id) {
         try {
-            DocumentP data = documentLogicFacade.getDocumentId(id);
+            DocumentP data = documentLogicFacade.get(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
             JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
@@ -64,9 +64,9 @@ public class DocumentS {
 
     @GET
     @Path("/list")
-    public Response listDocument() {
+    public Response getList() {
         try {
-            List<DocumentP> data = documentLogicFacade.listDocument();
+            List<DocumentP> data = documentLogicFacade.getList();
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
             JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
@@ -90,9 +90,9 @@ public class DocumentS {
 
     @POST
     @Path("/add")
-    public Response addDocument(DocumentP doc) {
+    public Response add(DocumentP doc) {
         try {
-            documentLogicFacade.addDocument(doc);
+            documentLogicFacade.add(doc);
             JsonObject rest = Json.createObjectBuilder().add("data", "add").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
@@ -104,9 +104,9 @@ public class DocumentS {
 
     @PUT
     @Path("/edit")
-    public Response editDocument(DocumentP doc) {
+    public Response edit(DocumentP doc) {
         try {
-            documentLogicFacade.editDocument(doc);
+            documentLogicFacade.edit(doc);
             JsonObject rest = Json.createObjectBuilder().add("data", "edit").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
@@ -117,9 +117,9 @@ public class DocumentS {
 
     @PUT
     @Path("/disable/{id}")
-    public Response disableDocument(@PathParam("id") int id, DatosSolicitudPOJO dataR) {
+    public Response disable(@PathParam("id") int id, DatosSolicitudPOJO dataR) {
         try {
-            documentLogicFacade.disableDocument(id, dataR);
+            documentLogicFacade.disable(id, dataR);
             JsonObject rest = Json.createObjectBuilder().add("data", "disable").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {

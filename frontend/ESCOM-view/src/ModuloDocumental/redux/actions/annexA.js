@@ -123,7 +123,7 @@ export function getAnnexId(token, id) {
     'Permiso': PERMIT_GET_ANNEX
   }
   return (dispatch, getState) => {
-    axios.get(`${URL_BASE}/api/annex/getAnnex/${id}`, { headers: headers })
+    axios.get(`${URL_BASE}/api/annex/get/${id}`, { headers: headers })
       .then(response => {
         dispatch({
           type: GET_ANNEX_ID,

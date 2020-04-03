@@ -9,7 +9,7 @@ import com.mycompany.modulodocumental.entity.Activity;
 import com.mycompany.modulodocumental.entity.Commentary;
 import com.mycompany.modulodocumental.interfaces.ActivityFacadeLocal;
 import com.mycompany.modulodocumental.interfaces.CommentaryFacadeLocal;
-import com.mycompany.modulodocumental.interfaces.CommentaryLogicFacadeLocal;
+import com.mycompany.modulodocumental.interfaces.logic.CommentaryLogicLocal;
 import com.mycompany.modulodocumental.pojo.CommentaryP;
 import com.mycompany.modulodocumental.utility.GenericException;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
@@ -26,7 +26,7 @@ import javax.ejb.Stateless;
  * @author hashy
  */
 @Stateless
-public class CommentaryLogic implements CommentaryLogicFacadeLocal {
+public class CommentaryLogic implements CommentaryLogicLocal {
 
     @EJB
     private CommentaryFacadeLocal commentaryFacade;
@@ -40,7 +40,7 @@ public class CommentaryLogic implements CommentaryLogicFacadeLocal {
     private static final String CLASS = "Clase logica comentario";
 
     @Override
-    public List<CommentaryP> listCommentary(int activity) throws GenericException {
+    public List<CommentaryP> getList(int activity) throws GenericException {
         try {
             List<Commentary> list = commentaryFacade.listCommentary(activity);
             List<CommentaryP> data = new ArrayList<>();
@@ -62,9 +62,9 @@ public class CommentaryLogic implements CommentaryLogicFacadeLocal {
     }
 
     @Override
-    public void deleteCommentary(int id, DatosSolicitudPOJO dataS) throws GenericException {
+    public void delete(int idCommentary, DatosSolicitudPOJO dataS) throws GenericException {
         try {
-            Commentary data = commentaryFacade.find(id);
+            Commentary data = commentaryFacade.find(idCommentary);
             commentaryFacade.remove(data);
             dataS.setTablaInvolucrada(TABLE);
             bitacora.registrarEnBitacora(dataS);
@@ -75,7 +75,7 @@ public class CommentaryLogic implements CommentaryLogicFacadeLocal {
     }
 
     @Override
-    public void addCommentary(CommentaryP commentary) throws GenericException {
+    public void add(CommentaryP commentary) throws GenericException {
         try {
             UsuarioPOJO user = bitacora.devolverInformacionDeUsuario(commentary.getRequestData().getToken());
             Commentary data = new Commentary(commentary.getMessage(), commentary.getDate(), user.getId());
