@@ -60,7 +60,7 @@ class AddUser extends Component {
                         <div class="modal-content">
                             <form className="form-horizontal" onSubmit={this.props.handleSubmit(this.handleSubmit)}>
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Nueva condicion</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel">Agregar usuario</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -68,7 +68,7 @@ class AddUser extends Component {
                                 <div class="modal-body">
                                     <label for="form_control_1">Usuarios: </label>
                                     <div className="row">
-                                        <div className="col-sm-8">
+                                        <div className="col-sm">
                                             <Field name="user" validate={[select]} className="bs-select form-control" component={generarSelect}>
                                                 <option selected value="0">Seleccione...</option>
                                                 {this.loadList()}

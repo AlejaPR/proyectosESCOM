@@ -6,6 +6,11 @@ import { getListConditions, getConditionId, disableCondition, addMessageEdit, ad
 import { ToastContainer, toast } from 'react-toastify';
 import Add from './add.js';
 import Edit from './edit.js';
+import MaterialTable from 'material-table';
+
+import EditIcon from '@material-ui/icons/Edit';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 class FormCondition extends Component {
 
@@ -72,62 +77,102 @@ class FormCondition extends Component {
         this.props.disableCondition(localStorage.getItem('Token'), id)
     }
 
-    loadTable() {
-        return this.props.conditions.map((condition) => {
-            return (
-                <tr key={condition.id}>
-                    <td>{condition.name}</td>
-                    <td>{condition.description}</td>
-                    <td>
-                        <button onClick={() => this.saveView(condition.id)} className="btn btn-sm">
-                            <i class="far fa-eye"></i>
-                        </button>
-                    </td>
-                    <td>
-                        <button onClick={() => this.saveEdit(condition.id)} className="btn btn-sm" data-toggle="modal" data-target="#editModal">
-                            <i class="fas fa-pen"></i>
-                        </button>
-                        <Edit />
-                    </td>
-                    <td>
-                        <button onClick={() => this.disable(condition.id)} className="btn btn-sm">
-                            <i class="fas fa-ban"></i>
-                        </button>
-                    </td>
-                </tr>
-            )
-        })
-    }
 
     render() {
         return (
-            <div className="container color" style={{ width: "90%" }}>
+            <div className="container" style={{ width: "90%" }}>
                 <ToastContainer />
-                <br />
-                <div class="card" >
-                    <div class="card-body">
-                        <h3 class="card-title text-center"><strong>LISTA CONDICIONES</strong></h3>
-                        <br />
-                        <div>
-                            <Add />
-                        </div>
-                        <table class="table border">
-                            <thead class="colorBlue text-light">
-                                <tr>
-                                    <th scope="col">Condición</th>
-                                    <th scope="col">Descripción</th>
-                                    <th scope="col"></th>
-                                    <th scope="col"></th>
-                                    <th scope="col"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {this.loadTable()}
-                            </tbody>
-                        </table>
-                    </div>
+                <div className="text-left titulo">
+                    <h4>Lista de condiciones</h4>
                 </div>
                 <br />
+                <div className="shadow" style={{ background: "#FFFFFF", padding: "30px" }}>
+                    <div>
+                        <Add />
+                    </div>
+                    <br />
+                    <br />
+                    <MaterialTable
+                        title=""
+                        localization={{
+                            header: {
+                                actions: ' '
+                            },
+                            pagination: {
+                                nextTooltip: 'Siguiente ',
+                                previousTooltip: 'Anterior',
+                                labelDisplayedRows: '{from}-{to} de {count}',
+                                lastTooltip: 'Ultima pagina',
+                                firstTooltip: 'Primera pagina',
+                                labelRowsSelect: 'Registros',
+                                firstAriaLabel: 'oooo'
+                            },
+                            body: {
+                                emptyDataSourceMessage: 'Aun no hay ningun documento registrado'
+                            },
+                            toolbar: {
+                                searchTooltip: 'Buscar',
+                                searchPlaceholder: 'Buscar'
+                            }
+                        }}
+                        columns={[
+
+                            { title: 'Nombre de la condición', field: 'name' },
+                            { title: 'Descripción', field: 'description',
+                                render: rowData=>{
+                                    if(rowData.description.length > 150){
+                                        return rowData.description.substr(0,150) +' ...'
+                                    }else{
+                                        return rowData.description
+                                    }
+                                }
+                            },
+                            {
+                                title: '', field: 'id',
+                                render: rowData => {
+                                    return (
+                                        <div>
+                                            <a onClick={() => this.saveView(rowData.id)} data-toggle="modal" data-target="#viewModal">
+                                                <VisibilityIcon />
+                                            </a>
+                                        </div>
+                                    )
+                                }
+                            },
+                            {
+                                title: '', field: 'id',
+                                render: rowData => {
+                                    return (
+                                        <div>
+                                            <a onClick={() => this.saveEdit(rowData.id)} data-toggle="modal" data-target="#editModal">
+                                                <EditIcon />
+                                            </a>
+                                            <Edit />
+                                        </div>
+                                    )
+                                }
+                            },
+                            {
+                                title: '', field: 'id',
+                                render: rowData => {
+                                    return (
+                                        <div>
+                                            <a onClick={() => this.disable(rowData.id)}>
+                                                <DeleteForeverIcon />
+                                            </a>
+                                        </div>
+                                    )
+                                }
+                            }
+
+                        ]}
+                        data={this.props.conditions}
+                        options={{
+                            search: true
+                        }}
+
+                    />
+                </div>
             </div>
         )
     }

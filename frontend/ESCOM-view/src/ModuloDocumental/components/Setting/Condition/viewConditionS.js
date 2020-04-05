@@ -14,6 +14,11 @@ import AddAnnex from '../Activity/addAnnex.js';
 import Edit from '../Activity/edit.js';
 import View from '../Activity/view.js';
 
+import MaterialTable from 'material-table';
+import EditIcon from '@material-ui/icons/Edit';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+
 class ViewCondition extends Component {
 
     componentDidUpdate() {
@@ -60,6 +65,7 @@ class ViewCondition extends Component {
     save(id) {
         this.props.getActivityId(localStorage.getItem('Token'), id)
     }
+
     deleteUser(id) {
         confirmAlert({
             title: 'Eliminar',
@@ -100,67 +106,9 @@ class ViewCondition extends Component {
         })
     }
 
-    loadTableInfo() {
-        return this.props.activitiesInfo.map((activity) => {
-            return (
-                <tr key={activity.id}>
-                    <td>{activity.number}</td>
-                    <td>{activity.name}</td>
-                    <td>{activity.description}</td>
-                    <td>
-                        <button onClick={() => this.save(activity.id)} className="btn btn-sm text-light naranja" data-toggle="modal" data-target="#viewModal">
-                            <i class="far fa-eye"></i>
-                        </button>
-                        <View />
-                    </td>
-                    <td>
-                        <button onClick={() => this.save(activity.id)} className="btn btn-sm text-light naranja" data-toggle="modal" data-target="#editModal">
-                            <i class="fas fa-pen"></i>
-                        </button>
-                        <Edit />
-                    </td>
-                    <td>
-                        <button onClick={() => this.submit(activity.id)} className="btn btn-sm text-light naranja">
-                            <i class="far fa-trash-alt"></i>
-                        </button>
-                    </td>
-                </tr>
-            )
-        })
-    }
-
-    loadTableAnnex() {
-        return this.props.activitiesAnnex.map((activity) => {
-            return (
-                <tr key={activity.id}>
-                    <td>{activity.name}</td>
-                    <td>{activity.description}</td>
-                    <td>
-                        <button onClick={() => this.saveView(activity.id)} className="btn btn-sm text-light naranja" data-toggle="modal" data-target="#viewModal">
-                            <i class="far fa-eye"></i>
-                        </button>
-                        <View />
-                    </td>
-                    <td>
-                        <button onClick={() => this.saveEdit(activity.id)} className="btn btn-sm text-light naranja" data-toggle="modal" data-target="#editModal">
-                            <i class="fas fa-pen"></i>
-                        </button>
-                        <Edit />
-                    </td>
-                    <td>
-                        <button onClick={() => this.submit(activity.id)} className="btn btn-sm text-light naranja">
-                            <i class="far fa-trash-alt"></i>
-                        </button>
-                    </td>
-                </tr>
-            )
-        })
-    }
-
-
     submit(id) {
         confirmAlert({
-            title: '¿Desea Eliminar?',
+            title: '¿Eliminar?',
             message: 'Desea eliminar este elemento de forma permanente.',
             buttons: [
                 {
@@ -185,85 +133,194 @@ class ViewCondition extends Component {
 
     render() {
         return (
-            <div className="container color" style={{ width: "90%" }}>
+            <div className="container" style={{ width: "90%" }}>
                 <ToastContainer />
+                <div className="text-left titulo">
+                    <h4>Condición especifica</h4>
+                </div>
                 <br />
-                <button type="button" onClick={this.onClickCancelar} className="btn btn-danger btn-sm" >
-                    <i class="fas fa-angle-double-left"></i>
-                </button>
-                <br />
-                <div class="card">
-                    <div class="card-body">
-                        <h2 class="card-title text-center" style={{ textTransform: 'uppercase' }}><strong>{this.props.conditions.name}</strong></h2>
-                        <hr />
-                        <div className="row">
-                            <div className="col-6">
-                                <h5><strong>Descripcion</strong></h5>
-                                <p>
-                                    {this.props.conditions.description}
-                                </p>
-                                <h6><strong>Fecha</strong></h6>
-                                <p>Fecha inicio: {this.props.conditions.startDateS} <br />Fecha final: {this.props.conditions.finalDateS}</p>
-                                <br />
-                            </div>
-                            <div className="col-6">
-                                <h5><strong>Personas encargadas</strong></h5>
-                                <table class="table border table-striped">
-                                    <tbody>
-                                        {this.tableUser()}
-                                    </tbody>
-                                </table>
-                                <AddUser />
-                            </div>
+                <div className="shadow" style={{ background: "#FFFFFF", padding: "30px" }}>
+                    <button type="button" onClick={this.onClickCancelar} className="btn btn-danger btn-sm" >
+                        <i class="fas fa-angle-double-left"></i>
+                    </button>
+                    <h5 class="card-title text-center"><strong>{this.props.conditions.name}</strong></h5>
+                    <hr />
+                    <div className="row">
+                        <div className="col-6">
+                            <h6><strong>Descripcion</strong></h6>
+                            <p>
+                                {this.props.conditions.description}
+                            </p>
+                            <h6><strong>Fecha</strong></h6>
+                            <p>Fecha inicio: {this.props.conditions.startDateS} <br />Fecha final: {this.props.conditions.finalDateS}</p>
+                            <br />
+                        </div>
+                        <div className="col-6">
+                            <h5><strong>Personas encargadas</strong></h5>
+                            <table class="table border table-striped">
+                                <tbody>
+                                    {this.tableUser()}
+                                </tbody>
+                            </table>
+                            <AddUser />
                         </div>
                     </div>
+                    <hr />
+                    <AddInfo />
+                    <br/>
+                    <br/>
+                    <MaterialTable
+                        title="Lista actividades informativas"
+                        localization={{
+                            header: {
+                                actions: ' '
+                            },
+                            pagination: {
+                                nextTooltip: 'Siguiente ',
+                                previousTooltip: 'Anterior',
+                                labelDisplayedRows: '{from}-{to} de {count}',
+                                lastTooltip: 'Ultima pagina',
+                                firstTooltip: 'Primera pagina',
+                                labelRowsSelect: 'Registros',
+                                firstAriaLabel: 'oooo'
+                            },
+                            body: {
+                                emptyDataSourceMessage: 'Aun no hay ninguna activadad registrada'
+                            },
+                            toolbar: {
+                                searchTooltip: 'Buscar',
+                                searchPlaceholder: 'Buscar'
+                            }
+                        }}
+                        columns={[
+                            { title: '#', field: 'number' },
+                            { title: 'Nombre de la actividad', field: 'name' },
+                            { title: 'Descripción', field: 'description' },
+                            {
+                                title: '', field: 'id',
+                                render: rowData => {
+                                    return (
+                                        <div>
+                                            <a onClick={() => this.save(rowData.id)} data-toggle="modal" data-target="#viewModal">
+                                                <VisibilityIcon />
+                                            </a>
+                                            <View />
+                                        </div>
+                                    )
+                                }
+                            },
+                            {
+                                title: '', field: 'id',
+                                render: rowData => {
+                                    return (
+                                        <div>
+                                            <a onClick={() => this.save(rowData.id)} data-toggle="modal" data-target="#editModal">
+                                                <EditIcon />
+                                            </a>
+                                            <Edit />
+                                        </div>
+                                    )
+                                }
+                            },
+                            {
+                                title: '', field: 'id',
+                                render: rowData => {
+                                    return (
+                                        <div>
+                                            <a onClick={() => this.submit(rowData.id)}>
+                                                <DeleteForeverIcon />
+                                            </a>
+                                        </div>
+                                    )
+                                }
+                            }
+
+                        ]}
+                        data={this.props.activitiesInfo}
+                        options={{
+                            search: true
+                        }}
+
+                    />
+                    <hr />
+                    <AddAnnex />
+                    <br/>
+                    <br/>
+                    <MaterialTable
+                        title="Lista de actividades de anexo"
+                        localization={{
+                            header: {
+                                actions: ' '
+                            },
+                            pagination: {
+                                nextTooltip: 'Siguiente ',
+                                previousTooltip: 'Anterior',
+                                labelDisplayedRows: '{from}-{to} de {count}',
+                                lastTooltip: 'Ultima pagina',
+                                firstTooltip: 'Primera pagina',
+                                labelRowsSelect: 'Registros',
+                                firstAriaLabel: 'oooo'
+                            },
+                            body: {
+                                emptyDataSourceMessage: 'Aun no hay ninguna actividad registrada'
+                            },
+                            toolbar: {
+                                searchTooltip: 'Buscar',
+                                searchPlaceholder: 'Buscar'
+                            }
+                        }}
+                        columns={[
+                            { title: 'Nombre de la actividad', field: 'name' },
+                            { title: 'Descripción', field: 'description' },
+                            {
+                                title: '', field: 'id',
+                                render: rowData => {
+                                    return (
+                                        <div>
+                                            <a onClick={() => this.save(rowData.id)} data-toggle="modal" data-target="#viewModal">
+                                                <VisibilityIcon />
+                                            </a>
+                                            <View />
+                                        </div>
+                                    )
+                                }
+                            },
+                            {
+                                title: '', field: 'id',
+                                render: rowData => {
+                                    return (
+                                        <div>
+                                            <a onClick={() => this.save(rowData.id)} data-toggle="modal" data-target="#editModal">
+                                                <EditIcon />
+                                            </a>
+                                            <Edit />
+                                        </div>
+                                    )
+                                }
+                            },
+                            {
+                                title: '', field: 'id',
+                                render: rowData => {
+                                    return (
+                                        <div>
+                                            <a onClick={() => this.submit(rowData.id)}>
+                                                <DeleteForeverIcon />
+                                            </a>
+                                        </div>
+                                    )
+                                }
+                            }
+
+                        ]}
+                        data={this.props.activitiesAnnex}
+                        options={{
+                            search: true
+                        }}
+
+                    />
+                    
                 </div>
 
-                <br />
-
-                <div class="card">
-                    <div class="card-body">
-                        <AddInfo />
-                        <h4 class="card-title text-center">LISTA ACTIVIDADES INFORMATIVAS</h4>
-                        <table class="table border table-striped">
-                            <thead class="colorBlue text-light">
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Actividad</th>
-                                    <th scope="col">Descrpcion</th>
-                                    <th scope="col"></th>
-                                    <th scope="col"></th>
-                                    <th scope="col"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {this.loadTableInfo()}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <br />
-                <div class="card">
-                    <div class="card-body">
-                        <AddAnnex />
-                        <h4 class="card-title text-center">LISTA ACTIVIDADES DE ANEXOS</h4>
-                        <table class="table border table-striped">
-                            <thead class="colorBlue text-light">
-                                <tr>
-                                    <th scope="col">Actividad</th>
-                                    <th scope="col">Descrpcion</th>
-                                    <th scope="col"></th>
-                                    <th scope="col"></th>
-                                    <th scope="col"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {this.loadTableAnnex()}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <br />
             </div>
         )
     }

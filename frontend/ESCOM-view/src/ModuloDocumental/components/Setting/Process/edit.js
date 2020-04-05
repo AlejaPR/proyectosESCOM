@@ -28,7 +28,7 @@ class Edit extends Component {
 
                             <form className="form-horizontal" onSubmit={this.props.handleSubmit(this.handleSubmit)}>
                                 <div class="modal-header">
-                                    <h4 class="modal-title" id="exampleModalLabel">EDITAR PROCESO</h4>
+                                    <h5 class="modal-title" id="exampleModalLabel">Editar proceso</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -36,7 +36,7 @@ class Edit extends Component {
                                 <div class="modal-body">
                                     <label for="form_control_1">Nombre: </label>
                                     <div className="row">
-                                        <div className="col-sm-8">
+                                        <div className="col-sm">
                                             <Field name="name" validate={[required, minimum, twenty]} component={generarInput} label="Nombre" />
                                         </div>
                                     </div>
@@ -44,7 +44,7 @@ class Edit extends Component {
 
                                     <label for="form_control_1">Descripción: </label>
                                     <div className="row">
-                                        <div className="col-sm-8">
+                                        <div className="col-sm">
                                             <Field name="description" validate={[required, minimum, fiveHundred]} component={generarText} label="Denominación del programa" />
                                         </div>
                                     </div>

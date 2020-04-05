@@ -12,15 +12,15 @@ class View extends Component {
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4>DOCUMENTO</h4>
+                                <h5>Documento</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <h5><strong>Descripción</strong></h5>
+                                <h6><strong>Descripción:</strong></h6>
                                 <p>{this.props.document.description}</p>
-                                <h5><strong>Tipo documento</strong></h5>
+                                <h6><strong>Tipo documento:</strong></h6>
                                 <p>{this.props.document.type}</p>
                             </div>
                             <div class="modal-footer">
@@ -40,4 +40,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default withRouter(connect(mapStateToProps, {  })(View));
+export default withRouter(connect(mapStateToProps, {})(View));

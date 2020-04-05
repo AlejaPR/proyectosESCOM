@@ -30,7 +30,7 @@ class ProcessCommentary extends Component {
         if (this.props.messageAddC !== '') {
             switch (this.props.messageAddC) {
                 case 'add':
-                    toast.success('Se agrego con exito.');
+                    toast.success('Se agrego con éxito.');
                     this.props.getListComments(localStorage.getItem('Token'), sessionStorage.getItem('activity'));
                     this.props.addMessageAdd('');
                     break;
@@ -45,7 +45,7 @@ class ProcessCommentary extends Component {
         if (this.props.messageDeleteC !== '') {
             switch (this.props.messageDeleteC) {
                 case 'delete':
-                    toast.success('Se elimino con exito.');
+                    toast.success('Se elimino con éxito.');
                     this.props.getListComments(localStorage.getItem('Token'), sessionStorage.getItem('activity'));
                     this.props.addMessageDelete('');
                     break;
@@ -126,46 +126,44 @@ class ProcessCommentary extends Component {
 
     render() {
         return (
-            <div className="card">
-                <div className="card-body">
-                    <h3><strong>Comentarios</strong></h3>
-                    <table class="table border">
-                        <tbody>
-                            {this.loadTable()}
-                        </tbody>
-                    </table>
-                    <br />
+            <div >
+                <h5><strong>Comentarios</strong></h5>
+                <table class="table border">
+                    <tbody>
+                        {this.loadTable()}
+                    </tbody>
+                </table>
+                <br />
 
-                    <button type="button" className="btn text-light btn-sm float-right naranja " data-toggle="modal" data-target="#addModalComment" >
-                        <i class="fas fa-plus"></i> Agregar
+                <button type="button" className="btn text-light btn-sm float-right naranja " data-toggle="modal" data-target="#addModalComment" >
+                    <i class="fas fa-plus"></i> Agregar
                      </button>
-                    <div class="modal fade" id="addModalComment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <form className="form-horizontal" onSubmit={this.props.handleSubmit(this.handleSubmit)}>
-                                    <div class="modal-header">
-                                        <h4 class="modal-title">Nuevo comentario</h4>
-                                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <label for="form_control_1">Mensaje: </label>
-                                        <div className="row">
-                                            <div className="col-sm-8">
-                                                <Field name="message" validate={[required, thousand, minimum]} component={generarText} label="Nombre" />
-                                            </div>
+                <div class="modal fade" id="addModalComment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <form className="form-horizontal" onSubmit={this.props.handleSubmit(this.handleSubmit)}>
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Nuevo comentario</h4>
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                </div>
+                                <div class="modal-body">
+                                    <label for="form_control_1">Mensaje: </label>
+                                    <div className="row">
+                                        <div className="col-sm-8">
+                                            <Field name="message" validate={[required, thousand, minimum]} component={generarText} label="Nombre" />
                                         </div>
                                     </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                        <button type="submit" className="btn btn-default naranja">Agregar</button>
-                                    </div>
-                                </form>
-                            </div>
-
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                    <button type="submit" className="btn btn-default naranja">Agregar</button>
+                                </div>
+                            </form>
                         </div>
-                    </div>
 
+                    </div>
                 </div>
+
             </div>
         );
     }

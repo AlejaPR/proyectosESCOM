@@ -5,6 +5,8 @@ import { withRouter } from 'react-router-dom';
 import { getListActivitiesInfo, getActivityId, getListActivitiesAnnex } from '../../redux/actions/activityA.js';
 import { getConditionId } from '../../redux/actions/conditionA.js';
 
+import MaterialTable from 'material-table';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 
 class ProcessCondition extends Component {
     componentWillMount() {
@@ -25,12 +27,8 @@ class ProcessCondition extends Component {
     loadCondition() {
         return (
             <div className="pg">
-                <h2 className="text-center" style={{ textTransform: 'uppercase' }}>
-                    {this.props.conditionPro.name}
-                </h2>
-                <h4>
-                    Descripcion
-                </h4>
+                <h5 className="text-center"><strong>{this.props.conditionPro.name}</strong></h5>
+                <h6><strong>Descripción:</strong></h6>
                 <p>
                     {this.props.conditionPro.description}
                 </p>
@@ -38,102 +36,132 @@ class ProcessCondition extends Component {
         )
     }
 
-    loadActivitiesInfo() {
-        return this.props.listActivityInfo.map((activity) => {
-            return (
-                <tr key={activity.id}>
-                    <td>{activity.number}</td>
-                    <td>{activity.name}</td>
-                    <td>{() => {
-                        if (activity.state === 1) {
-                            return ('Activo')
-                        } else if (activity.state === 2) {
-                            return ('Finalizado')
-                        } else {
-                            return (<strong>Por aprobación</strong>)
-                        }
-                    }
-                    }</td>
-                    <td>{activity.type === 1 ? 'Informativo' : 'anexo'}</td>
-                    <td>
-                        <button onClick={() => this.save(activity.id)} className="btn btn-sm text-light naranja">
-                            Ver
-                        </button>
-                    </td>
-                </tr>
-            )
-        })
-    }
-
-    loadActivitiesAnnex() {
-        return this.props.listActivityAnnex.map((activity) => {
-            return (
-                <tr key={activity.id}>
-                    <td>{activity.name}</td>
-                    <td>{() => {
-                        if (activity.state === 1) {
-                            return ('Activo')
-                        } else if (activity.state === 2) {
-                            return ('Finalizado')
-                        } else {
-                            return (<strong>Por aprobación</strong>)
-                        }
-                    }
-                    }</td>
-                    <td>{activity.type === 1 ? 'Informativo' : 'anexo'}</td>
-                    <td>{
-                        <button onClick={() => this.saveAnnex(activity.id)} className="btn btn-sm text-light naranja">
-                            Ver
-                        </button>
-                    }
-                    </td>
-                </tr>
-            )
-        })
-    }
-
     render() {
         return (
             <div className="container color" style={{ width: "90%" }}>
-                {this.loadCondition()}
-                <h2 className="text-center">
-                    Lista actividades informativas
-                </h2>
-                <div className="pg">
-                    <table class="table border table-striped">
-                        <thead class="colorBlue text-light">
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">Actividad</th>
-                                <th scope="col">Estado</th>
-                                <th scope="col">Tipo</th>
-                                <th scope="col"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {this.loadActivitiesInfo()}
-                        </tbody>
-                    </table>
+                <div className="text-left titulo">
+                    <h4>Información de la condición</h4>
                 </div>
-                <h2 className="text-center">
-                    Lista actividades de anexos
-                </h2>
-                <div className="pg">
-                    <table class="table border table-striped">
-                        <thead class="colorBlue text-light">
-                            <tr>
-                                <th scope="col">Actividad</th>
-                                <th scope="col">Estado</th>
-                                <th scope="col">Tipo</th>
-                                <th scope="col"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {this.loadActivitiesAnnex()}
-                        </tbody>
-                    </table>
-                </div>
+                <br />
+                <div className="shadow" style={{ background: "#FFFFFF", padding: "30px" }}>
+                    {this.loadCondition()}
+                    <hr />
+                    <MaterialTable
+                        title="Lista actividades informativas"
+                        localization={{
+                            header: {
+                                actions: ' '
+                            },
+                            pagination: {
+                                nextTooltip: 'Siguiente ',
+                                previousTooltip: 'Anterior',
+                                labelDisplayedRows: '{from}-{to} de {count}',
+                                lastTooltip: 'Ultima pagina',
+                                firstTooltip: 'Primera pagina',
+                                labelRowsSelect: 'Registros',
+                                firstAriaLabel: 'oooo'
+                            },
+                            body: {
+                                emptyDataSourceMessage: 'Aun no hay ninguna actividad registrada'
+                            },
+                            toolbar: {
+                                searchTooltip: 'Buscar',
+                                searchPlaceholder: 'Buscar'
+                            }
+                        }}
+                        columns={[
+                            { title: '#', field: 'number' },
+                            { title: 'Nombre de la actividad', field: 'name' },
+                            {
+                                title: 'Estado', field: 'state',
+                                render: rowData => {
+                                    if (rowData.state === 1) {
+                                        return 'Activo'
+                                    } else if (rowData.state === 2) {
+                                        return 'Finalizado'
+                                    } else {
+                                        return (<strong>Por aprobación</strong>)
+                                    }
+                                }
+                            },
+                            {
+                                title: '', field: 'id',
+                                render: rowData => {
+                                    return (
+                                        <div>
+                                            <a onClick={() => this.save(rowData.id)} data-toggle="modal" data-target="#viewModal">
+                                                <VisibilityIcon />
+                                            </a>
+                                        </div>
+                                    )
+                                }
+                            }
+                        ]}
+                        data={this.props.listActivityInfo}
+                        options={{
+                            search: true
+                        }}
 
+                    />
+                    <hr />
+                    <MaterialTable
+                        title="Lista de actividades de anexo"
+                        localization={{
+                            header: {
+                                actions: ' '
+                            },
+                            pagination: {
+                                nextTooltip: 'Siguiente ',
+                                previousTooltip: 'Anterior',
+                                labelDisplayedRows: '{from}-{to} de {count}',
+                                lastTooltip: 'Ultima pagina',
+                                firstTooltip: 'Primera pagina',
+                                labelRowsSelect: 'Registros',
+                                firstAriaLabel: 'oooo'
+                            },
+                            body: {
+                                emptyDataSourceMessage: 'Aun no hay ninguna actividad registrada'
+                            },
+                            toolbar: {
+                                searchTooltip: 'Buscar',
+                                searchPlaceholder: 'Buscar'
+                            }
+                        }}
+                        columns={[
+                            { title: 'Nombre de la actividad', field: 'name' },
+                            { title: 'Descripción', field: 'description' },
+                            {
+                                title: 'Estado', field: 'state',
+                                render: rowData => {
+                                    if (rowData.state === 1) {
+                                        return 'Activo'
+                                    } else if (rowData.state === 2) {
+                                        return 'Finalizado'
+                                    } else {
+                                        return (<strong>Por aprobación</strong>)
+                                    }
+                                }
+                            },
+                            {
+                                title: '', field: 'id',
+                                render: rowData => {
+                                    return (
+                                        <div>
+                                            <a onClick={() => this.saveAnnex(rowData.id)} data-toggle="modal" data-target="#viewModal">
+                                                <VisibilityIcon />
+                                            </a>
+                                        </div>
+                                    )
+                                }
+                            }
+                        ]}
+                        data={this.props.listActivityAnnex}
+                        options={{
+                            search: true
+                        }}
+
+                    />
+                </div>
             </div>
         )
     }

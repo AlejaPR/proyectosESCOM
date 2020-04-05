@@ -3,107 +3,104 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+//iconos
+import Persona from '@material-ui/icons/Person';
+import Folder from '@material-ui/icons/LocalLibrary';
+import Bombillo from '@material-ui/icons/EmojiObjects';
+import logoDefecto from '../../../SuperAdministrador/imagenes/defectoLogo.png';
+import HomeIcon from '@material-ui/icons/Home';
 
-import '../../css/menu.css';
-
-//imagenes
-import home from '../../img/icono-home.png'
-import logo from '../../img/logo.png'
-
+import { consultarConfiguracion } from '../../../SuperAdministrador/actions/actionConfiguracion.js';
 
 class MenuLateral extends Component {
 
-	state = {
-		hoverInicio: false,
-		hoverUsuario: false,
-		hoverActividad: false,
-		hoverModulo: false,
-		hoverReportes: false,
-		visible: false
+	state={
+		hoverInicio:false,
+		hoverUsuario:false,
+		hoverActividad:false,
+		hoverModulo:false,
+		hoverReportes:false
+	}
+
+	componentDidMount() {
+		this.props.consultarConfiguracion(localStorage.getItem('Token'));
 	}
 
 
-	componentWillMount() {
-
-    }
-
-	hoverOn = (evento) => {
+	hoverOn=(evento)=>{
 		this.setState({ [evento.target.name]: true });
 	}
 
-	hoverOff = (evento) => {
-		this.setState({ [evento.target.name]: false });
+	hoverOff=(evento)=>{ 
+		this.setState({ [evento.target.name]: false });    
+	}
+
+	fondoBarr=()=>{
+		return( 
+			this.props.configuracion.barraLateral===undefined?
+			{
+				background:'#0E3D38',
+				fontSize: "14px",
+				fontFamily: "Open sans, sans-serif"
+			}:{
+				background:this.props.configuracion.barraLateral,
+				fontSize: "14px",
+				fontFamily: "Open sans, sans-serif"
+			}
+			)
 	}
 
 	render() {
 		return (
-			<div id="sidebar-wrapper" className="toggled" style={fondoMenuLateral}>
-				<div className="col-sm" style={fondoMenuLateral}>
-					<div className="container text-center" style={fondoMenuLateral}>
-						<img src={logo} alt="" width="140" height="72" />
+			<div  id="sidebar-wrapper" className="toggled" style={this.fondoBarr()}>
+				<div className="col-sm" style={this.fondoBarr()}>
+					<div className="container text-center" style={this.fondoBarr()}>
+						{this.props.configuracion.logo===undefined?<img src={logoDefecto} alt="" width="130" height="50" />:<img src={this.props.configuracion.logo} alt="" width="130" height="50" />}
+						
 					</div>
 				</div>
-
-
-				<li className="nav-item">
-					<Link to="/" name="hoverInicio" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
-						style={this.state.hoverInicio ? fondoHover : fondoMenuLateral} >
-						<img src={home} alt="" width="25" height="25" />
+				<li className="nav-item"  style={{height:"65px"}}>
+					<Link to="/inicio" name="hoverUsuario" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
+					 style={this.fondoBarr()}>
+						<HomeIcon />
 						<br />
-						<span className="title">INICIO</span>
+						<span className="title letra">Inicio</span>
 					</Link>
 				</li>
-
-                <li className="nav-item">
-					<Link to="/ListProgram" name="hoverInicio" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
-						style={this.state.hoverInicio ? fondoHover : fondoMenuLateral} >
-						<img src={home} alt="" width="25" height="25" />
+				<li className="nav-item"  style={{height:"65px"}}>
+					<Link to="/ListProgram" name="hoverUsuario" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
+					 style={this.fondoBarr()}>
+						<Persona />
 						<br />
-						<span className="title">PROGRAMAS</span>
+						<span className="title letra">Programas</span>
 					</Link>
 				</li>
-
-                <li className="nav-item">
-					<Link to="/ListDocument" name="hoverInicio" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
-						style={this.state.hoverInicio ? fondoHover : fondoMenuLateral} >
-						<img src={home} alt="" width="25" height="25" />
+				<li className="nav-item"  style={{height:"65px"}}>
+					<Link to="/ListDocument" name="hoverModulo" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center" 
+					style={this.fondoBarr()}>
+						<Folder/>
 						<br />
-						<span className="title">DOCUMENTOS</span>
+						<span className="title letra">Documentos maestros</span>
 					</Link>
 				</li>
-
-				<li className="nav-item">
-					<Link to="/Prueba" name="hoverInicio" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
-						style={this.state.hoverInicio ? fondoHover : fondoMenuLateral} >
-						<img src={home} alt="" width="25" height="25" />
+				<li className="nav-item"  style={{height:"65px"}}>
+					<Link to="/Prueba" name="hoverActividad" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
+					style={this.fondoBarr()} >
+						<Bombillo/>
 						<br />
-						<span className="title">PRUEBA</span>
+						<span className="title letra">Pruebas</span>
 					</Link>
-				</li>
-
+				</li>			
 			</div>
+
 		)
 	}
 }
 
-const fondoMenuLateral = {
-	background: "#26344B",
-	fontSize: "14px",
-	fontFamily: "Open sans, sans-serif"
-
-}
-
-const fondoHover = {
-	background: "#2b3b55",
-	fontSize: "14px",
-	fontFamily: "Open sans, sans-serif"
-
-}
-
 function mapStateToProps(state) {
-    return {	
-
+    return {
+        configuracion:state.conf.configuracion
     }
 }
 
-export default connect(mapStateToProps, { })(MenuLateral)
+export default connect(mapStateToProps, { consultarConfiguracion })(MenuLateral)

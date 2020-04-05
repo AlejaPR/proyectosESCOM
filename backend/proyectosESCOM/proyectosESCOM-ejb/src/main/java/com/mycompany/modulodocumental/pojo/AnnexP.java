@@ -19,6 +19,7 @@ public class AnnexP implements Serializable {
     private String description;
     private String name;
     private int program;
+    private String nameProgram;
     private int state;
     private String link;
     private DatosSolicitudPOJO requestData;
@@ -96,6 +97,14 @@ public class AnnexP implements Serializable {
 
     public void setRequestData(DatosSolicitudPOJO requestData) {
         this.requestData = requestData;
+    }
+
+    public String getNameProgram() {
+        return nameProgram;
+    }
+
+    public void setNameProgram(String nameProgram) {
+        this.nameProgram = nameProgram;
     }
     
 }

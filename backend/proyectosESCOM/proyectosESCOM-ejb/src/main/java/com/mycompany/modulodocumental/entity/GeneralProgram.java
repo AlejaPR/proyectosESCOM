@@ -53,9 +53,6 @@ public class GeneralProgram implements Serializable{
     
     @OneToMany(mappedBy = "fkPpGeneral")
     List<ProfessionalProfile> listProfessionalProfile;
-    
-    @OneToMany(mappedBy = "fkTcGeneral")
-    List<ThematicCore> listThematicCore;
 
     public GeneralProgram() {
     }
@@ -144,15 +141,5 @@ public class GeneralProgram implements Serializable{
     public void setListProfessionalProfile(List<ProfessionalProfile> listProfessionalProfile) {
         this.listProfessionalProfile = listProfessionalProfile;
     }
-
-    public List<ThematicCore> getListThematicCore() {
-        return listThematicCore;
-    }
-
-    public void setListThematicCore(List<ThematicCore> listThematicCore) {
-        this.listThematicCore = listThematicCore;
-    }
-    
-    
     
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { getListAnnexes, searchAnnexS, getAnnexId, addMessageEdit, addMessageAdd, addMessageDisable, disableAnnex } from '../../../redux/actions/annexA.js';
+import { getListAnnexes, getAnnexId, addMessageEdit, addMessageAdd, addMessageDisable, disableAnnex } from '../../../redux/actions/annexA.js';
 import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
 import Add from './add.js';
@@ -9,7 +9,17 @@ import Edit from './edit.js';
 import View from './view.js';
 import { ToastContainer, toast } from 'react-toastify';
 
+import MaterialTable from 'material-table';
+import EditIcon from '@material-ui/icons/Edit';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+
 class ListAnnex extends Component {
+
+
+    componentDidMount() {
+        this.props.getListAnnexes(localStorage.getItem('Token'), sessionStorage.getItem('programId'))
+    }
 
     componentDidUpdate() {
         if (this.props.messageEditX !== '') {
@@ -56,27 +66,6 @@ class ListAnnex extends Component {
         }
     }
 
-    componentDidMount() {
-        this.props.getListAnnexes(localStorage.getItem('Token'), sessionStorage.getItem('programId'))
-    }
-
-    handleSubmit = formValues => {
-        console.log(formValues)
-        let searchAnn = {
-            idProgram: sessionStorage.getItem('programId'),
-            name: formValues.words
-        }
-        this.props.searchAnnexS(localStorage.getItem('Token'), searchAnn)
-    }
-
-    loadList() {
-        return this.props.programs.map((pro) => {
-            return (
-                <option value={pro.id}>{pro.name}</option>
-            )
-        })
-    }
-
     save(id) {
         this.props.getAnnexId(localStorage.getItem('Token'), id);
     }
@@ -85,96 +74,98 @@ class ListAnnex extends Component {
         this.props.disableAnnex(localStorage.getItem('Token'), id)
     }
 
-    loadTable() {
-        return this.props.annexes.map((annex) => {
-            return (
-                <tr key={annex.id}>
-                    <td>{annex.name}</td>
-                    <td>{annex.description}</td>
-                    <td>{annex.keywords}</td>
-                    <td>
-                        <button onClick={() => this.save(annex.id)} className="btn btn-sm text-light naranja" data-toggle="modal" data-target="#viewModal">
-                            <i class="far fa-eye"></i>
-                        </button>
-                        <View />
-                    </td>
-                    <td>
-                        <button onClick={() => this.save(annex.id)} className="btn btn-sm text-light naranja" data-toggle="modal" data-target="#editModal" >
-                            <i class="fas fa-pen"></i>
-                        </button>
-                        <Edit />
-                    </td>
-                    <td>
-                        <button onClick={() => this.disable(annex.id)} className="btn btn-sm text-light naranja">
-                            <i class="fas fa-ban"></i>
-                        </button>
-                    </td>
-                </tr>
-            )
-        })
-    }
-
-
     render() {
         return (
-            <div className="container color" style={{ width: "90%" }}>
+            <div className="container" style={{ width: "90%" }}>
                 <ToastContainer />
-                <br />
-                {/* main element */}
-                <div class="card" >
-                    <div class="card-body">
-                        <h3 class="card-title text-center"><strong>ANEXOS DEL PROGRAMA</strong></h3>
-                        <br />
-                        <form onSubmit={this.props.handleSubmit(this.handleSubmit)}>
-                            <div className="row">
-                                <div className="col-6">
-                                    <Field name="words" component={generarInput} label="" />
-                                </div>
-                                <div className="col-2">
-                                    <button className="btn naranja btn-sm" type="submit">
-                                        Buscar
-                                    </button>
-                                </div>
-                                <div className="col-4">
-                                    <Add />
-                                </div>
-                            </div>
-                        </form>
-                        <br />
-                        <div className="">
-                            <table class="table table-hover">
-                                <thead class="colorBlue text-light">
-                                    <tr>
-                                        <th scope="col">Anexo</th>
-                                        <th scope="col">Descripción</th>
-                                        <th scope="col">Palabras claves</th>
-                                        <th scope="col"></th>
-                                        <th scope="col"></th>
-                                        <th scope="col"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {this.loadTable()}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                <div className="text-left titulo">
+                    <h4>Anexos del programa</h4>
                 </div>
                 <br />
-            </div >
+                <div className="shadow" style={{ background: "#FFFFFF", padding: "30px" }}>
+                    <Add />
+                    <br />
+                    <br />
+                    <MaterialTable
+                        title=""
+                        localization={{
+                            header: {
+                                actions: ' '
+                            },
+                            pagination: {
+                                nextTooltip: 'Siguiente ',
+                                previousTooltip: 'Anterior',
+                                labelDisplayedRows: '{from}-{to} de {count}',
+                                lastTooltip: 'Ultima pagina',
+                                firstTooltip: 'Primera pagina',
+                                labelRowsSelect: 'Registros',
+                                firstAriaLabel: 'oooo'
+                            },
+                            body: {
+                                emptyDataSourceMessage: 'Aun no hay ningun documento registrado'
+                            },
+                            toolbar: {
+                                searchTooltip: 'Buscar',
+                                searchPlaceholder: 'Buscar'
+                            }
+                        }}
+                        columns={[
+
+                            { title: 'Nombre del anexo', field: 'name' },
+                            { title: 'Descripción', field: 'description' },
+                            { title: 'Palabras clave', field: 'keywords' },
+                            {
+                                title: '', field: 'id',
+                                render: rowData => {
+                                    return (
+                                        <div>
+                                            <a onClick={() => this.save(rowData.id)} data-toggle="modal" data-target="#viewModal">
+                                                <VisibilityIcon />
+                                            </a>
+                                            <View />
+                                        </div>
+                                    )
+                                }
+                            },
+                            {
+                                title: '', field: 'id',
+                                render: rowData => {
+                                    return (
+                                        <div>
+                                            <a onClick={() => this.save(rowData.id)} data-toggle="modal" data-target="#editModal">
+                                                <EditIcon />
+                                            </a>
+                                            <Edit />
+                                        </div>
+                                    )
+                                }
+                            },
+                            {
+                                title: '', field: 'id',
+                                render: rowData => {
+                                    return (
+                                        <div>
+                                            <a onClick={() => this.disable(rowData.id)}>
+                                                <DeleteForeverIcon />
+                                            </a>
+                                        </div>
+                                    )
+                                }
+                            }
+
+                        ]}
+                        data={this.props.annexes}
+                        options={{
+                            search: true
+                        }}
+
+                    />
+                </div>
+            </div>
         )
     }
 
 }
-
-const generarInput = ({ input, placeholder, label, type, meta: { touched, warning, error } }) => (
-    <div>
-        <div>
-            <input {...input} type={type} className="form-control letra form-control-solid placeholder-no-fix" />
-            {touched && ((error && <span className="text-danger letra form-group">{error}</span>) || (warning && <span>{warning}</span>))}
-        </div>
-    </div>
-)
 
 function mapStateToProps(state) {
     return {
@@ -185,8 +176,4 @@ function mapStateToProps(state) {
     }
 }
 
-let formSearch = reduxForm({
-    form: 'searchAnnex',
-    enableReinitialize: true
-})(ListAnnex)
-export default withRouter(connect(mapStateToProps, { searchAnnexS, disableAnnex, addMessageDisable, getListAnnexes, getAnnexId, addMessageEdit, addMessageAdd })(formSearch));
+export default withRouter(connect(mapStateToProps, { disableAnnex, addMessageDisable, getListAnnexes, getAnnexId, addMessageEdit, addMessageAdd })(ListAnnex));

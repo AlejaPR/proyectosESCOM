@@ -65,14 +65,14 @@ class AddAnnex extends Component {
                                 <div class="modal-body">
                                     <label for="form_control_1">Nombre: </label>
                                     <div className="row">
-                                        <div className="col-sm-10">
+                                        <div className="col-sm">
                                             <Field name="name" validate={[required, minimum, twoHundred]} type="text" component={generarInput} label="Nombre" />
                                         </div>
                                     </div>
                                     <br />
-                                    <label for="form_control_1">Descripcion: </label>
+                                    <label for="form_control_1">Descripción: </label>
                                     <div className="row">
-                                        <div className="col-sm-10">
+                                        <div className="col-sm">
                                             <Field name="description" validate={[required, thousand, minimum]} type="text" component={generarText} label="Descripcion" />
                                         </div>
                                     </div>

@@ -8,6 +8,11 @@ import Edit from './edit.js';
 import View from './view.js';
 import { ToastContainer, toast } from 'react-toastify';
 
+import MaterialTable from 'material-table';
+import EditIcon from '@material-ui/icons/Edit';
+import VisibilityIcon from '@material-ui/icons/Visibility';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+
 class ListDocument extends Component {
 
     componentDidUpdate() {
@@ -43,7 +48,7 @@ class ListDocument extends Component {
             switch (this.props.messageDisableD) {
                 case 'disable':
                     toast.success('Se inhabilito con exito.');
-                    this.props.addMessageDisable('');                    
+                    this.props.addMessageDisable('');
                     this.props.getListDocuments(localStorage.getItem('Token'));
                     break;
                 case 'error server':
@@ -67,62 +72,92 @@ class ListDocument extends Component {
         this.props.disableDocument(localStorage.getItem('Token'), id)
     }
 
-    loadTable() {
-        return this.props.listDocument.map((doc) => {
-            return (
-                <tr key={doc.id}>
-                    <td>{doc.program}</td>
-                    <td>{doc.description}</td>
-                    <td>
-                        <button onClick={() => this.save(doc.id)} className="btn btn-sm text-light naranja" data-toggle="modal" data-target="#viewModal">
-                            <i class="far fa-eye"></i>
-                        </button>
-                        <View />
-                    </td>
-                    <td>
-                        <button onClick={() => this.save(doc.id)} className="btn btn-sm text-light naranja" data-toggle="modal" data-target="#editModal">
-                            <i class="fas fa-pen"></i>
-                        </button>
-                        <Edit />
-                    </td>
-                    <td>
-                        <button onClick={() => this.disable(doc.id)} className="btn btn-sm text-light naranja">
-                            <i class="fas fa-ban"></i>
-                        </button>
-                    </td>
-                </tr>
-            )
-        })
-    }
-
     render() {
         return (
-            <div className="container color" style={{ width: "90%" }}>
+            <div className="container" style={{ width: "90%" }}>
+                <div className="text-left titulo">
+                    <h4>Lista documentos maestros</h4>
+                </div>
                 <ToastContainer />
                 <br />
-                <div class="card">
-                    <div class="card-body">
-                        <h3 class="card-title text-center"><strong>LISTA DE DOCUMENTOS</strong></h3>
-                        <div>
-                            <Add />
-                        </div>
-                        <table className="table border table-striped">
-                            <thead className="colorBlue text-light">
-                                <tr>
-                                    <th scope="col">Programa</th>
-                                    <th scope="col">Descripcion</th>
-                                    <th scope="col"></th>
-                                    <th scope="col"></th>
-                                    <th scope="col"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {this.loadTable()}
-                            </tbody>
-                        </table>
-                    </div>
+                <div className="shadow" style={{ background: "#FFFFFF", padding: "30px" }}>
+                    <Add/>
+                    <br/>
+                    <br/>
+                    <MaterialTable
+                        title=""
+                        localization={{
+                            header: {
+                                actions: ' '
+                            },
+                            pagination: {
+                                nextTooltip: 'Siguiente ',
+                                previousTooltip: 'Anterior',
+                                labelDisplayedRows: '{from}-{to} de {count}',
+                                lastTooltip: 'Ultima pagina',
+                                firstTooltip: 'Primera pagina',
+                                labelRowsSelect: 'Registros',
+                                firstAriaLabel: 'oooo'
+                            },
+                            body: {
+                                emptyDataSourceMessage: 'Aun no hay ningun documento registrado'
+                            },
+                            toolbar: {
+                                searchTooltip: 'Buscar',
+                                searchPlaceholder: 'Buscar'
+                            }
+                        }}
+                        columns={[
+
+                            { title: 'Nombre del documento', field: 'program' },
+                            { title: 'Descripción', field: 'description' },
+                            {
+                                title: '', field: 'id',
+                                render: rowData => {
+                                    return (
+                                        <div>
+                                            <a onClick={() => this.save(rowData.id)} data-toggle="modal" data-target="#viewModal">
+                                                <VisibilityIcon />
+                                            </a>
+                                            <View />
+                                        </div>
+                                    )
+                                }
+                            },
+                            {
+                                title: '', field: 'id',
+                                render: rowData => {
+                                    return (
+                                        <div>
+                                            <a onClick={() => this.save(rowData.id)} data-toggle="modal" data-target="#editModal">
+                                                <EditIcon />
+                                            </a>
+                                            <Edit />
+                                        </div>
+                                    )
+                                }
+                            },
+                            {
+                                title: '', field: 'id',
+                                render: rowData => {
+                                    return (
+                                        <div>
+                                            <a onClick={() => this.disable(rowData.id)}>
+                                                <DeleteForeverIcon />
+                                            </a>
+                                        </div>
+                                    )
+                                }
+                            }
+
+                        ]}
+                        data={this.props.listDocument}
+                        options={{
+                            search: true
+                        }}
+
+                    />
                 </div>
-                <br />
             </div>
         )
     }

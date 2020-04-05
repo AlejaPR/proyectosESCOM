@@ -16,13 +16,13 @@ class View extends Component {
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title" id="exampleModalLabel" style={{ textTransform: 'uppercase' }}><strong>{this.props.activity.name}</strong></h4>
+                                <h5 class="modal-title" id="exampleModalLabel" ><strong>{this.props.activity.name}</strong></h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <h6><strong>Descripcion</strong></h6>
+                                <h6><strong>Descripción:</strong></h6>
                                 <p>{this.props.activity.description}</p>                                
                             </div>
                             <div class="modal-footer">

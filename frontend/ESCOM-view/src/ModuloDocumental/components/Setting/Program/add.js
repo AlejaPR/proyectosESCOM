@@ -3,10 +3,28 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
-import { addProgram } from '../../../redux/actions/programA.js';
+import { addProgram, addMessageAdd } from '../../../redux/actions/programA.js';
 import { required, minimum, twoHundred } from '../../utilitarian/validations.js';
+import { toast } from 'react-toastify';
 
 class Add extends Component {
+
+    componentDidUpdate() {
+        if (this.props.messageAddPr !== '') {
+            switch (this.props.messageAddPr) {
+                case 'add':
+                    toast.success('Se agrego con exito.');
+                    this.props.getListPrograms(localStorage.getItem('Token'))
+                    this.props.addMessageAdd('')
+                    break;
+                case 'error server':
+                    toast.error('Se presento un error, intentelo mas tarde.');
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 
     handleSubmit = formValues => {
         let programN = {
@@ -41,7 +59,7 @@ class Add extends Component {
                         <div class="modal-content">
                             <form className="form-horizontal" onSubmit={this.props.handleSubmit(this.handleSubmit)}>
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">NUEVO PROGRAMA</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel">Nuevo programa</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -49,43 +67,43 @@ class Add extends Component {
                                 <div class="modal-body">
                                     <label for="form_control_1">Institución: </label>
                                     <div className="row">
-                                        <div className="col-sm-8">
+                                        <div className="col-sm">
                                             <Field name="institution" validate={[required, minimum, twoHundred]} component={generarInput} label="Institución" />
                                         </div>
                                     </div>
                                     <label for="form_control_1">Denominación del programa: </label>
                                     <div className="row">
-                                        <div className="col-sm-8">
+                                        <div className="col-sm">
                                             <Field name="name" validate={[required, minimum, twoHundred]} component={generarInput} label="Denominación del programa" />
                                         </div>
                                     </div>
                                     <label for="form_control_1">Nivel de formación: </label>
                                     <div className="row">
-                                        <div className="col-sm-8">
+                                        <div className="col-sm">
                                             <Field name="levelEducation" validate={[required, minimum, twoHundred]} component={generarInput} label="Nivel de formación" />
                                         </div>
                                     </div>
                                     <label for="form_control_1">Motodología: </label>
                                     <div className="row">
-                                        <div className="col-sm-8">
+                                        <div className="col-sm">
                                             <Field name="methodology" validate={[required, minimum, twoHundred]} component={generarInput} label="Motodología" />
                                         </div>
                                     </div>
                                     <label for="form_control_1">Campus: </label>
                                     <div className="row">
-                                        <div className="col-sm-8">
+                                        <div className="col-sm">
                                             <Field name="campus" validate={[required, minimum, twoHundred]} component={generarInput} label="Campus" />
                                         </div>
                                     </div>
                                     <label for="form_control_1">Créditos académicos: </label>
                                     <div className="row">
-                                        <div className="col-sm-8">
+                                        <div className="col-sm">
                                             <Field name="academicCredits" validate={[required]} type="number" component={generarInput} label="Créditos académicos" />
                                         </div>
                                     </div>
                                     <label for="form_control_1">Duración semestres: </label>
                                     <div className="row">
-                                        <div className="col-sm-8">
+                                        <div className="col-sm">
                                             <Field name="duration" validate={[required]} type="number" component={generarInput} label="Duración semestres" />
                                         </div>
                                     </div>
@@ -116,7 +134,7 @@ const generarInput = ({ input, placeholder, label, type, meta: { touched, warnin
 
 function mapStateToProps(state) {
     return {
-
+        messageAddPr: state.program.messageAdd
     }
 }
 
@@ -125,4 +143,4 @@ let formAdd = reduxForm({
     enableReinitialize: true
 })(Add)
 
-export default withRouter(connect(mapStateToProps, { addProgram })(formAdd));
+export default withRouter(connect(mapStateToProps, { addProgram, addMessageAdd })(formAdd));

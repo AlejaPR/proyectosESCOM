@@ -8,6 +8,11 @@ import { ToastContainer, toast } from 'react-toastify';
 import Add from './add.js';
 import Edit from './edit.js';
 
+import MaterialTable from 'material-table';
+
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+
 class ListProcess extends Component {
 
     componentDidUpdate() {
@@ -72,55 +77,83 @@ class ListProcess extends Component {
         this.props.disableProcess(localStorage.getItem('Token'), id)
     }
 
-    loadTable() {
-        return this.props.listProcess.map((pro) => {
-            return (
-                <tr key={pro.id}>
-                    <td>{pro.name}</td>
-                    <td>{pro.description}</td>
-                    <td>
-                        <button onClick={() => this.saveEdit(pro.id)} className="btn btn-sm text-light naranja" data-toggle="modal" data-target="#editModal">
-                            <i class="fas fa-pen"></i>
-                        </button>
-                        <Edit />
-                    </td>
-                    <td>
-                        <button onClick={() => this.disable(pro.id)} className="btn btn-sm text-light naranja">
-                            <i class="fas fa-ban"></i>
-                        </button>
-                    </td>
-                </tr>
-            )
-        })
-    }
+    
 
     render() {
         return (
-            <div className="container color" style={{ width: "90%" }}>
+            <div className="container" style={{ width: "90%" }}>
                 <ToastContainer />
-                <br />
-                <div className="card">
-                    <div className="card-body">
-                        <div>
-                            <Add />
-                        </div>
-                        <h4 className="card-title text-center"><strong>LISTA DE PROCESOS</strong></h4>
-                        <table className="table border table-striped">
-                            <thead className="colorBlue text-light">
-                                <tr>
-                                    <th scope="col">Proceso</th>
-                                    <th scope="col">Descripcion</th>
-                                    <th scope="col"></th>
-                                    <th scope="col"></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {this.loadTable()}
-                            </tbody>
-                        </table>
-                    </div>
+                <div className="text-left titulo">
+                    <h4>Lista de procesos</h4>
                 </div>
                 <br />
+                <div className="shadow" style={{ background: "#FFFFFF", padding: "30px" }}>
+                    <div>
+                        <Add />
+                    </div>
+                    <br />
+                    <br />
+                    <MaterialTable
+                        title=""
+                        localization={{
+                            header: {
+                                actions: ' '
+                            },
+                            pagination: {
+                                nextTooltip: 'Siguiente ',
+                                previousTooltip: 'Anterior',
+                                labelDisplayedRows: '{from}-{to} de {count}',
+                                lastTooltip: 'Ultima pagina',
+                                firstTooltip: 'Primera pagina',
+                                labelRowsSelect: 'Registros',
+                                firstAriaLabel: 'oooo'
+                            },
+                            body: {
+                                emptyDataSourceMessage: 'Aun no hay ningun proceso registrado'
+                            },
+                            toolbar: {
+                                searchTooltip: 'Buscar',
+                                searchPlaceholder: 'Buscar'
+                            }
+                        }}
+                        columns={[
+
+                            { title: 'Nombre del proceso', field: 'name' },
+                            { title: 'Descripción', field: 'description' },
+                            {
+                                title: '', field: 'id',
+                                render: rowData => {
+                                    return (
+                                        <div>
+                                            <a onClick={() => this.saveEdit(rowData.id)} data-toggle="modal" data-target="#editModal">
+                                                <EditIcon />
+                                            </a>
+                                            <Edit />
+                                        </div>
+                                    )
+                                }
+                            },
+                            {
+                                title: '', field: 'id',
+                                render: rowData => {
+                                    return (
+                                        <div>
+                                            <a onClick={() => this.disable(rowData.id)}>
+                                                <DeleteForeverIcon />
+                                            </a>
+                                        </div>
+                                    )
+                                }
+                            }
+
+                        ]}
+                        data={this.props.listProcess}
+                        options={{
+                            search: true
+                        }}
+
+                    />                    
+                </div>
             </div>
         )
     }

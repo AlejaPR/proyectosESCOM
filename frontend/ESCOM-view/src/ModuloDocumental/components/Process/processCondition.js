@@ -6,6 +6,8 @@ import { confirmAlert } from 'react-confirm-alert';
 import { ToastContainer, toast } from 'react-toastify';
 import { getListActivitiesInfo, getActivityAnnex, addMessageChange } from '../../redux/actions/activityA.js';
 import { getConditionId, approveCondition, addMessageApprove } from '../../redux/actions/conditionA.js';
+import MaterialTable from 'material-table';
+import VisibilityIcon from '@material-ui/icons/Visibility';
 
 import ProcessAnnex from './ProcessAnnex.js';
 class ProcessCondition extends Component {
@@ -32,11 +34,11 @@ class ProcessCondition extends Component {
         if (this.props.messageChange !== '') {
             switch (this.props.messageChange) {
                 case 'approved':
-                    toast.success('Aprobada con exito.');
+                    toast.success('Aprobada con éxito.');
                     this.props.addMessageChange('');
                     break;
                 case 'denied':
-                    toast.success('Denegada con exito.');
+                    toast.success('Denegada con éxito.');
                     this.props.addMessageChange('');
                     break;
                 case 'error server':
@@ -52,7 +54,7 @@ class ProcessCondition extends Component {
     approveCondition(id) {
         confirmAlert({
             title: 'Aprobar condición',
-            message: '¿Esta seguro que quiere dar como aprobada esta condición?.',
+            message: '¿Esta seguro que quiere aprobadar esta condición?.',
             buttons: [
                 {
                     label: 'Yes',
@@ -70,23 +72,6 @@ class ProcessCondition extends Component {
         });
     }
 
-    loadActivitiesInfo() {
-        return this.props.listActivityInfo.map((activity) => {
-            return (
-                <tr key={activity.id}>
-                    <td>{activity.number}</td>
-                    <td>{activity.name}</td>
-                    <td>{ activity.state === 1 ? 'Activo' : activity.state === 2 ? 'Finalizado' :<strong>Por aprobación</strong>}</td>
-                    <td>
-                        <button onClick={() => this.saveInfo(activity.id)} className="btn btn-sm text-light naranja">
-                            <i class="far fa-eye"></i>
-                        </button>
-                    </td>
-                </tr>
-            )
-        })
-    }
-
     saveInfo(id) {
         sessionStorage.setItem('activity', id)
         this.props.history.push('/ProcessActivity')
@@ -96,81 +81,138 @@ class ProcessCondition extends Component {
         this.props.getActivityAnnex(localStorage.getItem('Token'), id)
     }
 
-    loadActivitiesAnnex() {
-        return this.props.listActivityAnnex.map((activity) => {
-            return (
-                <tr key={activity.id}>
-                    <td>{activity.name}</td>
-                    <td>{activity.description}</td>
-                    <td>{ activity.state === 1 ? 'Activo' : activity.state === 2 ? 'Finalizado' :<strong>Por aprobación</strong>}</td>
-                    <td>
-                        <button onClick={() => this.saveAnnex(activity.id)} className="btn btn-sm text-light naranja" data-toggle="modal" data-target="#viewModal">
-                            <i class="far fa-eye"></i>
-                        </button>
-                        <ProcessAnnex />
-                    </td>
-                </tr>
-            )
-        })
-    }
-
     render() {
         return (
-            <div className="container color" style={{ width: "90%" }}>
+            <div className="container" style={{ width: "90%" }}>
                 <ToastContainer />
+                <div className="text-left titulo">
+                    <h4>Proceso condición</h4>
+                </div>
                 <br />
-                <div className="card">
-                    <div className="card-body">
-                        <button type="button" onClick={() => this.approveCondition(sessionStorage.getItem('condition'))} className="btn text-light btn-sm float-right naranja " >
-                            Aprobar
+                <div className="shadow" style={{ background: "#FFFFFF", padding: "30px" }}>
+                    <button type="button" onClick={() => this.approveCondition(sessionStorage.getItem('condition'))} className="btn text-light btn-sm float-right naranja " >
+                        Aprobar
                         </button>
-                        <h3 className="card-title text-center" style={{ textTransform: 'uppercase' }}><strong>{this.props.conditionPro.name}</strong></h3>
-                        <h5><strong>Descripcion</strong></h5>
-                        <p>{this.props.conditionPro.description}</p>
-                    </div>
+                    <h5 className="card-title text-center" ><strong>{this.props.conditionPro.name}</strong></h5>
+                    <h6><strong>Descripción:</strong></h6>
+                    <p>{this.props.conditionPro.description}</p>
+                    <hr />
+                    <MaterialTable
+                        title="Lista actividades informativas"
+                        localization={{
+                            header: {
+                                actions: ' '
+                            },
+                            pagination: {
+                                nextTooltip: 'Siguiente ',
+                                previousTooltip: 'Anterior',
+                                labelDisplayedRows: '{from}-{to} de {count}',
+                                lastTooltip: 'Ultima pagina',
+                                firstTooltip: 'Primera pagina',
+                                labelRowsSelect: 'Registros',
+                                firstAriaLabel: 'oooo'
+                            },
+                            body: {
+                                emptyDataSourceMessage: 'Aun no hay ninguna actividad registrada'
+                            },
+                            toolbar: {
+                                searchTooltip: 'Buscar',
+                                searchPlaceholder: 'Buscar'
+                            }
+                        }}
+                        columns={[
+                            { title: '#', field: 'number' },
+                            { title: 'Nombre de la actividad', field: 'name' },
+                            {
+                                title: 'Estado', field: 'state',
+                                render: rowData => {
+                                    if (rowData.state === 1) {
+                                        return 'Activo'
+                                    } else if (rowData.state === 2) {
+                                        return 'Finalizado'
+                                    } else {
+                                        return (<strong>Por aprobación</strong>)
+                                    }
+                                }
+                            },
+                            {
+                                title: '', field: 'id',
+                                render: rowData => {
+                                    return (
+                                        <div>
+                                            <a onClick={() => this.saveInfo(rowData.id)} data-toggle="modal" data-target="#viewModal">
+                                                <VisibilityIcon />
+                                            </a>
+                                        </div>
+                                    )
+                                }
+                            }
+                        ]}
+                        data={this.props.listActivityInfo}
+                        options={{
+                            search: true
+                        }}
+
+                    />
+                    <hr />
+                    <MaterialTable
+                        title="Lista de actividades de anexo"
+                        localization={{
+                            header: {
+                                actions: ' '
+                            },
+                            pagination: {
+                                nextTooltip: 'Siguiente ',
+                                previousTooltip: 'Anterior',
+                                labelDisplayedRows: '{from}-{to} de {count}',
+                                lastTooltip: 'Ultima pagina',
+                                firstTooltip: 'Primera pagina',
+                                labelRowsSelect: 'Registros',
+                                firstAriaLabel: 'oooo'
+                            },
+                            body: {
+                                emptyDataSourceMessage: 'Aun no hay ninguna actividad registrada'
+                            },
+                            toolbar: {
+                                searchTooltip: 'Buscar',
+                                searchPlaceholder: 'Buscar'
+                            }
+                        }}
+                        columns={[
+                            { title: 'Nombre de la actividad', field: 'name' },
+                            { title: 'Descripción', field: 'description' },
+                            {
+                                title: 'Estado', field: 'state',
+                                render: rowData => {
+                                    if (rowData.state === 1) {
+                                        return 'Activo'
+                                    } else if (rowData.state === 2) {
+                                        return 'Finalizado'
+                                    } else {
+                                        return (<strong>Por aprobación</strong>)
+                                    }
+                                }
+                            },
+                            {
+                                title: '', field: 'id',
+                                render: rowData => {
+                                    return (
+                                        <div>
+                                            <a onClick={() => this.saveInfo(rowData.id)} data-toggle="modal" data-target="#viewModal">
+                                                <VisibilityIcon />
+                                            </a>
+                                        </div>
+                                    )
+                                }
+                            }
+                        ]}
+                        data={this.props.listActivityAnnex}
+                        options={{
+                            search: true
+                        }}
+
+                    />
                 </div>
-                <div class="card">
-                    <div class="card-body">
-                        <h2 className="text-center">
-                            Lista actividades informativas
-                        </h2>
-                        <div className="pg">
-                            <table class="table border table-striped">
-                                <thead class="colorBlue text-light">
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Actividad</th>
-                                        <th scope="col">Estado</th>
-                                        <th scope="col">Tipo</th>
-                                        <th scope="col"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {this.loadActivitiesInfo()}
-                                </tbody>
-                            </table>
-                        </div>
-                        <h2 className="text-center">
-                            Lista actividades de anexos
-                        </h2>
-                        <div className="pg">
-                            <table class="table border table-striped">
-                                <thead class="colorBlue text-light">
-                                    <tr>
-                                        <th scope="col">Actividad</th>
-                                        <th scope="col">Descripcion</th>
-                                        <th scope="col">Estado</th>
-                                        <th scope="col"></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {this.loadActivitiesAnnex()}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <br />
             </div>
         )
     }

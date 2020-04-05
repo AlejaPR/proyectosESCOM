@@ -34,7 +34,7 @@ class Add extends Component {
 
                             <form className="form-horizontal" onSubmit={this.props.handleSubmit(this.handleSubmit)}>
                                 <div class="modal-header">
-                                    <h4 class="modal-title" id="exampleModalLabel">NUEVO PROCESO</h4>
+                                    <h5 class="modal-title" id="exampleModalLabel">Nuevo proceso</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -42,7 +42,7 @@ class Add extends Component {
                                 <div class="modal-body">
                                     <label for="form_control_1">Nombre: </label>
                                     <div className="row">
-                                        <div className="col-sm-8">
+                                        <div className="col-sm">
                                             <Field name="name" validate={[required, minimum, twenty]} component={generarInput} label="Nombre" />
                                         </div>
                                     </div>
@@ -50,13 +50,13 @@ class Add extends Component {
 
                                     <label for="form_control_1">Descripción: </label>
                                     <div className="row">
-                                        <div className="col-sm-8">
+                                        <div className="col-sm">
                                             <Field name="description" validate={[required, minimum, fiveHundred]} component={generarText} label="Denominación del programa" />
                                         </div>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                                     <button type="submit" className="btn btn-default naranja">Agregar</button>
                                 </div>
                             </form>

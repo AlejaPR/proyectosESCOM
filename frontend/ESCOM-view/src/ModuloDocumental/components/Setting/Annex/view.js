@@ -15,13 +15,13 @@ class View extends Component {
                         <div className="modal-content">
 
                             <div className="modal-header">
-                                <h4 className="modal-title" id="exampleModalLabel" style={{ textTransform: 'uppercase'}}>{this.props.annexV.name}</h4>
+                                <h5 className="modal-title" id="exampleModalLabel" >{this.props.annexV.name}</h5>
                                 <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div className="modal-body">
-                                <h6><strong>Descripcion</strong></h6>
+                                <h6><strong>Descripción: </strong></h6>
                                 <p>
                                     {this.props.annexV.description}
                                 </p>

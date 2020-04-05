@@ -32,7 +32,7 @@ class ProcessAnnex extends Component {
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4>Actividad Anexo</h4>
+                                <h5>Actividad Anexo</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -44,10 +44,10 @@ class ProcessAnnex extends Component {
                                 <button type="button" onClick={() => this.deniedActivity()} className="btn text-light btn-sm float-right naranja " >
                                     Denegar
                                 </button>
-                                <h3 className="card-title text-center"><strong>{this.props.activityAnnex.nameActivity}</strong></h3>
-                                <h5>Descripcion:</h5>
+                                <h4 className="card-title text-center"><strong>{this.props.activityAnnex.nameActivity}</strong></h4>
+                                <h6><strong>Descripción:</strong></h6>
                                 <p>-- {this.props.activityAnnex.descriptionActivity}</p>
-                                <h5>Anexo asociado: </h5>
+                                <h6><strong>Anexo asociado:</strong></h6>
                                 <p>-- {this.props.activityAnnex.nameAnnex === "" ? 'Ningún anexo asociado ' : this.props.activityAnnex.nameAnnex}</p>
                                 {() => {
                                     if (this.props.activityAnnex.url !== "") {

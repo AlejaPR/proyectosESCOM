@@ -30,4 +30,6 @@ public interface ThematicCoreFacadeLocal {
 
     int count();
     
+    List<ThematicCore> getList(int general);
+    
 }

@@ -83,7 +83,7 @@ class AddInfo extends Component {
                                         </div>
                                     </div>
                                     <br />
-                                    <label for="form_control_1">Descripcion: </label>
+                                    <label for="form_control_1">Descripción: </label>
                                     <div className="row">
                                         <div className="col-sm">
                                             <Field name="description" validate={[required, thousand, minimum]} type="text" component={generarText} label="Descripcion" />

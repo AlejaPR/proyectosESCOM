@@ -47,7 +47,7 @@ class Edit extends Component {
                         <div class="modal-content">
                             <form className="form-horizontal" onSubmit={this.props.handleSubmit(this.handleSubmit)}>
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Editar condicion</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel">Editar condición</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -60,7 +60,7 @@ class Edit extends Component {
                                         </div>
                                     </div>
                                     <br />
-                                    <label for="form_control_1">Descripcion: </label>
+                                    <label for="form_control_1">Descripción: </label>
                                     <div className="row">
                                         <div className="col-sm">
                                             <Field name="description" validate={[required, minimum, thousand]} component={generarText} label="Descripcion" />

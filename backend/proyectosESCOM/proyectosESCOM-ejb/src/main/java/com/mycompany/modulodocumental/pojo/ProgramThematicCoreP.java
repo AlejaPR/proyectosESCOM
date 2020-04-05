@@ -23,11 +23,20 @@ public class ProgramThematicCoreP implements Serializable {
     private String observationFinal;
     private int idProgram;
     private int idThematicCore;
+    private String nameThematicCore;
+    private String objetive;
     private DatosSolicitudPOJO requestData;
 
     public ProgramThematicCoreP() {
+        
     }
 
+    public ProgramThematicCoreP(int id, String nameThematicCore, String objetive) {
+        this.id = id;
+        this.nameThematicCore = nameThematicCore;
+        this.objetive = objetive;
+    }
+    
     public ProgramThematicCoreP(int id, String contributeObjetive, String contributeProfessional, String contributeOccupational, String objectiveOutput, String teamContribution, String observationFinal, int idProgram, int idThematicCore) {
         this.id = id;
         this.contributeObjetive = contributeObjetive;

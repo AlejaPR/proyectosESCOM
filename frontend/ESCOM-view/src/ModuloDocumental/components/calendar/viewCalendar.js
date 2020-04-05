@@ -31,40 +31,39 @@ class ViewCalendar extends Component {
     render() {
         return (
             <div className="container color" style={{ width: "90%" }}>
-                <div class="card">
-                    <div class="card-header text-center">
-                        Calendario condiciones
-                    </div>
-                    <div class="card-body">
-                        <Calendar
-                            popup
-                            messages={{
-                              showMore: total => (
+                <div className="text-left titulo">
+                    <h4>Calendario de condiciones</h4>
+                </div>
+                <br />
+                <div className="shadow" style={{ background: "#FFFFFF", padding: "30px" }}>
+                    <Calendar
+                        popup
+                        messages={{
+                            showMore: total => (
                                 <div
-                                  style={{ cursor: 'pointer' }}
-                                  onMouseOver={e => {
-                                    e.stopPropagation();
-                                    e.preventDefault();
-                                  }}
+                                    style={{ cursor: 'pointer' }}
+                                    onMouseOver={e => {
+                                        e.stopPropagation();
+                                        e.preventDefault();
+                                    }}
                                 >{`+${total} more`}
                                 </div>
-                              ),
-                            }}
-                            localizer={localizer}
-                            events={this.listEvents()}
-                            startAccessor="start"
-                            endAccessor="end"
-                            style={{ height: 700 }}
-                            messages={{
-                                next: "sig",
-                                previous: "ant",
-                                today: "Hoy",
-                                month: "Mes",
-                                week: "Semana",
-                                day: "Día"
-                            }}
-                        />
-                    </div>
+                            ),
+                        }}
+                        localizer={localizer}
+                        events={this.listEvents()}
+                        startAccessor="start"
+                        endAccessor="end"
+                        style={{ height: 700 }}
+                        messages={{
+                            next: "sig",
+                            previous: "ant",
+                            today: "Hoy",
+                            month: "Mes",
+                            week: "Semana",
+                            day: "Día"
+                        }}
+                    />
                 </div>
             </div>
         );

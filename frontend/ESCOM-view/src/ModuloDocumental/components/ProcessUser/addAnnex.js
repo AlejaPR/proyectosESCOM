@@ -20,7 +20,7 @@ class AddAnnex extends Component {
         if (this.props.messageAssociateA !== '') {
             switch (this.props.messageAssociateA) {
                 case 'associate':
-                    toast.success('Se asocio con exito.');
+                    toast.success('Se asocio con éxito.');
                     this.props.addMessageAssociate('');
                     this.props.getActivityAnnex(localStorage.getItem('Token'), sessionStorage.getItem('activity'))
                     break;
@@ -36,7 +36,7 @@ class AddAnnex extends Component {
         if (this.props.messageChange !== '') {
             switch (this.props.messageChange) {
                 case 'notify':
-                    toast.success('Notificada con exito.');
+                    toast.success('Notificada con éxito.');
                     this.props.addMessageChange('');
                     break;
                 case 'error server':
@@ -73,42 +73,43 @@ class AddAnnex extends Component {
 
     render() {
         return (
-            <div className="container color" style={{ width: "90%" }}>
+            <div className="container" style={{ width: "90%" }}>
                 <ToastContainer />
+                <div className="text-left titulo">
+                    <h4>Información de anexo</h4>
+                </div>
                 <br />
-                <div className="card">
-                    <div className="card-body">
-                        <button type="button" onClick={() => this.notifyActivity()} className="btn text-light btn-sm float-right naranja " >
-                            Notificar
+                <div className="shadow" style={{ background: "#FFFFFF", padding: "30px" }}>
+                    <button type="button" onClick={() => this.notifyActivity()} className="btn text-light btn-sm float-right naranja " >
+                        Notificar
                         </button>
-                        <h3 className="card-title text-center"><strong>{this.props.activityAnnex.nameActivity}</strong></h3>
-                        <h5>Descripcion:</h5>
-                        <p>-- {this.props.activityAnnex.descriptionActivity}</p>
-                        <h5>Anexo asociado: </h5>
-                        <p>-- {this.props.activityAnnex.nameAnnex === "" ? 'Ningún anexo asociado ' : this.props.activityAnnex.nameAnnex}</p>
-                        {() => {
-                            if (this.props.activityAnnex.url !== "") {
-                                return (
-                                    <Link to={'/' + this.props.activityAnnex.url} target="_blank" download><i class="fas fa-download"></i></Link>
-                                )
-                            }
+                    <h5 className="card-title text-center"><strong>{this.props.activityAnnex.nameActivity}</strong></h5>
+                    <h6><strong>Descripción:</strong></h6>
+                    <p>-- {this.props.activityAnnex.descriptionActivity}</p>
+                    <h6><strong>Anexo asociado:</strong></h6>
+                    <p>-- {this.props.activityAnnex.nameAnnex === "" ? 'Ningún anexo asociado ' : this.props.activityAnnex.nameAnnex}</p>
+                    {() => {
+                        if (this.props.activityAnnex.url !== "") {
+                            return (
+                                <Link to={'/' + this.props.activityAnnex.url} target="_blank" download><i class="fas fa-download"></i></Link>
+                            )
                         }
-                        }
-                        <hr />
-                        <h4>Asociar un anexo a la activiadad:</h4>
-                        <form className="form-horizontal" onSubmit={this.props.handleSubmit(this.handleSubmit)}>
-                            <div className="row">
-                                <div className="col-sm-4">
-                                    <Field name="annex" validate={[select]} className="bs-select form-control" component={generarSelect}>
-                                        <option selected value="0">Seleccione...</option>
-                                        {this.loadList()}
-                                    </Field>
-                                </div>
+                    }
+                    }
+                    <hr />
+                    <h5>Asociar un anexo a la actividad:</h5>
+                    <form className="form-horizontal" onSubmit={this.props.handleSubmit(this.handleSubmit)}>
+                        <div className="row">
+                            <div className="col-sm-4">
+                                <Field name="annex" validate={[select]} className="bs-select form-control" component={generarSelect}>
+                                    <option selected value="0">Seleccione...</option>
+                                    {this.loadList()}
+                                </Field>
                             </div>
-                            <br />
-                            <button type="submit" className="btn btn-default naranja">Agregar</button>
-                        </form>
-                    </div>
+                        </div>
+                        <br />
+                        <button type="submit" className="btn btn-default naranja">Agregar</button>
+                    </form>
                 </div>
 
                 <br />

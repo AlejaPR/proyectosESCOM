@@ -118,14 +118,14 @@ class AddVersion extends Component {
                             <form name="agregar" className="form-horizontal" onSubmit={this.props.handleSubmit(this.handleAdd)} id="hola">
 
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Agregar Annexo</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel">Agregar anexo</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
                                 <div class="modal-body">
 
-                                    <label for="form_control_1">Descripcion: </label>
+                                    <label for="form_control_1">Descripción: </label>
                                     <div className="row">
                                         <div className="col-sm-5">
                                             <Field name="descriptionA" validate={[required]} component={generarInput} label="Descripcion" />

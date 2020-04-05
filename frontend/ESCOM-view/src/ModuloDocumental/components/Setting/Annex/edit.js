@@ -24,7 +24,6 @@ class Edit extends Component {
     render() {
         return (
             <div>
-                {/** modal element add */}
                 <div className="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div className="modal-dialog" role="document">
                         <div className="modal-content">
@@ -45,14 +44,14 @@ class Edit extends Component {
                                         </div>
                                     </div>
                                     <br />
-                                    <label for="form_control_1">Descripcion: </label>
+                                    <label for="form_control_1">Descripción: </label>
                                     <div className="row">
                                         <div className="col-sm">
                                             <Field name="description" validate={[required, fiveHundred, minimum]} component={generarText} label="Descripcion" />
                                         </div>
                                     </div>
                                     <br />
-                                    <label for="form_control_1">Palabras claves: </label>
+                                    <label for="form_control_1">Palabras clave: </label>
                                     <div className="row">
                                         <div className="col-sm">
                                             <Field name="keywords" validate={[required, minimum, twoHundred]} component={generarInput} label="Palabras claves" />

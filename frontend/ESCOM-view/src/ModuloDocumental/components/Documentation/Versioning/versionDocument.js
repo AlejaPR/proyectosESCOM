@@ -4,88 +4,136 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { getProgramId } from '../../../redux/actions/programA';
 import { getCurrentVersions, getOldVersions } from '../../../redux/actions/documentVersionA.js';
+import MaterialTable from 'material-table';
 
 class versionDocument extends Component {
+
     componentDidMount() {
-        this.props.getProgramId(localStorage.getItem('Token'),sessionStorage.getItem('programId'))
-        this.props.getOldVersions(localStorage.getItem('Token'),sessionStorage.getItem('programId'))
-        this.props.getCurrentVersions(localStorage.getItem('Token'),sessionStorage.getItem('documentId'))
-    }
-
-    loadTableCurrent() {
-        return this.props.listCurrent.map((version) => {
-            return (
-                <tr key={version.id}>
-                    <td>{version.description}</td>
-                    <td>{'V-' + version.version}</td>
-                    <td>{version.state === 1 ? 'activo' : 'no activo'}</td>
-                    <td><Link to={version.location !== '' ? '/' + version.location : ''} target="_blank" download><i class="fas fa-download"></i></Link></td>
-                </tr>
-            )
-        })
-    }
-
-    loadTableOld() {
-        return this.props.listOld.map((version) => {
-            return (
-                <tr key={version.id}>
-                    <td>{version.description}</td>
-                    <td>{'V-' + version.version}</td>
-                    <td><Link to={version.location !== '' ? '/' + version.location : ''} target="_blank" download><i class="fas fa-download"></i></Link></td>
-                </tr>
-            )
-        })
+        this.props.getProgramId(localStorage.getItem('Token'), sessionStorage.getItem('programId'))
+        this.props.getOldVersions(localStorage.getItem('Token'), sessionStorage.getItem('programId'))
+        this.props.getCurrentVersions(localStorage.getItem('Token'), sessionStorage.getItem('documentId'))
     }
 
     render() {
         return (
-            <div className="container color" style={{ width: "90%" }}>
-                <div class="card">
-                    <h2 className="text-center"><strong>{this.props.program.name}</strong></h2>
+            <div className="container" style={{ width: "90%" }}>
+                <div className="text-left titulo">
+                    <h4>Lista versiones documento maestro</h4>
+                </div>
+                <br/>
+                <div className="shadow" style={{ background: "#FFFFFF", padding: "30px" }}>
+                    <h5 className="text-center"><strong>{this.props.program.name}</strong></h5>
                     <h6 className="text-center">Sede:{this.props.program.campus}</h6>
+                    <hr />
+                    <MaterialTable
+                        title="Versiones documento actual"
+                        localization={{
+                            header: {
+                                actions: ' '
+                            },
+                            pagination: {
+                                nextTooltip: 'Siguiente ',
+                                previousTooltip: 'Anterior',
+                                labelDisplayedRows: '{from}-{to} de {count}',
+                                lastTooltip: 'Ultima pagina',
+                                firstTooltip: 'Primera pagina',
+                                labelRowsSelect: 'Registros',
+                                firstAriaLabel: 'oooo'
+                            },
+                            body: {
+                                emptyDataSourceMessage: 'Aun no hay ningun documento registrado'
+                            },
+                            toolbar: {
+                                searchTooltip: 'Buscar',
+                                searchPlaceholder: 'Buscar'
+                            }
+                        }}
+                        columns={[
+                            { title: 'Descripción', field: 'description' },
+                            {
+                                title: 'Versión', field: 'version',
+                                render: rowData => {
+                                    return 'V-' + rowData.version
+                                }
 
-                    <div class="card-body">
-                        <div class="card">
-                            <div class="card-body">
-                                <h5 className="text-center py-3"><strong>Versiones documento actual</strong></h5>
-                                <div >
-                                    <table class="table border table-striped">
-                                        <thead class="colorBlue text-light">
-                                            <tr>
-                                                <th scope="col">Descripción</th>
-                                                <th scope="col">Version</th>
-                                                <th scope="col">Estado</th>
-                                                <th scope="col">Descargar</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {this.loadTableCurrent()}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
+                            },
+                            {
+                                title: 'Estado', field: 'state',
+                                render: rowData => {
+                                    if (rowData.state === 1) {
+                                        return 'Activo'
+                                    } else {
+                                        return 'No activo'
+                                    }
+                                }
+                            },
+                            {
+                                title: '', field: 'location',
+                                render: rowData => {
+                                    if (rowData.location !== null) {
+                                        return <Link to={'/' + rowData.location} target="_blank" download><i class="fas fa-download"></i></Link>
+                                    } else {
+                                        return ''
+                                    }
+                                }
+                            }
+                        ]}
+                        data={this.props.listCurrent}
+                        options={{
+                            search: true
+                        }}
 
-                        <div class="card">
-                            <div class="card-body">
-                                <h4 className="text-center py-3"><strong>Documentos anteriores</strong></h4>
-                                <div >
-                                    <table class="table border table-striped">
-                                        <thead class="colorBlue text-light">
-                                            <tr>
-                                                <th scope="col">Descripción</th>
-                                                <th scope="col">Version</th>
-                                                <th scope="col">Descargar</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {this.loadTableOld()}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    />
+                    <hr />
+                    <MaterialTable
+                        title="Documentos anteriores"
+                        localization={{
+                            header: {
+                                actions: ' '
+                            },
+                            pagination: {
+                                nextTooltip: 'Siguiente ',
+                                previousTooltip: 'Anterior',
+                                labelDisplayedRows: '{from}-{to} de {count}',
+                                lastTooltip: 'Ultima pagina',
+                                firstTooltip: 'Primera pagina',
+                                labelRowsSelect: 'Registros',
+                                firstAriaLabel: 'oooo'
+                            },
+                            body: {
+                                emptyDataSourceMessage: 'Aun no hay ningun documento registrado'
+                            },
+                            toolbar: {
+                                searchTooltip: 'Buscar',
+                                searchPlaceholder: 'Buscar'
+                            }
+                        }}
+                        columns={[
+                            { title: 'Descripción', field: 'description' },
+                            {
+                                title: 'Versión', field: 'version',
+                                render: rowData => {
+                                    return 'V-' + rowData.version
+                                }
+
+                            },
+                            {
+                                title: '', field: 'location',
+                                render: rowData => {
+                                    if (rowData.location !== null) {
+                                        return <Link to={'/' + rowData.location} target="_blank" download><i class="fas fa-download"></i></Link>
+                                    } else {
+                                        return ''
+                                    }
+                                }
+                            }
+                        ]}
+                        data={this.props.listOld}
+                        options={{
+                            search: true
+                        }}
+
+                    />
                 </div>
             </div>
         )

@@ -101,8 +101,9 @@ public class AnnexLogic implements AnnexLogicLocal {
                 if (list.size() > 0) {
                     add.setLink(list.get(0).getLocation());
                 }
+                add.setNameProgram(annex.getFkAxProgram().getName());
                 data.add(add);
-            }
+            }            
             return data;
         } catch (Exception ex) {
             bitacora.registroLogger(CLASS, "Lista anexos", Level.SEVERE, ex.getMessage());
@@ -133,6 +134,7 @@ public class AnnexLogic implements AnnexLogicLocal {
                 if (list.size() > 0) {
                     add.setLink(list.get(0).getLocation());
                 }
+                add.setNameProgram(annex.getFkAxProgram().getName());
                 data.add(add);
             }
             return data;

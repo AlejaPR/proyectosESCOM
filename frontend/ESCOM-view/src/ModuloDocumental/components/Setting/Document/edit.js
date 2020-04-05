@@ -49,15 +49,15 @@ class Edit extends Component {
                         <div class="modal-content">
                             <form className="form-horizontal" onSubmit={this.props.handleSubmit(this.handleSubmit)}>
                                 <div class="modal-header">
-                                    <h4 class="modal-title" id="exampleModalLabel">NUEVO DOCUMENTO</h4>
+                                    <h5 class="modal-title" id="exampleModalLabel">Editar documento</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <label for="form_control_1">Programa academico: </label>
+                                    <label for="form_control_1">Programa académico: </label>
                                     <div className="row">
-                                        <div className="col-sm-8">
+                                        <div className="col-sm">
                                             <Field name="program" validate={[select]} className="bs-select form-control" component="select">
                                                 <option selected value="0">Seleccione...</option>
                                                 {this.loadProgram()}
@@ -68,7 +68,7 @@ class Edit extends Component {
 
                                     <label for="form_control_1">Descripción: </label>
                                     <div className="row">
-                                        <div className="col-sm-8">
+                                        <div className="col-sm">
                                             <Field name="description" validate={[required, thousand, minimum]} component={generarText} label="Denominación del programa" />
                                         </div>
                                     </div>
@@ -76,7 +76,7 @@ class Edit extends Component {
 
                                     <label for="form_control_1">Usuario encargado: </label>
                                     <div className="row">
-                                        <div className="col-sm-8">
+                                        <div className="col-sm">
                                             <Field name="idUser" validate={[select]} className="bs-select form-control" component="select">
                                                 <option selected value="0">Seleccione...</option>
                                                 {this.loadUser()}
@@ -87,7 +87,7 @@ class Edit extends Component {
 
                                     <label for="form_control_1">Tipo Documento: </label>
                                     <div className="row">
-                                        <div className="col-sm-8">
+                                        <div className="col-sm">
                                             <Field name="type" validate={[required, twoHundred, minimum]} component={generarInput} label="Denominación del programa" />
                                         </div>
 

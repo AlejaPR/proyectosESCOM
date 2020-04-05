@@ -37,10 +37,6 @@ public class ThematicCore implements Serializable {
     private int credits;
     @Column(name = "TC_OBJECTIVE")
     private String objective;
-    
-    @JoinColumn(name = "FK_TC_GENERAL", referencedColumnName = "PK_GP_ID")
-    @ManyToOne
-    private GeneralProgram fkTcGeneral;
 
     @OneToMany(mappedBy = "fkPtThematicCore")
     private List<ProgramThematicCore> listProgramThematicCore;
@@ -104,14 +100,6 @@ public class ThematicCore implements Serializable {
 
     public void setFkTcTrainingArea(TrainingArea fkTcTrainingArea) {
         this.fkTcTrainingArea = fkTcTrainingArea;
-    }
-
-    public GeneralProgram getFkTcGeneral() {
-        return fkTcGeneral;
-    }
-
-    public void setFkTcGeneral(GeneralProgram fkTcGeneral) {
-        this.fkTcGeneral = fkTcGeneral;
     }
 
 }

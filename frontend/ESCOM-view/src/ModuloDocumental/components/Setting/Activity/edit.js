@@ -34,7 +34,7 @@ class Edit extends Component {
             information: '',
             state: this.props.activity.state,
             idCondition: sessionStorage.getItem('condition'),
-            type: formValues.type,
+            type: this.props.activity.type,
             requestData: null
         }
         this.props.editActivity(localStorage.getItem('Token'), activityE);
@@ -57,28 +57,18 @@ class Edit extends Component {
                                 <div class="modal-body">
                                     <label for="form_control_1">Nombre: </label>
                                     <div className="row">
-                                        <div className="col-sm-5">
+                                        <div className="col-sm">
                                             <Field name="name" type="text" validate={[required, minimum, twoHundred]} component={generarInput} label="Nombre" />
                                         </div>
                                     </div>
                                     <br />
-                                    <label for="form_control_1">Descripcion: </label>
+                                    <label for="form_control_1">Descripción: </label>
                                     <div className="row">
-                                        <div className="col-sm-5">
+                                        <div className="col-sm">
                                             <Field name="description" validate={[required, thousand, minimum]} type="text" component={generarText} label="Descripcion" />
                                         </div>
                                     </div>
-                                    <br />
-                                    <label for="form_control_1">Tipo actividad: </label>
-                                    <div className="row">
-                                        <div className="col-sm-5">
-                                            <Field name="type" validate={[select]} className="bs-select form-control" component={generarSelect}>
-                                                <option value="0">Seleccione...</option>
-                                                <option value="1">Informativa</option>
-                                                <option value="2">Anexo</option>
-                                            </Field>
-                                        </div>
-                                    </div>
+                                    <br />                                    
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
