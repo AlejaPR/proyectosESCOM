@@ -17,6 +17,7 @@ public class CompetitionGeneralP implements Serializable {
     private int id;
     private String name;
     private int idCompetition;
+    private String nameCompetition;
     private DatosSolicitudPOJO requestData;
 
     public CompetitionGeneralP() {
@@ -50,6 +51,14 @@ public class CompetitionGeneralP implements Serializable {
 
     public void setIdCompetition(int idCompetition) {
         this.idCompetition = idCompetition;
+    }
+
+    public String getNameCompetition() {
+        return nameCompetition;
+    }
+
+    public void setNameCompetition(String nameCompetition) {
+        this.nameCompetition = nameCompetition;
     }
 
     public DatosSolicitudPOJO getRequestData() {

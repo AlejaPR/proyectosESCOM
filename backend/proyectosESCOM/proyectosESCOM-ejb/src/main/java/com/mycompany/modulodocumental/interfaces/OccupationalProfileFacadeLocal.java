@@ -30,4 +30,5 @@ public interface OccupationalProfileFacadeLocal {
 
     int count();
     
+    List<OccupationalProfile> getList(int general);
 }

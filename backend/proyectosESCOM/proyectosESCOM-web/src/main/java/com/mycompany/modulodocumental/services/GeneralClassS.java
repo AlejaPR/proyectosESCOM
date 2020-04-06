@@ -37,7 +37,7 @@ public class GeneralClassS {
 
     @GET
     @Path("/list/{id}/{table}")
-    public Response getList(@PathParam("id") int id, @PathParam("id") String table) {
+    public Response getList(@PathParam("id") int id, @PathParam("table") String table) {
         try {
             List<GeneralClassP> data = generalClassLogic.getList(id, table);
             return Response.status(Response.Status.OK).entity(data).build();

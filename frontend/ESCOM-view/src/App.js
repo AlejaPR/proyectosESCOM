@@ -59,6 +59,8 @@ import UserCondition from "./ModuloDocumental/components/ProcessUser/userConditi
 import Prueba from "./ModuloDocumental/components/prueba.js";
 import Classification from './ModuloDocumental/components/Classification/classification.js';
 import ViewCalendar from './ModuloDocumental/components/calendar/viewCalendar.js';
+import ThematicList from './ModuloDocumental/components/Matrix/Fill/thematicList.js';
+import ItemList from './ModuloDocumental/components/Matrix/Config/itemList.js';
 
 //rutas
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom"
@@ -409,7 +411,24 @@ class App extends React.Component {
 								</div>
 							</>
 						</RutaProtegida>
-
+						<RutaProtegida path="/ThematicList">
+							<>
+								<LeaderMenu />
+								<MenuSuperior />
+								<div id="wrapper">
+									<ThematicList />
+								</div>
+							</>
+						</RutaProtegida>
+						<RutaProtegida path="/ItemList">
+							<>
+								<LeaderMenu />
+								<MenuSuperior />
+								<div id="wrapper">
+									<ItemList />
+								</div>
+							</>
+						</RutaProtegida>
 						<Route component={NotFound} />
 					</Switch>
 				</Router>

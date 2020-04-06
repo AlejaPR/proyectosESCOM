@@ -7,9 +7,11 @@ package com.mycompany.modulodocumental.ejb;
 
 import com.mycompany.modulodocumental.entity.OccupationalProfile;
 import com.mycompany.modulodocumental.interfaces.OccupationalProfileFacadeLocal;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -27,6 +29,14 @@ public class OccupationalProfileFacade extends AbstractFacade<OccupationalProfil
 
     public OccupationalProfileFacade() {
         super(OccupationalProfile.class);
+    }
+
+    @Override
+    public List<OccupationalProfile> getList(int general) {
+        Query query = em.createQuery("SELECT o FROM OccupationalProfile o WHERE o.fkOpGeneral.id = ?1 ");
+        query.setParameter(1, general);
+        List<OccupationalProfile> data = query.getResultList();
+        return data;
     }
     
 }

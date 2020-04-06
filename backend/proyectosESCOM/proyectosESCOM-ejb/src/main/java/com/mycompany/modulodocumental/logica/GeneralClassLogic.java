@@ -37,7 +37,7 @@ import javax.ejb.Stateless;
  */
 @Stateless
 public class GeneralClassLogic implements GeneralClassLogicLocal {
-
+    
     @EJB
     private ThematicFacadeLocal thematicFacade;
     @EJB
@@ -56,9 +56,9 @@ public class GeneralClassLogic implements GeneralClassLogicLocal {
     private GeneralProgramFacadeLocal generalProgramFacade;
     @EJB
     UtilitarioFacadeLocal bitacora;
-
+    
     private static final String CLASS = "Clase logica general";
-
+    
     @Override
     public List<GeneralClassP> getList(int program, String table) throws GenericException {
         try {
@@ -66,42 +66,42 @@ public class GeneralClassLogic implements GeneralClassLogicLocal {
             List<GeneralClassP> data = new ArrayList<>();
             switch (table) {
                 case "Thematic":
-                    List<Thematic> listT = pro.getFkProGeneral().getListThematic();
+                    List<Thematic> listT = thematicFacade.getList(pro.getFkProGeneral().getId());
                     for (Thematic list1 : listT) {
                         GeneralClassP aux = new GeneralClassP(list1.getId(), list1.getName());
                         data.add(aux);
                     }
                     return data;
                 case "TrainingArea":
-                    List<TrainingArea> listTA = pro.getFkProGeneral().getListTrainingArea();
+                    List<TrainingArea> listTA = trainingAreaFacade.getList(pro.getFkProGeneral().getId());
                     for (TrainingArea list1 : listTA) {
                         GeneralClassP aux = new GeneralClassP(list1.getId(), list1.getName());
                         data.add(aux);
                     }
                     return data;
                 case "Competition":
-                    List<Competition> listC = pro.getFkProGeneral().getListCompetition();
+                    List<Competition> listC = competitionFacade.getList(pro.getFkProGeneral().getId());
                     for (Competition list1 : listC) {
                         GeneralClassP aux = new GeneralClassP(list1.getId(), list1.getName());
                         data.add(aux);
                     }
                     return data;
                 case "DistinctiveFeature":
-                    List<DistinctiveFeature> listD = pro.getFkProGeneral().getListDistinctiveFeature();
+                    List<DistinctiveFeature> listD = distinctiveFeatureFacade.getList(pro.getFkProGeneral().getId());
                     for (DistinctiveFeature list1 : listD) {
                         GeneralClassP aux = new GeneralClassP(list1.getId(), list1.getName());
                         data.add(aux);
                     }
                     return data;
                 case "OccupationalProfile":
-                    List<OccupationalProfile> listO = pro.getFkProGeneral().getListOccupationalProfile();
+                    List<OccupationalProfile> listO = occupationalProfileFacade.getList(pro.getFkProGeneral().getId());
                     for (OccupationalProfile list1 : listO) {
                         GeneralClassP aux = new GeneralClassP(list1.getId(), list1.getName());
                         data.add(aux);
                     }
                     return data;
                 case "ProfessionalProfile":
-                    List<ProfessionalProfile> listP = pro.getFkProGeneral().getListProfessionalProfile();
+                    List<ProfessionalProfile> listP = professionalProfielFacade.getList(pro.getFkProGeneral().getId());
                     for (ProfessionalProfile list1 : listP) {
                         GeneralClassP aux = new GeneralClassP(list1.getId(), list1.getName());
                         data.add(aux);
@@ -115,7 +115,7 @@ public class GeneralClassLogic implements GeneralClassLogicLocal {
             throw new GenericException("error server");
         }
     }
-
+    
     @Override
     public GeneralClassP get(int id, String table) throws GenericException {
         try {
@@ -152,11 +152,12 @@ public class GeneralClassLogic implements GeneralClassLogicLocal {
             throw new GenericException("error server");
         }
     }
-
+    
     @Override
     public String add(GeneralClassP generalC) throws GenericException {
         try {
-            GeneralProgram gen = generalProgramFacade.find(generalC.getIdGeneral());
+            Program pro = programFacade.find(generalC.getIdGeneral());
+            GeneralProgram gen = pro.getFkProGeneral();
             switch (generalC.getTable()) {
                 case "Thematic":
                     Thematic data = new Thematic(generalC.getName());
@@ -202,18 +203,17 @@ public class GeneralClassLogic implements GeneralClassLogicLocal {
                     return "addP";
                 default:
                     throw new GenericException("error server");
-
+                
             }
         } catch (Exception ex) {
             bitacora.registroLogger(CLASS, "Agregar", Level.SEVERE, ex.getMessage());
             throw new GenericException("error server");
         }
     }
-
+    
     @Override
     public String edit(GeneralClassP generalC) throws GenericException {
         try {
-            String table = "";
             switch (generalC.getTable()) {
                 case "Thematic":
                     Thematic data = thematicFacade.find(generalC.getId());
@@ -265,7 +265,7 @@ public class GeneralClassLogic implements GeneralClassLogicLocal {
             throw new GenericException("error server");
         }
     }
-
+    
     @Override
     public String delete(GeneralClassP generalC) throws GenericException {
         try {

@@ -49,6 +49,7 @@ public class CompetitionGeneralLogic implements CompetitionGeneralLogicLocal {
             List<CompetitionGeneralP> data = new ArrayList<>();
             for (CompetitionGeneral list : listAux) {
                 CompetitionGeneralP aux = new CompetitionGeneralP(list.getId(), list.getName(), list.getFkCgCompetition().getId());
+                aux.setNameCompetition(list.getFkCgCompetition().getName());
                 data.add(aux);
             }
             return data;
@@ -63,6 +64,7 @@ public class CompetitionGeneralLogic implements CompetitionGeneralLogicLocal {
         try {
             CompetitionGeneral aux = competitionGeneralFacade.find(id);
             CompetitionGeneralP data = new CompetitionGeneralP(aux.getId(), aux.getName(), aux.getFkCgCompetition().getId());
+            data.setNameCompetition(aux.getFkCgCompetition().getName());
             return data;
         } catch (Exception ex) {
             bitacora.registroLogger(CLASS, "Obtener", Level.SEVERE, ex.getMessage());

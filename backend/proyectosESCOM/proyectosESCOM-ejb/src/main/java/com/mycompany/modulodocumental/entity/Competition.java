@@ -27,7 +27,7 @@ public class Competition implements Serializable {
     @Id
     @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "PK_AX_ID")
+    @Column(name = "PK_CT_ID")
     private int id;
     @Column(name = "CT_NAME")
     private String name;

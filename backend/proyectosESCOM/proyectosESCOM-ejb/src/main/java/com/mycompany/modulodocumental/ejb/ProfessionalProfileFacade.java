@@ -7,9 +7,11 @@ package com.mycompany.modulodocumental.ejb;
 
 import com.mycompany.modulodocumental.entity.ProfessionalProfile;
 import com.mycompany.modulodocumental.interfaces.ProfessionalProfileFacadeLocal;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -27,6 +29,14 @@ public class ProfessionalProfileFacade extends AbstractFacade<ProfessionalProfil
 
     public ProfessionalProfileFacade() {
         super(ProfessionalProfile.class);
+    }
+
+    @Override
+    public List<ProfessionalProfile> getList(int general) {
+        Query query = em.createQuery("SELECT p FROM ProfessionalProfile p WHERE p.fkPpGeneral.id = ?1 ");
+        query.setParameter(1, general);
+        List<ProfessionalProfile> data = query.getResultList();
+        return data;
     }
     
 }

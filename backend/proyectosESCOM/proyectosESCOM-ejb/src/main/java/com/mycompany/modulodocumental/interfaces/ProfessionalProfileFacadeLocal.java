@@ -30,4 +30,5 @@ public interface ProfessionalProfileFacadeLocal {
 
     int count();
     
+    List<ProfessionalProfile> getList(int general);
 }

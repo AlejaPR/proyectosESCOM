@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux';
 import { reducerUsuario } from './reducerUsuario.js';
-import { reducerConfiguracion} from './reducerConfiguracion.js';
-import { reducerModulo} from './reducerModulo.js';
-import {reducerActividad} from './reducerActividad.js'
-import { reducerReporte} from './reducerReporte.js';
-import {reducer as formReducer} from 'redux-form';
+import { reducerConfiguracion } from './reducerConfiguracion.js';
+import { reducerModulo } from './reducerModulo.js';
+import { reducerActividad } from './reducerActividad.js'
+import { reducerReporte } from './reducerReporte.js';
+import { reducer as formReducer } from 'redux-form';
 import { reducersCondition } from '../../ModuloDocumental/redux/reducers/conditionR.js';
 import { reducersProcess } from '../../ModuloDocumental/redux/reducers/processR.js';
 import { reducersActivity } from '../../ModuloDocumental/redux/reducers/activityR.js';
@@ -15,13 +15,14 @@ import { reducersAnnexVersion } from '../../ModuloDocumental/redux/reducers/anne
 import { reducersDocumentVersion } from '../../ModuloDocumental/redux/reducers/documentVersionR.js';
 import { reducersUserCondition } from "../../ModuloDocumental/redux/reducers/userConditionR.js";
 import { reducersCommentary } from "../../ModuloDocumental/redux/reducers/commentaryR.js";
+import { reducersGeneralClass } from "../../ModuloDocumental/redux/reducers/generalClassR.js";
 
 const rootReducer = combineReducers({
-    rep:reducerReporte,
+    rep: reducerReporte,
     user: reducerUsuario,
-    conf:reducerConfiguracion,
-    mod:reducerModulo,
-    act:reducerActividad,
+    conf: reducerConfiguracion,
+    mod: reducerModulo,
+    act: reducerActividad,
     condition: reducersCondition,
     process: reducersProcess,
     activity: reducersActivity,
@@ -32,7 +33,8 @@ const rootReducer = combineReducers({
     documentVersion: reducersDocumentVersion,
     userCondition: reducersUserCondition,
     commentary: reducersCommentary,
-    form:formReducer
+    generalClass: reducersGeneralClass,
+    form: formReducer
 })
 
 export default rootReducer;

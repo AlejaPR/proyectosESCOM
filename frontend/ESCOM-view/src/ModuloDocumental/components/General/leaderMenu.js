@@ -13,6 +13,8 @@ import SettingsIcon from '@material-ui/icons/Settings';
 import AccountTreeIcon from '@material-ui/icons/AccountTree';
 import AmpStoriesIcon from '@material-ui/icons/AmpStories';
 import ArchiveIcon from '@material-ui/icons/Archive';
+import ViewListIcon from '@material-ui/icons/ViewList';
+
 
 class MenuLateral extends Component {
 	state = {
@@ -147,13 +149,13 @@ class MenuLateral extends Component {
 				</li>
 
 				<div className="collapse" id="collapseDoc">
-					<li className="nav-item" style={{ height: "65px" }} data-toggle="collapse" data-target="#collapseDoc" aria-expanded="false" aria-controls="collapseDoc">
+					<li className="nav-item" style={{ height: "65px" }}>
 						<Link to="/SearchAnnexs" name="hoverActividad" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
 							style={this.fondoBarr()} >
 							<span className="title letra">Búsqueda anexos</span>
 						</Link>
 					</li>
-					<li className="nav-item" style={{ height: "65px" }} data-toggle="collapse" data-target="#collapseDoc" aria-expanded="false" aria-controls="collapseDoc">
+					<li className="nav-item" style={{ height: "65px" }}>
 						<Link to="/VersionDocument" name="hoverActividad" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
 							style={this.fondoBarr()} >
 							<span className="title letra">Versiones Documento</span>
@@ -177,6 +179,28 @@ class MenuLateral extends Component {
 						<span className="title letra">Clasificación Documental</span>
 					</Link>
 				</li>
+				<li className="nav-item" style={{ height: "65px" }} data-toggle="collapse" data-target="#collapseMatrix" aria-expanded="false" aria-controls="collapseMatrix">
+					<Link name="hoverReportes" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
+						style={this.fondoBarr()}>
+						<ViewListIcon />
+						<br />
+						<span className="title letra">Matrices</span>
+					</Link>
+				</li>
+				<div className="collapse" id="collapseMatrix">
+					<li className="nav-item" style={{ height: "65px" }} data-toggle="collapse" >
+						<Link to="/ItemList" name="hoverActividad" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
+							style={this.fondoBarr()} >
+							<span className="title letra">Configuración</span>
+						</Link>
+					</li>
+					<li className="nav-item" style={{ height: "65px" }} data-toggle="collapse" >
+						<Link to="/ThematicList" name="hoverActividad" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
+							style={this.fondoBarr()} >
+							<span className="title letra">Digitación</span>
+						</Link>
+					</li>
+				</div>
 			</div>
 
 		)
@@ -191,58 +215,5 @@ function mapStateToProps(state) {
 	}
 }
 
-
-/*
-
-
-
-
-			
-
-			<li className="nav-item">
-				<Link to="/UserCondition" name="hoverInicio" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
-					style={this.state.hoverInicio ? fondoHover : fondoMenuLateral} >
-					<img src={home} alt="" width="25" height="25" />
-					<br />
-					<span className="title">INFORMACION</span>
-				</Link>
-			</li>
-
-			<li className="nav-item">
-				<Link to="/Classification" name="hoverInicio" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
-					style={this.state.hoverInicio ? fondoHover : fondoMenuLateral} >
-					<img src={home} alt="" width="25" height="25" />
-					<br />
-					<span className="title">CLASIFICACION</span>
-				</Link>
-			</li>
-
-		</div>
-
-	)
-}
-}
-
-const fondoMenuLateral = {
-background: "#26344B",
-fontSize: "14px",
-fontFamily: "Open sans, sans-serif"
-
-}
-
-const fondoHover = {
-background: "#2b3b55",
-fontSize: "14px",
-fontFamily: "Open sans, sans-serif"
-
-}
-
-function mapStateToProps(state) {
-return {
-	processes: state.process.listProcessR,
-	documentIdG: state.document.documentIdG
-}
-}
-*/
 
 export default connect(mapStateToProps, { getListProcesses, getConditionsPer, consultarConfiguracion })(MenuLateral)
