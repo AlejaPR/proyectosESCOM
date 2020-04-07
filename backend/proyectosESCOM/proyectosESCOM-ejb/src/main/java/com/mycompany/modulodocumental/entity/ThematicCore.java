@@ -41,7 +41,7 @@ public class ThematicCore implements Serializable {
     @OneToMany(mappedBy = "fkPtThematicCore")
     private List<ProgramThematicCore> listProgramThematicCore;
 
-    @JoinColumn(name = "FK_PC_TRAINING_AREA", referencedColumnName = "PK_TA_ID")
+    @JoinColumn(name = "FK_TC_TRAINING_AREA", referencedColumnName = "PK_TA_ID")
     @ManyToOne
     private TrainingArea fkTcTrainingArea;
 

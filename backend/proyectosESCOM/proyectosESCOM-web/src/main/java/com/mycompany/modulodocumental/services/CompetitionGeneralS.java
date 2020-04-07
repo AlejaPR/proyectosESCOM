@@ -66,7 +66,7 @@ public class CompetitionGeneralS {
     public Response add(CompetitionGeneralP comG) {
         try {
             competitionGeneralLogic.add(comG);
-            JsonObject rest = Json.createObjectBuilder().add("data", "add").build();
+            JsonObject rest = Json.createObjectBuilder().add("data", "addG").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
             JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
@@ -80,7 +80,7 @@ public class CompetitionGeneralS {
     public Response edit(CompetitionGeneralP comG) {
         try {
             competitionGeneralLogic.edit(comG);
-            JsonObject rest = Json.createObjectBuilder().add("data", "edit").build();
+            JsonObject rest = Json.createObjectBuilder().add("data", "editG").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
             JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
@@ -94,7 +94,7 @@ public class CompetitionGeneralS {
     public Response delete(CompetitionGeneralP comG) {
         try {
             competitionGeneralLogic.delete(comG);
-            JsonObject rest = Json.createObjectBuilder().add("data", "delete").build();
+            JsonObject rest = Json.createObjectBuilder().add("data", "deleteG").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
             JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();

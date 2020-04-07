@@ -3,26 +3,27 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { reduxForm, Field } from 'redux-form';
-import { required, minimum, twoHundred } from '../../../utilitarian/validations.js';
-import { getListGeneralC, addGeneralC, addMessageAdd, addMessageDelete, deleteGeneralC } from '../../../../redux/actions/generalClassA.js';
+import { required, minimum, twoHundred, select } from '../../../utilitarian/validations.js';
+import { getListGeneralC } from '../../../../redux/actions/generalClassA.js';
+import { getListCompetitionG, addCompetitionG, deleteCompetitionG, addMessageDelete, addMessageAdd } from '../../../../redux/actions/competitionGeneralA.js';
 
 import { toast } from 'react-toastify';
 
 import MaterialTable from 'material-table';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
-class TrainingArea extends Component {
+class CompetitionG extends Component {
 
     componentDidMount() {
-        this.props.getListGeneralC(localStorage.getItem('Token'), sessionStorage.getItem('programId'), 'TrainingArea');
+        this.props.getListCompetitionG(localStorage.getItem('Token'), sessionStorage.getItem('programId'))
     }
 
     componentDidUpdate() {
-        if (this.props.messageAddO !== '') {
-            switch (this.props.messageAddO) {
-                case 'addTr':
+        if (this.props.messageAddG !== '') {
+            switch (this.props.messageAddG) {
+                case 'addG':
                     toast.success('Se agrego con exito.');
-                    this.props.getListGeneralC(localStorage.getItem('Token'), sessionStorage.getItem('programId'), 'TrainingArea');
+                    this.props.getListCompetitionG(localStorage.getItem('Token'), sessionStorage.getItem('programId'))
                     this.props.addMessageAdd('');
                     break;
                 case 'error server':
@@ -33,12 +34,12 @@ class TrainingArea extends Component {
                     break;
             }
         }
-        if (this.props.messageDeleteO !== '') {
-            switch (this.props.messageDeleteO) {
-                case 'deleteTr':
+        if (this.props.messageDeleteG !== '') {
+            switch (this.props.messageDeleteG) {
+                case 'deleteG':
                     toast.success('Se inhabilito con exito.');
                     this.props.addMessageDelete('');
-                    this.props.getListGeneralC(localStorage.getItem('Token'), sessionStorage.getItem('programId'), 'TrainingArea');
+                    this.props.getListCompetitionG(localStorage.getItem('Token'), sessionStorage.getItem('programId'))
                     break;
                 case 'error server':
                     toast.error('Se presento un error, intentelo mas tarde.');
@@ -54,40 +55,46 @@ class TrainingArea extends Component {
         let generalA = {
             id: 0,
             name: formValues.name,
-            idGeneral: sessionStorage.getItem('programId'),
-            table: 'TrainingArea',
+            idCompetition: formValues.competition,
             requestData: null
         }
-        this.props.addGeneralC(localStorage.getItem('Token'), generalA);
+        this.props.addCompetitionG(localStorage.getItem('Token'), generalA);
         formValues.name = '';
+        formValues.Competition = '';
     }
 
+    loadList() {
+        return this.props.listCompetition.map((com) => {
+            return (
+                <option value={com.id}>{com.name}</option>
+            )
+        })
+    }
 
     disable(id) {
         let generalA = {
             id: id,
-            name: "",
-            idGeneral: "",
-            table: 'TrainingArea',
+            name: '',
+            idCompetition: '',
             requestData: null
         }
-        this.props.deleteGeneralC(localStorage.getItem('Token'), generalA)
+        this.props.deleteCompetitionG(localStorage.getItem('Token'), generalA)
     }
 
     render() {
         return (
             <div >
                 <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                    <button type="button" className="btn text-light btn-sm float-right naranja " data-toggle="modal" data-target="#addTraining" >
+                    <button type="button" className="btn text-light btn-sm float-right naranja " data-toggle="modal" data-target="#addCompetitionG" >
                         <i class="fas fa-plus"></i> Agregar
                     </button>
-                    <div class="modal fade" id="addTraining" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="addCompetitionG" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
 
                                 <form className="form-horizontal" onSubmit={this.props.handleSubmit(this.handleSubmit)}>
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Nueva área de formación</h5>
+                                        <h5 class="modal-title" id="exampleModalLabel">Nueva competencia</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -97,6 +104,16 @@ class TrainingArea extends Component {
                                         <div className="row">
                                             <div className="col-sm">
                                                 <Field name="name" validate={[required, minimum, twoHundred]} component={generarInput} label="Nombre" />
+                                            </div>
+                                        </div>
+                                        <br />
+                                        <label for="form_control_1">Competencia: </label>
+                                        <div className="row">
+                                            <div className="col-sm">
+                                                <Field name="competition" validate={[select]} className="bs-select form-control" component={generarSelect}>
+                                                    <option selected value="0">Seleccione...</option>
+                                                    {this.loadList()}
+                                                </Field>
                                             </div>
                                         </div>
                                     </div>
@@ -112,7 +129,7 @@ class TrainingArea extends Component {
                     <br />
                     <br />
                     <MaterialTable
-                        title="Áreas de formación"
+                        title="Competencias especificas"
                         localization={{
                             header: {
                                 actions: ' '
@@ -127,7 +144,7 @@ class TrainingArea extends Component {
                                 firstAriaLabel: 'oooo'
                             },
                             body: {
-                                emptyDataSourceMessage: 'Aun no hay ninguna area registrada'
+                                emptyDataSourceMessage: 'Aun no hay ninguna competencia registrada'
                             },
                             toolbar: {
                                 searchTooltip: 'Buscar',
@@ -136,7 +153,8 @@ class TrainingArea extends Component {
                         }}
                         columns={[
 
-                            { title: 'Nombre del area', field: 'name' },
+                            { title: 'Nombre', field: 'name' },
+                            { title: 'Nombre de la Competencia', field: 'nameCompetition' },
                             {
                                 title: '', field: 'id',
                                 render: rowData => {
@@ -151,7 +169,7 @@ class TrainingArea extends Component {
                             }
 
                         ]}
-                        data={this.props.listGeneralC}
+                        data={this.props.listCompetitionG}
                         options={{
                             search: true
                         }}
@@ -165,6 +183,17 @@ class TrainingArea extends Component {
 
 }
 
+const generarSelect = ({ input, label, type, meta: { touched, error }, children }) => (
+    <div>
+        <div>
+            <select {...input} className="form-control letra" style={{ height: "35px", fontSize: "13px" }}>
+                {children}
+            </select>
+            {touched && ((error && <span className="text-danger letra form-group">{error}</span>))}
+        </div>
+    </div>
+)
+
 const generarInput = ({ input, placeholder, label, type, meta: { touched, warning, error } }) => (
     <div>
         <div>
@@ -176,15 +205,16 @@ const generarInput = ({ input, placeholder, label, type, meta: { touched, warnin
 
 function mapStateToProps(state) {
     return {
-        listGeneralC: state.generalClass.listGeneralClassR,
-        messageAddO: state.generalClass.messageAddC,
-        messageDeleteO: state.generalClass.messageDeleteC
+        listCompetitionG: state.competitionGeneral.listCompetitionGR,
+        listCompetition: state.generalClass.listGeneralClassR,
+        messageAddG: state.competitionGeneral.messageAdd,
+        messageDeleteG: state.competitionGeneral.messageDelete
     }
 }
 
 let formAdd = reduxForm({
     form: 'addProcess',
     enableReinitialize: true
-})(TrainingArea)
+})(CompetitionG)
 
-export default withRouter(connect(mapStateToProps, { getListGeneralC, deleteGeneralC, addGeneralC, addMessageAdd, addMessageDelete })(formAdd));
+export default withRouter(connect(mapStateToProps, { getListGeneralC, getListCompetitionG, addCompetitionG, deleteCompetitionG, addMessageAdd, addMessageDelete })(formAdd));

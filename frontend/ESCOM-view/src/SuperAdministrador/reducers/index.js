@@ -16,6 +16,9 @@ import { reducersDocumentVersion } from '../../ModuloDocumental/redux/reducers/d
 import { reducersUserCondition } from "../../ModuloDocumental/redux/reducers/userConditionR.js";
 import { reducersCommentary } from "../../ModuloDocumental/redux/reducers/commentaryR.js";
 import { reducersGeneralClass } from "../../ModuloDocumental/redux/reducers/generalClassR.js";
+import { reducersThematicCore } from "../../ModuloDocumental/redux/reducers/thematicCoreR.js";
+import { reducersCompetitionGeneral } from "../../ModuloDocumental/redux/reducers/competitionGeneralR.js";
+
 
 const rootReducer = combineReducers({
     rep: reducerReporte,
@@ -34,6 +37,8 @@ const rootReducer = combineReducers({
     userCondition: reducersUserCondition,
     commentary: reducersCommentary,
     generalClass: reducersGeneralClass,
+    thematicCore: reducersThematicCore,
+    competitionGeneral: reducersCompetitionGeneral,
     form: formReducer
 })
 

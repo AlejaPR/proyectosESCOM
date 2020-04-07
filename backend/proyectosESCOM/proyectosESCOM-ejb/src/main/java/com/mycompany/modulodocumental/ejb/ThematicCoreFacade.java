@@ -33,7 +33,7 @@ public class ThematicCoreFacade extends AbstractFacade<ThematicCore> implements 
 
     @Override
     public List<ThematicCore> getList(int general) {
-        Query query = em.createQuery("SELECT t FROM ThematicCore t WHERE t.fkTcTrainingArea.fkTaGeneral =?1 ");
+        Query query = em.createQuery("SELECT t FROM ThematicCore t WHERE t.fkTcTrainingArea.fkTaGeneral.id =?1 ");
         query.setParameter(1, general);
         List<ThematicCore> data = query.getResultList();
         return data;

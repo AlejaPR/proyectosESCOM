@@ -86,7 +86,7 @@ class Competition extends Component {
 
                                 <form className="form-horizontal" onSubmit={this.props.handleSubmit(this.handleSubmit)}>
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Nuevo proceso</h5>
+                                        <h5 class="modal-title" id="exampleModalLabel">Nueva competencia</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
