@@ -8,6 +8,7 @@ package com.mycompany.modulodocumental.entity;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -44,10 +45,10 @@ public class Annex implements Serializable{
     @ManyToOne
     private Program fkAxProgram;
     
-    @OneToMany(mappedBy = "fkAvAnnex")
+    @OneToMany(mappedBy = "fkAvAnnex", cascade = CascadeType.ALL)
     private List<AnnexVersion> listAnnexVersion;
 
-    @OneToMany(mappedBy = "fkActAnnex")
+    @OneToMany(mappedBy = "fkActAnnex", cascade = CascadeType.ALL)
     private List<Activity> listActivity;
 
     

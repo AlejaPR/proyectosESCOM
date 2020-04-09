@@ -6,7 +6,6 @@
 package com.mycompany.modulodocumental.services;
 
 import com.mycompany.modulodocumental.interfaces.logic.RelationalClassLogicLocal;
-import com.mycompany.modulodocumental.pojo.CompetitionGeneralP;
 import com.mycompany.modulodocumental.pojo.RelationalClassP;
 import java.util.List;
 import javax.ejb.EJB;

@@ -17,17 +17,19 @@ public class GeneralProgramP implements Serializable{
     private int id;
     private String name;
     private String description;
+    private int state;
     private DatosSolicitudPOJO requestData;
 
     public GeneralProgramP() {
     }
 
-    public GeneralProgramP(int id, String name, String description) {
+    public GeneralProgramP(int id, String name, String description, int state) {
         this.id = id;
         this.name = name;
         this.description = description;
-    }
-
+        this.state = state;
+    }    
+   
     public int getId() {
         return id;
     }
@@ -50,6 +52,14 @@ public class GeneralProgramP implements Serializable{
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
     }
 
     public DatosSolicitudPOJO getRequestData() {

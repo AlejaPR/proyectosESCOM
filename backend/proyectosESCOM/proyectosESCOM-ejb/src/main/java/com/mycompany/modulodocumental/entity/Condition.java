@@ -9,8 +9,10 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -47,14 +49,14 @@ public class Condition implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date finalDate;
 
-    @OneToMany(mappedBy = "fkActCondition")
+    @OneToMany(mappedBy = "fkActCondition", cascade = CascadeType.ALL)
     private List<Activity> listActivity;
 
-    @OneToMany(mappedBy = "fkUcCondition")
+    @OneToMany(mappedBy = "fkUcCondition", cascade = CascadeType.ALL)
     private List<UserCondition> listUserCondition;
 
     @JoinColumn(name = "FK_CON_PROCESS", referencedColumnName = "PK_PRC_ID")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Process fkConProcess;
 
     public Condition() {

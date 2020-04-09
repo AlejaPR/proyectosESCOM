@@ -30,4 +30,6 @@ public interface PtProfessionalFacadeLocal {
 
     int count();
     
+    List<PtProfessional> getList(int programT);
+    
 }

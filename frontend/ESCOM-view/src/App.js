@@ -61,6 +61,7 @@ import Classification from './ModuloDocumental/components/Classification/classif
 import ViewCalendar from './ModuloDocumental/components/calendar/viewCalendar.js';
 import ThematicList from './ModuloDocumental/components/Matrix/Fill/thematicList.js';
 import ItemList from './ModuloDocumental/components/Matrix/Config/itemList.js';
+import ThematicSelect from './ModuloDocumental/components/Matrix/Fill/list/thematicSelect.js';
 
 //rutas
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom"
@@ -429,6 +430,16 @@ class App extends React.Component {
 								</div>
 							</>
 						</RutaProtegida>
+						<RutaProtegida path="/ThematicSelect">
+							<>
+								<LeaderMenu />
+								<MenuSuperior />
+								<div id="wrapper">
+									<ThematicSelect />
+								</div>
+							</>
+						</RutaProtegida>
+
 						<Route component={NotFound} />
 					</Switch>
 				</Router>

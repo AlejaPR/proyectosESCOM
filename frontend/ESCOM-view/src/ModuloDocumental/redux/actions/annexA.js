@@ -170,13 +170,13 @@ export function addAnnex(token, annex) {
       }).catch(error => {
         if (error.request.response === '') {
           dispatch({
-            type: ADD_MESSAGE_ADD,
+            type: ADD_ANNEX,
             payload: 'error server'
           });
         } else {
           if (error.request) {
             dispatch({
-              type: ADD_MESSAGE_ADD,
+              type: ADD_ANNEX,
               payload: 'error server'
             });
           }
@@ -208,13 +208,13 @@ export function editAnnex(token, annex) {
       }).catch(error => {
         if (error.request.response === '') {
           dispatch({
-            type: ADD_MESSAGE_EDIT,
+            type: EDIT_ANNEX,
             payload: 'error server'
           });
         } else {
           if (error.request) {
             dispatch({
-              type: ADD_MESSAGE_EDIT,
+              type: EDIT_ANNEX,
               payload: 'error server'
             });
           }

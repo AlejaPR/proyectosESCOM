@@ -7,7 +7,6 @@ package com.mycompany.modulodocumental.logica;
 
 import com.mycompany.modulodocumental.ejb.PtThematicFacadeLocal;
 import com.mycompany.modulodocumental.ejb.ThematicFacadeLocal;
-import com.mycompany.modulodocumental.entity.Competition;
 import com.mycompany.modulodocumental.entity.CompetitionGeneral;
 import com.mycompany.modulodocumental.entity.DistinctiveFeature;
 import com.mycompany.modulodocumental.entity.OccupationalProfile;
@@ -19,7 +18,6 @@ import com.mycompany.modulodocumental.entity.PtOccupational;
 import com.mycompany.modulodocumental.entity.PtProfessional;
 import com.mycompany.modulodocumental.entity.PtThematic;
 import com.mycompany.modulodocumental.entity.Thematic;
-import com.mycompany.modulodocumental.interfaces.CompetitionFacadeLocal;
 import com.mycompany.modulodocumental.interfaces.CompetitionGeneralFacadeLocal;
 import com.mycompany.modulodocumental.interfaces.DistinctiveFeatureFacadeLocal;
 import com.mycompany.modulodocumental.interfaces.OccupationalProfileFacadeLocal;
@@ -29,7 +27,6 @@ import com.mycompany.modulodocumental.interfaces.PtCompetitionGFacadeLocal;
 import com.mycompany.modulodocumental.interfaces.PtDistinctiveFacadeLocal;
 import com.mycompany.modulodocumental.interfaces.PtOccupationalFacadeLocal;
 import com.mycompany.modulodocumental.interfaces.PtProfessionalFacadeLocal;
-import com.mycompany.modulodocumental.interfaces.TrainingAreaFacadeLocal;
 import com.mycompany.modulodocumental.interfaces.logic.RelationalClassLogicLocal;
 import com.mycompany.modulodocumental.pojo.RelationalClassP;
 import com.mycompany.modulodocumental.utility.GenericException;
@@ -78,34 +75,38 @@ public class RelationalClassLogic implements RelationalClassLogicLocal {
     public List<RelationalClassP> getList(int programT, String table) throws GenericException {
         try {
             List<RelationalClassP> data = new ArrayList<>();
-            ProgramThematicCore pro = programThematicCoreFacade.find(programT);
             switch (table) {
                 case "PtCompetitionG":
-                    for (PtCompetitionG col : pro.getListPtCompetitionG()) {
+                    List<PtCompetitionG> listC = ptCompetitionGFacade.getList(programT);
+                    for (PtCompetitionG col : listC) {
                         RelationalClassP aux = new RelationalClassP(col.getId(), col.getFkPtcCompetitionG().getId(), col.getFkPtcCompetitionG().getName(), programT);
                         data.add(aux);
                     }
                     return data;
                 case "PtDistinctive":
-                    for (PtDistinctive col : pro.getListPtDistinctive()) {
+                    List<PtDistinctive> listD = ptDistinctiveFacade.getList(programT);
+                    for (PtDistinctive col : listD) {
                         RelationalClassP aux = new RelationalClassP(col.getId(), col.getFkPtdDistinctive().getId(), col.getFkPtdDistinctive().getName(), programT);
                         data.add(aux);
                     }
                     return data;
                 case "PtOccupational":
-                    for (PtOccupational col : pro.getListPtOccupational()) {
+                    List<PtOccupational> listO = ptOccupationalFacade.getList(programT);
+                    for (PtOccupational col : listO) {
                         RelationalClassP aux = new RelationalClassP(col.getId(), col.getFkPtoOccupational().getId(), col.getFkPtoOccupational().getName(), programT);
                         data.add(aux);
                     }
                     return data;
                 case "PtProfessional":
-                    for (PtProfessional col : pro.getListPtProfessional()) {
+                    List<PtProfessional> listP = ptProfessionalFacade.getList(programT);
+                    for (PtProfessional col : listP) {
                         RelationalClassP aux = new RelationalClassP(col.getId(), col.getFkPtpProfessional().getId(), col.getFkPtpProfessional().getName(), programT);
                         data.add(aux);
                     }
                     return data;
                 case "PtThematic":
-                    for (PtThematic col : pro.getListPtThematic()) {
+                    List<PtThematic> listT = ptThematicFacade.getList(programT);
+                    for (PtThematic col : listT) {
                         RelationalClassP aux = new RelationalClassP(col.getId(), col.getFkPttThematic().getId(), col.getFkPttThematic().getName(), programT);
                         data.add(aux);
                     }
@@ -124,41 +125,82 @@ public class RelationalClassLogic implements RelationalClassLogicLocal {
     public String add(RelationalClassP relation) throws GenericException {
         try {
             ProgramThematicCore pro = programThematicCoreFacade.find(relation.getIdProgramaThematic());
+            boolean valid = false;
             switch (relation.getTable()) {
                 case "PtCompetitionG":
-                    CompetitionGeneral com = competitionGerenelFacade.find(relation.getIdRelation());
-                    PtCompetitionG dataP = new PtCompetitionG(com, pro);
-                    ptCompetitionGFacade.create(dataP);
-                    relation.getRequestData().setTablaInvolucrada("TBL_PT_COMPETITION_G");
-                    bitacora.registrarEnBitacora(relation.getRequestData());
+                    List<PtCompetitionG> listC = ptCompetitionGFacade.getList(pro.getId());
+                    for (PtCompetitionG lis : listC) {
+                        if (lis.getFkPtcCompetitionG().getId() == relation.getIdRelation()) {
+                            valid = true;
+                        }
+                    }
+                    if (!valid) {
+                        CompetitionGeneral com = competitionGerenelFacade.find(relation.getIdRelation());
+                        PtCompetitionG dataP = new PtCompetitionG(com, pro);
+                        ptCompetitionGFacade.create(dataP);
+                        relation.getRequestData().setTablaInvolucrada("TBL_PT_COMPETITION_G");
+                        bitacora.registrarEnBitacora(relation.getRequestData());
+                    }
                     return "addC";
                 case "PtDistinctive":
-                    DistinctiveFeature dis = distinctiveFeatureFacade.find(relation.getIdRelation());
-                    PtDistinctive dataD = new PtDistinctive(dis, pro);
-                    ptDistinctiveFacade.create(dataD);
-                    relation.getRequestData().setTablaInvolucrada("TBL_PT_DISTINCTIVE");
-                    bitacora.registrarEnBitacora(relation.getRequestData());
+                    List<PtDistinctive> listD = ptDistinctiveFacade.getList(pro.getId());
+                    for (PtDistinctive lis : listD) {
+                        if (lis.getFkPtdDistinctive().getId() == relation.getIdRelation()) {
+                            valid = true;
+                        }
+                    }
+                    if (!valid) {
+                        DistinctiveFeature dis = distinctiveFeatureFacade.find(relation.getIdRelation());
+                        PtDistinctive dataD = new PtDistinctive(dis, pro);
+                        ptDistinctiveFacade.create(dataD);
+                        relation.getRequestData().setTablaInvolucrada("TBL_PT_DISTINCTIVE");
+                        bitacora.registrarEnBitacora(relation.getRequestData());
+                    }
                     return "addD";
                 case "PtOccupational":
-                    OccupationalProfile occ = occupationalProfileFacade.find(relation.getIdRelation());
-                    PtOccupational dataO = new PtOccupational(occ, pro);
-                    ptOccupationalFacade.create(dataO);
-                    relation.getRequestData().setTablaInvolucrada("TBL_PT_OCCUPATIONAL");
-                    bitacora.registrarEnBitacora(relation.getRequestData());
+                    List<PtOccupational> listO = ptOccupationalFacade.getList(pro.getId());
+                    for (PtOccupational lis : listO) {
+                        if (lis.getFkPtoOccupational().getId() == relation.getIdRelation()) {
+                            valid = true;
+                        }
+                    }
+                    if (!valid) {
+                        OccupationalProfile occ = occupationalProfileFacade.find(relation.getIdRelation());
+                        PtOccupational dataO = new PtOccupational(occ, pro);
+                        ptOccupationalFacade.create(dataO);
+                        relation.getRequestData().setTablaInvolucrada("TBL_PT_OCCUPATIONAL");
+                        bitacora.registrarEnBitacora(relation.getRequestData());
+                    }
                     return "addO";
                 case "PtProfessional":
-                    ProfessionalProfile prof = professionalProfielFacade.find(relation.getIdRelation());
-                    PtProfessional dataPf = new PtProfessional(prof, pro);
-                    ptProfessionalFacade.create(dataPf);
-                    relation.getRequestData().setTablaInvolucrada("TBL_PT_PROFESSIONAL");
-                    bitacora.registrarEnBitacora(relation.getRequestData());
+                    List<PtProfessional> listP = ptProfessionalFacade.getList(pro.getId());
+                    for (PtProfessional lis : listP) {
+                        if (lis.getFkPtpProfessional().getId() == relation.getIdRelation()) {
+                            valid = true;
+                        }
+                    }
+                    if (!valid) {
+                        ProfessionalProfile prof = professionalProfielFacade.find(relation.getIdRelation());
+                        PtProfessional dataPf = new PtProfessional(prof, pro);
+                        ptProfessionalFacade.create(dataPf);
+                        relation.getRequestData().setTablaInvolucrada("TBL_PT_PROFESSIONAL");
+                        bitacora.registrarEnBitacora(relation.getRequestData());
+                    }
                     return "addP";
                 case "PtThematic":
-                    Thematic the = thematicFacade.find(relation.getIdRelation());
-                    PtThematic dataT = new PtThematic(the, pro);
-                    ptThematicFacade.create(dataT);
-                    relation.getRequestData().setTablaInvolucrada("TBL_PT_THEMATIC");
-                    bitacora.registrarEnBitacora(relation.getRequestData());
+                    List<PtThematic> listT = ptThematicFacade.getList(pro.getId());
+                    for (PtThematic lis : listT) {
+                        if (lis.getFkPttThematic().getId() == relation.getIdRelation()) {
+                            valid = true;
+                        }
+                    }
+                    if (!valid) {
+                        Thematic the = thematicFacade.find(relation.getIdRelation());
+                        PtThematic dataT = new PtThematic(the, pro);
+                        ptThematicFacade.create(dataT);
+                        relation.getRequestData().setTablaInvolucrada("TBL_PT_THEMATIC");
+                        bitacora.registrarEnBitacora(relation.getRequestData());
+                    }
                     return "addT";
                 default:
                     throw new GenericException("error server");
@@ -174,34 +216,44 @@ public class RelationalClassLogic implements RelationalClassLogicLocal {
         try {
             switch (relation.getTable()) {
                 case "PtCompetitionG":;
-                    PtCompetitionG dataP = ptCompetitionGFacade.find(relation.getId());
-                    ptCompetitionGFacade.remove(dataP);
-                    relation.getRequestData().setTablaInvolucrada("TBL_PT_COMPETITION_G");
-                    bitacora.registrarEnBitacora(relation.getRequestData());
+                    PtCompetitionG dataC = ptCompetitionGFacade.find(relation.getId());
+                    if (dataC != null) {
+                        ptCompetitionGFacade.remove(dataC);
+                        relation.getRequestData().setTablaInvolucrada("TBL_PT_COMPETITION_G");
+                        bitacora.registrarEnBitacora(relation.getRequestData());
+                    }
                     return "deleteC";
-                case "PtDistinctive":                    
+                case "PtDistinctive":
                     PtDistinctive dataD = ptDistinctiveFacade.find(relation.getId());
-                    ptDistinctiveFacade.remove(dataD);
-                    relation.getRequestData().setTablaInvolucrada("TBL_PT_DISTINCTIVE");
-                    bitacora.registrarEnBitacora(relation.getRequestData());
+                    if (dataD != null) {
+                        ptDistinctiveFacade.remove(dataD);
+                        relation.getRequestData().setTablaInvolucrada("TBL_PT_DISTINCTIVE");
+                        bitacora.registrarEnBitacora(relation.getRequestData());
+                    }
                     return "deleteD";
                 case "PtOccupational":
                     PtOccupational dataO = ptOccupationalFacade.find(relation.getId());
-                    ptOccupationalFacade.remove(dataO);
-                    relation.getRequestData().setTablaInvolucrada("TBL_PT_OCCUPATIONAL");
-                    bitacora.registrarEnBitacora(relation.getRequestData());
+                    if (dataO != null) {
+                        ptOccupationalFacade.remove(dataO);
+                        relation.getRequestData().setTablaInvolucrada("TBL_PT_OCCUPATIONAL");
+                        bitacora.registrarEnBitacora(relation.getRequestData());
+                    }
                     return "deleteO";
                 case "PtProfessional":
-                    PtProfessional dataPf = ptProfessionalFacade.find(relation.getId());
-                    ptProfessionalFacade.remove(dataPf);
-                    relation.getRequestData().setTablaInvolucrada("TBL_PT_PROFESSIONAL");
-                    bitacora.registrarEnBitacora(relation.getRequestData());
+                    PtProfessional dataP = ptProfessionalFacade.find(relation.getId());
+                    if (dataP != null) {
+                        ptProfessionalFacade.remove(dataP);
+                        relation.getRequestData().setTablaInvolucrada("TBL_PT_PROFESSIONAL");
+                        bitacora.registrarEnBitacora(relation.getRequestData());
+                    }
                     return "deleteP";
                 case "PtThematic":
                     PtThematic dataT = ptThematicFacade.find(relation.getId());
-                    ptThematicFacade.remove(dataT);
-                    relation.getRequestData().setTablaInvolucrada("TBL_PT_THEMATIC");
-                    bitacora.registrarEnBitacora(relation.getRequestData());
+                    if (dataT != null) {
+                        ptThematicFacade.remove(dataT);
+                        relation.getRequestData().setTablaInvolucrada("TBL_PT_THEMATIC");
+                        bitacora.registrarEnBitacora(relation.getRequestData());
+                    }
                     return "deleteT";
                 default:
                     throw new GenericException("error server");

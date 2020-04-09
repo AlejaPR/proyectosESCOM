@@ -17,12 +17,14 @@ import javax.ejb.Local;
 @Local
 public interface GeneralProgramLogicLocal {
 
-    public List<GeneralProgramP> getList() throws GenericException;
+    List<GeneralProgramP> getList() throws GenericException;
 
-    public GeneralProgramP get(int idGeneralP) throws GenericException;
+    GeneralProgramP get(int idGeneralP) throws GenericException;
 
-    public void add(GeneralProgramP generalP) throws GenericException;
+    void add(GeneralProgramP generalP) throws GenericException;
 
-    public void edit(GeneralProgramP generalP) throws GenericException;    
+    void edit(GeneralProgramP generalP) throws GenericException;
+    
+    void disable(GeneralProgramP generalP) throws GenericException;
 
 }

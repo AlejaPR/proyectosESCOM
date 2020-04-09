@@ -69,7 +69,5 @@ public class PtProfessional implements Serializable {
     public void setFkPtpProgramThematic(ProgramThematicCore fkPtpProgramThematic) {
         this.fkPtpProgramThematic = fkPtpProgramThematic;
     }
-    
-     
 
 }

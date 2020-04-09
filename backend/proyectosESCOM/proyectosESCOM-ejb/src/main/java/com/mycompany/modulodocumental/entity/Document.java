@@ -8,6 +8,7 @@ package com.mycompany.modulodocumental.entity;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,10 +39,10 @@ public class Document implements Serializable{
     @Column(name = "DOC_STATE")
     private int state;
     
-    @OneToMany(mappedBy = "fkPrcDocument")
+    @OneToMany(mappedBy = "fkPrcDocument", cascade = CascadeType.ALL)
     private List<Process> listProcess;
     
-    @OneToMany(mappedBy = "fkDvDocument")
+    @OneToMany(mappedBy = "fkDvDocument",cascade = CascadeType.ALL)
     private List<DocumentVersion> listDocumentVersion;
     
     @JoinColumn(name = "FK_DOC_PROGRAM", referencedColumnName = "PK_PRO_ID")

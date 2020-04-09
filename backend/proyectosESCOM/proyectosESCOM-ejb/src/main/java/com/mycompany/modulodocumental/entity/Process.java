@@ -8,6 +8,7 @@ package com.mycompany.modulodocumental.entity;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,11 +25,11 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "TBL_PROCESS")
-public class Process implements Serializable{
-    
+public class Process implements Serializable {
+
     @Id
     @Basic(optional = false)
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PK_PRC_ID")
     private int id;
     @Column(name = "PRC_NAME")
@@ -37,14 +38,14 @@ public class Process implements Serializable{
     private String description;
     @Column(name = "PRC_STATE")
     private int state;
-     
-    @OneToMany(mappedBy = "fkConProcess")
+
+    @OneToMany(mappedBy = "fkConProcess", cascade = CascadeType.ALL)
     private List<Condition> listCondition;
-    
+
     @JoinColumn(name = "FK_PRC_DOCUMENT", referencedColumnName = "PK_DOC_ID")
     @ManyToOne
     private Document fkPrcDocument;
-    
+
     public Process() {
     }
 
@@ -101,5 +102,5 @@ public class Process implements Serializable{
     public void setState(int state) {
         this.state = state;
     }
-    
+
 }

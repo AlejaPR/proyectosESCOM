@@ -2,7 +2,6 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import { getListAnnexes, getAnnexId, addMessageEdit, addMessageAdd, addMessageDisable, disableAnnex } from '../../../redux/actions/annexA.js';
-import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
 import Add from './add.js';
 import Edit from './edit.js';

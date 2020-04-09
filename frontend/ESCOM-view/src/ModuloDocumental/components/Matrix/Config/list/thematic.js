@@ -52,13 +52,13 @@ class Thematic extends Component {
     handleSubmit = formValues => {
         let generalA = {
             id: 0,
-            name: formValues.name,
+            name: formValues.nameT,
             idGeneral: sessionStorage.getItem('programId'),
             table: 'Thematic',
             requestData: null
         }
         this.props.addGeneralC(localStorage.getItem('Token'), generalA);
-        formValues.name = '';
+        formValues.nameT = '';
     }
 
 
@@ -95,7 +95,7 @@ class Thematic extends Component {
                                         <label for="form_control_1">Nombre: </label>
                                         <div className="row">
                                             <div className="col-sm">
-                                                <Field name="name" validate={[required, minimum, twoHundred]} component={generarInput} label="Nombre" />
+                                                <Field name="nameT" validate={[required, minimum, twoHundred]} component={generarInput} label="Nombre" />
                                             </div>
                                         </div>
                                     </div>
@@ -182,7 +182,7 @@ function mapStateToProps(state) {
 }
 
 let formAdd = reduxForm({
-    form: 'addProcess',
+    form: 'addThematic',
     enableReinitialize: true
 })(Thematic)
 

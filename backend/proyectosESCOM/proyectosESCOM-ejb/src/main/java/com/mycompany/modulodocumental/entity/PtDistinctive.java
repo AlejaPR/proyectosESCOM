@@ -34,7 +34,7 @@ public class PtDistinctive implements Serializable {
     @ManyToOne
     private DistinctiveFeature fkPtdDistinctive;
 
-    @JoinColumn(name = "FK_PTC_PROGRAM_THEMATIC", referencedColumnName = "PK_PT_ID")
+    @JoinColumn(name = "FK_PTD_PROGRAM_THEMATIC", referencedColumnName = "PK_PT_ID")
     @ManyToOne
     private ProgramThematicCore fkPtdProgramThematic;
 

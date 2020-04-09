@@ -39,8 +39,10 @@ public class GeneralProgramLogic implements GeneralProgramLogicLocal {
             List<GeneralProgram> list = generalProgramFacade.findAll();
             List<GeneralProgramP> data = new ArrayList<>();
             for (GeneralProgram lis : list) {
-                GeneralProgramP aux = new GeneralProgramP(lis.getId(), lis.getName(), lis.getDescription());
-                data.add(aux);
+                if (lis.getState() > 0) {
+                    GeneralProgramP aux = new GeneralProgramP(lis.getId(), lis.getName(), lis.getDescription(), lis.getState());
+                    data.add(aux);
+                }
             }
             return data;
         } catch (Exception ex) {
@@ -53,7 +55,7 @@ public class GeneralProgramLogic implements GeneralProgramLogicLocal {
     public GeneralProgramP get(int idGeneralP) throws GenericException {
         try {
             GeneralProgram aux = generalProgramFacade.find(idGeneralP);
-            GeneralProgramP data = new GeneralProgramP(aux.getId(), aux.getName(), aux.getDescription());
+            GeneralProgramP data = new GeneralProgramP(aux.getId(), aux.getName(), aux.getDescription(), aux.getState());
             return data;
         } catch (Exception ex) {
             bitacora.registroLogger(CLASS, "Obtener", Level.SEVERE, ex.getMessage());
@@ -64,7 +66,7 @@ public class GeneralProgramLogic implements GeneralProgramLogicLocal {
     @Override
     public void add(GeneralProgramP generalP) throws GenericException {
         try {
-            GeneralProgram data = new GeneralProgram(generalP.getName(), generalP.getDescription());
+            GeneralProgram data = new GeneralProgram(generalP.getName(), generalP.getDescription(), generalP.getState());
             generalProgramFacade.create(data);
             generalP.getRequestData().setTablaInvolucrada(TABLE);
             bitacora.registrarEnBitacora(generalP.getRequestData());
@@ -85,6 +87,19 @@ public class GeneralProgramLogic implements GeneralProgramLogicLocal {
             bitacora.registrarEnBitacora(generalP.getRequestData());
         } catch (Exception ex) {
             bitacora.registroLogger(CLASS, "editar", Level.SEVERE, ex.getMessage());
+            throw new GenericException("error server");
+        }
+    }
+
+    @Override
+    public void disable(GeneralProgramP generalP) throws GenericException {
+        try {
+            GeneralProgram data = generalProgramFacade.find(generalP.getId());
+            data.setState(-1);
+            generalP.getRequestData().setTablaInvolucrada(TABLE);
+            bitacora.registrarEnBitacora(generalP.getRequestData());
+        } catch (Exception ex) {
+            bitacora.registroLogger(CLASS, "Inhabilitar", Level.SEVERE, ex.getMessage());
             throw new GenericException("error server");
         }
     }

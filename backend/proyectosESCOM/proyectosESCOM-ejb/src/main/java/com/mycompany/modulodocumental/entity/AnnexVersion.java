@@ -25,11 +25,11 @@ import javax.persistence.TemporalType;
  */
 @Entity
 @Table(name = "TBL_ANNEX_VERSION")
-public class AnnexVersion implements Serializable{
-    
+public class AnnexVersion implements Serializable {
+
     @Id
     @Basic(optional = false)
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PK_AV_ID")
     private int id;
     @Column(name = "AV_DATE")
@@ -38,7 +38,7 @@ public class AnnexVersion implements Serializable{
     @Column(name = "AV_LOCATION")
     private String location;
     @Column(name = "AV_STATE")
-    private int state;    
+    private int state;
     @Column(name = "AV_VERSION")
     private int version;
     @Column(name = "AV_DESCRIPTION")
@@ -46,16 +46,15 @@ public class AnnexVersion implements Serializable{
 
     @Column(name = "FK_AV_USER")
     private int idUser;
-    
+
     @JoinColumn(name = "FK_AV_ANNEX", referencedColumnName = "PK_AX_ID")
     @ManyToOne
-    private Annex fkAvAnnex; 
-    
-          
+    private Annex fkAvAnnex;
+
     public AnnexVersion() {
     }
-    
-    public AnnexVersion(Date date, String location, int state,int version, String description) {
+
+    public AnnexVersion(Date date, String location, int state, int version, String description) {
         this.date = date;
         this.location = location;
         this.state = state;
@@ -126,5 +125,5 @@ public class AnnexVersion implements Serializable{
     public void setVersion(int version) {
         this.version = version;
     }
-        
+
 }

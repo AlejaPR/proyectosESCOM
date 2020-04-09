@@ -6,7 +6,9 @@
 package com.mycompany.modulodocumental.entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +16,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -31,7 +34,10 @@ public class Competition implements Serializable {
     private int id;
     @Column(name = "CT_NAME")
     private String name;
-    
+
+    @OneToMany(mappedBy = "fkCgCompetition",cascade = CascadeType.ALL)
+    private List<CompetitionGeneral> listCompetitionGeneral;
+
     @JoinColumn(name = "FK_CT_GENERAL", referencedColumnName = "PK_GP_ID")
     @ManyToOne
     private GeneralProgram fkCtGeneral;
@@ -65,6 +71,14 @@ public class Competition implements Serializable {
 
     public void setFkCtGeneral(GeneralProgram fkCtGeneral) {
         this.fkCtGeneral = fkCtGeneral;
+    }
+
+    public List<CompetitionGeneral> getListCompetitionGeneral() {
+        return listCompetitionGeneral;
+    }
+
+    public void setListCompetitionGeneral(List<CompetitionGeneral> listCompetitionGeneral) {
+        this.listCompetitionGeneral = listCompetitionGeneral;
     }
 
 }

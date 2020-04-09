@@ -30,4 +30,5 @@ public interface PtCompetitionGFacadeLocal {
 
     int count();
     
+    List<PtCompetitionG> getList(int programT);
 }

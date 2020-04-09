@@ -8,6 +8,7 @@ package com.mycompany.modulodocumental.entity;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,8 +25,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "TBL_THEMATIC")
-public class Thematic implements Serializable{
-    
+public class Thematic implements Serializable {
+
     @Id
     @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,12 +34,12 @@ public class Thematic implements Serializable{
     private int id;
     @Column(name = "TH_NAME")
     private String name;
-    
+
     @JoinColumn(name = "FK_TH_GENERAL", referencedColumnName = "PK_GP_ID")
     @ManyToOne
     private GeneralProgram fkThGeneral;
-    
-    @OneToMany(mappedBy = "fkPttThematic")
+
+    @OneToMany(mappedBy = "fkPttThematic", cascade = CascadeType.ALL)
     private List<PtThematic> listPtThematic;
 
     public Thematic() {
@@ -79,5 +80,5 @@ public class Thematic implements Serializable{
     public void setFkThGeneral(GeneralProgram fkThGeneral) {
         this.fkThGeneral = fkThGeneral;
     }
-    
+
 }

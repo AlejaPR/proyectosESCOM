@@ -104,7 +104,7 @@ const generarSelect = ({ input, label, type, meta: { touched, error }, children 
 function mapStateToProps(state) {
     return {
         listUsers: state.userCondition.listUsersR,
-        messageAssociate: state.userCondition.messageAssociate,
+        messageAssociate: state.userCondition.messageAssociate
     }
 }
 

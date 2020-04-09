@@ -8,6 +8,7 @@ package com.mycompany.modulodocumental.entity;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -49,14 +50,14 @@ public class Program implements Serializable {
     @JoinColumn(name = "FK_PRO_GENERAL", referencedColumnName = "PK_GP_ID")
     @ManyToOne
     private GeneralProgram fkProGeneral;
-    
-    @OneToMany(mappedBy = "fkDocProgram")
+
+    @OneToMany(mappedBy = "fkDocProgram", cascade = CascadeType.ALL)
     private List<Document> listDocument;
 
-    @OneToMany(mappedBy = "fkAxProgram")
+    @OneToMany(mappedBy = "fkAxProgram", cascade = CascadeType.ALL)
     private List<Annex> listAnnex;
-    
-    @OneToMany(mappedBy = "fkPtProgram")
+
+    @OneToMany(mappedBy = "fkPtProgram", cascade = CascadeType.ALL)
     private List<ProgramThematicCore> listProgramThematicCore;
 
     public Program() {
@@ -143,7 +144,7 @@ public class Program implements Serializable {
     public void setFkProGeneral(GeneralProgram fkProGeneral) {
         this.fkProGeneral = fkProGeneral;
     }
-    
+
     public List<Document> getListDocument() {
         return listDocument;
     }

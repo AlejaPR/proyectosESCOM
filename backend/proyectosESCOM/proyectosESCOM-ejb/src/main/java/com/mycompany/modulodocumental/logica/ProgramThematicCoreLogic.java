@@ -41,15 +41,16 @@ public class ProgramThematicCoreLogic implements ProgramThematicCoreLogicLocal {
     private static final String TABLE = "TBL_PROGRAM_THEMATIC_CORE";
 
     private static final String CLASS = "Clase logica programa nucleo temactico";
-    
+
     @Override
     public List<ProgramThematicCoreP> getList(int program) throws GenericException {
         try {
-            Program pro = programFacade.find(program);
-            List<ProgramThematicCore> listAux = pro.getListProgramThematicCore();
+            List<ProgramThematicCore> listAux = programThematicCoreFacade.getList(program);
             List<ProgramThematicCoreP> data = new ArrayList<>();
             for (ProgramThematicCore list : listAux) {
                 ProgramThematicCoreP aux = new ProgramThematicCoreP(list.getId(), list.getFkPtThematicCore().getName(), list.getFkPtThematicCore().getObjective());
+                aux.setNameThematicCore(list.getFkPtThematicCore().getName());
+                aux.setObjetive(list.getFkPtThematicCore().getObjective());
                 data.add(aux);
             }
             return data;
@@ -63,7 +64,9 @@ public class ProgramThematicCoreLogic implements ProgramThematicCoreLogicLocal {
     public ProgramThematicCoreP get(int id) throws GenericException {
         try {
             ProgramThematicCore pro = programThematicCoreFacade.find(id);
-            ProgramThematicCoreP data = new ProgramThematicCoreP(pro.getId(), pro.getContributeObjetive(),pro.getContributeProfessional(), pro.getContributeOccupational(),pro.getObjectiveOutput() ,pro.getTeamContribution() , pro.getObservationFinal() , pro.getFkPtProgram().getId(), pro.getFkPtThematicCore().getId());
+            ProgramThematicCoreP data = new ProgramThematicCoreP(pro.getId(), pro.getContributeObjetive(), pro.getContributeProfessional(), pro.getContributeOccupational(), pro.getObjectiveOutput(), pro.getTeamContribution(), pro.getObservationFinal(), pro.getFkPtProgram().getId(), pro.getFkPtThematicCore().getId());
+            data.setNameThematicCore(pro.getFkPtThematicCore().getName());
+            data.setObjetive(pro.getFkPtThematicCore().getObjective());
             return data;
         } catch (Exception ex) {
             bitacora.registroLogger(CLASS, "Obtener", Level.SEVERE, ex.getMessage());
@@ -79,7 +82,7 @@ public class ProgramThematicCoreLogic implements ProgramThematicCoreLogicLocal {
             ProgramThematicCore data = new ProgramThematicCore();
             data.setFkPtProgram(pro);
             data.setFkPtThematicCore(them);
-            thematicCoreFacade.create(them);
+            programThematicCoreFacade.create(data);
             programT.getRequestData().setTablaInvolucrada(TABLE);
             bitacora.registrarEnBitacora(programT.getRequestData());
         } catch (Exception ex) {
@@ -100,7 +103,7 @@ public class ProgramThematicCoreLogic implements ProgramThematicCoreLogicLocal {
             data.setTeamContribution(programT.getTeamContribution());
             programThematicCoreFacade.edit(data);
             programT.getRequestData().setTablaInvolucrada(TABLE);
-            bitacora.registrarEnBitacora(programT.getRequestData());                   
+            bitacora.registrarEnBitacora(programT.getRequestData());
         } catch (Exception ex) {
             bitacora.registroLogger(CLASS, "Editar", Level.SEVERE, ex.getMessage());
             throw new GenericException("error server");
@@ -113,7 +116,7 @@ public class ProgramThematicCoreLogic implements ProgramThematicCoreLogicLocal {
             ProgramThematicCore data = programThematicCoreFacade.find(id);
             programThematicCoreFacade.remove(data);
             dataS.setTablaInvolucrada(TABLE);
-            bitacora.registrarEnBitacora(dataS); 
+            bitacora.registrarEnBitacora(dataS);
         } catch (Exception ex) {
             bitacora.registroLogger(CLASS, "Eliminar", Level.SEVERE, ex.getMessage());
             throw new GenericException("error server");

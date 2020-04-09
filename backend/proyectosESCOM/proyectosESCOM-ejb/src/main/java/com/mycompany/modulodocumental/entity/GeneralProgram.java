@@ -8,6 +8,7 @@ package com.mycompany.modulodocumental.entity;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,7 +23,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "TBL_GENERAL_PROGRAM")
-public class GeneralProgram implements Serializable{
+public class GeneralProgram implements Serializable {
+
     @Id
     @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,34 +34,37 @@ public class GeneralProgram implements Serializable{
     private String name;
     @Column(name = "GP_DESCRIPTION")
     private String description;
-    
-    @OneToMany(mappedBy = "fkProGeneral")
+    @Column(name = "GP_STATE")
+    private int state;
+
+    @OneToMany(mappedBy = "fkProGeneral", cascade = CascadeType.ALL)
     List<Program> listProgram;
-    
-    @OneToMany(mappedBy = "fkThGeneral")
+
+    @OneToMany(mappedBy = "fkThGeneral", cascade = CascadeType.ALL)
     List<Thematic> listThematic;
-    
-    @OneToMany(mappedBy = "fkTaGeneral")
+
+    @OneToMany(mappedBy = "fkTaGeneral", cascade = CascadeType.ALL)
     List<TrainingArea> listTrainingArea;
-    
-    @OneToMany(mappedBy = "fkCtGeneral")
+
+    @OneToMany(mappedBy = "fkCtGeneral", cascade = CascadeType.ALL)
     List<Competition> listCompetition;
-    
-    @OneToMany(mappedBy = "fkDfGeneral")
+
+    @OneToMany(mappedBy = "fkDfGeneral", cascade = CascadeType.ALL)
     List<DistinctiveFeature> listDistinctiveFeature;
-    
-    @OneToMany(mappedBy = "fkOpGeneral")
+
+    @OneToMany(mappedBy = "fkOpGeneral", cascade = CascadeType.ALL)
     List<OccupationalProfile> listOccupationalProfile;
-    
-    @OneToMany(mappedBy = "fkPpGeneral")
+
+    @OneToMany(mappedBy = "fkPpGeneral", cascade = CascadeType.ALL)
     List<ProfessionalProfile> listProfessionalProfile;
 
     public GeneralProgram() {
     }
 
-    public GeneralProgram(String name, String description) {
+    public GeneralProgram(String name, String description, int state) {
         this.name = name;
         this.description = description;
+        this.state = state;
     }
 
     public int getId() {
@@ -84,6 +89,14 @@ public class GeneralProgram implements Serializable{
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
     }
 
     public List<Program> getListProgram() {
@@ -141,5 +154,5 @@ public class GeneralProgram implements Serializable{
     public void setListProfessionalProfile(List<ProfessionalProfile> listProfessionalProfile) {
         this.listProfessionalProfile = listProfessionalProfile;
     }
-    
+
 }

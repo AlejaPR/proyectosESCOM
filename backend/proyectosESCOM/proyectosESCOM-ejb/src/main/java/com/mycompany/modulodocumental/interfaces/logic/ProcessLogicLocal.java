@@ -18,14 +18,14 @@ import javax.ejb.Local;
 @Local
 public interface ProcessLogicLocal {
 
-    public List<ProcessP> getList(int idDocument) throws GenericException;
+    List<ProcessP> getList(int idDocument) throws GenericException;
 
-    public ProcessP get(int idProcess) throws GenericException;
+    ProcessP get(int idProcess) throws GenericException;
 
-    public void add(ProcessP process) throws GenericException;
+    void add(ProcessP process) throws GenericException;
 
-    public void edit(ProcessP process) throws GenericException;
+    void edit(ProcessP process) throws GenericException;
 
-    public void disable(int idProcess, DatosSolicitudPOJO dataR) throws GenericException;
+    void disable(int idProcess, DatosSolicitudPOJO dataR) throws GenericException;
     
 }

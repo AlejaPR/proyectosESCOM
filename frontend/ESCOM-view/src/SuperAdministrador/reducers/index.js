@@ -5,6 +5,7 @@ import { reducerModulo } from './reducerModulo.js';
 import { reducerActividad } from './reducerActividad.js'
 import { reducerReporte } from './reducerReporte.js';
 import { reducer as formReducer } from 'redux-form';
+
 import { reducersCondition } from '../../ModuloDocumental/redux/reducers/conditionR.js';
 import { reducersProcess } from '../../ModuloDocumental/redux/reducers/processR.js';
 import { reducersActivity } from '../../ModuloDocumental/redux/reducers/activityR.js';
@@ -18,7 +19,9 @@ import { reducersCommentary } from "../../ModuloDocumental/redux/reducers/commen
 import { reducersGeneralClass } from "../../ModuloDocumental/redux/reducers/generalClassR.js";
 import { reducersThematicCore } from "../../ModuloDocumental/redux/reducers/thematicCoreR.js";
 import { reducersCompetitionGeneral } from "../../ModuloDocumental/redux/reducers/competitionGeneralR.js";
-
+import { reducersProgramThematic } from "../../ModuloDocumental/redux/reducers/programThematicR.js";
+import { reducersRelationalClass } from "../../ModuloDocumental/redux/reducers/relationalClassR.js";
+import { reducersGeneralProgram } from "../../ModuloDocumental/redux/reducers/generalProgramR.js";
 
 const rootReducer = combineReducers({
     rep: reducerReporte,
@@ -39,6 +42,9 @@ const rootReducer = combineReducers({
     generalClass: reducersGeneralClass,
     thematicCore: reducersThematicCore,
     competitionGeneral: reducersCompetitionGeneral,
+    programThematic: reducersProgramThematic,
+    relationalClass: reducersRelationalClass,
+    generalProgram: reducersGeneralProgram,
     form: formReducer
 })
 

@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 import { desencriptar } from '../../../SuperAdministrador/componentes/general/Encriptar.js';
-import { DELETE_GENERAL_CLASS } from './generalClassA.js';
 
 export const GET_LIST_THEMATIC_CORE = 'GET_LIST_THEMATIC_CORE';
 export const ADD_THEMATIC_CORE = 'ADD_THEMATIC_CORE';

@@ -8,8 +8,10 @@ package com.mycompany.modulodocumental.entity;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -52,19 +54,19 @@ public class ProgramThematicCore implements Serializable {
     @ManyToOne
     private ThematicCore fkPtThematicCore;
 
-    @OneToMany(mappedBy = "fkPtcProgramThematic")
+    @OneToMany(mappedBy = "fkPtcProgramThematic", cascade = CascadeType.ALL)
     private List<PtCompetitionG> listPtCompetitionG;
 
-    @OneToMany(mappedBy = "fkPtdProgramThematic")
+    @OneToMany(mappedBy = "fkPtdProgramThematic", cascade = CascadeType.ALL)
     private List<PtDistinctive> listPtDistinctive;
 
-    @OneToMany(mappedBy = "fkPtoProgramThematic")
+    @OneToMany(mappedBy = "fkPtoProgramThematic", cascade = CascadeType.ALL)
     private List<PtOccupational> listPtOccupational;
 
-    @OneToMany(mappedBy = "fkPtpProgramThematic")
+    @OneToMany(mappedBy = "fkPtpProgramThematic", cascade = CascadeType.ALL)
     private List<PtProfessional> listPtProfessional;
 
-    @OneToMany(mappedBy = "fkPttProgramThematic")
+    @OneToMany(mappedBy = "fkPttProgramThematic", cascade = CascadeType.ALL)
     private List<PtThematic> listPtThematic;
 
     public ProgramThematicCore() {

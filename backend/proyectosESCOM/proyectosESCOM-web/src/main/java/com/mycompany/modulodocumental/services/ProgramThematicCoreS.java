@@ -5,9 +5,7 @@
  */
 package com.mycompany.modulodocumental.services;
 
-import com.mycompany.modulodocumental.interfaces.logic.CompetitionGeneralLogicLocal;
 import com.mycompany.modulodocumental.interfaces.logic.ProgramThematicCoreLogicLocal;
-import com.mycompany.modulodocumental.pojo.CompetitionGeneralP;
 import com.mycompany.modulodocumental.pojo.ProgramThematicCoreP;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import java.util.List;

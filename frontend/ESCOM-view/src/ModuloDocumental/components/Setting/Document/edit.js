@@ -6,11 +6,13 @@ import { withRouter } from 'react-router-dom';
 import { getListPrograms } from '../../../redux/actions/programA.js';
 import { editDocument } from '../../../redux/actions/documentA.js';
 import { required, thousand, twoHundred, minimum, select } from '../../utilitarian/validations.js';
+import { getListUser } from '../../../redux/actions/userConditionA.js';
 
 class Edit extends Component {
 
     componentWillMount() {
         this.props.getListPrograms(localStorage.getItem('Token'))
+        this.props.getListUser(localStorage.getItem('Token'))
     }
 
     handleSubmit = formValues => {
@@ -35,10 +37,12 @@ class Edit extends Component {
         })
     }
 
-    loadUser() {
-        return (
-            <option value="1">Cristian Estevez</option>
-        )
+    loadList() {
+        return this.props.listUsers.map((user) => {
+            return (
+                <option value={user.id}>{user.nombre}</option>
+            )
+        })
     }
 
     render() {
@@ -79,7 +83,7 @@ class Edit extends Component {
                                         <div className="col-sm">
                                             <Field name="idUser" validate={[select]} className="bs-select form-control" component="select">
                                                 <option selected value="0">Seleccione...</option>
-                                                {this.loadUser()}
+                                                {this.loadList()}
                                             </Field>
                                         </div>
                                     </div>
@@ -129,6 +133,7 @@ const generarText = ({ input, placeholder, label, type, meta: { touched, warning
 function mapStateToProps(state) {
     return {
         listProgram: state.program.listProgramR,
+        listUsers: state.userCondition.listUsersR,
         document: state.document.documentR,
         initialValues: {
             description: state.document.documentR.description,
@@ -144,4 +149,4 @@ let formEdit = reduxForm({
     enableReinitialize: true
 })(Edit)
 
-export default withRouter(connect(mapStateToProps, { getListPrograms, editDocument })(formEdit));
+export default withRouter(connect(mapStateToProps, { getListPrograms, editDocument, getListUser})(formEdit));

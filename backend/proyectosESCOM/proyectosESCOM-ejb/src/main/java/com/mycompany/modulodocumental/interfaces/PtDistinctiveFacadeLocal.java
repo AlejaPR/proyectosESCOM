@@ -30,4 +30,6 @@ public interface PtDistinctiveFacadeLocal {
 
     int count();
     
+    List<PtDistinctive> getList(int programT);
+    
 }

@@ -29,5 +29,7 @@ public interface PtThematicFacadeLocal {
     List<PtThematic> findRange(int[] range);
 
     int count();
-    
+
+    List<PtThematic> getList(int programT);
+
 }

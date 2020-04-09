@@ -30,7 +30,7 @@ public class PtCompetitionG implements Serializable {
     @Column(name = "PK_PTC_ID")
     private int id;
 
-    @JoinColumn(name = "FK_PTC_COMPETITIION_G", referencedColumnName = "PK_CG_ID")
+    @JoinColumn(name = "FK_PTC_COMPETITION_G", referencedColumnName = "PK_CG_ID")
     @ManyToOne
     private CompetitionGeneral fkPtcCompetitionG;
 

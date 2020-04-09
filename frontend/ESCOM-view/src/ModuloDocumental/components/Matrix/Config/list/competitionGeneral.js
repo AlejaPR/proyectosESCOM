@@ -24,6 +24,7 @@ class CompetitionG extends Component {
                 case 'addG':
                     toast.success('Se agrego con exito.');
                     this.props.getListCompetitionG(localStorage.getItem('Token'), sessionStorage.getItem('programId'))
+                    this.props.getListGeneralC(localStorage.getItem('Token'), sessionStorage.getItem('programId'), 'Competition');
                     this.props.addMessageAdd('');
                     break;
                 case 'error server':
@@ -54,12 +55,12 @@ class CompetitionG extends Component {
     handleSubmit = formValues => {
         let generalA = {
             id: 0,
-            name: formValues.name,
+            name: formValues.nameG,
             idCompetition: formValues.competition,
             requestData: null
         }
         this.props.addCompetitionG(localStorage.getItem('Token'), generalA);
-        formValues.name = '';
+        formValues.nameG = '';
         formValues.Competition = '';
     }
 
@@ -103,7 +104,7 @@ class CompetitionG extends Component {
                                         <label for="form_control_1">Nombre: </label>
                                         <div className="row">
                                             <div className="col-sm">
-                                                <Field name="name" validate={[required, minimum, twoHundred]} component={generarInput} label="Nombre" />
+                                                <Field name="nameG" validate={[required, minimum, twoHundred]} component={generarInput} label="Nombre" />
                                             </div>
                                         </div>
                                         <br />
@@ -213,7 +214,7 @@ function mapStateToProps(state) {
 }
 
 let formAdd = reduxForm({
-    form: 'addProcess',
+    form: 'addCompetitionG',
     enableReinitialize: true
 })(CompetitionG)
 

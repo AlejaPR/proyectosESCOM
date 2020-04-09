@@ -30,4 +30,6 @@ public interface ProgramThematicCoreFacadeLocal {
 
     int count();
     
+    List<ProgramThematicCore> getList(int program);
+    
 }

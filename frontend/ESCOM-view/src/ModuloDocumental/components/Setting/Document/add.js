@@ -6,11 +6,13 @@ import { withRouter } from 'react-router-dom';
 import { getListPrograms } from '../../../redux/actions/programA.js';
 import { addDocument } from '../../../redux/actions/documentA.js';
 import { required, thousand, twoHundred, minimum, select } from '../../utilitarian/validations.js';
+import { getListUser } from '../../../redux/actions/userConditionA.js';
 
 class Add extends Component {
 
     componentWillMount() {
         this.props.getListPrograms(localStorage.getItem('Token'))
+        this.props.getListUser(localStorage.getItem('Token'))
     }
 
 
@@ -39,10 +41,12 @@ class Add extends Component {
         })
     }
 
-    loadUser() {
-        return (
-            <option value="1">Cristian Estevez</option>
-        )
+    loadList() {
+        return this.props.listUsers.map((user) => {
+            return (
+                <option value={user.id}>{user.nombre}</option>
+            )
+        })
     }
 
     render() {
@@ -87,7 +91,7 @@ class Add extends Component {
                                         <div className="col-sm">
                                             <Field name="idUser" validate={[select]} className="bs-select form-control" component="select">
                                                 <option selected value="0">Seleccione...</option>
-                                                {this.loadUser()}
+                                                {this.loadList()}
                                             </Field>
                                         </div>
                                     </div>
@@ -136,7 +140,8 @@ const generarText = ({ input, placeholder, label, type, meta: { touched, warning
 
 function mapStateToProps(state) {
     return {
-        listProgram: state.program.listProgramR
+        listProgram: state.program.listProgramR,
+        listUsers: state.userCondition.listUsersR
     }
 }
 
@@ -145,4 +150,4 @@ let formAdd = reduxForm({
     enableReinitialize: true
 })(Add)
 
-export default withRouter(connect(mapStateToProps, { getListPrograms, addDocument })(formAdd));
+export default withRouter(connect(mapStateToProps, { getListPrograms, addDocument, getListUser })(formAdd));

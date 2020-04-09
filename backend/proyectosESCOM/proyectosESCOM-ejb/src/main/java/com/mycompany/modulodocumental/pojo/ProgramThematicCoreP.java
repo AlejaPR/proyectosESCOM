@@ -135,4 +135,20 @@ public class ProgramThematicCoreP implements Serializable {
         this.requestData = requestData;
     }
 
+    public String getNameThematicCore() {
+        return nameThematicCore;
+    }
+
+    public void setNameThematicCore(String nameThematicCore) {
+        this.nameThematicCore = nameThematicCore;
+    }
+
+    public String getObjetive() {
+        return objetive;
+    }
+
+    public void setObjetive(String objetive) {
+        this.objetive = objetive;
+    }
+    
 }

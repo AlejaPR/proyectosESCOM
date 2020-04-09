@@ -52,13 +52,13 @@ class Professional extends Component {
     handleSubmit = formValues => {
         let generalA = {
             id: 0,
-            name: formValues.name,
+            name: formValues.nameP,
             idGeneral: sessionStorage.getItem('programId'),
             table: 'ProfessionalProfile',
             requestData: null
         }
         this.props.addGeneralC(localStorage.getItem('Token'), generalA);
-        formValues.name = '';
+        formValues.nameP = '';
     }
 
 
@@ -95,7 +95,7 @@ class Professional extends Component {
                                         <label for="form_control_1">Nombre: </label>
                                         <div className="row">
                                             <div className="col-sm">
-                                                <Field name="name" validate={[required, minimum, twoHundred]} component={generarInput} label="Nombre" />
+                                                <Field name="nameP" validate={[required, minimum, twoHundred]} component={generarInput} label="Nombre" />
                                             </div>
                                         </div>
                                     </div>
@@ -182,7 +182,7 @@ function mapStateToProps(state) {
 }
 
 let formAdd = reduxForm({
-    form: 'addProcess',
+    form: 'addProfessional',
     enableReinitialize: true
 })(Professional)
 

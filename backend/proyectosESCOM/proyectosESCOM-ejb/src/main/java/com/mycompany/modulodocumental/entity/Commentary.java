@@ -47,7 +47,7 @@ public class Commentary implements Serializable {
     public Commentary() {
     }
 
-    public Commentary(String message, Date date, int idUser ) {
+    public Commentary(String message, Date date, int idUser) {
         this.message = message;
         this.date = date;
         this.idUser = idUser;

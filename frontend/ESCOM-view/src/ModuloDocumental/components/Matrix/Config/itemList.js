@@ -45,7 +45,7 @@ class ItemList extends Component {
                             <a onClick={() => this.save('OccupationalProfile')} class="nav-item nav-link" id="nav-occupational-tab" data-toggle="tab" href="#nav-occupational" role="tab" aria-controls="nav-occupational" aria-selected="false">ocupacional</a>
                             <a onClick={() => this.save('ProfessionalProfile')} class="nav-item nav-link" id="nav-professional-tab" data-toggle="tab" href="#nav-professional" role="tab" aria-controls="nav-professional" aria-selected="false">profesional</a>
                             <a onClick={() => this.save('Competition')} class="nav-item nav-link" id="nav-competition-tab" data-toggle="tab" href="#nav-competition" role="tab" aria-controls="nav-competition" aria-selected="false">Competencia</a>
-                            <a onClick={() => this.save('Competition')} class="nav-item nav-link" id="nav-competitionG-tab" data-toggle="tab" href="#nav-competitionG" role="tab" aria-controls="nav-competitionG" aria-selected="false">Competencia genérica</a>
+                            <a onClick={() => this.save('Competition')} class="nav-item nav-link" id="nav-competitionG-tab" data-toggle="tab" href="#nav-competitionG" role="tab" aria-controls="nav-competitionG" aria-selected="false">Competencia específica</a>
                             <a onClick={() => this.save('DistinctiveFeature')} class="nav-item nav-link" id="nav-distinctive-tab" data-toggle="tab" href="#nav-distinctive" role="tab" aria-controls="nav-distinctive" aria-selected="false">Distintivo</a>
                         </div>
                     </nav>

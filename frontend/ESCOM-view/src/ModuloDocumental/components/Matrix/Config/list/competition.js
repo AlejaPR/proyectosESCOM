@@ -5,6 +5,7 @@ import { withRouter } from 'react-router-dom';
 import { reduxForm, Field } from 'redux-form';
 import { required, minimum, twoHundred } from '../../../utilitarian/validations.js';
 import { getListGeneralC, addGeneralC, addMessageAdd, addMessageDelete, deleteGeneralC } from '../../../../redux/actions/generalClassA.js';
+import { getListCompetitionG } from '../../../../redux/actions/competitionGeneralA.js';
 
 import { toast } from 'react-toastify';
 
@@ -38,6 +39,7 @@ class Competition extends Component {
                     toast.success('Se inhabilito con exito.');
                     this.props.addMessageDelete('');
                     this.props.getListGeneralC(localStorage.getItem('Token'), sessionStorage.getItem('programId'), 'Competition');
+                    this.props.getListCompetitionG(localStorage.getItem('Token'), sessionStorage.getItem('programId'))
                     break;
                 case 'error server':
                     toast.error('Se presento un error, intentelo mas tarde.');
@@ -52,13 +54,13 @@ class Competition extends Component {
     handleSubmit = formValues => {
         let generalA = {
             id: 0,
-            name: formValues.name,
+            name: formValues.nameC,
             idGeneral: sessionStorage.getItem('programId'),
             table: 'Competition',
             requestData: null
         }
         this.props.addGeneralC(localStorage.getItem('Token'), generalA);
-        formValues.name = '';
+        formValues.nameC = '';
     }
 
 
@@ -95,7 +97,7 @@ class Competition extends Component {
                                         <label for="form_control_1">Nombre: </label>
                                         <div className="row">
                                             <div className="col-sm">
-                                                <Field name="name" validate={[required, minimum, twoHundred]} component={generarInput} label="Nombre" />
+                                                <Field name="nameC" validate={[required, minimum, twoHundred]} component={generarInput} label="Nombre" />
                                             </div>
                                         </div>
                                     </div>
@@ -182,8 +184,8 @@ function mapStateToProps(state) {
 }
 
 let formAdd = reduxForm({
-    form: 'addProcess',
+    form: 'addCompetition',
     enableReinitialize: true
 })(Competition)
 
-export default withRouter(connect(mapStateToProps, { getListGeneralC, deleteGeneralC, addGeneralC, addMessageAdd, addMessageDelete })(formAdd));
+export default withRouter(connect(mapStateToProps, { getListGeneralC, getListCompetitionG, deleteGeneralC, addGeneralC, addMessageAdd, addMessageDelete })(formAdd));

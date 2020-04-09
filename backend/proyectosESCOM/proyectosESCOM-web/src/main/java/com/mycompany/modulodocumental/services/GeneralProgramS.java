@@ -7,7 +7,6 @@ package com.mycompany.modulodocumental.services;
 
 import com.mycompany.modulodocumental.interfaces.logic.GeneralProgramLogicLocal;
 import com.mycompany.modulodocumental.pojo.GeneralProgramP;
-import com.mycompany.modulodocumental.pojo.ProcessP;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
@@ -82,6 +81,20 @@ public class GeneralProgramS {
         try {
             generalProgramLogic.edit(gen);
             JsonObject rest = Json.createObjectBuilder().add("data", "edit").build();
+            return Response.status(Response.Status.OK).entity(rest).build();
+        } catch (Exception e) {
+            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
+        }
+
+    }
+    
+    @PUT
+    @Path("/disable")
+    public Response disable(GeneralProgramP gen) {
+        try {
+            generalProgramLogic.disable(gen);
+            JsonObject rest = Json.createObjectBuilder().add("data", "disable").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
             JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();

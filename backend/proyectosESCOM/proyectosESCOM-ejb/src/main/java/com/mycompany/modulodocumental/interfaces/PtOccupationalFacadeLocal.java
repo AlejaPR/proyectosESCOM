@@ -30,4 +30,6 @@ public interface PtOccupationalFacadeLocal {
 
     int count();
     
+    List<PtOccupational> getList(int programT);
+    
 }

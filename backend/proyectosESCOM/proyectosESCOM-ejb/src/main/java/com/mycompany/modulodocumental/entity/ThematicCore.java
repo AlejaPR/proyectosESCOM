@@ -8,6 +8,7 @@ package com.mycompany.modulodocumental.entity;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,7 +39,7 @@ public class ThematicCore implements Serializable {
     @Column(name = "TC_OBJECTIVE")
     private String objective;
 
-    @OneToMany(mappedBy = "fkPtThematicCore")
+    @OneToMany(mappedBy = "fkPtThematicCore", cascade = CascadeType.ALL)
     private List<ProgramThematicCore> listProgramThematicCore;
 
     @JoinColumn(name = "FK_TC_TRAINING_AREA", referencedColumnName = "PK_TA_ID")

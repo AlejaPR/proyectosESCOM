@@ -55,13 +55,13 @@ class ThematicCore extends Component {
     handleSubmit = formValues => {
         let thematicC = {
             id: 0,
-            name: formValues.name,
+            name: formValues.nameTC,
             objective: formValues.objective,
             idTrainingArea: formValues.trainingA,
             requestData: null
         }
         this.props.addThematicCore(localStorage.getItem('Token'), thematicC);
-        formValues.name = '';
+        formValues.nameTC = '';
         formValues.objective = '';
         formValues.trainingA = '';
     }
@@ -108,7 +108,7 @@ class ThematicCore extends Component {
                                         <label for="form_control_1">Nombre: </label>
                                         <div className="row">
                                             <div className="col-sm">
-                                                <Field name="name" validate={[required, minimum, twoHundred]} component={generarInput} label="Nombre" />
+                                                <Field name="nameTC" validate={[required, minimum, twoHundred]} component={generarInput} label="Nombre" />
                                             </div>
                                         </div>
                                         <br />
@@ -166,7 +166,7 @@ class ThematicCore extends Component {
                         columns={[
 
                             { title: 'Nombre de la temática', field: 'name' },
-                            { title: 'Objetivo', field: 'name' },
+                            { title: 'Objetivo', field: 'objective' },
                             {
                                 title: '', field: 'id',
                                 render: rowData => {
@@ -234,7 +234,7 @@ function mapStateToProps(state) {
 }
 
 let formAdd = reduxForm({
-    form: 'addProcess',
+    form: 'addThematicCore',
     enableReinitialize: true
 })(ThematicCore)
 

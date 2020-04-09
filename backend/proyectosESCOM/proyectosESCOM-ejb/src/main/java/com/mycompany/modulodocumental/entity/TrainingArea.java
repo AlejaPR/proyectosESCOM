@@ -8,6 +8,7 @@ package com.mycompany.modulodocumental.entity;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -33,12 +34,12 @@ public class TrainingArea implements Serializable {
     private int id;
     @Column(name = "TA_NAME")
     private String name;
-    
+
     @JoinColumn(name = "FK_TA_GENERAL", referencedColumnName = "PK_GP_ID")
     @ManyToOne
     private GeneralProgram fkTaGeneral;
-    
-    @OneToMany(mappedBy = "fkTcTrainingArea")
+
+    @OneToMany(mappedBy = "fkTcTrainingArea", cascade = CascadeType.ALL)
     private List<ThematicCore> listThematicCore;
 
     public TrainingArea() {
@@ -79,5 +80,5 @@ public class TrainingArea implements Serializable {
     public void setFkTaGeneral(GeneralProgram fkTaGeneral) {
         this.fkTaGeneral = fkTaGeneral;
     }
-    
+
 }

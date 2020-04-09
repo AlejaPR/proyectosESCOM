@@ -22,8 +22,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "TBL_PT_THEMATIC")
-public class PtThematic implements Serializable{
-    
+public class PtThematic implements Serializable {
+
     @Id
     @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -70,5 +70,4 @@ public class PtThematic implements Serializable{
         this.fkPttProgramThematic = fkPttProgramThematic;
     }
 
-    
 }

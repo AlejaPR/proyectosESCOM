@@ -8,6 +8,7 @@ package com.mycompany.modulodocumental.entity;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,7 +39,7 @@ public class OccupationalProfile implements Serializable {
     @ManyToOne
     private GeneralProgram fkOpGeneral;
 
-    @OneToMany(mappedBy = "fkPtoOccupational")
+    @OneToMany(mappedBy = "fkPtoOccupational", cascade = CascadeType.ALL)
     private List<PtOccupational> listPtOccupational;
 
     public OccupationalProfile() {
