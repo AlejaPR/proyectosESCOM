@@ -3,38 +3,31 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
-import { addProcess } from '../../../redux/actions/processA.js';
+import { editGeneralPro  } from '../../../redux/actions/generalProgramA.js';
 import { required, minimum, fiveHundred, twenty } from '../../utilitarian/validations.js';
 
-class Add extends Component {
+class Edit extends Component {
 
     handleSubmit = formValues => {
-        let processN = {
-            id: 0,
+        let generalP = {
+            id: this.props.generalP.id,
             description: formValues.description,
             name: formValues.name,
-            document: sessionStorage.getItem('documentId'),
-            state: 1,
             requestData: null
         }
-        this.props.addProcess(localStorage.getItem('Token'), processN);
-        formValues.description = '';
-        formValues.name = '';
+        this.props.editGeneralPro(localStorage.getItem('Token'), generalP);
     }
 
     render() {
         return (
             <div>
-                <button type="button" className="btn text-light btn-sm float-right naranja " data-toggle="modal" data-target="#addModal" >
-                    <i class="fas fa-plus"></i> Agregar
-                </button>
-                <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
 
                             <form className="form-horizontal" onSubmit={this.props.handleSubmit(this.handleSubmit)}>
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Nuevo proceso</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel">Editar programa general</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -56,8 +49,8 @@ class Add extends Component {
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                    <button type="submit" className="btn btn-default naranja">Agregar</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                                    <button type="submit" className="btn btn-default naranja">Guardar</button>
                                 </div>
                             </form>
                         </div>
@@ -89,12 +82,17 @@ const generarText = ({ input, placeholder, label, type, meta: { touched, warning
 
 function mapStateToProps(state) {
     return {
+        generalP: state.generalProgram.generalPro,
+        initialValues: {
+            description: state.generalProgram.generalPro.description,
+            name: state.generalProgram.generalPro.name
+        }
     }
 }
 
-let formAdd = reduxForm({
-    form: 'addProcess',
+let formEdit = reduxForm({
+    form: 'editGeneral',
     enableReinitialize: true
-})(Add)
+})(Edit)
 
-export default withRouter(connect(mapStateToProps, { addProcess })(formAdd));
+export default withRouter(connect(mapStateToProps, { editGeneralPro })(formEdit));

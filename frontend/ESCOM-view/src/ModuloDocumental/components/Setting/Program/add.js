@@ -4,17 +4,23 @@ import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
 import { addProgram, addMessageAdd } from '../../../redux/actions/programA.js';
-import { required, minimum, twoHundred } from '../../utilitarian/validations.js';
+import { required, minimum, twoHundred, select } from '../../utilitarian/validations.js';
 import { toast } from 'react-toastify';
+import { getListGeneralPro } from '../../../redux/actions/generalProgramA.js';
+
 
 class Add extends Component {
+
+    componentDidMount(){
+        this.props.getListGeneralPro(localStorage.getItem('Token'))
+    }
 
     componentDidUpdate() {
         if (this.props.messageAddPr !== '') {
             switch (this.props.messageAddPr) {
                 case 'add':
                     toast.success('Se agrego con exito.');
-                    this.props.getListPrograms(localStorage.getItem('Token'))
+                    this.props.getListGeneralPro(localStorage.getItem('Token'))
                     this.props.addMessageAdd('')
                     break;
                 case 'error server':
@@ -36,6 +42,7 @@ class Add extends Component {
             duration: formValues.duration,
             methodology: formValues.methodology,
             campus: formValues.campus,
+            idGeneral: formValues.general,
             requestData: null
         }
         this.props.addProgram(localStorage.getItem('Token'), programN);
@@ -45,7 +52,16 @@ class Add extends Component {
         formValues.academicCredits = '';
         formValues.duration = '';
         formValues.methodology = '';
+        formValues.general = '';
 
+    }
+
+    loadList() {
+        return this.props.listGeneralPro.map((general) => {
+            return (
+                <option value={general.id}>{general.name}</option>
+            )
+        })
     }
 
     render() {
@@ -107,6 +123,15 @@ class Add extends Component {
                                             <Field name="duration" validate={[required]} type="number" component={generarInput} label="Duración semestres" />
                                         </div>
                                     </div>
+                                    <label for="form_control_1">Programa general: </label>
+                                    <div className="row">
+                                        <div className="col-sm">
+                                            <Field name="general" validate={[select]} className="bs-select form-control" component={generarSelect}>
+                                                <option selected value="0">Seleccione...</option>
+                                                {this.loadList()}
+                                            </Field>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
@@ -122,6 +147,16 @@ class Add extends Component {
     }
 }
 
+const generarSelect = ({ input, label, type, meta: { touched, error }, children }) => (
+    <div>
+        <div>
+            <select {...input} className="form-control letra" style={{ height: "35px", fontSize: "13px" }}>
+                {children}
+            </select>
+            {touched && ((error && <span className="text-danger letra form-group">{error}</span>))}
+        </div>
+    </div>
+)
 
 const generarInput = ({ input, placeholder, label, type, meta: { touched, warning, error } }) => (
     <div>
@@ -134,6 +169,7 @@ const generarInput = ({ input, placeholder, label, type, meta: { touched, warnin
 
 function mapStateToProps(state) {
     return {
+        listGeneralPro: state.generalProgram.listGeneralPro,
         messageAddPr: state.program.messageAdd
     }
 }
@@ -143,4 +179,4 @@ let formAdd = reduxForm({
     enableReinitialize: true
 })(Add)
 
-export default withRouter(connect(mapStateToProps, { addProgram, addMessageAdd })(formAdd));
+export default withRouter(connect(mapStateToProps, { addProgram, addMessageAdd, getListGeneralPro })(formAdd));

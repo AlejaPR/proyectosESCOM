@@ -3,21 +3,20 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
-import { addProcess } from '../../../redux/actions/processA.js';
+import { addGeneralPro } from '../../../redux/actions/generalProgramA.js';
 import { required, minimum, fiveHundred, twenty } from '../../utilitarian/validations.js';
 
 class Add extends Component {
 
     handleSubmit = formValues => {
-        let processN = {
+        let generalN = {
             id: 0,
             description: formValues.description,
             name: formValues.name,
-            document: sessionStorage.getItem('documentId'),
             state: 1,
             requestData: null
         }
-        this.props.addProcess(localStorage.getItem('Token'), processN);
+        this.props.addGeneralPro(localStorage.getItem('Token'), generalN);
         formValues.description = '';
         formValues.name = '';
     }
@@ -34,7 +33,7 @@ class Add extends Component {
 
                             <form className="form-horizontal" onSubmit={this.props.handleSubmit(this.handleSubmit)}>
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Nuevo proceso</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel">Nuevo programa general</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -93,8 +92,8 @@ function mapStateToProps(state) {
 }
 
 let formAdd = reduxForm({
-    form: 'addProcess',
+    form: 'addGeneral',
     enableReinitialize: true
 })(Add)
 
-export default withRouter(connect(mapStateToProps, { addProcess })(formAdd));
+export default withRouter(connect(mapStateToProps, { addGeneralPro })(formAdd));

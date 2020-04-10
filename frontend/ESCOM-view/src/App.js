@@ -62,6 +62,7 @@ import ViewCalendar from './ModuloDocumental/components/calendar/viewCalendar.js
 import ThematicList from './ModuloDocumental/components/Matrix/Fill/thematicList.js';
 import ItemList from './ModuloDocumental/components/Matrix/Config/itemList.js';
 import ThematicSelect from './ModuloDocumental/components/Matrix/Fill/list/thematicSelect.js';
+import ListGeneral from './ModuloDocumental/components/Setting/generalP/listGeneralP.js';
 
 //rutas
 import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom"
@@ -399,6 +400,16 @@ class App extends React.Component {
 								<MenuSuperior />
 								<div id="wrapper">
 									<ListDocument />
+								</div>
+							</>
+						</RutaProtegida>
+
+						<RutaProtegida path="/ListGeneral">
+							<>
+								<HomeMenu />
+								<MenuSuperior />
+								<div id="wrapper">
+									<ListGeneral />
 								</div>
 							</>
 						</RutaProtegida>

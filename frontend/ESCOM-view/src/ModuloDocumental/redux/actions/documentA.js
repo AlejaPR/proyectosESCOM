@@ -10,6 +10,7 @@ export const EDIT_DOCUMENT = 'EDIT_DOCUMENT';
 export const DISABLE_DOCUMENT = 'DISABLE_DOCUMENT';
 export const GET_LIST_DOCUMENTS = 'GET_LIST_DOCUMENTS';
 
+export const ADD_ID_DOCUMENT = 'ADD_ID_DOCUMENT';
 export const ADD_MESSAGE_ADD = 'ADD_MESSAGE_ADD';
 export const ADD_MESSAGE_EDIT = 'ADD_MESSAGE_EDIT';
 export const ADD_MESSAGE_DISABLE = 'ADD_MESSAGE_DISABLE';
@@ -47,6 +48,15 @@ export function addMessageDisable(mensaje) {
         dispatch({
             type: ADD_MESSAGE_DISABLE,
             mensaje: mensaje
+        });
+    };
+}
+
+export function addIdDocument(id) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: ADD_ID_DOCUMENT,
+            mensaje: id
         });
     };
 }

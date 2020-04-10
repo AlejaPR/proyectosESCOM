@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { getListProcesses } from '../../redux/actions/processA.js';
 import { getConditionsPer } from '../../redux/actions/conditionA.js';
 import { consultarConfiguracion } from '../../../SuperAdministrador/actions/actionConfiguracion.js';
+import { addIdDocument } from '../../redux/actions/documentA.js';
 
 import logoDefecto from '../../../SuperAdministrador/imagenes/defectoLogo.png';
 import HomeIcon from '@material-ui/icons/Home';
@@ -83,7 +84,7 @@ class MenuLateral extends Component {
 					</div>
 				</div>
 				<li className="nav-item" style={{ height: "65px" }}>
-					<Link to="/HomeDocumentary" name="hoverUsuario" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
+					<Link to="/HomeDocumentary" onClick ={() => this.props.addIdDocument(0)} name="hoverUsuario" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
 						style={this.fondoBarr()}>
 						<HomeIcon />
 						<br />
@@ -216,4 +217,4 @@ function mapStateToProps(state) {
 }
 
 
-export default connect(mapStateToProps, { getListProcesses, getConditionsPer, consultarConfiguracion })(MenuLateral)
+export default connect(mapStateToProps, { getListProcesses,addIdDocument, getConditionsPer, consultarConfiguracion })(MenuLateral)

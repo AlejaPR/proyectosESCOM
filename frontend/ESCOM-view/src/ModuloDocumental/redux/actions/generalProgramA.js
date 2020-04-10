@@ -191,19 +191,19 @@ export function editGeneralPro(token, programE) {
 }
 
 
-export function disableGeneralPro(token, id) {
+export function disableGeneralPro(token, generalN) {
   const headers = {
     'Content-Type': 'application/json',
     'TokenAuto': desencriptar(token),
     'Permiso': PERMIT_DISABLE_GENERAL_PRO
   }
-  const requestData = {
+  generalN.requestData = {
     'ip': localStorage.getItem('Ip'),
     'token': desencriptar(token),
     'operacion': PERMIT_DISABLE_GENERAL_PRO
   };
   return (dispatch, getState) => {
-    axios.put(`${URL_BASE}/api/generalProgram/disable/${id}`, requestData, { headers: headers })
+    axios.put(`${URL_BASE}/api/generalProgram/disable`, generalN, { headers: headers })
       .then(response => {
         dispatch({
           type: DISABLE_GENERAL_PRO,
