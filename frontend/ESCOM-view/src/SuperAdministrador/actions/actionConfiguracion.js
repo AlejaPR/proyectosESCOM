@@ -14,7 +14,7 @@ export const MENSAJE_CONFIGURACION = 'MENSAJE_CONFIGURACION';
 export const CARGAR_CONFIGURACION = 'CARGAR_CONFIGURACION';
 export const CONFIGURACION_LOGIN = 'CONFIGURACION_LOGIN';
 
-const URL_BASE = 'http://localhost:9090';
+const URL_BASE = 'http://proyectosescom.3utilities.com:9090';
 const PERMISO_CONFIGURACION = 'SA_Administrar configuracion de aspecto';
 
 export function actionActualizarConfiguracion(configuracion, token) {

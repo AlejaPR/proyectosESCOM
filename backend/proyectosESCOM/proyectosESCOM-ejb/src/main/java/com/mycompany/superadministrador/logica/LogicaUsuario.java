@@ -545,9 +545,8 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
     @Override
     public List<ActividadPOJO> listarActividadesUsuario(int numeroDocumento) throws ExcepcionGenerica {
         try {
-            List<ActividadPOJO> listaActividades = new ArrayList();
-            listaActividades = actividadDB.listarActividadesUsuario(numeroDocumento);
-            if (listaActividades.size() >= 0) {
+            List<ActividadPOJO> listaActividades =actividadDB.listarActividadesUsuario(numeroDocumento);
+            if (!listaActividades.isEmpty()) {
                 return listaActividades;
             } else {
                 throw new NoResultException("Error en la consulta");
@@ -577,9 +576,8 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
     @Override
     public List<ActividadPOJO> listarActividadesNoAsociadasUsuario(int numeroDocumento, int idModulo) throws ExcepcionGenerica {
         try {
-            List<ActividadPOJO> listaActividades = new ArrayList();
-            listaActividades = actividadDB.listarActividadesNoAsociadasUsuario(numeroDocumento, idModulo);
-            if (listaActividades.size() >= 0) {
+            List<ActividadPOJO> listaActividades =actividadDB.listarActividadesNoAsociadasUsuario(numeroDocumento, idModulo);
+            if (!listaActividades.isEmpty()) {
                 return listaActividades;
             } else {
                 throw new NoResultException("Error en la consulta");
@@ -676,9 +674,8 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
     @Override
     public List<ActividadPOJO> listarActividadesUsuarioActivas(int numeroDocumento) throws ExcepcionGenerica {
         try {
-            List<ActividadPOJO> listaActividades = new ArrayList();
-            listaActividades = actividadDB.listarActividadesUsuarioActivas(numeroDocumento);
-            if (listaActividades.size() >= 0) {
+            List<ActividadPOJO> listaActividades =actividadDB.listarActividadesUsuarioActivas(numeroDocumento);
+            if (!listaActividades.isEmpty()) {
                 return listaActividades;
             } else {
                 throw new NoResultException("Error en la consulta");

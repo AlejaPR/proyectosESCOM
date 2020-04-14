@@ -90,7 +90,7 @@ class AsignarActividadModulo extends React.Component {
                 <div class="text-left titulo" style={estiloLetrero}>
                     <h4>Administrar actividades del modulo</h4>
                 </div>
-                <Barra texto="Administracion de modulos > Administrar actividades del modulo" />
+                <Barra texto="Inicio > Administracion de modulos > Administrar actividades del modulo" />
 
 
 

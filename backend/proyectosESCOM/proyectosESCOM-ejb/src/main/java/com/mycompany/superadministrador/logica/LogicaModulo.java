@@ -283,9 +283,8 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
     @Override
     public List<ActividadPOJO> listarActividadesModulo(int idModulo) throws ExcepcionGenerica {
         try {
-            List<ActividadPOJO> listaActividadesM = new ArrayList();
-            listaActividadesM = actividadDB.listarActividadesModulo(moduloDB.find(idModulo));
-            if (listaActividadesM.size() >= 0) {
+            List<ActividadPOJO> listaActividadesM = actividadDB.listarActividadesModulo(moduloDB.find(idModulo));
+            if (!listaActividadesM.isEmpty()) {
                 return listaActividadesM;
             } else {
                 throw new NoResultException("No se encontraron datos del modulo");

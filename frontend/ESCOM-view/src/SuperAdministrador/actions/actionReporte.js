@@ -5,7 +5,7 @@ import { mensajeDeConsulta } from '../mensajesDeError/MensajesDeErrorReporte.js'
 export const REPORTES = 'REPORTES';
 export const MENSAJE_REPORTE = 'MENSAJE_REPORTE';
 
-const URL_BASE = 'http://localhost:9090';
+const URL_BASE = 'http://proyectosescom.3utilities.com:9090';
 const PERMISO_REALIZAR = 'SA_Realizar reportes';
 
 

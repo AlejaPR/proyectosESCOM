@@ -6,6 +6,9 @@
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
   <name>proyectosESCOM</name>
+  <build>
+      <finalName>proyectosESCOM-web</finalName>
+  </build>
   <modules>
     <module>proyectosESCOM-ear</module>
     <module>proyectosESCOM-web</module>

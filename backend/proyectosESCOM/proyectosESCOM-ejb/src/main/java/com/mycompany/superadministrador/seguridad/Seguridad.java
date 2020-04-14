@@ -126,29 +126,17 @@ public class Seguridad implements SeguridadFacadeLocal {
     public static String generarHash(String texto) {
         String respuesta = "";
         try {
-            // Generamos una clave de 128 bits adecuada para AES
             KeyGenerator keyGenerator = KeyGenerator.getInstance("AES");
             keyGenerator.init(128);
             Key key = keyGenerator.generateKey();
-
-            // Alternativamente, una clave que queramos que tenga al menos 16 bytes
-            // y nos quedamos con los bytes 0 a 15
             key = new SecretKeySpec("h4eBMfS!Nr^.E8:Ye12".getBytes(), 0, 16, "AES");
-
-            // Se obtiene un cifrador AES
             Cipher aes = Cipher.getInstance("AES/ECB/PKCS5Padding");
-
-            // Se inicializa para encriptacion y se encripta el texto,
-            // que debemos pasar como bytes.
             aes.init(Cipher.ENCRYPT_MODE, key);
             byte[] encriptado = aes.doFinal(texto.getBytes());
 
-            // Se escribe byte a byte en hexadecimal el texto
-            // encriptado para ver su pinta.
             for (byte b : encriptado) {
                 respuesta += Integer.toHexString(0xFF & b).toString();
             }
-
             return respuesta;
 
         } catch (IllegalBlockSizeException ex) {

@@ -21,7 +21,7 @@ export const INFORMACION_ACTIVIDAD = 'INFORMACION_ACTIVIDAD';
 export const MENSAJE_EDITAR = 'MENSAJE_EDITAR';
 export const EDITAR_ACTIVIDAD = 'EDITAR_ACTIVIDAD';
 
-const URL_BASE = 'http://localhost:9090';
+const URL_BASE = 'http://proyectosescom.3utilities.com:9090';
 const PERMISO_CONSULTAR_ACTIVIDADES = 'SA_Consultar actividades registradas';
 const PERMISO_REGISTRAR_ACTIVIDAD = 'SA_Registrar actividad';
 const PERMISO_SUSPENDER_ACTIVAR = 'SA_Suspender/activar actividades'
