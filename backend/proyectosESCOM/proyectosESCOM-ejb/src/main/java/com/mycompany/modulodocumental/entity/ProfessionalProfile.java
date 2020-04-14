@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.entity;
 
 import java.io.Serializable;
@@ -20,35 +15,60 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
+ * This is the class of the professional profile entity. Contains all fields for
+ * persistence.
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - Universsity of Cundinamarca
  */
 @Entity
 @Table(name = "TBL_PROFESSIONAL_PROFILE")
 public class ProfessionalProfile implements Serializable {
 
+    /**
+     * id variable
+     */
     @Id
     @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PK_PP_ID")
     private int id;
+
+    /**
+     * variable name professinal profile
+     */
     @Column(name = "PP_NAME")
     private String name;
 
+    /**
+     * Variable for the relationship with the general program entity
+     */
     @JoinColumn(name = "FK_PP_GENERAL", referencedColumnName = "PK_GP_ID")
     @ManyToOne
     private GeneralProgram fkPpGeneral;
 
+    /**
+     * Variable for the relationship with the program thematic core,
+     * professional profile entity
+     */
     @OneToMany(mappedBy = "fkPtpProfessional", cascade = CascadeType.ALL)
     private List<PtProfessional> listPtProfessional;
 
+    /**
+     * constructor method
+     */
     public ProfessionalProfile() {
     }
 
+    /**
+     * constructor method
+     *
+     * @param name
+     */
     public ProfessionalProfile(String name) {
         this.name = name;
     }
 
+    //getter and setter
     public int getId() {
         return id;
     }

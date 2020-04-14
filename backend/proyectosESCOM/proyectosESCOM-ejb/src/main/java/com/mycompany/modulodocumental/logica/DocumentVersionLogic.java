@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.logica;
 
 import com.mycompany.modulodocumental.entity.DocumentVersion;
@@ -18,21 +13,42 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 /**
+ * This is the class in charge of the document version logic
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Stateless
 public class DocumentVersionLogic implements DocumentVersionLogicLocal {
 
+    /**
+     * Document version interface injection
+     */
     @EJB
     private DocumentVersionFacadeLocal documentVersionFacade;
+
+    /**
+     * Bitacora interface injection
+     */
     @EJB
     private UtilitarioFacadeLocal bitacora;
 
+    /**
+     * Variable for logging
+     */
     private static final String TABLE = "TBL_DOCUMENT_VERSION";
 
+    /**
+     * Variable for the logger record
+     */
     private static final String CLASS = "Clase logica version documento";
 
+    /**
+     * method for current document version list
+     *
+     * @param idDocument
+     * @return
+     * @throws GenericException
+     */
     @Override
     public List<DocumentVersionP> getListCurrent(int idDocument) throws GenericException {
         try {
@@ -49,6 +65,13 @@ public class DocumentVersionLogic implements DocumentVersionLogicLocal {
         }
     }
 
+    /**
+     * method for listing old document versions
+     *
+     * @param idProgram
+     * @return
+     * @throws GenericException
+     */
     @Override
     public List<DocumentVersionP> getListOld(int idProgram) throws GenericException {
         try {
@@ -65,6 +88,12 @@ public class DocumentVersionLogic implements DocumentVersionLogicLocal {
         }
     }
 
+    /**
+     * method to add a document version
+     *
+     * @param version
+     * @throws GenericException
+     */
     @Override
     public void add(DocumentVersionP version) throws GenericException {
         try {
@@ -80,7 +109,7 @@ public class DocumentVersionLogic implements DocumentVersionLogicLocal {
                 fin.setState(-1);
                 documentVersionFacade.edit(fin);
             }
-            DocumentVersion data = new DocumentVersion(version.getDescription(),value , version.getLocation(), version.getState(), version.getDate());        
+            DocumentVersion data = new DocumentVersion(version.getDescription(), value, version.getLocation(), version.getState(), version.getDate());
             documentVersionFacade.create(data);
             version.getRequestData().setTablaInvolucrada(TABLE);
             bitacora.registrarEnBitacora(version.getRequestData());

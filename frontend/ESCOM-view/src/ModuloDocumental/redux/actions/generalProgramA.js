@@ -131,7 +131,7 @@ export function addGeneralPro(token, programN) {
       .then(response => {
         dispatch({
           type: ADD_GENERAL_PRO,
-          payload: response.data.data
+          payload: response.data.respuesta
         });
       }).catch(error => {
         if (error.request.response === '') {
@@ -169,7 +169,7 @@ export function editGeneralPro(token, programE) {
       .then(response => {
         dispatch({
           type: EDIT_GENERAL_PRO,
-          payload: response.data.data
+          payload: response.data.respuesta
         });
       }).catch(error => {
         if (error.request.response === '') {
@@ -207,7 +207,7 @@ export function disableGeneralPro(token, generalN) {
       .then(response => {
         dispatch({
           type: DISABLE_GENERAL_PRO,
-          payload: response.data.data
+          payload: response.data.respuesta
         })
       }).catch(error => {
         if (error.request.response === '') {

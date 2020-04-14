@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.logica;
 
 import com.mycompany.modulodocumental.entity.Document;
@@ -21,23 +16,48 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 /**
+ * This is the class in charge of the document logic
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Stateless
 public class DocumentLogic implements DocumentLogicLocal {
 
+    /**
+     * document interface injection
+     */
     @EJB
     DocumentFacadeLocal documentFacade;
+
+    /**
+     * program interface injection
+     */
     @EJB
     ProgramFacadeLocal programFacade;
+
+    /**
+     * bitacora interface injection
+     */
     @EJB
     UtilitarioFacadeLocal bitacora;
 
+    /**
+     * Variable for logging
+     */
     private static final String TABLE = "TBL_DOCUMENT";
 
+    /**
+     * Variable for the logger record
+     */
     private static final String CLASS = "Clase logica documento";
 
+    /**
+     * method to get the id of a document
+     *
+     * @param id
+     * @return
+     * @throws GenericException
+     */
     @Override
     public int getIdDocument(int id) throws GenericException {
         try {
@@ -49,6 +69,13 @@ public class DocumentLogic implements DocumentLogicLocal {
         }
     }
 
+    /**
+     * method of get a document
+     *
+     * @param idDocument
+     * @return
+     * @throws GenericException
+     */
     @Override
     public DocumentP get(int idDocument) throws GenericException {
         try {
@@ -62,6 +89,12 @@ public class DocumentLogic implements DocumentLogicLocal {
         }
     }
 
+    /**
+     * method to get list of documents
+     *
+     * @return
+     * @throws GenericException
+     */
     @Override
     public List<DocumentP> getList() throws GenericException {
         try {
@@ -81,6 +114,13 @@ public class DocumentLogic implements DocumentLogicLocal {
         }
     }
 
+    /**
+     * method to get the document to edit
+     *
+     * @param id
+     * @return
+     * @throws GenericException
+     */
     @Override
     public DocumentP documentIdEdit(int id) throws GenericException {
         try {
@@ -95,12 +135,18 @@ public class DocumentLogic implements DocumentLogicLocal {
         }
     }
 
+    /**
+     * method to add a document
+     *
+     * @param document
+     * @throws GenericException
+     */
     @Override
     public void add(DocumentP document) throws GenericException {
         try {
             List<Document> list = documentFacade.documentsProgram(Integer.parseInt(document.getProgram()));
             for (Document list1 : list) {
-                if(list1.getState()==1){
+                if (list1.getState() == 1) {
                     list1.setState(-1);
                     documentFacade.edit(list1);
                 }
@@ -117,6 +163,12 @@ public class DocumentLogic implements DocumentLogicLocal {
         }
     }
 
+    /**
+     * method of editing a document
+     *
+     * @param document
+     * @throws GenericException
+     */
     @Override
     public void edit(DocumentP document) throws GenericException {
         try {
@@ -135,6 +187,13 @@ public class DocumentLogic implements DocumentLogicLocal {
         }
     }
 
+    /**
+     * method to disable a document
+     *
+     * @param idDocument
+     * @param dataR
+     * @throws GenericException
+     */
     @Override
     public void disable(int idDocument, DatosSolicitudPOJO dataR) throws GenericException {
         try {

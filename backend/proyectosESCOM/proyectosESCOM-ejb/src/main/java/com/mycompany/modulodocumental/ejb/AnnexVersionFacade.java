@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.ejb;
 
 import com.mycompany.modulodocumental.interfaces.AnnexVersionFacadeLocal;
@@ -14,11 +9,14 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
+ * This is the entity bean version annex. Contains all methods for persistence
+ * and queries to the database
  *
- * @author HASHY
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Stateless
 public class AnnexVersionFacade extends AbstractFacade<AnnexVersion> implements AnnexVersionFacadeLocal {
+
     @PersistenceContext(unitName = "documentaryUnit")
     private EntityManager em;
 
@@ -31,6 +29,12 @@ public class AnnexVersionFacade extends AbstractFacade<AnnexVersion> implements 
         super(AnnexVersion.class);
     }
 
+    /**
+     * This method returns the list of annex versions, from a specific annex
+     *
+     * @param id
+     * @return
+     */
     @Override
     public List<AnnexVersion> listAnnexVersion(int id) {
         Query query = em.createQuery("SELECT v FROM AnnexVersion v WHERE v.fkAvAnnex.id = ?1 ORDER BY v.state DESC");
@@ -38,5 +42,5 @@ public class AnnexVersionFacade extends AbstractFacade<AnnexVersion> implements 
         List<AnnexVersion> list = query.getResultList();
         return list;
     }
-    
+
 }

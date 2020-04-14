@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.ejb;
 
 import com.mycompany.modulodocumental.interfaces.ConditionFacadeLocal;
@@ -14,8 +9,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
+ * This is the bean of the condition entity. Contains all methods for
+ * persistence and queries to the database
  *
- * @author HASHY
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Stateless
 public class ConditionFacade extends AbstractFacade<Condition> implements ConditionFacadeLocal {
@@ -32,6 +29,12 @@ public class ConditionFacade extends AbstractFacade<Condition> implements Condit
         super(Condition.class);
     }
 
+    /**
+     * This method returns the list of the conditions of a specific process
+     *
+     * @param idProcess
+     * @return
+     */
     @Override
     public List<Condition> listConditionPro(int idProcess) {
         Query query = em.createQuery("SELECT c FROM Condition c WHERE c.fkConProcess.id = ?1 AND c.state <> -1 ORDER BY c.id ASC");
@@ -40,10 +43,16 @@ public class ConditionFacade extends AbstractFacade<Condition> implements Condit
         return list;
     }
 
+    /**
+     * This method returns the list of the conditions of a specific document
+     *
+     * @param idDocument
+     * @return
+     */
     @Override
-    public List<Condition> listConditionDoc(int idD) {
+    public List<Condition> listConditionDoc(int idDocument) {
         Query query = em.createQuery("SELECT c FROM Condition c WHERE c.fkConProcess.fkPrcDocument.id = ?1  AND c.state <> -1 ORDER BY c.id DESC, c.fkConProcess.id ASC");
-        query.setParameter(1, idD);
+        query.setParameter(1, idDocument);
         List<Condition> list = query.getResultList();
         return list;
     }

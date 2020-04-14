@@ -7,6 +7,7 @@ package com.mycompany.modulodocumental.services;
 
 import com.mycompany.modulodocumental.interfaces.logic.ProgramLogicLocal;
 import com.mycompany.modulodocumental.pojo.ProgramP;
+import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
@@ -42,7 +43,7 @@ public class ProgramS {
             List<ProgramP> data = programLogicFacade.getList();
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
@@ -54,7 +55,7 @@ public class ProgramS {
             ProgramP data = programLogicFacade.get(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
@@ -64,10 +65,10 @@ public class ProgramS {
     public Response add(ProgramP pro) {
         try {
             programLogicFacade.add(pro);
-            JsonObject rest = Json.createObjectBuilder().add("data", "add").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "add").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 
@@ -78,10 +79,24 @@ public class ProgramS {
     public Response edit(ProgramP pro) {
         try {
             programLogicFacade.edit(pro);
-            JsonObject rest = Json.createObjectBuilder().add("data", "edit").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "edit").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
+        }
+
+    }
+
+    @PUT
+    @Path("/disable/{id}")
+    public Response disable(@PathParam("id") int id, DatosSolicitudPOJO dataS) {
+        try {
+            programLogicFacade.disable(id, dataS);
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "disable").build();
+            return Response.status(Response.Status.OK).entity(rest).build();
+        } catch (Exception e) {
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 

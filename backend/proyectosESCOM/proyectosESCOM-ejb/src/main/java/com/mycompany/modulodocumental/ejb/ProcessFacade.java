@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.ejb;
 
 import com.mycompany.modulodocumental.interfaces.ProcessFacadeLocal;
@@ -14,11 +9,14 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
+ * This is the bean of the process entity. Contains all methods for persistence
+ * and queries to the database
  *
- * @author HASHY
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Stateless
 public class ProcessFacade extends AbstractFacade<Process> implements ProcessFacadeLocal {
+
     @PersistenceContext(unitName = "documentaryUnit")
     private EntityManager em;
 
@@ -31,6 +29,12 @@ public class ProcessFacade extends AbstractFacade<Process> implements ProcessFac
         super(Process.class);
     }
 
+    /**
+     * This method returns the list of processes of a specific document
+     *
+     * @param idDocument
+     * @return
+     */
     @Override
     public List<Process> listProcess(int idDocument) {
         Query query = em.createQuery("SELECT p FROM Process p WHERE p.fkPrcDocument.id = ?1 AND p.state > 0");
@@ -38,5 +42,5 @@ public class ProcessFacade extends AbstractFacade<Process> implements ProcessFac
         List<Process> list = query.getResultList();
         return list;
     }
-    
+
 }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.ejb;
 
 import com.mycompany.modulodocumental.entity.PtCompetitionG;
@@ -14,8 +9,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
+ * This is the bean of the entity thematic core program, general competence.
+ * Contains all methods for persistence and queries to the database
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Stateless
 public class PtCompetitionGFacade extends AbstractFacade<PtCompetitionG> implements PtCompetitionGFacadeLocal {
@@ -32,6 +29,13 @@ public class PtCompetitionGFacade extends AbstractFacade<PtCompetitionG> impleme
         super(PtCompetitionG.class);
     }
 
+    /**
+     * This method returns the list of relationships of general competence and
+     * thematic core of the program.
+     *
+     * @param programT
+     * @return
+     */
     @Override
     public List<PtCompetitionG> getList(int programT) {
         Query query = em.createQuery("SELECT c FROM PtCompetitionG c WHERE c.fkPtcProgramThematic.id = ?1");

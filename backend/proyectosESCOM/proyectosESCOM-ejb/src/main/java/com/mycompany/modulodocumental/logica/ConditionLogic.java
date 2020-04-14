@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.logica;
 
 import com.mycompany.modulodocumental.entity.Condition;
@@ -25,25 +20,54 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 /**
+ * This is the class in charge of the condition logic
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Stateless
 public class ConditionLogic implements ConditionLogicLocal {
 
+    /**
+     * Condition interface injection
+     */
     @EJB
     private ConditionFacadeLocal conditionFacade;
+
+    /**
+     * Activity interface injection
+     */
     @EJB
     private ActivityFacadeLocal activityFacade;
+
+    /**
+     * Process interface injection
+     */
     @EJB
     private ProcessFacadeLocal processFacade;
+
+    /**
+     * Bitacora interface injection
+     */
     @EJB
     UtilitarioFacadeLocal bitacora;
 
+    /**
+     * Variable for logging
+     */
     private static final String TABLE = "TBL_CONDITION";
 
+    /**
+     * Variable for the logger record
+     */
     private static final String CLASS = "Clase logica condicion";
 
+    /**
+     * method to get list of conditions
+     *
+     * @param idDocument
+     * @return
+     * @throws GenericException
+     */
     @Override
     public List<ConditionP> getList(int idDocument) throws GenericException {
         try {
@@ -68,7 +92,7 @@ public class ConditionLogic implements ConditionLogicLocal {
                     finalDataN = formatoUsuario.format(finalData);
                 }
 
-                ConditionP conP = new ConditionP(con.getId(), con.getName(), con.getDescription(), con.getState(), startDataN, finalDataN,1);
+                ConditionP conP = new ConditionP(con.getId(), con.getName(), con.getDescription(), con.getState(), startDataN, finalDataN, 1);
                 data.add(conP);
             }
             return data;
@@ -79,6 +103,13 @@ public class ConditionLogic implements ConditionLogicLocal {
 
     }
 
+    /**
+     * method to get a condition
+     *
+     * @param idCondition
+     * @return
+     * @throws GenericException
+     */
     @Override
     public ConditionP get(int idCondition) throws GenericException {
         try {
@@ -105,7 +136,7 @@ public class ConditionLogic implements ConditionLogicLocal {
                     con.getDescription(),
                     con.getState(),
                     startDataN,
-                    finalDataN,1);
+                    finalDataN, 1);
             data.setProcess(con.getFkConProcess().getId());
             return data;
         } catch (Exception ex) {
@@ -115,6 +146,13 @@ public class ConditionLogic implements ConditionLogicLocal {
 
     }
 
+    /**
+     * method to get the list of conditions with the percentage of progress
+     *
+     * @param idProcess
+     * @return
+     * @throws GenericException
+     */
     @Override
     public List<ConditionView> getListPercentage(int idProcess) throws GenericException {
         try {
@@ -138,6 +176,12 @@ public class ConditionLogic implements ConditionLogicLocal {
 
     }
 
+    /**
+     * method of adding a condition
+     *
+     * @param condition
+     * @throws GenericException
+     */
     @Override
     public void add(ConditionP condition) throws GenericException {
         try {
@@ -153,6 +197,12 @@ public class ConditionLogic implements ConditionLogicLocal {
         }
     }
 
+    /**
+     * method of editing a condition
+     *
+     * @param condition
+     * @throws GenericException
+     */
     @Override
     public void edit(ConditionP condition) throws GenericException {
         try {
@@ -170,6 +220,13 @@ public class ConditionLogic implements ConditionLogicLocal {
         }
     }
 
+    /**
+     * method to disable a condition
+     *
+     * @param idCondition
+     * @param dataR
+     * @throws GenericException
+     */
     @Override
     public void disable(int idCondition, DatosSolicitudPOJO dataR) throws GenericException {
         try {
@@ -184,6 +241,13 @@ public class ConditionLogic implements ConditionLogicLocal {
         }
     }
 
+    /**
+     * method of approving a condition
+     *
+     * @param idCondition
+     * @param dataR
+     * @throws GenericException
+     */
     @Override
     public void approve(int idCondition, DatosSolicitudPOJO dataR) throws GenericException {
         try {

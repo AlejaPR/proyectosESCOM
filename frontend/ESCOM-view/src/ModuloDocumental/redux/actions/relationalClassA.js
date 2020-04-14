@@ -84,7 +84,7 @@ export function addRelational(token, relationalN) {
             .then(response => {
                 dispatch({
                     type: ADD_RELATIONAL_CLASS,
-                    payload: response.data.data
+                    payload: response.data.respuesta
                 });
             }).catch(error => {
                 if (error.request.response === '') {
@@ -122,7 +122,7 @@ export function deleteRelational(token, relationalN) {
             .then(response => {
                 dispatch({
                     type: DELETE_RELATIONAL_CLASS,
-                    payload: response.data.data
+                    payload: response.data.respuesta
                 });
             }).catch(error => {
                 if (error.request.response === '') {

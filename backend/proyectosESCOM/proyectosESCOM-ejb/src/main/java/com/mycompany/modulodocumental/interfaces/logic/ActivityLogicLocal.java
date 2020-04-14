@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.interfaces.logic;
 
 import com.mycompany.modulodocumental.pojo.ActivityP;
@@ -13,8 +8,10 @@ import java.util.List;
 import javax.ejb.Local;
 
 /**
+ * This is the interface for the logical activity class. Contains all the
+ * methods required for connecting the logic with the entity
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Local
 public interface ActivityLogicLocal {
@@ -26,7 +23,7 @@ public interface ActivityLogicLocal {
     void edit(ActivityP activity) throws GenericException;
 
     List<ActivityP> listInfo(int idCondition) throws GenericException;
-    
+
     List<ActivityP> listAnnex(int idCondition) throws GenericException;
 
     void addInformation(ActivityP activity) throws GenericException;
@@ -38,7 +35,7 @@ public interface ActivityLogicLocal {
     void changeStatus(ActivityP activity) throws GenericException;
 
     void associateAnnex(int activity, int annex, DatosSolicitudPOJO dataS) throws GenericException;
-    
+
     ActivityAnnexView getAnnex(int activity) throws GenericException;
 
 }

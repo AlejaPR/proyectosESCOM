@@ -178,7 +178,7 @@ export function addDocument(token, documentN) {
             .then(response => {
                 dispatch({
                     type: ADD_DOCUMENT,
-                    payload: response.data.data
+                    payload: response.data.respuesta
                 });
             }).catch(error => {
                 if (error.request.response === '') {
@@ -216,7 +216,7 @@ export function editDocument(token, documentE) {
             .then(response => {
                 dispatch({
                     type: EDIT_DOCUMENT,
-                    payload: response.data.data
+                    payload: response.data.respuesta
                 });
             }).catch(error => {
                 if (error.request.response === '') {
@@ -288,7 +288,7 @@ export function disableDocument(token, id) {
             .then(response => {
                 dispatch({
                     type: DISABLE_DOCUMENT,
-                    payload: response.data.data
+                    payload: response.data.respuesta
                 })
             }).catch(error => {
                 if (error.request.response === '') {

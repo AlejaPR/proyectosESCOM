@@ -22,13 +22,14 @@ public class ProgramP implements Serializable {
     private int duration;
     private String methodology;
     private String campus;
+    private int state;
     private int idGeneral;
     private DatosSolicitudPOJO requestData;
 
     public ProgramP() {
     }
 
-    public ProgramP(int id, String name, String levelEducation, String institution, int academicCredits, int duration, String methodology, String campus) {
+    public ProgramP(int id, String name, String levelEducation, String institution, int academicCredits, int duration, String methodology, String campus, int state) {
         this.id = id;
         this.name = name;
         this.levelEducation = levelEducation;
@@ -37,6 +38,7 @@ public class ProgramP implements Serializable {
         this.duration = duration;
         this.methodology = methodology;
         this.campus = campus;
+        this.state = state;
     }
 
     public int getId() {
@@ -101,6 +103,14 @@ public class ProgramP implements Serializable {
 
     public void setCampus(String campus) {
         this.campus = campus;
+    }
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
     }
 
     public int getIdGeneral() {

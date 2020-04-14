@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.ejb;
 
 import com.mycompany.modulodocumental.interfaces.ProgramFacadeLocal;
@@ -12,11 +7,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 /**
+ * This is the bean of the program entity. Contains all methods for persistence
+ * and queries to the database
  *
- * @author HASHY
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Stateless
 public class ProgramFacade extends AbstractFacade<Program> implements ProgramFacadeLocal {
+
     @PersistenceContext(unitName = "documentaryUnit")
     private EntityManager em;
 
@@ -28,5 +26,5 @@ public class ProgramFacade extends AbstractFacade<Program> implements ProgramFac
     public ProgramFacade() {
         super(Program.class);
     }
-    
+
 }

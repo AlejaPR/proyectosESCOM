@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.ejb;
 
 import com.mycompany.modulodocumental.entity.PtDistinctive;
@@ -14,11 +9,14 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
+ * This is the bean of the entity thematic core program, distinctive feature.
+ * Contains all methods for persistence and queries to the database
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Stateless
 public class PtDistinctiveFacade extends AbstractFacade<PtDistinctive> implements PtDistinctiveFacadeLocal {
+
     @PersistenceContext(unitName = "documentaryUnit")
     private EntityManager em;
 
@@ -31,6 +29,13 @@ public class PtDistinctiveFacade extends AbstractFacade<PtDistinctive> implement
         super(PtDistinctive.class);
     }
 
+    /**
+     * This method returns the list of distinctive feature relationships and
+     * thematic core of the program.
+     *
+     * @param programT
+     * @return
+     */
     @Override
     public List<PtDistinctive> getList(int programT) {
         Query query = em.createQuery("SELECT d FROM PtDistinctive d WHERE d.fkPtdProgramThematic.id = ?1");
@@ -38,5 +43,5 @@ public class PtDistinctiveFacade extends AbstractFacade<PtDistinctive> implement
         List<PtDistinctive> list = query.getResultList();
         return list;
     }
-    
+
 }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.logica;
 
 import com.mycompany.modulodocumental.entity.Activity;
@@ -22,23 +17,49 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 /**
+ * This is the class in charge of the commentary logic
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Stateless
 public class CommentaryLogic implements CommentaryLogicLocal {
 
+    /**
+     * Commentary interface injection
+     */
     @EJB
     private CommentaryFacadeLocal commentaryFacade;
+
+    /**
+     * Activity interface injection
+     */
     @EJB
     private ActivityFacadeLocal activityFacade;
+
+    /**
+     * Bitacora interface injection
+     */
     @EJB
     UtilitarioFacadeLocal bitacora;
 
+    /**
+     * Variable for logging
+     */
     private static final String TABLE = "TBL_COMMENTARY";
 
+    /**
+     * Variable for the logger record
+     */
     private static final String CLASS = "Clase logica comentario";
 
+    /**
+     * *
+     * method to get the list of comments
+     *
+     * @param activity
+     * @return
+     * @throws GenericException
+     */
     @Override
     public List<CommentaryP> getList(int activity) throws GenericException {
         try {
@@ -61,6 +82,13 @@ public class CommentaryLogic implements CommentaryLogicLocal {
         }
     }
 
+    /**
+     * method to delete a comment
+     *
+     * @param idCommentary
+     * @param dataS
+     * @throws GenericException
+     */
     @Override
     public void delete(int idCommentary, DatosSolicitudPOJO dataS) throws GenericException {
         try {
@@ -74,6 +102,12 @@ public class CommentaryLogic implements CommentaryLogicLocal {
         }
     }
 
+    /**
+     * method of adding a comment
+     *
+     * @param commentary
+     * @throws GenericException
+     */
     @Override
     public void add(CommentaryP commentary) throws GenericException {
         try {

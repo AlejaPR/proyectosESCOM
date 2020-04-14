@@ -1,11 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.logica;
 
-import com.mycompany.modulodocumental.ejb.ThematicFacadeLocal;
+import com.mycompany.modulodocumental.interfaces.ThematicFacadeLocal;
 import com.mycompany.modulodocumental.interfaces.TrainingAreaFacadeLocal;
 import com.mycompany.modulodocumental.entity.Competition;
 import com.mycompany.modulodocumental.entity.DistinctiveFeature;
@@ -17,7 +12,6 @@ import com.mycompany.modulodocumental.entity.Thematic;
 import com.mycompany.modulodocumental.entity.TrainingArea;
 import com.mycompany.modulodocumental.interfaces.CompetitionFacadeLocal;
 import com.mycompany.modulodocumental.interfaces.DistinctiveFeatureFacadeLocal;
-import com.mycompany.modulodocumental.interfaces.GeneralProgramFacadeLocal;
 import com.mycompany.modulodocumental.interfaces.OccupationalProfileFacadeLocal;
 import com.mycompany.modulodocumental.interfaces.ProfessionalProfileFacadeLocal;
 import com.mycompany.modulodocumental.interfaces.ProgramFacadeLocal;
@@ -32,33 +26,74 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 /**
+ * This is the class in charge of the general class logic
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Stateless
 public class GeneralClassLogic implements GeneralClassLogicLocal {
-    
+
+    /**
+     * thematic interface injection
+     */
     @EJB
     private ThematicFacadeLocal thematicFacade;
+
+    /**
+     * training area interface injection
+     */
     @EJB
     private TrainingAreaFacadeLocal trainingAreaFacade;
+
+    /**
+     * occupation profile interface injection
+     */
     @EJB
     private OccupationalProfileFacadeLocal occupationalProfileFacade;
+
+    /**
+     * professional profile interface injection
+     */
     @EJB
     private ProfessionalProfileFacadeLocal professionalProfielFacade;
+
+    /**
+     * distinctive feature interface injection
+     */
     @EJB
     private DistinctiveFeatureFacadeLocal distinctiveFeatureFacade;
+
+    /**
+     * competition interface injection
+     */
     @EJB
     private CompetitionFacadeLocal competitionFacade;
+
+    /**
+     * program interface injection
+     */
     @EJB
     private ProgramFacadeLocal programFacade;
-    @EJB
-    private GeneralProgramFacadeLocal generalProgramFacade;
+
+    /**
+     * bitacora interface injection
+     */
     @EJB
     UtilitarioFacadeLocal bitacora;
-    
+
+    /**
+     * Variable for the logger record
+     */
     private static final String CLASS = "Clase logica general";
-    
+
+    /**
+     * method to get the general class list
+     *
+     * @param program
+     * @param table
+     * @return
+     * @throws GenericException
+     */
     @Override
     public List<GeneralClassP> getList(int program, String table) throws GenericException {
         try {
@@ -115,7 +150,15 @@ public class GeneralClassLogic implements GeneralClassLogicLocal {
             throw new GenericException("error server");
         }
     }
-    
+
+    /**
+     * method to get the general class
+     *
+     * @param id
+     * @param table
+     * @return
+     * @throws GenericException
+     */
     @Override
     public GeneralClassP get(int id, String table) throws GenericException {
         try {
@@ -152,7 +195,14 @@ public class GeneralClassLogic implements GeneralClassLogicLocal {
             throw new GenericException("error server");
         }
     }
-    
+
+    /**
+     * method to add a general class
+     *
+     * @param generalC
+     * @return
+     * @throws GenericException
+     */
     @Override
     public String add(GeneralClassP generalC) throws GenericException {
         try {
@@ -203,14 +253,21 @@ public class GeneralClassLogic implements GeneralClassLogicLocal {
                     return "addP";
                 default:
                     throw new GenericException("error server");
-                
+
             }
         } catch (Exception ex) {
             bitacora.registroLogger(CLASS, "Agregar", Level.SEVERE, ex.getMessage());
             throw new GenericException("error server");
         }
     }
-    
+
+    /**
+     * method to edit a general classF
+     *
+     * @param generalC
+     * @return
+     * @throws GenericException
+     */
     @Override
     public String edit(GeneralClassP generalC) throws GenericException {
         try {
@@ -265,46 +322,65 @@ public class GeneralClassLogic implements GeneralClassLogicLocal {
             throw new GenericException("error server");
         }
     }
-    
+
+    /**
+     * method to edit a general class
+     *
+     * @param generalC
+     * @return
+     * @throws GenericException
+     */
     @Override
     public String delete(GeneralClassP generalC) throws GenericException {
         try {
             switch (generalC.getTable()) {
                 case "Thematic":
                     Thematic data = thematicFacade.find(generalC.getId());
-                    thematicFacade.remove(data);
-                    generalC.getRequestData().setTablaInvolucrada("TBL_THEMATIC");
-                    bitacora.registrarEnBitacora(generalC.getRequestData());
+                    if (data != null) {
+                        thematicFacade.remove(data);
+                        generalC.getRequestData().setTablaInvolucrada("TBL_THEMATIC");
+                        bitacora.registrarEnBitacora(generalC.getRequestData());
+                    }
                     return "deleteT";
                 case "TrainingArea":
                     TrainingArea dataT = trainingAreaFacade.find(generalC.getId());
-                    trainingAreaFacade.remove(dataT);
-                    generalC.getRequestData().setTablaInvolucrada("TBL_TRAINING_AREA");
-                    bitacora.registrarEnBitacora(generalC.getRequestData());
+                    if (dataT != null) {
+                        trainingAreaFacade.remove(dataT);
+                        generalC.getRequestData().setTablaInvolucrada("TBL_TRAINING_AREA");
+                        bitacora.registrarEnBitacora(generalC.getRequestData());
+                    }
                     return "deleteTr";
                 case "Competition":
                     Competition dataC = competitionFacade.find(generalC.getId());
-                    competitionFacade.remove(dataC);
-                    generalC.getRequestData().setTablaInvolucrada("TBL_COMPETITION");
-                    bitacora.registrarEnBitacora(generalC.getRequestData());
+                    if (dataC != null) {
+                        competitionFacade.remove(dataC);
+                        generalC.getRequestData().setTablaInvolucrada("TBL_COMPETITION");
+                        bitacora.registrarEnBitacora(generalC.getRequestData());
+                    }
                     return "deleteC";
                 case "DistinctiveFeature":
                     DistinctiveFeature dataD = distinctiveFeatureFacade.find(generalC.getId());
-                    distinctiveFeatureFacade.remove(dataD);
-                    generalC.getRequestData().setTablaInvolucrada("TBL_DISTINCTIVE_FEACTURE");
-                    bitacora.registrarEnBitacora(generalC.getRequestData());
+                    if (dataD != null) {
+                        distinctiveFeatureFacade.remove(dataD);
+                        generalC.getRequestData().setTablaInvolucrada("TBL_DISTINCTIVE_FEACTURE");
+                        bitacora.registrarEnBitacora(generalC.getRequestData());
+                    }
                     return "deleteD";
                 case "OccupationalProfile":
                     OccupationalProfile dataO = occupationalProfileFacade.find(generalC.getId());
-                    occupationalProfileFacade.remove(dataO);
-                    generalC.getRequestData().setTablaInvolucrada("TBL_OCCUPATIONAL_PROFILE");
-                    bitacora.registrarEnBitacora(generalC.getRequestData());
+                    if (dataO != null) {
+                        occupationalProfileFacade.remove(dataO);
+                        generalC.getRequestData().setTablaInvolucrada("TBL_OCCUPATIONAL_PROFILE");
+                        bitacora.registrarEnBitacora(generalC.getRequestData());
+                    }
                     return "deleteO";
                 case "ProfessionalProfile":
                     ProfessionalProfile dataP = professionalProfielFacade.find(generalC.getId());
-                    professionalProfielFacade.remove(dataP);
-                    generalC.getRequestData().setTablaInvolucrada("TBL_PROFESSIONAL_PROFILE");
-                    bitacora.registrarEnBitacora(generalC.getRequestData());
+                    if (dataP != null) {
+                        professionalProfielFacade.remove(dataP);
+                        generalC.getRequestData().setTablaInvolucrada("TBL_PROFESSIONAL_PROFILE");
+                        bitacora.registrarEnBitacora(generalC.getRequestData());
+                    }
                     return "deleteP";
                 default:
                     throw new GenericException("error server");

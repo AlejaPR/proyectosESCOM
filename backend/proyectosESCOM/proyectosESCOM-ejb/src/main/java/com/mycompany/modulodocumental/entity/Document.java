@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.entity;
 
 import java.io.Serializable;
@@ -20,47 +15,87 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
+ * This is the class of the document entity. Contains all fields for
+ * persistence.
  *
- * @author HASHY
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Entity
 @Table(name = "TBL_DOCUMENT")
-public class Document implements Serializable{
-    
+public class Document implements Serializable {
+
+    /**
+     * id variable
+     */
     @Id
     @Basic(optional = false)
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PK_DOC_ID")
     private int id;
+
+    /**
+     * variable description document
+     */
     @Column(name = "DOC_DESCRIPTION")
     private String description;
+
+    /**
+     * variable type document
+     */
     @Column(name = "DOC_TYPE")
     private String type;
+
+    /**
+     * variable state document
+     */
     @Column(name = "DOC_STATE")
     private int state;
-    
+
+    /**
+     * Variable for the relationship with the process entity
+     */
     @OneToMany(mappedBy = "fkPrcDocument", cascade = CascadeType.ALL)
     private List<Process> listProcess;
-    
-    @OneToMany(mappedBy = "fkDvDocument",cascade = CascadeType.ALL)
+
+    /**
+     * Variable for the relationship with the document version entity
+     */
+    @OneToMany(mappedBy = "fkDvDocument", cascade = CascadeType.ALL)
     private List<DocumentVersion> listDocumentVersion;
-    
+
+    /**
+     * Variable for the relationship with the program entity
+     */
     @JoinColumn(name = "FK_DOC_PROGRAM", referencedColumnName = "PK_PRO_ID")
     @ManyToOne
     private Program fkDocProgram;
-    
+
+    /**
+     * Variable for the relationship with the user entity
+     */
     @Column(name = "FK_DOC_USER")
     private int idUser;
 
+    /**
+     * constructor method.
+     */
     public Document() {
     }
 
-    public Document(String description, String type, int state) {        
+    /**
+     * constructor method.
+     *
+     * @param description
+     * @param type
+     * @param state
+     */
+    public Document(String description, String type, int state) {
         this.description = description;
         this.type = type;
         this.state = state;
     }
 
+    //getter and setter
     public int getId() {
         return id;
     }

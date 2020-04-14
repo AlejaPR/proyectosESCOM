@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.entity;
 
 import java.io.Serializable;
@@ -20,34 +15,60 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
+ * This is the class of the distinctive feature entity. Contains all fields for
+ * persistence.
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Entity
-@Table(name = "TBL_DISTINCTIVE_FEATURE") 
-public class DistinctiveFeature implements Serializable{
+@Table(name = "TBL_DISTINCTIVE_FEATURE")
+public class DistinctiveFeature implements Serializable {
+
+    /**
+     * id variable
+     */
     @Id
     @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PK_DF_ID")
     private int id;
+
+    /**
+     * variable name distinctive feature
+     */
     @Column(name = "DF_NAME")
     private String name;
-    
+
+    /**
+     * Variable para la relación con la entidad programa general
+     */
     @JoinColumn(name = "FK_DF_GENERAL", referencedColumnName = "PK_GP_ID")
     @ManyToOne
     private GeneralProgram fkDfGeneral;
-    
+
+    /**
+     * Variable for the relationship with the general program entity,
+     * distinctive feature
+     */
     @OneToMany(mappedBy = "fkPtdDistinctive", cascade = CascadeType.ALL)
     private List<PtDistinctive> listPtDistinctive;
-    
+
+    /**
+     * constructor method.
+     */
     public DistinctiveFeature() {
     }
 
+    /**
+     * constructor method.
+     *
+     * @param name
+     */
     public DistinctiveFeature(String name) {
         this.name = name;
     }
 
+    //getter and setter
     public int getId() {
         return id;
     }
@@ -79,5 +100,5 @@ public class DistinctiveFeature implements Serializable{
     public void setFkDfGeneral(GeneralProgram fkDfGeneral) {
         this.fkDfGeneral = fkDfGeneral;
     }
-       
+
 }

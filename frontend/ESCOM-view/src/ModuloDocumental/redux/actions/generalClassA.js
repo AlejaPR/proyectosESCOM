@@ -84,7 +84,7 @@ export function addGeneralC(token, generalN) {
             .then(response => {
                 dispatch({
                     type: ADD_GENERAL_CLASS,
-                    payload: response.data.data
+                    payload: response.data.respuesta
                 });
             }).catch(error => {
                 if (error.request.response === '') {
@@ -122,7 +122,7 @@ export function deleteGeneralC(token, generalN) {
             .then(response => {
                 dispatch({
                     type: DELETE_GENERAL_CLASS,
-                    payload: response.data.data
+                    payload: response.data.respuesta
                 });
             }).catch(error => {
                 if (error.request.response === '') {

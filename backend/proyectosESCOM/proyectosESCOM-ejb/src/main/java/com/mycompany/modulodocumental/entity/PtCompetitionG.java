@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.entity;
 
 import java.io.Serializable;
@@ -17,35 +12,56 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
+ * This is the class of the programa tematica - competition general entity.
+ * Contains all fields for persistence.
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Entity
 @Table(name = "TBL_PT_COMPETITION_G")
 public class PtCompetitionG implements Serializable {
 
+    /**
+     * id variable
+     */
     @Id
     @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PK_PTC_ID")
     private int id;
 
+    /**
+     * Variable for the relationship with the competition general entity
+     */
     @JoinColumn(name = "FK_PTC_COMPETITION_G", referencedColumnName = "PK_CG_ID")
     @ManyToOne
     private CompetitionGeneral fkPtcCompetitionG;
 
+    /**
+     * Variable for the relationship with the program thematic core entity
+     */
     @JoinColumn(name = "FK_PTC_PROGRAM_THEMATIC", referencedColumnName = "PK_PT_ID")
     @ManyToOne
     private ProgramThematicCore fkPtcProgramThematic;
 
+    /**
+     * constructor method
+     */
     public PtCompetitionG() {
     }
 
+    /**
+     * constructor method
+     *
+     * @param fkPtcCompetitionG
+     * @param fkPtcProgramThematic
+     */
     public PtCompetitionG(CompetitionGeneral fkPtcCompetitionG, ProgramThematicCore fkPtcProgramThematic) {
         this.fkPtcCompetitionG = fkPtcCompetitionG;
         this.fkPtcProgramThematic = fkPtcProgramThematic;
     }
 
+    //getter and setter
     public int getId() {
         return id;
     }

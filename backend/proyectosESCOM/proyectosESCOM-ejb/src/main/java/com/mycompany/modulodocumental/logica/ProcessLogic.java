@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.logica;
 
 import com.mycompany.modulodocumental.entity.Document;
@@ -21,23 +16,48 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 /**
+ * This is the class in charge of the process logic
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Stateless
 public class ProcessLogic implements ProcessLogicLocal {
-    
+
+    /**
+     * process interface injection
+     */
     @EJB
     private ProcessFacadeLocal processFacade;
+
+    /**
+     * document interface injection
+     */
     @EJB
     private DocumentFacadeLocal documentFacade;
+
+    /**
+     * bitacora interface injection
+     */
     @EJB
     UtilitarioFacadeLocal bitacora;
-    
+
+    /**
+     * Variable for logging
+     */
     private static final String TABLE = "TBL_PROCESS";
-    
+
+    /**
+     * Variable for the logger record
+     */
     private static final String CLASS = "Clase logica proceso";
-    
+
+    /**
+     * method to get the process list
+     *
+     * @param idDocument
+     * @return
+     * @throws GenericException
+     */
     @Override
     public List<ProcessP> getList(int idDocument) throws GenericException {
         try {
@@ -53,7 +73,14 @@ public class ProcessLogic implements ProcessLogicLocal {
             throw new GenericException("error server");
         }
     }
-    
+
+    /**
+     * method to get a process
+     *
+     * @param idProcess
+     * @return
+     * @throws GenericException
+     */
     @Override
     public ProcessP get(int idProcess) throws GenericException {
         try {
@@ -65,7 +92,13 @@ public class ProcessLogic implements ProcessLogicLocal {
             throw new GenericException("error server");
         }
     }
-    
+
+    /**
+     * method to add a process
+     *
+     * @param process
+     * @throws GenericException
+     */
     @Override
     public void add(ProcessP process) throws GenericException {
         try {
@@ -80,7 +113,13 @@ public class ProcessLogic implements ProcessLogicLocal {
             throw new GenericException("error server");
         }
     }
-    
+
+    /**
+     * method of editing a process
+     *
+     * @param process
+     * @throws GenericException
+     */
     @Override
     public void edit(ProcessP process) throws GenericException {
         try {
@@ -95,7 +134,14 @@ public class ProcessLogic implements ProcessLogicLocal {
             throw new GenericException("error server");
         }
     }
-    
+
+    /**
+     * method to disable a process
+     *
+     * @param idProcess
+     * @param dataR
+     * @throws GenericException
+     */
     @Override
     public void disable(int idProcess, DatosSolicitudPOJO dataR) throws GenericException {
         try {
@@ -109,5 +155,5 @@ public class ProcessLogic implements ProcessLogicLocal {
             throw new GenericException("error server");
         }
     }
-    
+
 }

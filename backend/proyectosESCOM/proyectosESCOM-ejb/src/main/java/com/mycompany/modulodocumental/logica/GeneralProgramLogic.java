@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.logica;
 
 import com.mycompany.modulodocumental.entity.GeneralProgram;
@@ -18,21 +13,41 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 /**
+ * This is the class in charge of the general program logic
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Stateless
 public class GeneralProgramLogic implements GeneralProgramLogicLocal {
 
+    /**
+     * general program interface injection
+     */
     @EJB
     private GeneralProgramFacadeLocal generalProgramFacade;
+
+    /**
+     * bitacora interface injection
+     */
     @EJB
     UtilitarioFacadeLocal bitacora;
 
+    /**
+     * Variable for logging
+     */
     private static final String TABLE = "TBL_GENERAL_PROGRAM";
 
+    /**
+     * Variable for the logger record
+     */
     private static final String CLASS = "Clase logica programa general";
 
+    /**
+     * method to get general program list
+     *
+     * @return
+     * @throws GenericException
+     */
     @Override
     public List<GeneralProgramP> getList() throws GenericException {
         try {
@@ -51,6 +66,13 @@ public class GeneralProgramLogic implements GeneralProgramLogicLocal {
         }
     }
 
+    /**
+     * method of obtaining a general program
+     *
+     * @param idGeneralP
+     * @return
+     * @throws GenericException
+     */
     @Override
     public GeneralProgramP get(int idGeneralP) throws GenericException {
         try {
@@ -63,6 +85,12 @@ public class GeneralProgramLogic implements GeneralProgramLogicLocal {
         }
     }
 
+    /**
+     * method of adding a general program
+     *
+     * @param generalP
+     * @throws GenericException
+     */
     @Override
     public void add(GeneralProgramP generalP) throws GenericException {
         try {
@@ -76,6 +104,12 @@ public class GeneralProgramLogic implements GeneralProgramLogicLocal {
         }
     }
 
+    /**
+     * method of editing a general program
+     *
+     * @param generalP
+     * @throws GenericException
+     */
     @Override
     public void edit(GeneralProgramP generalP) throws GenericException {
         try {
@@ -91,6 +125,12 @@ public class GeneralProgramLogic implements GeneralProgramLogicLocal {
         }
     }
 
+    /**
+     * method to disable a general program
+     *
+     * @param generalP
+     * @throws GenericException
+     */
     @Override
     public void disable(GeneralProgramP generalP) throws GenericException {
         try {

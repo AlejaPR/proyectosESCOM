@@ -1,11 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.logica;
 
-import com.mycompany.modulodocumental.ejb.ThematicCoreFacadeLocal;
+import com.mycompany.modulodocumental.interfaces.ThematicCoreFacadeLocal;
 import com.mycompany.modulodocumental.entity.Program;
 import com.mycompany.modulodocumental.entity.ProgramThematicCore;
 import com.mycompany.modulodocumental.entity.ThematicCore;
@@ -23,34 +18,62 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 /**
+ * This is the class in charge of the program logic
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Stateless
 public class ProgramThematicCoreLogic implements ProgramThematicCoreLogicLocal {
 
+    /**
+     * program thematic core interface injection
+     */
     @EJB
     private ProgramThematicCoreFacadeLocal programThematicCoreFacade;
+
+    /**
+     * thematic core interface injection
+     */
     @EJB
     private ThematicCoreFacadeLocal thematicCoreFacade;
+
+    /**
+     * program interface injection
+     */
     @EJB
     private ProgramFacadeLocal programFacade;
+
+    /**
+     * bitacora interface injection
+     */
     @EJB
     UtilitarioFacadeLocal bitacora;
 
+    /**
+     * Variable for logging
+     */
     private static final String TABLE = "TBL_PROGRAM_THEMATIC_CORE";
 
+    /**
+     * Variable for the logger record
+     */
     private static final String CLASS = "Clase logica programa nucleo temactico";
 
+    /**
+     * method to list thematic core program
+     *
+     * @param program
+     * @return
+     * @throws GenericException
+     */
     @Override
     public List<ProgramThematicCoreP> getList(int program) throws GenericException {
         try {
             List<ProgramThematicCore> listAux = programThematicCoreFacade.getList(program);
             List<ProgramThematicCoreP> data = new ArrayList<>();
             for (ProgramThematicCore list : listAux) {
-                ProgramThematicCoreP aux = new ProgramThematicCoreP(list.getId(), list.getFkPtThematicCore().getName(), list.getFkPtThematicCore().getObjective());
+                ProgramThematicCoreP aux = new ProgramThematicCoreP(list.getId(), list.getFkPtThematicCore().getName(), list.getObjective());
                 aux.setNameThematicCore(list.getFkPtThematicCore().getName());
-                aux.setObjetive(list.getFkPtThematicCore().getObjective());
                 data.add(aux);
             }
             return data;
@@ -60,13 +83,20 @@ public class ProgramThematicCoreLogic implements ProgramThematicCoreLogicLocal {
         }
     }
 
+    /**
+     * method to obtain thematic core program
+     *
+     * @param id
+     * @return
+     * @throws GenericException
+     */
     @Override
     public ProgramThematicCoreP get(int id) throws GenericException {
         try {
             ProgramThematicCore pro = programThematicCoreFacade.find(id);
             ProgramThematicCoreP data = new ProgramThematicCoreP(pro.getId(), pro.getContributeObjetive(), pro.getContributeProfessional(), pro.getContributeOccupational(), pro.getObjectiveOutput(), pro.getTeamContribution(), pro.getObservationFinal(), pro.getFkPtProgram().getId(), pro.getFkPtThematicCore().getId());
             data.setNameThematicCore(pro.getFkPtThematicCore().getName());
-            data.setObjetive(pro.getFkPtThematicCore().getObjective());
+            data.setObjetive(pro.getObjective());
             return data;
         } catch (Exception ex) {
             bitacora.registroLogger(CLASS, "Obtener", Level.SEVERE, ex.getMessage());
@@ -74,6 +104,12 @@ public class ProgramThematicCoreLogic implements ProgramThematicCoreLogicLocal {
         }
     }
 
+    /**
+     * method to add a thematic core program
+     *
+     * @param programT
+     * @throws GenericException
+     */
     @Override
     public void add(ProgramThematicCoreP programT) throws GenericException {
         try {
@@ -91,6 +127,12 @@ public class ProgramThematicCoreLogic implements ProgramThematicCoreLogicLocal {
         }
     }
 
+    /**
+     * method to edit a thematic core program
+     *
+     * @param programT
+     * @throws GenericException
+     */
     @Override
     public void edit(ProgramThematicCoreP programT) throws GenericException {
         try {
@@ -101,6 +143,7 @@ public class ProgramThematicCoreLogic implements ProgramThematicCoreLogicLocal {
             data.setObjectiveOutput(programT.getObjectiveOutput());
             data.setObservationFinal(programT.getObservationFinal());
             data.setTeamContribution(programT.getTeamContribution());
+            data.setObjective(programT.getObjetive());
             programThematicCoreFacade.edit(data);
             programT.getRequestData().setTablaInvolucrada(TABLE);
             bitacora.registrarEnBitacora(programT.getRequestData());
@@ -110,6 +153,13 @@ public class ProgramThematicCoreLogic implements ProgramThematicCoreLogicLocal {
         }
     }
 
+    /**
+     * method to remove a core theme program
+     *
+     * @param id
+     * @param dataS
+     * @throws GenericException
+     */
     @Override
     public void delete(int id, DatosSolicitudPOJO dataS) throws GenericException {
         try {
@@ -123,6 +173,4 @@ public class ProgramThematicCoreLogic implements ProgramThematicCoreLogicLocal {
         }
     }
 
-    // Add business logic below. (Right-click in editor and choose
-    // "Insert Code > Add Business Method")
 }

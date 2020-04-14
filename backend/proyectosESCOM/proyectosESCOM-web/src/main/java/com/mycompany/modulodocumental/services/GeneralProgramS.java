@@ -42,7 +42,7 @@ public class GeneralProgramS {
             List<GeneralProgramP> data = generalProgramLogic.getList();
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 
@@ -55,7 +55,7 @@ public class GeneralProgramS {
             GeneralProgramP data = generalProgramLogic.get(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 
@@ -66,10 +66,10 @@ public class GeneralProgramS {
     public Response add(GeneralProgramP gen) {
         try {
             generalProgramLogic.add(gen);
-            JsonObject rest = Json.createObjectBuilder().add("data", "add").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "add").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 
@@ -80,10 +80,10 @@ public class GeneralProgramS {
     public Response edit(GeneralProgramP gen) {
         try {
             generalProgramLogic.edit(gen);
-            JsonObject rest = Json.createObjectBuilder().add("data", "edit").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "edit").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 
@@ -94,10 +94,10 @@ public class GeneralProgramS {
     public Response disable(GeneralProgramP gen) {
         try {
             generalProgramLogic.disable(gen);
-            JsonObject rest = Json.createObjectBuilder().add("data", "disable").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "disable").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 

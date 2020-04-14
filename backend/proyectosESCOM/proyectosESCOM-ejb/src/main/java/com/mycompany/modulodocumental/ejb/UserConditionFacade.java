@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.ejb;
 
 import com.mycompany.modulodocumental.entity.Condition;
@@ -16,8 +11,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
+ * This is the bean of the entity user condition. Contains all methods for
+ * persistence and queries to the database
  *
- * @author HASHY
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Stateless
 public class UserConditionFacade extends AbstractFacade<UserCondition> implements UserConditionFacadeLocal {
@@ -34,6 +31,13 @@ public class UserConditionFacade extends AbstractFacade<UserCondition> implement
         super(UserCondition.class);
     }
 
+    /**
+     * This method returns the list of conditions associated with a user
+     *
+     * @param user
+     * @param document
+     * @return
+     */
     @Override
     public List<Condition> listCondition(int user, int document) {
         List<Condition> list = new ArrayList<>();
@@ -47,6 +51,12 @@ public class UserConditionFacade extends AbstractFacade<UserCondition> implement
         return list;
     }
 
+    /**
+     * This method returns the list of users associated with a condition
+     *
+     * @param id
+     * @return
+     */
     @Override
     public List<UserCondition> listUsersCondition(int id) {
         Query query = em.createQuery("SELECT u FROM UserCondition u WHERE u.fkUcCondition.id =?1");

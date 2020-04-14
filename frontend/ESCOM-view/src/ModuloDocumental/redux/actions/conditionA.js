@@ -181,7 +181,7 @@ export function addCondition(token, conditionN) {
       .then(response => {
         dispatch({
           type: ADD_CONDITION,
-          payload: response.data.data
+          payload: response.data.respuesta
         });
       }).catch(error => {
         if (error.request.response === '') {
@@ -221,7 +221,7 @@ export function editCondition(token, conditionE) {
       .then(response => {
         dispatch({
           type: EDIT_CONDITION,
-          payload: response.data.data
+          payload: response.data.respuesta
         });
       }).catch(error => {
         if (error.request.response === '') {
@@ -260,7 +260,7 @@ export function disableCondition(token, id) {
       .then(response => {
         dispatch({
           type: DISABLE_CONDITION,
-          payload: response.data.data
+          payload: response.data.respuesta
         })
       }).catch(error => {
         if (error.request.response === '') {
@@ -298,7 +298,7 @@ export function approveCondition(token, id) {
       .then(response => {
         dispatch({
           type: APPROVE_CONDITION,
-          payload: response.data.data
+          payload: response.data.respuesta
         })
       }).catch(error => {
         if (error.request.response === '') {

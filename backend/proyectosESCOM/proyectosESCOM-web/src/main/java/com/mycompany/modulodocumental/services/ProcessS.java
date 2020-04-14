@@ -43,7 +43,7 @@ public class ProcessS {
             List<ProcessP> data = processLogicFacadeLocal.getList(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 
@@ -56,7 +56,7 @@ public class ProcessS {
             ProcessP data = processLogicFacadeLocal.get(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 
@@ -67,10 +67,10 @@ public class ProcessS {
     public Response add(ProcessP pro) {
         try {
             processLogicFacadeLocal.add(pro);
-            JsonObject rest = Json.createObjectBuilder().add("data", "add").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "add").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 
@@ -81,10 +81,10 @@ public class ProcessS {
     public Response edit(ProcessP pro) {
         try {
             processLogicFacadeLocal.edit(pro);
-            JsonObject rest = Json.createObjectBuilder().add("data", "edit").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "edit").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 
@@ -95,10 +95,10 @@ public class ProcessS {
     public Response disable(@PathParam("id") int id, DatosSolicitudPOJO dataR) {
         try {
             processLogicFacadeLocal.disable(id, dataR);
-            JsonObject rest = Json.createObjectBuilder().add("data", "disable").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "disable").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }

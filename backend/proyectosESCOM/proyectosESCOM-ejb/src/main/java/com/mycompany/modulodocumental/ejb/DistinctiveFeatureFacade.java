@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.ejb;
 
 import com.mycompany.modulodocumental.entity.DistinctiveFeature;
@@ -14,11 +9,14 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
+ * This is the distinctive feature entity bean. Contains all methods for
+ * persistence and queries to the database
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Stateless
 public class DistinctiveFeatureFacade extends AbstractFacade<DistinctiveFeature> implements DistinctiveFeatureFacadeLocal {
+
     @PersistenceContext(unitName = "documentaryUnit")
     private EntityManager em;
 
@@ -31,6 +29,12 @@ public class DistinctiveFeatureFacade extends AbstractFacade<DistinctiveFeature>
         super(DistinctiveFeature.class);
     }
 
+    /**
+     * This method returns the list of distinctive features of a general program
+     *
+     * @param general
+     * @return
+     */
     @Override
     public List<DistinctiveFeature> getList(int general) {
         Query query = em.createQuery("SELECT d FROM DistinctiveFeature d WHERE d.fkDfGeneral.id = ?1 ");
@@ -38,5 +42,5 @@ public class DistinctiveFeatureFacade extends AbstractFacade<DistinctiveFeature>
         List<DistinctiveFeature> data = query.getResultList();
         return data;
     }
-    
+
 }

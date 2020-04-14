@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.entity;
 
 import java.io.Serializable;
@@ -11,7 +6,6 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -21,67 +15,138 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
+ * This is the class of the program thematic core entity. Contains all fields
+ * for persistence.
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Entity
 @Table(name = "TBL_PROGRAM_THEMATIC_CORE")
 public class ProgramThematicCore implements Serializable {
 
+    /**
+     * id variable
+     */
     @Id
     @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PK_PT_ID")
     private int id;
+    
+    /**
+     * variable contibute objective - program thematic core
+     */
     @Column(name = "PT_CONTRIBUTE_OBJECTIVE")
     private String contributeObjetive;
+    
+    /**
+     * variable contribute professional profile - program thematic core
+     */
     @Column(name = "PT_CONTRIBUTE_PROFESSIONAL")
     private String contributeProfessional;
+    
+    /**
+     * variable contribute occupational profile - program thematic core
+     */
     @Column(name = "PT_CONTRIBUTE_OCCUPATIONAL")
     private String contributeOccupational;
+    
+    /**
+     * variable objective output - program thematic core
+     */
     @Column(name = "PT_OBJECTIVE_OUTPUT")
     private String objectiveOutput;
+    
+    /**
+     * variable team contribution - program thematic core
+     */
     @Column(name = "PT_TEAM_CONTRIBUTION")
     private String teamContribution;
+    
+    /**
+     * variable observation final - program thematic core
+     */
     @Column(name = "PT_OBSERVATION_FINAL")
     private String observationFinal;
+    
+    /**
+     * variable objective - program thematic core
+     */
+    @Column(name = "PT_OBJECTIVE")
+    private String objective;
 
+    /**
+     * Variable for the relationship with the program entity
+     */
     @JoinColumn(name = "FK_PT_PROGRAM", referencedColumnName = "PK_PRO_ID")
     @ManyToOne
     private Program fkPtProgram;
 
+    /**
+     * Variable for the relationship with the thematic core entity
+     */
     @JoinColumn(name = "FK_PT_THEMATIC_CORE", referencedColumnName = "PK_TC_ID")
     @ManyToOne
     private ThematicCore fkPtThematicCore;
 
+    /**
+     * Variable for the relationship with the competition general entity
+     */
     @OneToMany(mappedBy = "fkPtcProgramThematic", cascade = CascadeType.ALL)
     private List<PtCompetitionG> listPtCompetitionG;
 
+    /**
+     * Variable for the relationship with the distinctive feature entity
+     */
     @OneToMany(mappedBy = "fkPtdProgramThematic", cascade = CascadeType.ALL)
     private List<PtDistinctive> listPtDistinctive;
 
+    /**
+     * Variable for the relationship with the occupational profile entity
+     */
     @OneToMany(mappedBy = "fkPtoProgramThematic", cascade = CascadeType.ALL)
     private List<PtOccupational> listPtOccupational;
 
+    /**
+     * Variable for the relationship with the professional profile entity
+     */
     @OneToMany(mappedBy = "fkPtpProgramThematic", cascade = CascadeType.ALL)
     private List<PtProfessional> listPtProfessional;
 
+    /**
+     * Variable for the relationship with the thematic entity
+     */
     @OneToMany(mappedBy = "fkPttProgramThematic", cascade = CascadeType.ALL)
     private List<PtThematic> listPtThematic;
 
+    /**
+     * constructor method.
+     */
     public ProgramThematicCore() {
     }
 
-    public ProgramThematicCore(String contributeObjetive, String contributeProfessional, String contributeOccupational, String objectiveOutput, String teamContribution, String observationFinal) {
+    /**
+     * constructor method
+     * 
+     * @param contributeObjetive
+     * @param contributeProfessional
+     * @param contributeOccupational
+     * @param objectiveOutput
+     * @param teamContribution
+     * @param observationFinal
+     * @param objective 
+     */
+    public ProgramThematicCore(String contributeObjetive, String contributeProfessional, String contributeOccupational, String objectiveOutput, String teamContribution, String observationFinal, String objective) {
         this.contributeObjetive = contributeObjetive;
         this.contributeProfessional = contributeProfessional;
         this.contributeOccupational = contributeOccupational;
         this.objectiveOutput = objectiveOutput;
         this.teamContribution = teamContribution;
         this.observationFinal = observationFinal;
-
+        this.objective = objective;
     }
 
+    //getter and setter
     public int getId() {
         return id;
     }
@@ -136,6 +201,14 @@ public class ProgramThematicCore implements Serializable {
 
     public void setObservationFinal(String observationFinal) {
         this.observationFinal = observationFinal;
+    }
+
+    public String getObjective() {
+        return objective;
+    }
+
+    public void setObjective(String objective) {
+        this.objective = objective;
     }
 
     public Program getFkPtProgram() {

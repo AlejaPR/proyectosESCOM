@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.ejb;
 
 import com.mycompany.modulodocumental.interfaces.CommentaryFacadeLocal;
@@ -14,11 +9,14 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
+ * This is the comment entity bean. Contains all methods for persistence and
+ * queries to the database
  *
- * @author HASHY
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Stateless
 public class CommentaryFacade extends AbstractFacade<Commentary> implements CommentaryFacadeLocal {
+
     @PersistenceContext(unitName = "documentaryUnit")
     private EntityManager em;
 
@@ -31,6 +29,12 @@ public class CommentaryFacade extends AbstractFacade<Commentary> implements Comm
         super(Commentary.class);
     }
 
+    /**
+     * This method returns the list the comments of a specific activity
+     *
+     * @param activity
+     * @return
+     */
     @Override
     public List<Commentary> listCommentary(int activity) {
         Query query = em.createQuery("SELECT c FROM Commentary c WHERE c.fkComActivity.id = ?1  ORDER BY c.id DESC");
@@ -38,5 +42,5 @@ public class CommentaryFacade extends AbstractFacade<Commentary> implements Comm
         List<Commentary> list = query.setMaxResults(4).getResultList();
         return list;
     }
-    
+
 }

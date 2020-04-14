@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.entity;
 
 import java.io.Serializable;
@@ -20,41 +15,74 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
+ * This is the class of the process entity. Contains all fields for persistence.
  *
- * @author HASHY
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Entity
 @Table(name = "TBL_PROCESS")
 public class Process implements Serializable {
 
+    /**
+     * id variable
+     */
     @Id
     @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PK_PRC_ID")
     private int id;
+
+    /**
+     * variable name process
+     */
     @Column(name = "PRC_NAME")
     private String name;
+
+    /**
+     * variable description process
+     */
     @Column(name = "PRC_DESCRIPTION")
     private String description;
+
+    /**
+     * variable state process
+     */
     @Column(name = "PRC_STATE")
     private int state;
 
+    /**
+     * Variable for the relationship with the codition entity
+     */
     @OneToMany(mappedBy = "fkConProcess", cascade = CascadeType.ALL)
     private List<Condition> listCondition;
 
+    /**
+     * Variable for the relationship with the document entity
+     */
     @JoinColumn(name = "FK_PRC_DOCUMENT", referencedColumnName = "PK_DOC_ID")
     @ManyToOne
     private Document fkPrcDocument;
 
+    /**
+     * constructor method
+     */
     public Process() {
     }
 
+    /**
+     * constructor method
+     *
+     * @param name
+     * @param description
+     * @param state
+     */
     public Process(String name, String description, int state) {
         this.name = name;
         this.description = description;
         this.state = state;
     }
 
+    //getter an setter
     public int getId() {
         return id;
     }

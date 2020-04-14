@@ -1,11 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.ejb;
 
 import com.mycompany.modulodocumental.entity.PtThematic;
+import com.mycompany.modulodocumental.interfaces.PtThematicFacadeLocal;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -13,8 +9,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
+ * This is the bean of the entity thematic, thematic program. Contains all
+ * methods for persistence and queries to the database
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Stateless
 public class PtThematicFacade extends AbstractFacade<PtThematic> implements PtThematicFacadeLocal {
@@ -31,6 +29,13 @@ public class PtThematicFacade extends AbstractFacade<PtThematic> implements PtTh
         super(PtThematic.class);
     }
 
+    /**
+     * This method returns the list of thematic relations and thematic nucleus
+     * of the program.
+     *
+     * @param programT
+     * @return
+     */
     @Override
     public List<PtThematic> getList(int programT) {
         Query query = em.createQuery("SELECT t FROM PtCompetitionG t WHERE t.fkPtcProgramThematic.id = ?1");

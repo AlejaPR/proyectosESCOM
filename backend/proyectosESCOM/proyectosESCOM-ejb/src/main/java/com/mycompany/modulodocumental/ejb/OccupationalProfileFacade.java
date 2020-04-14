@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.ejb;
 
 import com.mycompany.modulodocumental.entity.OccupationalProfile;
@@ -14,11 +9,14 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
+ * This is the bean of the occupational profile entity. Contains all methods for
+ * persistence and queries to the database
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Stateless
 public class OccupationalProfileFacade extends AbstractFacade<OccupationalProfile> implements OccupationalProfileFacadeLocal {
+
     @PersistenceContext(unitName = "documentaryUnit")
     private EntityManager em;
 
@@ -31,6 +29,13 @@ public class OccupationalProfileFacade extends AbstractFacade<OccupationalProfil
         super(OccupationalProfile.class);
     }
 
+    /**
+     * This method returns the list of occupational profiles of a general
+     * program
+     *
+     * @param general
+     * @return
+     */
     @Override
     public List<OccupationalProfile> getList(int general) {
         Query query = em.createQuery("SELECT o FROM OccupationalProfile o WHERE o.fkOpGeneral.id = ?1 ");
@@ -38,5 +43,5 @@ public class OccupationalProfileFacade extends AbstractFacade<OccupationalProfil
         List<OccupationalProfile> data = query.getResultList();
         return data;
     }
-    
+
 }

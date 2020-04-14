@@ -42,10 +42,10 @@ public class AnnexS {
     public Response add(AnnexP annex) {
         try {
             annexLogicFacade.add(annex);
-            JsonObject rest = Json.createObjectBuilder().add("data", "add").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "add").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 
@@ -56,10 +56,10 @@ public class AnnexS {
     public Response edit(AnnexP annex) {
         try {
             annexLogicFacade.edit(annex);
-            JsonObject rest = Json.createObjectBuilder().add("data", "edit").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "edit").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
@@ -69,10 +69,10 @@ public class AnnexS {
     public Response disableAnnex(@PathParam("id") int id, DatosSolicitudPOJO dataR) {
         try {
             annexLogicFacade.disable(id, dataR);
-            JsonObject rest = Json.createObjectBuilder().add("data", "disable").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "disable").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
@@ -84,7 +84,7 @@ public class AnnexS {
             List<AnnexP> data = annexLogicFacade.getList(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
@@ -96,7 +96,7 @@ public class AnnexS {
             AnnexP data = annexLogicFacade.get(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
@@ -108,7 +108,7 @@ public class AnnexS {
             List<AnnexP> data = annexLogicFacade.searchAnnexS(search);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 

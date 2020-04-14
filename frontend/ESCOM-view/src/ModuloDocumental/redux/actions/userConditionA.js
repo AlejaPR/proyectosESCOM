@@ -152,7 +152,7 @@ export function associateUserCondition(token, userCondition) {
             .then(response => {
                 dispatch({
                     type: ASSOCIATE_USER_CONDITION,
-                    payload: response.data.data
+                    payload: response.data.respuesta
                 });
             }).catch(error => {
                 if (error.request.response === '') {
@@ -189,7 +189,7 @@ export function deleteUserCondition(token, userCondition) {
             .then(response => {
                 dispatch({
                     type: DELETE_USER_CONDITION,
-                    payload: response.data.data
+                    payload: response.data.respuesta
                 });
             }).catch(error => {
                 if (error.request.response === '') {

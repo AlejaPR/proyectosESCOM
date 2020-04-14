@@ -130,7 +130,7 @@ export function addProcess(token, processN) {
       .then(response => {
         dispatch({
           type: ADD_PROCESS,
-          payload: response.data.data
+          payload: response.data.respuesta
         });
       }).catch(error => {
         if (error.request.response === '') {
@@ -168,7 +168,7 @@ export function editProcess(token, processE) {
       .then(response => {
         dispatch({
           type: EDIT_PROCESS,
-          payload: response.data.data
+          payload: response.data.respuesta
         });
       }).catch(error => {
         if (error.request.response === '') {
@@ -207,7 +207,7 @@ export function disableProcess(token, id) {
       .then(response => {
         dispatch({
           type: DISABLE_PROCESS,
-          payload: response.data.data
+          payload: response.data.respuesta
         })
       }).catch(error => {
         if (error.request.response === '') {

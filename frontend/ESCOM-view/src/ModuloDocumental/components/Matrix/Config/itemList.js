@@ -2,8 +2,8 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
-import { getListGeneralC } from '../../../redux/actions/generalClassA.js';
+import { ToastContainer, toast } from 'react-toastify';
+import { getListGeneralC, addMessageAdd, addMessageDelete } from '../../../redux/actions/generalClassA.js';
 
 import Occupational from './list/occupational.js';
 import TrainingArea from './list/trainingArea.js';
@@ -22,6 +22,26 @@ class ItemList extends Component {
     }
 
     componentDidUpdate() {
+        if (this.props.messageAdd !== '') {
+            switch (this.props.messageAdd) {
+                case 'error server':
+                    toast.error('Se presento un error, intentelo mas tarde.');
+                    this.props.addMessageAdd('');
+                    break;
+                default:
+                    break;
+            }
+        }
+        if (this.props.messageDelete !== '') {
+            switch (this.props.messageDelete) {
+                case 'error server':
+                    toast.error('Se presento un error, intentelo mas tarde.');
+                    this.props.addMessageDelete('');
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     save(table) {
@@ -69,8 +89,9 @@ class ItemList extends Component {
 
 function mapStateToProps(state) {
     return {
-
+        messageAdd: state.generalClass.messageAddC,
+        messageDelete: state.generalClass.messageDeleteC
     }
 }
 
-export default withRouter(connect(mapStateToProps, { getListGeneralC })(ItemList));
+export default withRouter(connect(mapStateToProps, { getListGeneralC, addMessageAdd, addMessageDelete })(ItemList));

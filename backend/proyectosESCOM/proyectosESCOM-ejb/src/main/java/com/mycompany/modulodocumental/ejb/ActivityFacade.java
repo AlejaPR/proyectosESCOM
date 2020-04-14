@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.ejb;
 
 import com.mycompany.modulodocumental.interfaces.ActivityFacadeLocal;
@@ -14,8 +9,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
+ * This is the activity entity bean. Contains all methods for persistence and
+ * queries to the database
  *
- * @author HASHY
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Stateless
 public class ActivityFacade extends AbstractFacade<Activity> implements ActivityFacadeLocal {
@@ -32,6 +29,12 @@ public class ActivityFacade extends AbstractFacade<Activity> implements Activity
         super(Activity.class);
     }
 
+    /**
+     * This method returns the number of activities completed
+     *
+     * @param id
+     * @return
+     */
     @Override
     public int Percentage(int id) {
         Query query = em.createQuery("SELECT a FROM Activity a WHERE a.fkActCondition.id = ?1 AND a.state = 2 ");
@@ -40,6 +43,12 @@ public class ActivityFacade extends AbstractFacade<Activity> implements Activity
         return cont;
     }
 
+    /**
+     * This method returns the number of activities of a condition
+     *
+     * @param id
+     * @return
+     */
     @Override
     public int totalActivities(int id) {
         Query query = em.createQuery("SELECT a FROM Activity a WHERE a.fkActCondition.id = ?1 ");
@@ -48,6 +57,12 @@ public class ActivityFacade extends AbstractFacade<Activity> implements Activity
         return cont;
     }
 
+    /**
+     * This method returns the list of informative activities
+     *
+     * @param id
+     * @return
+     */
     @Override
     public List<Activity> listActivitiesInfo(int id) {
         Query query = em.createQuery("SELECT a FROM Activity a WHERE a.fkActCondition.id = ?1 AND a.type = 1 ORDER BY a.number ASC, a.state ASC");
@@ -56,6 +71,12 @@ public class ActivityFacade extends AbstractFacade<Activity> implements Activity
         return list;
     }
 
+    /**
+     * This method returns the list of activities of type annex
+     *
+     * @param id
+     * @return
+     */
     @Override
     public List<Activity> listActivitiesAnnex(int id) {
         Query query = em.createQuery("SELECT a FROM Activity a WHERE a.fkActCondition.id = ?1 AND a.type = 2 ORDER BY a.state ASC ");
@@ -63,7 +84,13 @@ public class ActivityFacade extends AbstractFacade<Activity> implements Activity
         List<Activity> list = query.getResultList();
         return list;
     }
-    
+
+    /**
+     * This method returns all the information registered in the activities
+     *
+     * @param id
+     * @return
+     */
     @Override
     public String allInformation(int id) {
         Query query = em.createQuery("SELECT a FROM Activity a WHERE a.fkActCondition.fkConProcess.id = ?1 AND a.type = 1 ORDER BY a.number ASC");
@@ -78,6 +105,13 @@ public class ActivityFacade extends AbstractFacade<Activity> implements Activity
         return rest;
     }
 
+    /**
+     * This method returns the list of activities parent of an activity
+     *
+     * @param id
+     * @param condition
+     * @return
+     */
     @Override
     public List<Activity> listDaughters(int id, int condition) {
         Query query = em.createQuery("SELECT a FROM Activity a WHERE a.parentActivity = ?1 AND a.type = 1 AND a.fkActCondition.id = ?2 ORDER BY a.number ASC");

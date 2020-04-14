@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.entity;
 
 import java.io.Serializable;
@@ -20,36 +15,62 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
+ * This is the class of the entity of general competence. Contains all fields
+ * for persistence.
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Entity
 @Table(name = "TBL_COMPETITION_GENERAL")
 public class CompetitionGeneral implements Serializable {
 
+    /**
+     * id variable
+     */
     @Id
     @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PK_CG_ID")
     private int id;
+
+    /**
+     * variable name competition general
+     */
     @Column(name = "CG_NAME")
     private String name;
 
+    /**
+     * Variable for the relationship with the competition entity
+     */
     @JoinColumn(name = "FK_CG_COMPETITION", referencedColumnName = "PK_CT_ID")
     @ManyToOne
     private Competition fkCgCompetition;
 
+    /**
+     * Variable for the relationship with the entity general program, general
+     * competence
+     */
     @OneToMany(mappedBy = "fkPtcCompetitionG", cascade = CascadeType.ALL)
     private List<PtCompetitionG> listPtCompetitionG;
 
+    /**
+     * constructor method
+     */
     public CompetitionGeneral() {
     }
 
+    /**
+     * constructor method
+     *
+     * @param name
+     * @param fkCgCompetition
+     */
     public CompetitionGeneral(String name, Competition fkCgCompetition) {
         this.name = name;
         this.fkCgCompetition = fkCgCompetition;
     }
 
+    //getter and setter
     public int getId() {
         return id;
     }

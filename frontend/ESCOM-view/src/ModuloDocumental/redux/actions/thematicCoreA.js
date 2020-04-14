@@ -83,7 +83,7 @@ export function addThematicCore(token, thematicC) {
             .then(response => {
                 dispatch({
                     type: ADD_THEMATIC_CORE,
-                    payload: response.data.data
+                    payload: response.data.respuesta
                 });
             }).catch(error => {
                 if (error.request.response === '') {
@@ -120,7 +120,7 @@ export function deleteThemacticCore(token, thematicC) {
             .then(response => {
                 dispatch({
                     type: DELETE_THEMATIC_CORE,
-                    payload: response.data.data
+                    payload: response.data.respuesta
                 });
             }).catch(error => {
                 if (error.request.response === '') {

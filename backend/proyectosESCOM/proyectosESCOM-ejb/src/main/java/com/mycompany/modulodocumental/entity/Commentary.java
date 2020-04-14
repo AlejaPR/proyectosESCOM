@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.entity;
 
 import java.io.Serializable;
@@ -20,39 +15,68 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
+ * This is the class of the comment entity. Contains all fields for persistence
  *
- * @author HASHY
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Entity
 @Table(name = "TBL_COMMENTARY")
 public class Commentary implements Serializable {
 
+    /**
+     * id variable
+     */
     @Id
     @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PK_COM_ID")
     private int id;
+    
+    /**
+     * variable message comentary
+     */
     @Column(name = "COM_MESSAGE")
     private String message;
+    
+    /**
+     * creation date variable
+     */
     @Column(name = "COM_DATE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
+    
+    /**
+     * Variable for the relationship with the user entity
+     */
     @Column(name = "FK_COM_USER")
     private int idUser;
 
+    /**
+     * Variable for the relationship with the activity entity
+     */
     @JoinColumn(name = "FK_COM_ACTIVITY", referencedColumnName = "PK_ACT_ID")
     @ManyToOne
     private Activity fkComActivity;
 
+    /**
+     * constructor method
+     */
     public Commentary() {
     }
 
+    /**
+     * constructor method
+     * @param message
+     * @param date
+     * @param idUser 
+     */
     public Commentary(String message, Date date, int idUser) {
         this.message = message;
         this.date = date;
         this.idUser = idUser;
     }
 
+    //getter and setter
     public int getId() {
         return id;
     }

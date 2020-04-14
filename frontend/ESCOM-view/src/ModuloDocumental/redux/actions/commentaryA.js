@@ -51,7 +51,7 @@ export function addCommentary(token, commentaryN) {
             .then(response => {
                 dispatch({
                     type: ADD_COMMENTARY,
-                    payload: response.data.data
+                    payload: response.data.respuesta
                 });
             }).catch(error => {
                 if (error.request.response === '') {
@@ -121,7 +121,7 @@ export function deleteCommentary(token, id) {
             .then(response => {
                 dispatch({
                     type: DELETE_COMMENTARY,
-                    payload: response.data.data
+                    payload: response.data.respuesta
                 });
             }).catch(error => {
                 if (error.request.response === '') {

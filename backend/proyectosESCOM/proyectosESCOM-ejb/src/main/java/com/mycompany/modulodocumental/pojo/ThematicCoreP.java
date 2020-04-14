@@ -17,18 +17,16 @@ public class ThematicCoreP implements Serializable {
     private int id;
     private String name;
     private int credits;
-    private String objective;
     private int idTrainingArea;
     private DatosSolicitudPOJO requestData;
 
     public ThematicCoreP() {
     }
 
-    public ThematicCoreP(int id, String name, int credits, String objective, int idTrainingArea) {
+    public ThematicCoreP(int id, String name, int credits, int idTrainingArea) {
         this.id = id;
         this.name = name;
         this.credits = credits;
-        this.objective = objective;
         this.idTrainingArea = idTrainingArea;
     }
 
@@ -54,14 +52,6 @@ public class ThematicCoreP implements Serializable {
 
     public void setCredits(int credits) {
         this.credits = credits;
-    }
-
-    public String getObjective() {
-        return objective;
-    }
-
-    public void setObjective(String objective) {
-        this.objective = objective;
     }
 
     public int getIdTrainingArea() {

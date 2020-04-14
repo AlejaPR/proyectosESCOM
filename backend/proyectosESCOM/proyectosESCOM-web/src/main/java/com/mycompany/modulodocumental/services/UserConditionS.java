@@ -16,7 +16,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.json.Json;
 import javax.json.JsonObject;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.HeaderParam;
 import javax.ws.rs.POST;
@@ -46,7 +45,7 @@ public class UserConditionS {
             List<ConditionView> data = userConditionLogicFacade.getList(token, idP);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
@@ -58,7 +57,7 @@ public class UserConditionS {
             List<UsuarioPOJO> data = userConditionLogicFacade.listUsers();
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
@@ -70,7 +69,7 @@ public class UserConditionS {
             List<UsuarioPOJO> data = userConditionLogicFacade.listUsersCondition(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
@@ -80,10 +79,10 @@ public class UserConditionS {
     public Response associate(UserConditionP userCondition){
         try {
             userConditionLogicFacade.associate(userCondition);
-            JsonObject rest = Json.createObjectBuilder().add("data", "associate").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "associate").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
@@ -93,10 +92,10 @@ public class UserConditionS {
     public Response delete(UserConditionP userCondition){
         try {
             userConditionLogicFacade.delete(userCondition);
-            JsonObject rest = Json.createObjectBuilder().add("data", "delete").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "delete").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }

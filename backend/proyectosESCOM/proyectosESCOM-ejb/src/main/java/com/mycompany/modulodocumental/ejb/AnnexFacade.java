@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.ejb;
 
 import com.mycompany.modulodocumental.interfaces.AnnexFacadeLocal;
@@ -15,8 +10,10 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
+ * This is the annex entity bean. Contains all methods for persistence and
+ * queries to the database
  *
- * @author HASHY
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Stateless
 public class AnnexFacade extends AbstractFacade<Annex> implements AnnexFacadeLocal {
@@ -33,6 +30,14 @@ public class AnnexFacade extends AbstractFacade<Annex> implements AnnexFacadeLoc
         super(Annex.class);
     }
 
+    /**
+     * This method returns the list of annexes specifying the program or the
+     * name
+     *
+     * @param idProgram
+     * @param name
+     * @return
+     */
     @Override
     public List<Annex> searchAnnex(int idProgram, String name) {
         List<Annex> list = new ArrayList<>();

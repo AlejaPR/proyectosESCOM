@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.logica;
 
 import com.mycompany.modulodocumental.entity.Annex;
@@ -24,26 +19,53 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 /**
+ * This is the class in charge of the annex logic
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Stateless
 public class AnnexLogic implements AnnexLogicLocal {
 
+    /**
+     * Annex interface injection
+     */
     @EJB
     private AnnexFacadeLocal annexFacade;
+
+    /**
+     * Program interface injection
+     */
     @EJB
     private ProgramFacadeLocal programFacade;
+
+    /**
+     * Version annex interface injection
+     */
     @EJB
     private AnnexVersionFacadeLocal annexVersionFacade;
+
+    /**
+     * bitacora interface injection
+     */
     @EJB
     UtilitarioFacadeLocal bitacora;
 
+    /**
+     * Variable for logging
+     */
     private static final String TABLE = "TBL_ANNEX";
-    
-    private static final String CLASS = "Clase logica anexo";
-    
 
+    /**
+     * Variable for the logger record
+     */
+    private static final String CLASS = "Clase logica anexo";
+
+    /**
+     * method that adds an annex
+     *
+     * @param annex
+     * @throws GenericException
+     */
     @Override
     public void add(AnnexP annex) throws GenericException {
         try {
@@ -60,6 +82,12 @@ public class AnnexLogic implements AnnexLogicLocal {
         }
     }
 
+    /**
+     * method that edits an annex
+     *
+     * @param annex
+     * @throws GenericException
+     */
     @Override
     public void edit(AnnexP annex) throws GenericException {
         try {
@@ -76,6 +104,13 @@ public class AnnexLogic implements AnnexLogicLocal {
         }
     }
 
+    /**
+     * method disabling an annex
+     *
+     * @param id
+     * @param dataR
+     * @throws GenericException
+     */
     @Override
     public void disable(int id, DatosSolicitudPOJO dataR) throws GenericException {
         try {
@@ -90,6 +125,13 @@ public class AnnexLogic implements AnnexLogicLocal {
         }
     }
 
+    /**
+     * method that gets the list of annex
+     *
+     * @param idProgram
+     * @return
+     * @throws GenericException
+     */
     @Override
     public List<AnnexP> getList(int idProgram) throws GenericException {
         try {
@@ -103,7 +145,7 @@ public class AnnexLogic implements AnnexLogicLocal {
                 }
                 add.setNameProgram(annex.getFkAxProgram().getName());
                 data.add(add);
-            }            
+            }
             return data;
         } catch (Exception ex) {
             bitacora.registroLogger(CLASS, "Lista anexos", Level.SEVERE, ex.getMessage());
@@ -111,6 +153,14 @@ public class AnnexLogic implements AnnexLogicLocal {
         }
     }
 
+    /**
+     * *
+     * method that gets an annex
+     *
+     * @param idAnnex
+     * @return
+     * @throws GenericException
+     */
     @Override
     public AnnexP get(int idAnnex) throws GenericException {
         try {
@@ -123,6 +173,13 @@ public class AnnexLogic implements AnnexLogicLocal {
         }
     }
 
+    /**
+     * method to find attachments by name and program
+     *
+     * @param search
+     * @return
+     * @throws GenericException
+     */
     @Override
     public List<AnnexP> searchAnnexS(SearchAnnP search) throws GenericException {
         try {

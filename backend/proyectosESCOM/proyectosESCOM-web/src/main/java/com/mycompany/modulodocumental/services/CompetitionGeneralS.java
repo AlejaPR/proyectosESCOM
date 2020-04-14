@@ -42,7 +42,7 @@ public class CompetitionGeneralS {
             List<CompetitionGeneralP> data = competitionGeneralLogic.getList(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 
@@ -55,7 +55,7 @@ public class CompetitionGeneralS {
             CompetitionGeneralP data = competitionGeneralLogic.get(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 
@@ -66,10 +66,10 @@ public class CompetitionGeneralS {
     public Response add(CompetitionGeneralP comG) {
         try {
             competitionGeneralLogic.add(comG);
-            JsonObject rest = Json.createObjectBuilder().add("data", "addG").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "addG").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 
@@ -80,10 +80,10 @@ public class CompetitionGeneralS {
     public Response edit(CompetitionGeneralP comG) {
         try {
             competitionGeneralLogic.edit(comG);
-            JsonObject rest = Json.createObjectBuilder().add("data", "editG").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "editG").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 
@@ -94,10 +94,10 @@ public class CompetitionGeneralS {
     public Response delete(CompetitionGeneralP comG) {
         try {
             competitionGeneralLogic.delete(comG);
-            JsonObject rest = Json.createObjectBuilder().add("data", "deleteG").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "deleteG").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }

@@ -129,7 +129,7 @@ export function addProgramT(token, programT) {
             .then(response => {
                 dispatch({
                     type: ADD_PROGRAM_T,
-                    payload: response.data.data
+                    payload: response.data.respuesta
                 });
             }).catch(error => {
                 if (error.request.response === '') {
@@ -166,7 +166,7 @@ export function editProgramT(token, programT) {
             .then(response => {
                 dispatch({
                     type: EDIT_PROGRAM_T,
-                    payload: response.data.data
+                    payload: response.data.respuesta
                 });
             }).catch(error => {
                 if (error.request.response === '') {
@@ -204,7 +204,7 @@ export function deleteProgramT(token, programT) {
             .then(response => {
                 dispatch({
                     type: DELETE_PROGRAM_T,
-                    payload: response.data.data
+                    payload: response.data.respuesta
                 });
             }).catch(error => {
                 if (error.request.response === '') {

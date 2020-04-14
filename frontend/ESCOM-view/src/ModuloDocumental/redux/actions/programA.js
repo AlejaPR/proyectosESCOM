@@ -18,7 +18,7 @@ const PERMIT_LIST_PROGRAMS = 'MD_Lista programas';
 const PERMIT_GET_PROGRAM = 'MD_Obtiene programa';
 const PERMIT_ADD_PROGRAM = 'MD_Agregar programa';
 const PERMIT_EDIT_PROGRAM = 'MD_Editar programa';
-const PERMIT_DISABLE_PROGRAM = 'MD_Inhabilitar program';
+const PERMIT_DISABLE_PROGRAM = 'MD_Inhabilitar programa';
 
 export function addMessageEdit(mensaje) {
   return (dispatch, getState) => {
@@ -131,7 +131,7 @@ export function addProgram(token, programN) {
       .then(response => {
         dispatch({
           type: ADD_PROGRAM,
-          payload: response.data.data
+          payload: response.data.respuesta
         });
       }).catch(error => {
         if (error.request.response === '') {
@@ -169,7 +169,7 @@ export function editProgram(token, programE) {
       .then(response => {
         dispatch({
           type: EDIT_PROGRAM,
-          payload: response.data.data
+          payload: response.data.respuesta
         });
       }).catch(error => {
         if (error.request.response === '') {
@@ -208,7 +208,7 @@ export function disableProgram(token, id) {
       .then(response => {
         dispatch({
           type: DISABLE_PROGRAM,
-          payload: response.data.data
+          payload: response.data.respuesta
         })
       }).catch(error => {
         if (error.request.response === '') {

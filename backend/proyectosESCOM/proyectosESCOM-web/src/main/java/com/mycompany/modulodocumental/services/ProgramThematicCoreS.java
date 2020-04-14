@@ -43,7 +43,7 @@ public class ProgramThematicCoreS {
             List<ProgramThematicCoreP> data = programThematicCoreLogic.getList(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 
@@ -56,7 +56,7 @@ public class ProgramThematicCoreS {
             ProgramThematicCoreP data = programThematicCoreLogic.get(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 
@@ -67,10 +67,10 @@ public class ProgramThematicCoreS {
     public Response add(ProgramThematicCoreP pro) {
         try {
             programThematicCoreLogic.add(pro);
-            JsonObject rest = Json.createObjectBuilder().add("data", "add").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "add").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 
@@ -81,10 +81,10 @@ public class ProgramThematicCoreS {
     public Response edit(ProgramThematicCoreP pro) {
         try {
             programThematicCoreLogic.edit(pro);
-            JsonObject rest = Json.createObjectBuilder().add("data", "edit").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "edit").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 
@@ -95,10 +95,10 @@ public class ProgramThematicCoreS {
     public Response delete(@PathParam("id") int id, DatosSolicitudPOJO dataS) {
         try {
             programThematicCoreLogic.delete(id, dataS);
-            JsonObject rest = Json.createObjectBuilder().add("data", "delete").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "delete").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }

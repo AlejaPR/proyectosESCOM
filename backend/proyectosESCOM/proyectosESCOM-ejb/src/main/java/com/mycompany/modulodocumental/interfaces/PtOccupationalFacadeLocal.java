@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.interfaces;
 
 import com.mycompany.modulodocumental.entity.PtOccupational;
@@ -10,8 +5,10 @@ import java.util.List;
 import javax.ejb.Local;
 
 /**
+ * This is the interface for the program thematic - occupational profile class.
+ * Contains all the methods required for the entity
  *
- * @author hashy
+ * @author Cristain Estevez - Anggy - University of Cundinamarca
  */
 @Local
 public interface PtOccupationalFacadeLocal {
@@ -29,7 +26,7 @@ public interface PtOccupationalFacadeLocal {
     List<PtOccupational> findRange(int[] range);
 
     int count();
-    
+
     List<PtOccupational> getList(int programT);
-    
+
 }

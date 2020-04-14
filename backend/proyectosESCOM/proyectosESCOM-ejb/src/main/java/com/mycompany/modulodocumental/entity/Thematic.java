@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.entity;
 
 import java.io.Serializable;
@@ -20,35 +15,59 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
+ * This is the class of the thematic entity. Contains all fields for
+ * persistence.
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Entity
 @Table(name = "TBL_THEMATIC")
 public class Thematic implements Serializable {
 
+    /**
+     * id variable
+     */
     @Id
     @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PK_TH_ID")
     private int id;
+
+    /**
+     * variable name thematic
+     */
     @Column(name = "TH_NAME")
     private String name;
 
+    /**
+     * Variable for the relationship with the general program entity
+     */
     @JoinColumn(name = "FK_TH_GENERAL", referencedColumnName = "PK_GP_ID")
     @ManyToOne
     private GeneralProgram fkThGeneral;
 
+    /**
+     * Variable for the relationship with the program thematic core entity
+     */
     @OneToMany(mappedBy = "fkPttThematic", cascade = CascadeType.ALL)
     private List<PtThematic> listPtThematic;
 
+    /**
+     * constructor method
+     */
     public Thematic() {
     }
 
+    /**
+     * constructor method
+     *
+     * @param name
+     */
     public Thematic(String name) {
         this.name = name;
     }
 
+    //getter and setter
     public int getId() {
         return id;
     }

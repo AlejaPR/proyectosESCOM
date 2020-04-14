@@ -24,10 +24,6 @@ class Thematic extends Component {
                     this.props.getListGeneralC(localStorage.getItem('Token'), sessionStorage.getItem('programId'), 'Thematic');
                     this.props.addMessageAdd('');
                     break;
-                case 'error server':
-                    toast.error('Se presento un error, intentelo mas tarde.');
-                    this.props.addMessageAdd('');
-                    break;
                 default:
                     break;
             }
@@ -38,10 +34,6 @@ class Thematic extends Component {
                     toast.success('Se inhabilito con exito.');
                     this.props.addMessageDelete('');
                     this.props.getListGeneralC(localStorage.getItem('Token'), sessionStorage.getItem('programId'), 'Thematic');
-                    break;
-                case 'error server':
-                    toast.error('Se presento un error, intentelo mas tarde.');
-                    this.props.addMessageDelete('');
                     break;
                 default:
                     break;

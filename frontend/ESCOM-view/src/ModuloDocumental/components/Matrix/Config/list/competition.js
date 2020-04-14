@@ -25,10 +25,6 @@ class Competition extends Component {
                     this.props.getListGeneralC(localStorage.getItem('Token'), sessionStorage.getItem('programId'), 'Competition');
                     this.props.addMessageAdd('');
                     break;
-                case 'error server':
-                    toast.error('Se presento un error, intentelo mas tarde.');
-                    this.props.addMessageAdd('');
-                    break;
                 default:
                     break;
             }
@@ -40,10 +36,6 @@ class Competition extends Component {
                     this.props.addMessageDelete('');
                     this.props.getListGeneralC(localStorage.getItem('Token'), sessionStorage.getItem('programId'), 'Competition');
                     this.props.getListCompetitionG(localStorage.getItem('Token'), sessionStorage.getItem('programId'))
-                    break;
-                case 'error server':
-                    toast.error('Se presento un error, intentelo mas tarde.');
-                    this.props.addMessageDelete('');
                     break;
                 default:
                     break;

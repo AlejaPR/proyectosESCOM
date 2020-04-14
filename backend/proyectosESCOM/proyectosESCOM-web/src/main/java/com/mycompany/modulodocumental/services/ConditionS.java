@@ -50,7 +50,7 @@ public class ConditionS {
             List<ConditionP> data = conditionLogicFacade.getList(idD);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
@@ -68,7 +68,7 @@ public class ConditionS {
             ConditionP data = conditionLogicFacade.get(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
@@ -86,7 +86,7 @@ public class ConditionS {
             List<ConditionView> data = conditionLogicFacade.getListPercentage(idP);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
@@ -102,10 +102,10 @@ public class ConditionS {
     public Response add(ConditionP con) {
         try {
             conditionLogicFacade.add(con);
-            JsonObject rest = Json.createObjectBuilder().add("data", "add").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "add").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
@@ -115,10 +115,10 @@ public class ConditionS {
     public Response edit(ConditionP con) {
         try {
             conditionLogicFacade.edit(con);
-            JsonObject rest = Json.createObjectBuilder().add("data", "edit").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "edit").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 
@@ -129,10 +129,10 @@ public class ConditionS {
     public Response disable(@PathParam("id") int id, DatosSolicitudPOJO dataR) {
         try {
             conditionLogicFacade.disable(id, dataR);
-            JsonObject rest = Json.createObjectBuilder().add("data", "disable").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "disable").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 
@@ -143,10 +143,10 @@ public class ConditionS {
     public Response approve(@PathParam("id") int id, DatosSolicitudPOJO dataR) {
         try {
             conditionLogicFacade.approve(id, dataR);
-            JsonObject rest = Json.createObjectBuilder().add("data", "approve").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "approve").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 

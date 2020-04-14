@@ -83,7 +83,7 @@ export function addCompetitionG(token, competitionG) {
             .then(response => {
                 dispatch({
                     type: ADD_COMPETITION_GENERAL,
-                    payload: response.data.data
+                    payload: response.data.respuesta
                 });
             }).catch(error => {
                 if (error.request.response === '') {
@@ -120,7 +120,7 @@ export function deleteCompetitionG(token, competitionG) {
             .then(response => {
                 dispatch({
                     type: DELETE_COMPETITION_GENERAL,
-                    payload: response.data.data
+                    payload: response.data.respuesta
                 });
             }).catch(error => {
                 if (error.request.response === '') {

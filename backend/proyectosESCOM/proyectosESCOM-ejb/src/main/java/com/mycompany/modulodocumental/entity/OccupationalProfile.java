@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.entity;
 
 import java.io.Serializable;
@@ -20,35 +15,60 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
+ * This is the class of the occupational profile entity. Contains all fields for
+ * persistence.
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Entity
 @Table(name = "TBL_OCCUPATIONAL_PROFILE")
 public class OccupationalProfile implements Serializable {
 
+    /**
+     * id variable
+     */
     @Id
     @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PK_OP_ID")
     private int id;
+
+    /**
+     * variable name occupational profile
+     */
     @Column(name = "OP_NAME")
     private String name;
 
+    /**
+     * Variable for the relationship with the general program entity
+     */
     @JoinColumn(name = "FK_OP_GENERAL", referencedColumnName = "PK_GP_ID")
     @ManyToOne
     private GeneralProgram fkOpGeneral;
 
+    /**
+     * Variable for the relationship with the program themetic core,
+     * occupational profile entity
+     */
     @OneToMany(mappedBy = "fkPtoOccupational", cascade = CascadeType.ALL)
     private List<PtOccupational> listPtOccupational;
 
+    /**
+     * constructor method
+     */
     public OccupationalProfile() {
     }
 
+    /**
+     * constructor method
+     *
+     * @param name
+     */
     public OccupationalProfile(String name) {
         this.name = name;
     }
 
+    //getter and setter
     public int getId() {
         return id;
     }

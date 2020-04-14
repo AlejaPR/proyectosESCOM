@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.logica;
 
 import com.mycompany.modulodocumental.entity.Condition;
@@ -23,25 +18,55 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 /**
+ * This is the class in charge of the user condition logic
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Stateless
 public class UserConditionLogic implements UserConditionLogicLocal {
 
+    /**
+     * Activity interface injection
+     */
     @EJB
     private ActivityFacadeLocal activityFacade;
+
+    /**
+     * condition interface injection
+     */
     @EJB
     private ConditionFacadeLocal conditionFacade;
+
+    /**
+     * user condition interface injection
+     */
     @EJB
     private UserConditionFacadeLocal userConditionFacade;
+
+    /**
+     * bitacora interface injection
+     */
     @EJB
     private UtilitarioFacadeLocal bitacora;
 
+    /**
+     * Variable for logging
+     */
     private static final String TABLE = "TBL_USER_CONDITION";
 
+    /**
+     * Variable for the logger record
+     */
     private static final String CLASS = "Clase logica usuario condicion";
 
+    /**
+     * method to list user conditions
+     *
+     * @param token
+     * @param idP
+     * @return
+     * @throws GenericException
+     */
     @Override
     public List<ConditionView> getList(String token, int idP) throws GenericException {
         try {
@@ -65,6 +90,12 @@ public class UserConditionLogic implements UserConditionLogicLocal {
         }
     }
 
+    /**
+     * method to list users
+     *
+     * @return
+     * @throws GenericException
+     */
     @Override
     public List<UsuarioPOJO> listUsers() throws GenericException {
         try {
@@ -76,6 +107,13 @@ public class UserConditionLogic implements UserConditionLogicLocal {
         }
     }
 
+    /**
+     * method to list condition users
+     *
+     * @param id
+     * @return
+     * @throws GenericException
+     */
     @Override
     public List<UsuarioPOJO> listUsersCondition(int id) throws GenericException {
         try {
@@ -96,6 +134,12 @@ public class UserConditionLogic implements UserConditionLogicLocal {
         }
     }
 
+    /**
+     * method to associate user and condition
+     *
+     * @param userCondition
+     * @throws GenericException
+     */
     @Override
     public void associate(UserConditionP userCondition) throws GenericException {
         try {
@@ -121,6 +165,12 @@ public class UserConditionLogic implements UserConditionLogicLocal {
         }
     }
 
+    /**
+     * method to remove a user condition
+     *
+     * @param userCondition
+     * @throws GenericException
+     */
     @Override
     public void delete(UserConditionP userCondition) throws GenericException {
         try {

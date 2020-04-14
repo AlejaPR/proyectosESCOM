@@ -43,7 +43,7 @@ public class AnnexVersionS {
             List<AnnexVersionP> data = annexVersionLogicFacade.getList(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
@@ -53,10 +53,10 @@ public class AnnexVersionS {
     public Response add(AnnexVersionP annexV) {
         try {
             annexVersionLogicFacade.add(annexV);
-            JsonObject rest = Json.createObjectBuilder().add("data", "add").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "add").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 
@@ -67,10 +67,10 @@ public class AnnexVersionS {
     public Response delete(@PathParam("id") int id, DatosSolicitudPOJO dataR) {
         try {
             annexVersionLogicFacade.delete(id, dataR);
-            JsonObject rest = Json.createObjectBuilder().add("data", "delete").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "delete").build();
             return Response.status(Response.Status.NO_CONTENT).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }

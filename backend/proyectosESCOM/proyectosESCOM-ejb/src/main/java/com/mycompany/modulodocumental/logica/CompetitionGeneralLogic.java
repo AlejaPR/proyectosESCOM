@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.logica;
 
 import com.mycompany.modulodocumental.entity.Competition;
@@ -22,25 +17,54 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 /**
+ * This is the class in charge of the competition general logic
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Stateless
 public class CompetitionGeneralLogic implements CompetitionGeneralLogicLocal {
 
+    /**
+     * competition general interface injection
+     */
     @EJB
     private CompetitionGeneralFacadeLocal competitionGeneralFacade;
+
+    /**
+     * competition interface injection
+     */
     @EJB
     private CompetitionFacadeLocal competitionFacade;
+
+    /**
+     * program interface injection
+     */
     @EJB
     private ProgramFacadeLocal programFacade;
+
+    /**
+     * bitacora interface injection
+     */
     @EJB
     UtilitarioFacadeLocal bitacora;
 
+    /**
+     * Variable for logging
+     */
     private static final String TABLE = "TBL_COMPETITION_GENERAL";
 
+    /**
+     * Variable for the logger record
+     */
     private static final String CLASS = "Clase logica competencia general";
 
+    /**
+     * method for obtaining the list of general competencies
+     *
+     * @param program
+     * @return
+     * @throws GenericException
+     */
     @Override
     public List<CompetitionGeneralP> getList(int program) throws GenericException {
         try {
@@ -59,6 +83,13 @@ public class CompetitionGeneralLogic implements CompetitionGeneralLogicLocal {
         }
     }
 
+    /**
+     * method of obtaining general competence
+     *
+     * @param id
+     * @return
+     * @throws GenericException
+     */
     @Override
     public CompetitionGeneralP get(int id) throws GenericException {
         try {
@@ -72,6 +103,12 @@ public class CompetitionGeneralLogic implements CompetitionGeneralLogicLocal {
         }
     }
 
+    /**
+     * method to add general competence
+     *
+     * @param competitionGeneral
+     * @throws GenericException
+     */
     @Override
     public void add(CompetitionGeneralP competitionGeneral) throws GenericException {
         try {
@@ -87,6 +124,12 @@ public class CompetitionGeneralLogic implements CompetitionGeneralLogicLocal {
 
     }
 
+    /**
+     * method for editing a general competency
+     *
+     * @param competitionGeneral
+     * @throws GenericException
+     */
     @Override
     public void edit(CompetitionGeneralP competitionGeneral) throws GenericException {
         try {
@@ -100,6 +143,11 @@ public class CompetitionGeneralLogic implements CompetitionGeneralLogicLocal {
         }
     }
 
+    /**
+     * method to delete general competition
+     * @param competitionGeneral
+     * @throws GenericException 
+     */
     @Override
     public void delete(CompetitionGeneralP competitionGeneral) throws GenericException {
         try {

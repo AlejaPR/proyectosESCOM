@@ -165,7 +165,7 @@ export function addAnnex(token, annex) {
       .then(response => {
         dispatch({
           type: ADD_ANNEX,
-          payload: response.data.data
+          payload: response.data.respuesta
         });
       }).catch(error => {
         if (error.request.response === '') {
@@ -203,7 +203,7 @@ export function editAnnex(token, annex) {
       .then(response => {
         dispatch({
           type: EDIT_ANNEX,
-          payload: response.data.data
+          payload: response.data.respuesta
         });
       }).catch(error => {
         if (error.request.response === '') {
@@ -242,7 +242,7 @@ export function disableAnnex(token, id) {
       .then(response => {
         dispatch({
           type: DISABLE_ANNEX,
-          payload: response.data.data
+          payload: response.data.respuesta
         });
       }).catch(error => {
         if (error.request.response === '') {

@@ -58,7 +58,7 @@ export function addAnnexVersion(token, data, annexN) {
                     .then(response => {
                         dispatch({
                             type: ADD_ANNEX_VERSION,
-                            payload: response.data.data
+                            payload: response.data.respuesta
                         });
                     });
             }).catch(err => {

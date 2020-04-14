@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.logica;
 
 import com.mycompany.modulodocumental.entity.AnnexVersion;
@@ -20,23 +15,48 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 /**
+ * This is the class in charge of the annex version logic
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Stateless
 public class AnnexVersionLogic implements AnnexVersionLogicLocal {
 
+    /**
+     * Annex version interface injection
+     */
     @EJB
     private AnnexVersionFacadeLocal annexVersionFacade;
+
+    /**
+     * Annex interface injection
+     */
     @EJB
     private AnnexFacadeLocal annexFacade;
+
+    /**
+     * Bitacora interface injection
+     */
     @EJB
     UtilitarioFacadeLocal bitacora;
 
+    /**
+     * Variable for logging
+     */
     private static final String TABLE = "TBL_ANNEX_VERSION";
-    
+
+    /**
+     * Variable for the logger record
+     */
     private static final String CLASS = "Clase logica version anexo";
 
+    /**
+     * method to get list of annex versions
+     *
+     * @param idAnnex
+     * @return
+     * @throws GenericException
+     */
     @Override
     public List<AnnexVersionP> getList(int idAnnex) throws GenericException {
         try {
@@ -53,6 +73,12 @@ public class AnnexVersionLogic implements AnnexVersionLogicLocal {
         }
     }
 
+    /**
+     * method to add an annex versions
+     *
+     * @param annexV
+     * @throws GenericException
+     */
     @Override
     public void add(AnnexVersionP annexV) throws GenericException {
         try {
@@ -79,6 +105,13 @@ public class AnnexVersionLogic implements AnnexVersionLogicLocal {
         }
     }
 
+    /**
+     * method to remove an annex versions
+     *
+     * @param idAnnexVersion
+     * @param dataR
+     * @throws GenericException
+     */
     @Override
     public void delete(int idAnnexVersion, DatosSolicitudPOJO dataR) throws GenericException {
         try {

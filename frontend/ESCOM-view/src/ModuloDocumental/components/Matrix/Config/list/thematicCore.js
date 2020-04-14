@@ -38,7 +38,7 @@ class ThematicCore extends Component {
         if (this.props.messageDelete !== '') {
             switch (this.props.messageDelete) {
                 case 'delete':
-                    toast.success('Se inhabilito con exito.');
+                    toast.success('Se elimino con exito.');
                     this.props.addMessageDelete('');
                     this.props.getListThematicCore(localStorage.getItem('Token'), sessionStorage.getItem('programId'))
                     break;
@@ -56,13 +56,13 @@ class ThematicCore extends Component {
         let thematicC = {
             id: 0,
             name: formValues.nameTC,
-            objective: formValues.objective,
+            credits: formValues.credits,
             idTrainingArea: formValues.trainingA,
             requestData: null
         }
         this.props.addThematicCore(localStorage.getItem('Token'), thematicC);
         formValues.nameTC = '';
-        formValues.objective = '';
+        formValues.credits = '';
         formValues.trainingA = '';
     }
 
@@ -112,13 +112,13 @@ class ThematicCore extends Component {
                                             </div>
                                         </div>
                                         <br />
-                                        <label for="form_control_1">Objetivo: </label>
+                                        <label for="form_control_1">Créditos académicos: </label>
                                         <div className="row">
                                             <div className="col-sm">
-                                                <Field name="objective" validate={[required, minimum, fiveHundred]} component={generarText} label="Objetivo" />
+                                                <Field name="credits" validate={[required]} type="number" component={generarInput} label="Créditos académicos" />
                                             </div>
                                         </div>
-                                        <br />
+                                        <br/>
                                         <label for="form_control_1">Área de formación: </label>
                                         <div className="row">
                                             <div className="col-sm">
@@ -166,7 +166,7 @@ class ThematicCore extends Component {
                         columns={[
 
                             { title: 'Nombre de la temática', field: 'name' },
-                            { title: 'Objetivo', field: 'objective' },
+                            { title: 'Numero de creditos', field: 'credits' },
                             {
                                 title: '', field: 'id',
                                 render: rowData => {
@@ -229,7 +229,7 @@ function mapStateToProps(state) {
         listThematicC: state.thematicCore.listThematicCoreR,
         listTraining: state.generalClass.listGeneralClassR,
         messageAdd: state.thematicCore.messageAdd,
-        messageDelete: state.generalClass.messageDelete
+        messageDelete: state.thematicCore.messageDelete
     }
 }
 

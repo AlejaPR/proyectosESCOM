@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.ejb;
 
 import com.mycompany.modulodocumental.entity.CompetitionGeneral;
@@ -14,11 +9,14 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
+ * This is the general competence entity bean. Contains all methods for
+ * persistence and queries to the database
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Stateless
 public class CompetitionGeneralFacade extends AbstractFacade<CompetitionGeneral> implements CompetitionGeneralFacadeLocal {
+
     @PersistenceContext(unitName = "documentaryUnit")
     private EntityManager em;
 
@@ -31,13 +29,18 @@ public class CompetitionGeneralFacade extends AbstractFacade<CompetitionGeneral>
         super(CompetitionGeneral.class);
     }
 
+    /**
+     * This method returns the list of general competencies of a general program
+     *
+     * @param general
+     * @return
+     */
     @Override
-    public List<CompetitionGeneral> getList(int general) {        
+    public List<CompetitionGeneral> getList(int general) {
         Query query = em.createQuery("SELECT c FROM CompetitionGeneral c WHERE c.fkCgCompetition.fkCtGeneral.id = ?1 ");
         query.setParameter(1, general);
         List<CompetitionGeneral> data = query.getResultList();
         return data;
     }
-    
-    
+
 }

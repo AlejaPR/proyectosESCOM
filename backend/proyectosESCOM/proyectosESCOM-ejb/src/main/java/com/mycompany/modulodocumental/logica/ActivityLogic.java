@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.logica;
 
 import com.mycompany.modulodocumental.entity.Activity;
@@ -25,27 +20,60 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 /**
+ * This is the class in charge of the activity logic
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Stateless
 public class ActivityLogic implements ActivityLogicLocal {
 
+    /**
+     * Activity interface injection
+     */
     @EJB
     private ActivityFacadeLocal activityFacade;
+
+    /**
+     * Annex interface injection
+     */
     @EJB
     private AnnexFacadeLocal annexFacade;
+
+    /**
+     * Annex version interface injection
+     */
     @EJB
     private AnnexVersionFacadeLocal annexVersionFacade;
+
+    /**
+     * Condition interface injection
+     */
     @EJB
     private ConditionFacadeLocal conditionFacade;
+
+    /**
+     * Bitacora interface injection
+     */
     @EJB
     UtilitarioFacadeLocal bitacora;
 
+    /**
+     * Variable for logging
+     */
     private static final String TABLE = "TBL_ACTIVITY";
 
+    /**
+     * Variable for the logger record
+     */
     private static final String CLASS = "Clase logica actividad";
 
+    /**
+     * method that gets activity
+     *
+     * @param idActivity
+     * @return
+     * @throws GenericException
+     */
     @Override
     public ActivityP get(int idActivity) throws GenericException {
         try {
@@ -60,6 +88,12 @@ public class ActivityLogic implements ActivityLogicLocal {
 
     }
 
+    /**
+     * method that adds an activity
+     *
+     * @param activity
+     * @throws GenericException
+     */
     @Override
     public void add(ActivityP activity) throws GenericException {
         try {
@@ -110,6 +144,12 @@ public class ActivityLogic implements ActivityLogicLocal {
 
     }
 
+    /**
+     * method that edits an activity
+     *
+     * @param activity
+     * @throws GenericException
+     */
     @Override
     public void edit(ActivityP activity) throws GenericException {
         try {
@@ -127,6 +167,13 @@ public class ActivityLogic implements ActivityLogicLocal {
 
     }
 
+    /**
+     * method that lists informative activities
+     *
+     * @param idCondition
+     * @return
+     * @throws GenericException
+     */
     @Override
     public List<ActivityP> listInfo(int idCondition) throws GenericException {
         try {
@@ -146,6 +193,12 @@ public class ActivityLogic implements ActivityLogicLocal {
         }
     }
 
+    /**
+     * method that adds information to the activity
+     *
+     * @param activity
+     * @throws GenericException
+     */
     @Override
     public void addInformation(ActivityP activity) throws GenericException {
         try {
@@ -160,6 +213,13 @@ public class ActivityLogic implements ActivityLogicLocal {
         }
     }
 
+    /**
+     * method that obtains all the information of the activities
+     *
+     * @param idCondition
+     * @return
+     * @throws GenericException
+     */
     @Override
     public String allInformation(int idCondition) throws GenericException {
         try {
@@ -197,6 +257,13 @@ public class ActivityLogic implements ActivityLogicLocal {
 
     }
 
+    /**
+     * method that removes an activity
+     *
+     * @param idActivity
+     * @param dataR
+     * @throws GenericException
+     */
     @Override
     public void disable(int idActivity, DatosSolicitudPOJO dataR) throws GenericException {
         try {
@@ -210,6 +277,12 @@ public class ActivityLogic implements ActivityLogicLocal {
         }
     }
 
+    /**
+     * method that modifies the state of the activity
+     *
+     * @param activity
+     * @throws GenericException
+     */
     @Override
     public void changeStatus(ActivityP activity) throws GenericException {
         try {
@@ -224,6 +297,14 @@ public class ActivityLogic implements ActivityLogicLocal {
         }
     }
 
+    /**
+     * method that associates an attachment with an activity
+     *
+     * @param activity
+     * @param annex
+     * @param dataS
+     * @throws GenericException
+     */
     @Override
     public void associateAnnex(int activity, int annex, DatosSolicitudPOJO dataS) throws GenericException {
         try {
@@ -239,6 +320,13 @@ public class ActivityLogic implements ActivityLogicLocal {
         }
     }
 
+    /**
+     * method that gets an annex type activity
+     *
+     * @param activity
+     * @return
+     * @throws GenericException
+     */
     @Override
     public ActivityAnnexView getAnnex(int activity) throws GenericException {
         try {
@@ -261,6 +349,13 @@ public class ActivityLogic implements ActivityLogicLocal {
         }
     }
 
+    /**
+     * method that lists the attached type activities
+     *
+     * @param id
+     * @return
+     * @throws GenericException
+     */
     @Override
     public List<ActivityP> listAnnex(int id) throws GenericException {
         try {

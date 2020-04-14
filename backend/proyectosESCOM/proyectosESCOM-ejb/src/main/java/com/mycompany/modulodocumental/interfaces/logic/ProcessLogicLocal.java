@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.interfaces.logic;
 
 import com.mycompany.modulodocumental.pojo.ProcessP;
@@ -12,8 +7,10 @@ import java.util.List;
 import javax.ejb.Local;
 
 /**
+ * This is the interface for the logical process class. Contains all the
+ * methods required for connecting the logic with the entity
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Local
 public interface ProcessLogicLocal {
@@ -27,5 +24,5 @@ public interface ProcessLogicLocal {
     void edit(ProcessP process) throws GenericException;
 
     void disable(int idProcess, DatosSolicitudPOJO dataR) throws GenericException;
-    
+
 }

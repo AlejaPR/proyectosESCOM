@@ -3,7 +3,7 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
-import { select, fiveHundred } from '../../utilitarian/validations.js';
+import { select, fiveHundred, required, minimum } from '../../utilitarian/validations.js';
 import { toast } from 'react-toastify';
 import { getProgramT, addMessageEdit, editProgramT } from '../../../redux/actions/programThematicA.js';
 class EditProgramT extends Component {
@@ -39,6 +39,7 @@ class EditProgramT extends Component {
             objectiveOutput: formValues.objectiveOut,
             teamContribution: formValues.team,
             observationFinal: formValues.observation,
+            objective: formValues.objective,
             requestData: null
         }
         this.props.editProgramT(localStorage.getItem('Token'), programT);
@@ -62,6 +63,12 @@ class EditProgramT extends Component {
                                     </button>
                                 </div>
                                 <div class="modal-body">
+                                    <label for="form_control_1">Objetivo: </label>
+                                    <div className="row">
+                                        <div className="col-sm">
+                                            <Field name="objective" validate={[required, minimum, fiveHundred]} component={generarText} label="Objetivo" />
+                                        </div>
+                                    </div>
                                     <label for="form_control_1">Contribución objetivo: </label>
                                     <div className="row">
                                         <div className="col-sm">

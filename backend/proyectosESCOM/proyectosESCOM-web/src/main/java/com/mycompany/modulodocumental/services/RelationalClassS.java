@@ -42,7 +42,7 @@ public class RelationalClassS {
             List<RelationalClassP> data = relationalClassLogic.getList(id, table);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 
@@ -53,10 +53,10 @@ public class RelationalClassS {
     public Response add(RelationalClassP relation) {
         try {
             String data = relationalClassLogic.add(relation);
-            JsonObject rest = Json.createObjectBuilder().add("data", data).build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", data).build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 
@@ -67,10 +67,10 @@ public class RelationalClassS {
     public Response delete(RelationalClassP relation) {
         try {
             String data = relationalClassLogic.delete(relation);
-            JsonObject rest = Json.createObjectBuilder().add("data", data).build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", data).build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }

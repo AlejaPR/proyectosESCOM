@@ -42,7 +42,7 @@ public class GeneralClassS {
             List<GeneralClassP> data = generalClassLogic.getList(id, table);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 
@@ -50,12 +50,12 @@ public class GeneralClassS {
 
     @GET
     @Path("/get/{id}/{table}")
-    public Response get(@PathParam("id") int id, @PathParam("table") String table) {
+    public Response get(@PathParam("id") int id, @PathParam("respuesta") String table) {
         try {
             GeneralClassP data = generalClassLogic.get(id, table);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 
@@ -66,10 +66,10 @@ public class GeneralClassS {
     public Response add(GeneralClassP com) {
         try {
             String data = generalClassLogic.add(com);
-            JsonObject rest = Json.createObjectBuilder().add("data", data).build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", data).build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 
@@ -80,10 +80,10 @@ public class GeneralClassS {
     public Response edit(GeneralClassP com) {
         try {
             String data = generalClassLogic.edit(com);
-            JsonObject rest = Json.createObjectBuilder().add("data", data).build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", data).build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 
@@ -94,10 +94,10 @@ public class GeneralClassS {
     public Response delete(GeneralClassP com) {
         try {
             String data = generalClassLogic.delete(com);
-            JsonObject rest = Json.createObjectBuilder().add("data", data).build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", data).build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }

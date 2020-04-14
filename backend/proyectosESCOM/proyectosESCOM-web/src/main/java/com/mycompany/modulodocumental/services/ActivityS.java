@@ -56,10 +56,10 @@ public class ActivityS {
     public Response edit(ActivityP act) {
         try {
             activityLogicFacade.edit(act);
-            JsonObject rest = Json.createObjectBuilder().add("data", "edit").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "edit").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 
@@ -72,7 +72,7 @@ public class ActivityS {
             List<ActivityP> data = activityLogicFacade.listInfo(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
@@ -84,7 +84,7 @@ public class ActivityS {
             List<ActivityP> data = activityLogicFacade.listAnnex(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
@@ -94,10 +94,10 @@ public class ActivityS {
     public Response addInformation(ActivityP act) {
         try {
             activityLogicFacade.addInformation(act);
-            JsonObject rest = Json.createObjectBuilder().add("data", "add").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "add").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 
@@ -110,7 +110,7 @@ public class ActivityS {
             ActivityP data = activityLogicFacade.get(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
@@ -120,10 +120,10 @@ public class ActivityS {
     public Response allInformation(@PathParam("id") int id) {
         try {
             String data = activityLogicFacade.allInformation(id);
-            JsonObject rest = Json.createObjectBuilder().add("data", data).build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", data).build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
@@ -133,10 +133,10 @@ public class ActivityS {
     public Response delete(@PathParam("id") int id, DatosSolicitudPOJO dataR) {
         try {
             activityLogicFacade.disable(id, dataR);
-            JsonObject rest = Json.createObjectBuilder().add("data", "delete").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "delete").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
@@ -147,18 +147,18 @@ public class ActivityS {
         try {
             activityLogicFacade.changeStatus(activity);
             if (activity.getState()==1) {
-                JsonObject rest = Json.createObjectBuilder().add("data", "denied").build();
+                JsonObject rest = Json.createObjectBuilder().add("respuesta", "denied").build();
                 return Response.status(Response.Status.OK).entity(rest).build();
             } else if(activity.getState()==2) {
-                JsonObject rest = Json.createObjectBuilder().add("data", "approved").build();
+                JsonObject rest = Json.createObjectBuilder().add("respuesta", "approved").build();
                 return Response.status(Response.Status.OK).entity(rest).build();
             }else{
-                JsonObject rest = Json.createObjectBuilder().add("data", "notify").build();
+                JsonObject rest = Json.createObjectBuilder().add("respuesta", "notify").build();
                 return Response.status(Response.Status.OK).entity(rest).build();
             }
 
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
 
@@ -169,10 +169,10 @@ public class ActivityS {
     public Response associateAnnex(@PathParam("id") int id, @PathParam("idA") int idA, DatosSolicitudPOJO dataS) {
         try {
             activityLogicFacade.associateAnnex(id, idA, dataS);
-            JsonObject rest = Json.createObjectBuilder().add("data", "associate").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "associate").build();
             return Response.status(Response.Status.OK).entity(rest).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
@@ -184,7 +184,7 @@ public class ActivityS {
             ActivityAnnexView data = activityLogicFacade.getAnnex(id);
             return Response.status(Response.Status.OK).entity(data).build();
         } catch (Exception e) {
-            JsonObject rest = Json.createObjectBuilder().add("data", "error server").build();
+            JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }

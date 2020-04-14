@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.entity;
 
 import java.io.Serializable;
@@ -20,35 +15,59 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
+ * This is the class of the training area entity. Contains all fields for
+ * persistence.
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Entity
 @Table(name = "TBL_TRAINING_AREA")
 public class TrainingArea implements Serializable {
 
+    /**
+     * id variable
+     */
     @Id
     @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PK_TA_ID")
     private int id;
+
+    /**
+     * variable name training area
+     */
     @Column(name = "TA_NAME")
     private String name;
 
+    /**
+     * Variable for the relationship with the general program entity
+     */
     @JoinColumn(name = "FK_TA_GENERAL", referencedColumnName = "PK_GP_ID")
     @ManyToOne
     private GeneralProgram fkTaGeneral;
 
+    /**
+     * Variable for the relationship with the thematic core entity
+     */
     @OneToMany(mappedBy = "fkTcTrainingArea", cascade = CascadeType.ALL)
     private List<ThematicCore> listThematicCore;
 
+    /**
+     * constructor method
+     */
     public TrainingArea() {
     }
 
+    /**
+     * constructor method
+     *
+     * @param name
+     */
     public TrainingArea(String name) {
         this.name = name;
     }
 
+    //getter and setter
     public int getId() {
         return id;
     }

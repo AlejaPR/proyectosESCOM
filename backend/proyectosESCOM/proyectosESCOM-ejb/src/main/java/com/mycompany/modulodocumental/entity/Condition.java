@@ -1,8 +1,3 @@
- /*
- * To change this li cense header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.entity;
 
 import java.io.Serializable;
@@ -24,44 +19,90 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
+ * This is the class of the condition entity. Contains all fields for
+ * persistence.
  *
- * @author HASHY
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Entity
 @Table(name = "TBL_CONDITION")
 public class Condition implements Serializable {
 
+    /**
+     * id variable
+     */
     @Id
     @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PK_CON_ID")
     private int id;
+
+    /**
+     * variable name condition
+     */
     @Column(name = "CON_NAME")
     private String name;
+
+    /**
+     * variable description condition
+     */
     @Column(name = "CON_DESCRIPTION")
     private String description;
+
+    /**
+     * variable state condition
+     */
     @Column(name = "CON_STATE")
     private int state;
+
+    /**
+     * variable start date condition
+     */
     @Column(name = "CON_START_DATE")
     @Temporal(TemporalType.DATE)
     private Date startDate;
+
+    /**
+     * variable final date condition
+     */
     @Column(name = "CON_FINAL_DATE")
     @Temporal(TemporalType.DATE)
     private Date finalDate;
 
+    /**
+     * Variable for the relationship with the activity entity
+     */
     @OneToMany(mappedBy = "fkActCondition", cascade = CascadeType.ALL)
     private List<Activity> listActivity;
 
+    /**
+     * Variable for the relationship with the user condition entity
+     */
     @OneToMany(mappedBy = "fkUcCondition", cascade = CascadeType.ALL)
     private List<UserCondition> listUserCondition;
 
+    /**
+     * Variable for the relationship with the process entity
+     */
     @JoinColumn(name = "FK_CON_PROCESS", referencedColumnName = "PK_PRC_ID")
     @ManyToOne(fetch = FetchType.LAZY)
     private Process fkConProcess;
 
+    /**
+     * constructor method
+     */
     public Condition() {
     }
 
+    /**
+     * constructor method
+     *
+     * @param name
+     * @param description
+     * @param state
+     * @param startDate
+     * @param finalDate
+     */
     public Condition(String name, String description, int state, Date startDate, Date finalDate) {
         this.name = name;
         this.description = description;
@@ -70,6 +111,7 @@ public class Condition implements Serializable {
         this.finalDate = finalDate;
     }
 
+    //getter and setter
     public int getId() {
         return id;
     }

@@ -241,7 +241,7 @@ export function addActivity(token, activityN) {
             .then(response => {
                 dispatch({
                     type: ADD_ACTIVITY,
-                    payload: response.data.data
+                    payload: response.data.respuesta
                 });
             }).catch(error => {
                 if (error.request.response === '') {
@@ -280,7 +280,7 @@ export function editActivity(token, activityE) {
                 console.log(response.data)
                 dispatch({
                     type: EDIT_ACTIVITY,
-                    payload: response.data.data
+                    payload: response.data.respuesta
                 });
             }).catch(error => {
                 if (error.request.response === '') {
@@ -319,7 +319,7 @@ export function changeStatus(token, activityE) {
                 console.log(response.data)
                 dispatch({
                     type: CHANGE_STATUS,
-                    payload: response.data.data
+                    payload: response.data.respuesta
                 });
             }).catch(error => {
                 if (error.request.response === '') {
@@ -357,7 +357,7 @@ export function deleteActivity(token, id) {
             .then(response => {
                 dispatch({
                     type: DELETE_ACTIVITY,
-                    payload: response.data.data
+                    payload: response.data.respuesta
                 });
             }).catch(error => {
                 if (error.request.response === '') {
@@ -395,7 +395,7 @@ export function addInformation(token, info) {
             .then(response => {
                 dispatch({
                     type: ADD_INFORMATION,
-                    payload: response.data.data
+                    payload: response.data.respuesta
                 });
             }).catch(error => {
                 if (error.request.response === '') {
@@ -433,7 +433,7 @@ export function associateAnnex(token, activity, annexo) {
             .then(response => {
                 dispatch({
                     type: ASSOCIATE_ANNEX,
-                    payload: response.data.data
+                    payload: response.data.respuesta
                 });
             }).catch(error => {
                 if (error.request.response === '') {

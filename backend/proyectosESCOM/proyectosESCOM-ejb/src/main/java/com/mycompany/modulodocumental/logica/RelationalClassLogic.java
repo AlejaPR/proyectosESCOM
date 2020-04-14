@@ -1,12 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.logica;
 
-import com.mycompany.modulodocumental.ejb.PtThematicFacadeLocal;
-import com.mycompany.modulodocumental.ejb.ThematicFacadeLocal;
+import com.mycompany.modulodocumental.interfaces.PtThematicFacadeLocal;
+import com.mycompany.modulodocumental.interfaces.ThematicFacadeLocal;
 import com.mycompany.modulodocumental.entity.CompetitionGeneral;
 import com.mycompany.modulodocumental.entity.DistinctiveFeature;
 import com.mycompany.modulodocumental.entity.OccupationalProfile;
@@ -38,39 +33,98 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
 /**
+ * This is the class in charge of the relational class logic
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Stateless
 public class RelationalClassLogic implements RelationalClassLogicLocal {
 
+    /**
+     * thematic interface injection
+     */
     @EJB
     private ThematicFacadeLocal thematicFacade;
+
+    /**
+     * occupational profile interface injection
+     */
     @EJB
     private OccupationalProfileFacadeLocal occupationalProfileFacade;
+
+    /**
+     * professional profile interface injection
+     */
     @EJB
     private ProfessionalProfileFacadeLocal professionalProfielFacade;
+
+    /**
+     * distinctive feature interface injection
+     */
     @EJB
     private DistinctiveFeatureFacadeLocal distinctiveFeatureFacade;
+
+    /**
+     * competition general interface injection
+     */
     @EJB
     private CompetitionGeneralFacadeLocal competitionGerenelFacade;
+
+    /**
+     * program thematic core interface injection
+     */
     @EJB
     private ProgramThematicCoreFacadeLocal programThematicCoreFacade;
+
+    /**
+     * compettition general interface injection
+     */
     @EJB
     private PtCompetitionGFacadeLocal ptCompetitionGFacade;
+
+    /**
+     * distintive feature interface injection
+     */
     @EJB
     private PtDistinctiveFacadeLocal ptDistinctiveFacade;
+
+    /**
+     * occupational profile interface injection
+     */
     @EJB
     private PtOccupationalFacadeLocal ptOccupationalFacade;
+
+    /**
+     * professional profile interface injection
+     */
     @EJB
     private PtProfessionalFacadeLocal ptProfessionalFacade;
+
+    /**
+     * thematic interface injection
+     */
     @EJB
     private PtThematicFacadeLocal ptThematicFacade;
+
+    /**
+     * bitacora interface injection
+     */
     @EJB
     UtilitarioFacadeLocal bitacora;
 
+    /**
+     * Variable for the logger record
+     */
     private static final String CLASS = "Clase logica relacional";
 
+    /**
+     * method to get list relational classes
+     *
+     * @param programT
+     * @param table
+     * @return
+     * @throws GenericException
+     */
     @Override
     public List<RelationalClassP> getList(int programT, String table) throws GenericException {
         try {
@@ -121,6 +175,13 @@ public class RelationalClassLogic implements RelationalClassLogicLocal {
         }
     }
 
+    /**
+     * method of adding a relational class
+     *
+     * @param relation
+     * @return
+     * @throws GenericException
+     */
     @Override
     public String add(RelationalClassP relation) throws GenericException {
         try {
@@ -211,6 +272,13 @@ public class RelationalClassLogic implements RelationalClassLogicLocal {
         }
     }
 
+    /**
+     * method to remove a relational class
+     *
+     * @param relation
+     * @return
+     * @throws GenericException
+     */
     @Override
     public String delete(RelationalClassP relation) throws GenericException {
         try {

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.entity;
 
 import java.io.Serializable;
@@ -18,55 +13,104 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
+ * This is the class of the general program entity. Contains all fields for
+ * persistence.
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Entity
 @Table(name = "TBL_GENERAL_PROGRAM")
 public class GeneralProgram implements Serializable {
 
+    /**
+     * id variable
+     */
     @Id
     @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PK_GP_ID")
     private int id;
+
+    /**
+     * variable name general program
+     */
     @Column(name = "GP_NAME")
     private String name;
+
+    /**
+     * variable description general program
+     */
     @Column(name = "GP_DESCRIPTION")
     private String description;
+
+    /**
+     * variable state general program
+     */
     @Column(name = "GP_STATE")
     private int state;
 
+    /**
+     * Variable for the relationship with the program entity
+     */
     @OneToMany(mappedBy = "fkProGeneral", cascade = CascadeType.ALL)
     List<Program> listProgram;
 
+    /**
+     * Variable for the relationship with the thematic entity
+     */
     @OneToMany(mappedBy = "fkThGeneral", cascade = CascadeType.ALL)
     List<Thematic> listThematic;
 
+    /**
+     * Variable for the relationship with the training area entity
+     */
     @OneToMany(mappedBy = "fkTaGeneral", cascade = CascadeType.ALL)
     List<TrainingArea> listTrainingArea;
 
+    /**
+     * Variable for the relationship with the competition entity
+     */
     @OneToMany(mappedBy = "fkCtGeneral", cascade = CascadeType.ALL)
     List<Competition> listCompetition;
 
+    /**
+     * Variable for the relationship with the distinctive feature entity
+     */
     @OneToMany(mappedBy = "fkDfGeneral", cascade = CascadeType.ALL)
     List<DistinctiveFeature> listDistinctiveFeature;
 
+    /**
+     * Variable for the relationship with the occupational profile entity
+     */
     @OneToMany(mappedBy = "fkOpGeneral", cascade = CascadeType.ALL)
     List<OccupationalProfile> listOccupationalProfile;
 
+    /**
+     * Variable for the relationship with the professional profile entity
+     */
     @OneToMany(mappedBy = "fkPpGeneral", cascade = CascadeType.ALL)
     List<ProfessionalProfile> listProfessionalProfile;
 
+    /**
+     * constructor method
+     */
     public GeneralProgram() {
     }
 
+    /**
+     * constructor method
+     *
+     * @param name
+     * @param description
+     * @param state
+     */
     public GeneralProgram(String name, String description, int state) {
         this.name = name;
         this.description = description;
         this.state = state;
     }
 
+    //getter and setter
     public int getId() {
         return id;
     }

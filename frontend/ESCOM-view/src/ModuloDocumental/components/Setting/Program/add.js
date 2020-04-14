@@ -3,7 +3,7 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
-import { addProgram, addMessageAdd } from '../../../redux/actions/programA.js';
+import { getListPrograms, addProgram, addMessageAdd } from '../../../redux/actions/programA.js';
 import { required, minimum, twoHundred, select } from '../../utilitarian/validations.js';
 import { toast } from 'react-toastify';
 import { getListGeneralPro } from '../../../redux/actions/generalProgramA.js';
@@ -11,7 +11,7 @@ import { getListGeneralPro } from '../../../redux/actions/generalProgramA.js';
 
 class Add extends Component {
 
-    componentDidMount(){
+    componentDidMount() {
         this.props.getListGeneralPro(localStorage.getItem('Token'))
     }
 
@@ -20,11 +20,12 @@ class Add extends Component {
             switch (this.props.messageAddPr) {
                 case 'add':
                     toast.success('Se agrego con exito.');
-                    this.props.getListGeneralPro(localStorage.getItem('Token'))
                     this.props.addMessageAdd('')
+                    this.props.getListPrograms(localStorage.getItem('Token'))
                     break;
                 case 'error server':
                     toast.error('Se presento un error, intentelo mas tarde.');
+                    this.props.addMessageAdd('')
                     break;
                 default:
                     break;
@@ -42,6 +43,7 @@ class Add extends Component {
             duration: formValues.duration,
             methodology: formValues.methodology,
             campus: formValues.campus,
+            state: 1,
             idGeneral: formValues.general,
             requestData: null
         }
@@ -51,6 +53,7 @@ class Add extends Component {
         formValues.institution = '';
         formValues.academicCredits = '';
         formValues.duration = '';
+        formValues.campus = '';
         formValues.methodology = '';
         formValues.general = '';
 
@@ -179,4 +182,4 @@ let formAdd = reduxForm({
     enableReinitialize: true
 })(Add)
 
-export default withRouter(connect(mapStateToProps, { addProgram, addMessageAdd, getListGeneralPro })(formAdd));
+export default withRouter(connect(mapStateToProps, { addProgram, addMessageAdd, getListGeneralPro, getListPrograms })(formAdd));

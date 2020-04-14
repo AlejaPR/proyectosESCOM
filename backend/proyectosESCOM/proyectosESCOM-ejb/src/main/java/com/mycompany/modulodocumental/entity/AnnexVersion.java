@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.entity;
 
 import java.io.Serializable;
@@ -20,40 +15,83 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
+ * This is the class of the version annex entity. Contains all fields for
+ * persistence
  *
- * @author HASHY
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @Entity
 @Table(name = "TBL_ANNEX_VERSION")
 public class AnnexVersion implements Serializable {
 
+    /**
+     * id variable
+     */
     @Id
     @Basic(optional = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PK_AV_ID")
     private int id;
+
+    /**
+     * change date variable
+     */
     @Column(name = "AV_DATE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
+
+    /**
+     * variable location annex
+     */
     @Column(name = "AV_LOCATION")
     private String location;
+
+    /**
+     * variable state annex
+     */
     @Column(name = "AV_STATE")
     private int state;
+
+    /**
+     * variable version annex
+     */
     @Column(name = "AV_VERSION")
     private int version;
+
+    /**
+     * variable description annex
+     */
     @Column(name = "AV_DESCRIPTION")
     private String description;
 
+    /**
+     * Variable for the relationship with the user entity
+     */
     @Column(name = "FK_AV_USER")
     private int idUser;
 
+    /**
+     * Variable for the relationship with the annex entity
+     */
     @JoinColumn(name = "FK_AV_ANNEX", referencedColumnName = "PK_AX_ID")
     @ManyToOne
     private Annex fkAvAnnex;
 
+    /**
+     * constructor method
+     */
     public AnnexVersion() {
     }
 
+    /**
+     * constructor method
+     *
+     * @param date
+     * @param location
+     * @param state
+     * @param version
+     * @param description
+     */
     public AnnexVersion(Date date, String location, int state, int version, String description) {
         this.date = date;
         this.location = location;
@@ -62,6 +100,7 @@ public class AnnexVersion implements Serializable {
         this.description = description;
     }
 
+    //getter and setter
     public int getId() {
         return id;
     }
