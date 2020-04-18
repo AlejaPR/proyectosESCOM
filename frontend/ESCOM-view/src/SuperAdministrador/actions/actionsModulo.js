@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { desencriptar } from '../componentes/general/Encriptar.js';
 import {campo} from '../utilitario/GenerarInputs.js'
-
+import {URL_BASE} from '../utilitario/Configuracion.js';
 import {
     mensajeCambiarEstadoDeActividades,
     mensajeDeRegistro,
@@ -25,7 +25,6 @@ export const ACTUALIZAR_MODULOS = 'ACTUALIZAR_MODULOS';
 export const AGREGAR_MODULO = 'AGREGAR_MODULO';
 export const MENSAJE_REGISTRAR_MODULO = 'MENSAJE_REGISTRAR_MODULO';
 
-const URL_BASE = 'http://proyectosescom.3utilities.com:9090';
 const PERMISO_REGISTRAR_MODULOS = 'SA_Registrar modulos';
 const PERMISO_CONSULTAR_MODULOS = 'SA_Consultar modulos registrados';
 const PERMISO_EDITAR_MODULOS = 'SA_Editar informacion de los modulos';

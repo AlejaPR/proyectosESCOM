@@ -2,6 +2,7 @@ import axios from 'axios';
 import { desencriptar } from '../componentes/general/Encriptar.js';
 import { mensajesFiltro } from '../mensajesDeError/MensajeDeErrorFiltro.js';
 import { mensajeDeCargar, mensajeDeRegistro } from '../mensajesDeError/MensajesDeErrorConfiguracion.js';
+import {URL_BASE} from '../utilitario/Configuracion.js';
 
 export const ESTADO_CONFIGURACION = 'ESTADO_CONFIGURACION';
 export const MOSTRAR_CONFIGURACION = 'MOSTRAR_CONFIGURACION'
@@ -14,7 +15,6 @@ export const MENSAJE_CONFIGURACION = 'MENSAJE_CONFIGURACION';
 export const CARGAR_CONFIGURACION = 'CARGAR_CONFIGURACION';
 export const CONFIGURACION_LOGIN = 'CONFIGURACION_LOGIN';
 
-const URL_BASE = 'http://proyectosescom.3utilities.com:9090';
 const PERMISO_CONFIGURACION = 'SA_Administrar configuracion de aspecto';
 
 export function actionActualizarConfiguracion(configuracion, token) {

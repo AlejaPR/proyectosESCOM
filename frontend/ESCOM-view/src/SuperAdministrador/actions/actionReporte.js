@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { desencriptar } from '../componentes/general/Encriptar.js';
 import { mensajeDeConsulta } from '../mensajesDeError/MensajesDeErrorReporte.js';
+import {URL_BASE} from '../utilitario/Configuracion.js';
 
 export const REPORTES = 'REPORTES';
 export const MENSAJE_REPORTE = 'MENSAJE_REPORTE';
 
-const URL_BASE = 'http://proyectosescom.3utilities.com:9090';
 const PERMISO_REALIZAR = 'SA_Realizar reportes';
 
 

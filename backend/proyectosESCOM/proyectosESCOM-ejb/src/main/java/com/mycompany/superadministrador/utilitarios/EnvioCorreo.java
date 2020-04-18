@@ -15,6 +15,8 @@ import javax.mail.internet.MimeMessage;
  */
 public class EnvioCorreo {
 
+    final String IPSERVIDOR = "http://localhost:3000";
+
     /**
      * Constructor de la clase
      */
@@ -29,8 +31,8 @@ public class EnvioCorreo {
      * @param asunto
      * @throws javax.mail.internet.AddressException
      */
-    public void enviarCorreo(String mensaje, String destinatario, String asunto) 
-        throws AddressException, MessagingException {
+    public void enviarCorreo(String mensaje, String destinatario, String asunto)
+            throws AddressException, MessagingException {
         final String username = "admistrativosis6@gmail.com";
         final String password = "AdminSIS678916";
 
@@ -55,7 +57,7 @@ public class EnvioCorreo {
         Transport.send(message);
 
     }
-    
+
     public String devolverEstructuraHTML(String usuario, String link) {
         String message = "<html xmlns=\"http://www.w3.org/1999/xhtml\">\n"
                 + "\n"
@@ -123,4 +125,10 @@ public class EnvioCorreo {
                 + "</html>";
         return message;
     }
+
+    public String getIPSERVIDOR() {
+        return IPSERVIDOR;
+    }
+    
+    
 }

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { encriptar, desencriptar } from '../componentes/general/Encriptar.js';
+import {URL_BASE} from '../utilitario/Configuracion.js';
 import {
     mensajesDeErrorModulosAcceso,
     mensajesDeErrorRegistroUsuarios,
@@ -44,7 +45,6 @@ export const MOSTRAR_USUARIOS = 'MOSTRAR_USUARIOS';
 export const NOMBRE_USUARIO = 'NOMBRE_USUARIO';
 export const REDIRECCIONAR_LOGIN = 'REDIRECCIONAR_LOGIN';
 
-const URL_BASE = 'http://proyectosescom.3utilities.com:9090';
 const PERMISO_REGISTRAR = 'SA_Registrar usuarios';
 const PERMISO_CONSULTAR_USUARIOS = 'SA_Consultar usuarios registrados';
 const PERMISO_EDITAR_USUARIOS = 'SA_Editar informacion de los usuarios';

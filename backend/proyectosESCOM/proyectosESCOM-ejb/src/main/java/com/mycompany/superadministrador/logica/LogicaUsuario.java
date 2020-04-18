@@ -891,7 +891,7 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
                     throw new ExcepcionGenerica("Ocurrio un error en el servidor");
                 } else {
                     EnvioCorreo e = new EnvioCorreo();
-                    String link = "http://localhost:3000/recuperarContrasena/" + token;
+                    String link = e.getIPSERVIDOR()+"/recuperarContrasena/" + token;
                     e.enviarCorreo(e.devolverEstructuraHTML(usuario.get(0).getNombre(), link), correoElectronico, "Recuperar contraseña");
                     return "Correo enviado";
                 }

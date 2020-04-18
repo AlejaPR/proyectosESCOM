@@ -22,13 +22,13 @@ public class GestorBitacora {
      * @param nivel
      * @param error
      * @param metodo
-     * @return 
+     * @return
      *
      */
     public static Logger getBitacora(String clase, String nombreArchivoBitacora, Level nivel, String metodo, String error) {
         Logger bitacora = null;
         bitacora = Logger.getLogger(clase);
-
+        
         try {
             Handler handler = new FileHandler(nombreArchivoBitacora, true);
             SimpleFormatter formateador = new SimpleFormatter();
