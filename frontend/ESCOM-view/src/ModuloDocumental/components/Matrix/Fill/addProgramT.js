@@ -79,7 +79,7 @@ class AddProgramT extends Component {
                                     <div className="row">
                                         <div className="col-sm">
                                             <Field name="thematic" validate={[select]} className="bs-select form-control" component={generarSelect}>
-                                                <option selected value="0">Seleccione...</option>
+                                                <option value="0">Seleccione...</option>
                                                 {this.loadList()}
                                             </Field>
                                         </div>

@@ -7,6 +7,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import Add from './add.js';
 import Edit from './edit.js';
 import MaterialTable from 'material-table';
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
 
 import EditIcon from '@material-ui/icons/Edit';
 import VisibilityIcon from '@material-ui/icons/Visibility';
@@ -22,6 +24,10 @@ class FormCondition extends Component {
                     this.props.addMessageEdit('');
                     this.props.getListConditions(localStorage.getItem('Token'), sessionStorage.getItem('documentId'));
                     break;
+                case 'Sin persimo':
+                    toast.error('No tiene permiso para editar este elemento.');
+                    this.props.addMessageEdit('')
+                    break;
                 case 'error server':
                     toast.error('Se presento un error, intentelo mas tarde.');
                     break;
@@ -36,6 +42,10 @@ class FormCondition extends Component {
                     this.props.addMessageAdd('')
                     this.props.getListConditions(localStorage.getItem('Token'), sessionStorage.getItem('documentId'));
                     break;
+                case 'Sin persimo':
+                    toast.error('No tiene permiso para agregar este elemento.');
+                    this.props.addMessageAdd('')
+                    break;
                 case 'error server':
                     toast.error('Se presento un error, intentelo mas tarde.');
                     break;
@@ -49,6 +59,10 @@ class FormCondition extends Component {
                     toast.success('Se inhabilito con exito.');
                     this.props.addMessageDisable('')
                     this.props.getListConditions(localStorage.getItem('Token'), sessionStorage.getItem('documentId'));
+                    break;
+                case 'Sin persimo':
+                    toast.error('No tiene permiso para inhabilitar este elemento.');
+                    this.props.addMessageDisable('')
                     break;
                 case 'error server':
                     toast.error('Se presento un error, intentelo mas tarde.');
@@ -87,91 +101,102 @@ class FormCondition extends Component {
                 </div>
                 <br />
                 <div className="shadow" style={{ background: "#FFFFFF", padding: "30px" }}>
-                    <div>
-                        <Add />
-                    </div>
-                    <br />
-                    <br />
-                    <MaterialTable
-                        title=""
-                        localization={{
-                            header: {
-                                actions: ' '
-                            },
-                            pagination: {
-                                nextTooltip: 'Siguiente ',
-                                previousTooltip: 'Anterior',
-                                labelDisplayedRows: '{from}-{to} de {count}',
-                                lastTooltip: 'Ultima pagina',
-                                firstTooltip: 'Primera pagina',
-                                labelRowsSelect: 'Registros',
-                                firstAriaLabel: 'oooo'
-                            },
-                            body: {
-                                emptyDataSourceMessage: 'Aun no hay ningun documento registrado'
-                            },
-                            toolbar: {
-                                searchTooltip: 'Buscar',
-                                searchPlaceholder: 'Buscar'
-                            }
-                        }}
-                        columns={[
 
-                            { title: 'Nombre de la condición', field: 'name' },
-                            { title: 'Descripción', field: 'description',
-                                render: rowData=>{
-                                    if(rowData.description.length > 150){
-                                        return rowData.description.substr(0,150) +' ...'
-                                    }else{
-                                        return rowData.description
-                                    }
-                                }
-                            },
-                            {
-                                title: '', field: 'id',
-                                render: rowData => {
-                                    return (
-                                        <div>
-                                            <a onClick={() => this.saveView(rowData.id)} data-toggle="modal" data-target="#viewModal">
-                                                <VisibilityIcon />
-                                            </a>
-                                        </div>
-                                    )
-                                }
-                            },
-                            {
-                                title: '', field: 'id',
-                                render: rowData => {
-                                    return (
-                                        <div>
-                                            <a onClick={() => this.saveEdit(rowData.id)} data-toggle="modal" data-target="#editModal">
-                                                <EditIcon />
-                                            </a>
-                                            <Edit />
-                                        </div>
-                                    )
-                                }
-                            },
-                            {
-                                title: '', field: 'id',
-                                render: rowData => {
-                                    return (
-                                        <div>
-                                            <a onClick={() => this.disable(rowData.id)}>
-                                                <DeleteForeverIcon />
-                                            </a>
-                                        </div>
-                                    )
-                                }
-                            }
+                    {
+                        this.props.enabled ? <div className="col-sm-12">
+                            <Alert severity="error" variant="outlined">
+                                <AlertTitle>Sin permiso</AlertTitle>
+                        No tiene permisos suficientes para listar las condiciones</Alert>
+                        </div> :
+                            <div>
+                                <div>
+                                    <Add />
+                                </div>
+                                <br />
+                                <br />
+                                <MaterialTable
+                                    title=""
+                                    localization={{
+                                        header: {
+                                            actions: ' '
+                                        },
+                                        pagination: {
+                                            nextTooltip: 'Siguiente ',
+                                            previousTooltip: 'Anterior',
+                                            labelDisplayedRows: '{from}-{to} de {count}',
+                                            lastTooltip: 'Ultima pagina',
+                                            firstTooltip: 'Primera pagina',
+                                            labelRowsSelect: 'Registros',
+                                            firstAriaLabel: 'oooo'
+                                        },
+                                        body: {
+                                            emptyDataSourceMessage: 'Aun no hay ningun documento registrado'
+                                        },
+                                        toolbar: {
+                                            searchTooltip: 'Buscar',
+                                            searchPlaceholder: 'Buscar'
+                                        }
+                                    }}
+                                    columns={[
 
-                        ]}
-                        data={this.props.conditions}
-                        options={{
-                            search: true
-                        }}
+                                        { title: 'Nombre de la condición', field: 'name' },
+                                        {
+                                            title: 'Descripción', field: 'description',
+                                            render: rowData => {
+                                                if (rowData.description.length > 150) {
+                                                    return rowData.description.substr(0, 150) + ' ...'
+                                                } else {
+                                                    return rowData.description
+                                                }
+                                            }
+                                        },
+                                        {
+                                            title: '', field: 'id',
+                                            render: rowData => {
+                                                return (
+                                                    <div>
+                                                        <a onClick={() => this.saveView(rowData.id)} data-toggle="modal" data-target="#viewModal">
+                                                            <VisibilityIcon />
+                                                        </a>
+                                                    </div>
+                                                )
+                                            }
+                                        },
+                                        {
+                                            title: '', field: 'id',
+                                            render: rowData => {
+                                                return (
+                                                    <div>
+                                                        <a onClick={() => this.saveEdit(rowData.id)} data-toggle="modal" data-target="#editModal">
+                                                            <EditIcon />
+                                                        </a>
+                                                        <Edit />
+                                                    </div>
+                                                )
+                                            }
+                                        },
+                                        {
+                                            title: '', field: 'id',
+                                            render: rowData => {
+                                                return (
+                                                    <div>
+                                                        <a onClick={() => this.disable(rowData.id)}>
+                                                            <DeleteForeverIcon />
+                                                        </a>
+                                                    </div>
+                                                )
+                                            }
+                                        }
 
-                    />
+                                    ]}
+                                    data={this.props.conditions}
+                                    options={{
+                                        search: true
+                                    }}
+
+                                />
+                            </div>
+                    }
                 </div>
             </div>
         )
@@ -184,7 +209,8 @@ function mapStateToProps(state) {
         conditions: state.condition.listConditions,
         messageEditC: state.condition.messageEdit,
         messageAddC: state.condition.messageAdd,
-        messageDisableC: state.condition.messageDisable
+        messageDisableC: state.condition.messageDisable,
+        enabled: state.condition.stateCondition
     }
 }
 

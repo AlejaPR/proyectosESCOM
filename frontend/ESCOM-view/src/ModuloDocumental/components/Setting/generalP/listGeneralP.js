@@ -87,7 +87,7 @@ class ListGeneral extends Component {
             <div className="container" style={{ width: "90%" }}>
                 <ToastContainer />
                 <div className="text-left titulo">
-                    <h4>Lista de programas generales</h4>
+                    <h4>Lista de facultades</h4>
                 </div>
                 <br />
                 <div className="shadow" style={{ background: "#FFFFFF", padding: "30px" }}>
@@ -112,7 +112,7 @@ class ListGeneral extends Component {
                                 firstAriaLabel: 'oooo'
                             },
                             body: {
-                                emptyDataSourceMessage: 'Aun no hay ningun rpgrama registrado'
+                                emptyDataSourceMessage: 'Aun no hay ninguna facultad registrada'
                             },
                             toolbar: {
                                 searchTooltip: 'Buscar',
@@ -121,7 +121,7 @@ class ListGeneral extends Component {
                         }}
                         columns={[
 
-                            { title: 'Nombre del programa', field: 'name' },
+                            { title: 'Nombre de la facultad', field: 'name' },
                             { title: 'Descripción', field: 'description' },
                             {
                                 title: '', field: 'id',

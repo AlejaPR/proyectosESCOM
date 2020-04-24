@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 import { desencriptar } from '../../../SuperAdministrador/componentes/general/Encriptar.js';
+import { URL_BASE } from '../../../SuperAdministrador/utilitario/Configuracion.js';
 
 export const GET_LIST_ACTIVITIES_INFO = 'GET_LIST_ACTIVITIES_INFO';
 export const GET_LIST_ACTIVITIES_ANNEX = 'GET_LIST_ACTIVITIES_ANNEX';
@@ -11,6 +12,8 @@ export const EDIT_ACTIVITY = 'EDIT_ACTIVITY';
 export const DELETE_ACTIVITY = 'DELETE_ACTIVITY';
 export const CHANGE_STATUS = 'CHANGE_STATUS';
 export const ASSOCIATE_ANNEX = 'ASSOCIATE_ANNEX';
+export const STATE_ACTIVITY_INFO = 'STATE_ACTIVITY_INFO';
+export const STATE_ACTIVITY_ANNEX = 'STATE_ACTIVITY_ANNEX';
 
 export const ADD_INFORMATION = 'ADD_INFORMATION';
 export const GET_ALL_INFORMATION = 'GET_ALL_INFORMATION';
@@ -23,7 +26,6 @@ export const ADD_MESSAGE_CHANGE = 'ADD_MESSAGE_CHANGE';
 export const ADD_MESSAGE_ADD_INFO = 'ADD_MESSAGE_ADD_INFO';
 export const ADD_MESSAGE = 'ADD_MESSAGE';
 
-const URL_BASE = 'http://localhost:9090/proyectosESCOM-web';
 const PERMIT_LIST_ACTIVITIES_INFO = 'MD_Prueba';
 const PERMIT_LIST_ACTIVITIES_ANNEX = 'MD_Prueba';
 const PERMIT_GET_ACTIVITY = 'MD_Obtiene actividad';
@@ -98,7 +100,7 @@ export function getListActivitiesInfo(token, id) {
         'Permiso': PERMIT_LIST_ACTIVITIES_INFO
     }
     return (dispatch, getState) => {
-        axios.get(`${URL_BASE}/api/activity/listInfo/${id}`, { headers: headers })
+        axios.get(`${URL_BASE}/proyectosESCOM-web/api/activity/listInfo/${id}`, { headers: headers })
             .then(response => {
                 dispatch({
                     type: GET_LIST_ACTIVITIES_INFO,
@@ -112,10 +114,19 @@ export function getListActivitiesInfo(token, id) {
                     });
                 } else {
                     if (error.request) {
-                        dispatch({
-                            type: ADD_MESSAGE,
-                            payload: 'error server'
-                        });
+                        var data = JSON.parse(error.request.response);
+                        let respuesta = data.respuesta;
+                        if (respuesta === 'Sin permiso') {
+                            dispatch({
+                                type: STATE_ACTIVITY_INFO,
+                                payload: true
+                            });
+                        } else {
+                            dispatch({
+                                type: ADD_MESSAGE,
+                                payload: respuesta
+                            });
+                        }
                     }
                 }
 
@@ -132,7 +143,7 @@ export function getListActivitiesAnnex(token, id) {
     }
 
     return (dispatch, getState) => {
-        axios.get(`${URL_BASE}/api/activity/listAnnex/${id}`, { headers: headers })
+        axios.get(`${URL_BASE}/proyectosESCOM-web/api/activity/listAnnex/${id}`, { headers: headers })
             .then(response => {
                 dispatch({
                     type: GET_LIST_ACTIVITIES_ANNEX,
@@ -146,10 +157,19 @@ export function getListActivitiesAnnex(token, id) {
                     });
                 } else {
                     if (error.request) {
-                        dispatch({
-                            type: ADD_MESSAGE,
-                            payload: 'error server'
-                        });
+                        var data = JSON.parse(error.request.response);
+                        let respuesta = data.respuesta;
+                        if (respuesta === 'Sin permiso') {
+                            dispatch({
+                                type: STATE_ACTIVITY_ANNEX,
+                                payload: true
+                            });
+                        } else {
+                            dispatch({
+                                type: ADD_MESSAGE,
+                                payload: respuesta
+                            });
+                        }
                     }
                 }
 
@@ -166,7 +186,7 @@ export function getActivityId(token, id) {
         'Permiso': PERMIT_GET_ACTIVITY
     }
     return (dispatch, getState) => {
-        axios.get(`${URL_BASE}/api/activity/get/${id}`, { headers: headers })
+        axios.get(`${URL_BASE}/proyectosESCOM-web/api/activity/get/${id}`, { headers: headers })
             .then(response => {
                 dispatch({
                     type: GET_ACTIVITY_ID,
@@ -199,7 +219,7 @@ export function getActivityAnnex(token, id) {
         'Permiso': PERMIT_GET_ACTIVITY_ANNEX
     }
     return (dispatch, getState) => {
-        axios.get(`${URL_BASE}/api/activity/getActivityAnnex/${id}`, { headers: headers })
+        axios.get(`${URL_BASE}/proyectosESCOM-web/api/activity/getActivityAnnex/${id}`, { headers: headers })
             .then(response => {
                 dispatch({
                     type: GET_ACTIVITY_ANNEX,
@@ -237,7 +257,7 @@ export function addActivity(token, activityN) {
         'operacion': PERMIT_ADD_ACTIVITY
     };
     return (dispatch, getState) => {
-        axios.post(`${URL_BASE}/api/activity/add`, activityN, { headers: headers })
+        axios.post(`${URL_BASE}/proyectosESCOM-web/api/activity/add`, activityN, { headers: headers })
             .then(response => {
                 dispatch({
                     type: ADD_ACTIVITY,
@@ -251,9 +271,11 @@ export function addActivity(token, activityN) {
                     });
                 } else {
                     if (error.request) {
+                        var data = JSON.parse(error.request.response);
+                        let respuesta = data.respuesta;
                         dispatch({
                             type: ADD_MESSAGE_ADD,
-                            payload: 'error server'
+                            payload: respuesta
                         });
                     }
                 }
@@ -275,7 +297,7 @@ export function editActivity(token, activityE) {
         'operacion': PERMIT_EDIT_ACTIVITY
     };
     return (dispatch, getState) => {
-        axios.put(`${URL_BASE}/api/activity/edit`, activityE, { headers: headers })
+        axios.put(`${URL_BASE}/proyectosESCOM-web/api/activity/edit`, activityE, { headers: headers })
             .then(response => {
                 console.log(response.data)
                 dispatch({
@@ -290,9 +312,11 @@ export function editActivity(token, activityE) {
                     });
                 } else {
                     if (error.request) {
+                        var data = JSON.parse(error.request.response);
+                        let respuesta = data.respuesta;
                         dispatch({
                             type: ADD_MESSAGE_EDIT,
-                            payload: 'error server'
+                            payload: respuesta
                         });
                     }
                 }
@@ -314,7 +338,7 @@ export function changeStatus(token, activityE) {
         'operacion': PERMIT_CHANGE_STATUS
     };
     return (dispatch, getState) => {
-        axios.put(`${URL_BASE}/api/activity/changeStatus`, activityE, { headers: headers })
+        axios.put(`${URL_BASE}/proyectosESCOM-web/api/activity/changeStatus`, activityE, { headers: headers })
             .then(response => {
                 console.log(response.data)
                 dispatch({
@@ -329,9 +353,11 @@ export function changeStatus(token, activityE) {
                     });
                 } else {
                     if (error.request) {
+                        var data = JSON.parse(error.request.response);
+                        let respuesta = data.respuesta;
                         dispatch({
                             type: ADD_MESSAGE_CHANGE,
-                            payload: 'error server'
+                            payload: respuesta
                         });
                     }
                 }
@@ -353,7 +379,7 @@ export function deleteActivity(token, id) {
         'operacion': PERMIT_DELETE_ACTIVITY
     };
     return (dispatch, getState) => {
-        axios.post(`${URL_BASE}/api/activity/delete/${id}`, requestData, { headers: headers })
+        axios.post(`${URL_BASE}/proyectosESCOM-web/api/activity/delete/${id}`, requestData, { headers: headers })
             .then(response => {
                 dispatch({
                     type: DELETE_ACTIVITY,
@@ -367,9 +393,11 @@ export function deleteActivity(token, id) {
                     });
                 } else {
                     if (error.request) {
+                        var data = JSON.parse(error.request.response);
+                        let respuesta = data.respuesta;
                         dispatch({
                             type: ADD_MESSAGE_DELETE,
-                            payload: 'error server'
+                            payload: respuesta
                         });
                     }
                 }
@@ -391,7 +419,7 @@ export function addInformation(token, info) {
         'operacion': PERMIT_ADD_INFORMATION
     };
     return (dispatch, getState) => {
-        axios.put(`${URL_BASE}/api/activity/addInformation`, info, { headers: headers })
+        axios.put(`${URL_BASE}/proyectosESCOM-web/api/activity/addInformation`, info, { headers: headers })
             .then(response => {
                 dispatch({
                     type: ADD_INFORMATION,
@@ -405,9 +433,11 @@ export function addInformation(token, info) {
                     });
                 } else {
                     if (error.request) {
+                        var data = JSON.parse(error.request.response);
+                        let respuesta = data.respuesta;
                         dispatch({
                             type: ADD_INFORMATION,
-                            payload: 'error server'
+                            payload: respuesta
                         });
                     }
                 }
@@ -429,7 +459,7 @@ export function associateAnnex(token, activity, annexo) {
         'operacion': PERMIT_ASSOCIATE_ANNEX
     };
     return (dispatch, getState) => {
-        axios.put(`${URL_BASE}/api/activity/associate/${activity}/${annexo}`, requestData, { headers: headers })
+        axios.put(`${URL_BASE}/proyectosESCOM-web/api/activity/associate/${activity}/${annexo}`, requestData, { headers: headers })
             .then(response => {
                 dispatch({
                     type: ASSOCIATE_ANNEX,
@@ -443,9 +473,11 @@ export function associateAnnex(token, activity, annexo) {
                     });
                 } else {
                     if (error.request) {
+                        var data = JSON.parse(error.request.response);
+                        let respuesta = data.respuesta;
                         dispatch({
                             type: ASSOCIATE_ANNEX,
-                            payload: 'error server'
+                            payload: respuesta
                         });
                     }
                 }
@@ -462,7 +494,7 @@ export function getAllInformation(token, id) {
         'Permiso': PERMIT_ALL_INFORMATION
     }
     return (dispatch, getState) => {
-        axios.get(`${URL_BASE}/api/activity/allInformation/${id}`, { headers: headers })
+        axios.get(`${URL_BASE}/proyectosESCOM-web/api/activity/allInformation/${id}`, { headers: headers })
             .then(response => {
                 dispatch({
                     type: GET_ALL_INFORMATION,
@@ -476,9 +508,11 @@ export function getAllInformation(token, id) {
                     });
                 } else {
                     if (error.request) {
+                        var data = JSON.parse(error.request.response);
+                        let respuesta = data.respuesta;
                         dispatch({
                             type: ADD_MESSAGE,
-                            payload: 'error server'
+                            payload: respuesta
                         });
                     }
                 }

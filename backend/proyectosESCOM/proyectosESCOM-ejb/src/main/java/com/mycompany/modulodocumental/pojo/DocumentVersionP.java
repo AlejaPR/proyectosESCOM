@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.pojo;
 
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
@@ -10,23 +5,69 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
+ * This is the POJO class of the document version entity. contains the variables
+ * of the table without annotations
  *
- * @author HASHY
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 public class DocumentVersionP implements Serializable {
 
+    /**
+     * id variable
+     */
     private int id;
+
+    /**
+     * variable description document version
+     */
     private String description;
+
+    /**
+     * variable version document version
+     */
     private int version;
+
+    /**
+     * variable location document version
+     */
     private String location;
+
+    /**
+     * variable state document version
+     */
     private int state;
+
+    /**
+     * variable date document version
+     */
     private Date date;
+
+    /**
+     * variable id document
+     */
     private int document;
+
+    /**
+     * request data variable
+     */
     private DatosSolicitudPOJO requestData;
 
+    /**
+     * constructor method
+     */
     public DocumentVersionP() {
     }
 
+    /**
+     * constructor method
+     *
+     * @param id
+     * @param description
+     * @param version
+     * @param location
+     * @param state
+     * @param date
+     */
     public DocumentVersionP(int id, String description, int version, String location, int state, Date date) {
         this.id = id;
         this.description = description;
@@ -36,6 +77,7 @@ public class DocumentVersionP implements Serializable {
         this.date = date;
     }
 
+    //getter and setter
     public int getId() {
         return id;
     }

@@ -1,11 +1,12 @@
-import { GET_LIST_PROGRAM_T, DELETE_PROGRAM_T, EDIT_PROGRAM_T, GET_PROGRAM_T, ADD_PROGRAM_T, ADD_MESSAGE_ADD, ADD_MESSAGE_DELETE,ADD_MESSAGE_EDIT } from '../actions/programThematicA.js'
+import {STATE_PROGRAM_T, GET_LIST_PROGRAM_T, DELETE_PROGRAM_T, EDIT_PROGRAM_T, GET_PROGRAM_T, ADD_PROGRAM_T, ADD_MESSAGE_ADD, ADD_MESSAGE_DELETE, ADD_MESSAGE_EDIT } from '../actions/programThematicA.js'
 
 const initialState = {
     listProgramTR: [],
     programTR: [],
     messageEdit: '',
     messageAdd: '',
-    messageDelete: ''
+    messageDelete: '',
+    stateProgramT: false
 }
 
 export function reducersProgramThematic(state = initialState, action) {
@@ -27,6 +28,8 @@ export function reducersProgramThematic(state = initialState, action) {
             return Object.assign({}, state, { messageAdd: action.payload });
         case ADD_MESSAGE_DELETE:
             return Object.assign({}, state, { messageDelete: action.payload });
+        case STATE_PROGRAM_T:
+            return Object.assign({}, state, { stateProgramT: action.payload });
         default:
             return state;
     }

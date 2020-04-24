@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
 import { getListPrograms, addProgram, addMessageAdd } from '../../../redux/actions/programA.js';
-import { required, minimum, twoHundred, select } from '../../utilitarian/validations.js';
+import { required, minimum, threeHundred, select } from '../../utilitarian/validations.js';
 import { toast } from 'react-toastify';
 import { getListGeneralPro } from '../../../redux/actions/generalProgramA.js';
 
@@ -20,6 +20,11 @@ class Add extends Component {
             switch (this.props.messageAddPr) {
                 case 'add':
                     toast.success('Se agrego con exito.');
+                    this.props.addMessageAdd('')
+                    this.props.getListPrograms(localStorage.getItem('Token'))
+                    break;
+                case 'Sin permiso':
+                    toast.error('No tiene permisos suficientes para agregar un elemento.');
                     this.props.addMessageAdd('')
                     this.props.getListPrograms(localStorage.getItem('Token'))
                     break;
@@ -87,31 +92,31 @@ class Add extends Component {
                                     <label for="form_control_1">Institución: </label>
                                     <div className="row">
                                         <div className="col-sm">
-                                            <Field name="institution" validate={[required, minimum, twoHundred]} component={generarInput} label="Institución" />
+                                            <Field name="institution" validate={[required, minimum, threeHundred]} component={generarInput} label="Institución" />
                                         </div>
                                     </div>
                                     <label for="form_control_1">Denominación del programa: </label>
                                     <div className="row">
                                         <div className="col-sm">
-                                            <Field name="name" validate={[required, minimum, twoHundred]} component={generarInput} label="Denominación del programa" />
+                                            <Field name="name" validate={[required, minimum, threeHundred]} component={generarInput} label="Denominación del programa" />
                                         </div>
                                     </div>
                                     <label for="form_control_1">Nivel de formación: </label>
                                     <div className="row">
                                         <div className="col-sm">
-                                            <Field name="levelEducation" validate={[required, minimum, twoHundred]} component={generarInput} label="Nivel de formación" />
+                                            <Field name="levelEducation" validate={[required, minimum, threeHundred]} component={generarInput} label="Nivel de formación" />
                                         </div>
                                     </div>
                                     <label for="form_control_1">Motodología: </label>
                                     <div className="row">
                                         <div className="col-sm">
-                                            <Field name="methodology" validate={[required, minimum, twoHundred]} component={generarInput} label="Motodología" />
+                                            <Field name="methodology" validate={[required, minimum, threeHundred]} component={generarInput} label="Motodología" />
                                         </div>
                                     </div>
                                     <label for="form_control_1">Campus: </label>
                                     <div className="row">
                                         <div className="col-sm">
-                                            <Field name="campus" validate={[required, minimum, twoHundred]} component={generarInput} label="Campus" />
+                                            <Field name="campus" validate={[required, minimum, threeHundred]} component={generarInput} label="Campus" />
                                         </div>
                                     </div>
                                     <label for="form_control_1">Créditos académicos: </label>
@@ -126,11 +131,11 @@ class Add extends Component {
                                             <Field name="duration" validate={[required]} type="number" component={generarInput} label="Duración semestres" />
                                         </div>
                                     </div>
-                                    <label for="form_control_1">Programa general: </label>
+                                    <label for="form_control_1">Facultad: </label>
                                     <div className="row">
                                         <div className="col-sm">
                                             <Field name="general" validate={[select]} className="bs-select form-control" component={generarSelect}>
-                                                <option selected value="0">Seleccione...</option>
+                                                <option value="0">Seleccione...</option>
                                                 {this.loadList()}
                                             </Field>
                                         </div>

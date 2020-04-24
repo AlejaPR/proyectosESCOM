@@ -1,6 +1,8 @@
 import axios from 'axios';
 
 import { desencriptar } from '../../../SuperAdministrador/componentes/general/Encriptar.js';
+import { URL_BASE } from '../../../SuperAdministrador/utilitario/Configuracion.js';
+
 
 export const GET_LIST_CONDITIONS = 'GET_LIST_CONDITIONS';
 export const GET_CONDITIONS_PER = 'GET_CONDITIONS_PER';
@@ -9,6 +11,8 @@ export const ADD_CONDITION = 'ADD_CONDITION';
 export const EDIT_CONDITION = 'EDIT_CONDITION';
 export const DISABLE_CONDITION = 'DISABLE_CONDITION';
 export const APPROVE_CONDITION = 'APPROVE_CONDITION';
+export const STATE_CONDITION = 'STATE_CONDITION';
+export const STATE_CONDITION_PER = 'STATE_CONDITION_PER';
 
 export const ADD_MESSAGE_ADD = 'ADD_MESSAGE_ADD';
 export const ADD_MESSAGE_EDIT = 'ADD_MESSAGE_EDIT';
@@ -16,7 +20,6 @@ export const ADD_MESSAGE_DISABLE = 'ADD_MESSAGE_DISABLE';
 export const ADD_MESSAGE_APPROVE = 'ADD_MESSAGE_APPROVE';
 export const ADD_MESSAGE = 'ADD_MESSAGE';
 
-const URL_BASE = 'http://localhost:9090/proyectosESCOM-web';
 const PERMIT_LIST_CONDITIONS = 'MD_Lista condiciones';
 const PERMIT_LIST_CONDITIONS_PER = 'MD_Lista condiciones porcentaje';
 const PERMIT_GET_CONDITION = 'MD_Obtiene condicion';
@@ -70,7 +73,7 @@ export function getListConditions(token, idD) {
     'Permiso': PERMIT_LIST_CONDITIONS
   }
   return (dispatch, getState) => {
-    axios.get(`${URL_BASE}/api/condition/list/${idD}`, { headers: headers })
+    axios.get(`${URL_BASE}/proyectosESCOM-web/api/condition/list/${idD}`, { headers: headers })
       .then(response => {
         dispatch({
           type: GET_LIST_CONDITIONS,
@@ -84,10 +87,19 @@ export function getListConditions(token, idD) {
           });
         } else {
           if (error.request) {
-            dispatch({
-              type: ADD_MESSAGE,
-              payload: 'error server'
-            });
+            var data = JSON.parse(error.request.response);
+            let respuesta = data.respuesta;
+            if (respuesta === 'Sin permiso') {
+              dispatch({
+                type: STATE_CONDITION,
+                payload: true
+              });
+            } else {
+              dispatch({
+                type: ADD_MESSAGE,
+                payload: respuesta
+              });
+            }
           }
         }
       });
@@ -104,7 +116,7 @@ export function getConditionsPer(token, idP) {
     'Permiso': PERMIT_LIST_CONDITIONS_PER
   }
   return (dispatch, getState) => {
-    axios.get(`${URL_BASE}/api/condition/listPercentage/${idP}`, { headers: headers })
+    axios.get(`${URL_BASE}/proyectosESCOM-web/api/condition/listPercentage/${idP}`, { headers: headers })
       .then(response => {
         dispatch({
           type: GET_CONDITIONS_PER,
@@ -118,10 +130,19 @@ export function getConditionsPer(token, idP) {
           });
         } else {
           if (error.request) {
-            dispatch({
-              type: ADD_MESSAGE,
-              payload: 'error server'
-            });
+            var data = JSON.parse(error.request.response);
+            let respuesta = data.respuesta;
+            if (respuesta === 'Sin permiso') {
+              dispatch({
+                type: STATE_CONDITION_PER,
+                payload: true
+              });
+            } else {
+              dispatch({
+                type: ADD_MESSAGE,
+                payload: respuesta
+              });
+            }
           }
         }
       });
@@ -137,7 +158,7 @@ export function getConditionId(token, id) {
     'Permiso': PERMIT_GET_CONDITION
   }
   return (dispatch, getState) => {
-    axios.get(`${URL_BASE}/api/condition/get/${id}`, { headers: headers })
+    axios.get(`${URL_BASE}/proyectosESCOM-web/api/condition/get/${id}`, { headers: headers })
       .then(response => {
         console.log(response)
         dispatch({
@@ -177,7 +198,7 @@ export function addCondition(token, conditionN) {
     'operacion': PERMIT_ADD_CONDITION
   };
   return (dispatch, getState) => {
-    axios.post(`${URL_BASE}/api/condition/add`, conditionN, { headers: headers })
+    axios.post(`${URL_BASE}/proyectosESCOM-web/api/condition/add`, conditionN, { headers: headers })
       .then(response => {
         dispatch({
           type: ADD_CONDITION,
@@ -191,9 +212,11 @@ export function addCondition(token, conditionN) {
           });
         } else {
           if (error.request) {
+            var data = JSON.parse(error.request.response);
+            let respuesta = data.respuesta;
             dispatch({
               type: ADD_MESSAGE_ADD,
-              payload: 'error server'
+              payload: respuesta
             });
           }
         }
@@ -217,7 +240,7 @@ export function editCondition(token, conditionE) {
     'operacion': PERMIT_EDIT_CONDITION
   };
   return (dispatch, getState) => {
-    axios.put(`${URL_BASE}/api/condition/edit`, conditionE, { headers: headers })
+    axios.put(`${URL_BASE}/proyectosESCOM-web/api/condition/edit`, conditionE, { headers: headers })
       .then(response => {
         dispatch({
           type: EDIT_CONDITION,
@@ -231,9 +254,11 @@ export function editCondition(token, conditionE) {
           });
         } else {
           if (error.request) {
+            var data = JSON.parse(error.request.response);
+            let respuesta = data.respuesta;
             dispatch({
               type: ADD_MESSAGE_EDIT,
-              payload: 'error server'
+              payload: respuesta
             });
           }
         }
@@ -256,7 +281,7 @@ export function disableCondition(token, id) {
     'operacion': PERMIT_DISABLE_CONDITION
   };
   return (dispatch, getState) => {
-    axios.put(`${URL_BASE}/api/condition/disable/${id}`,requestData, { headers: headers })
+    axios.put(`${URL_BASE}/proyectosESCOM-web/api/condition/disable/${id}`, requestData, { headers: headers })
       .then(response => {
         dispatch({
           type: DISABLE_CONDITION,
@@ -270,9 +295,11 @@ export function disableCondition(token, id) {
           });
         } else {
           if (error.request) {
+            var data = JSON.parse(error.request.response);
+            let respuesta = data.respuesta;
             dispatch({
               type: ADD_MESSAGE_DISABLE,
-              payload: 'error server'
+              payload: respuesta
             });
           }
         }
@@ -294,7 +321,7 @@ export function approveCondition(token, id) {
     'operacion': PERMIT_APPROVE_CONDITION
   };
   return (dispatch, getState) => {
-    axios.put(`${URL_BASE}/api/condition/approve/${id}`,requestData, { headers: headers })
+    axios.put(`${URL_BASE}/proyectosESCOM-web/api/condition/approve/${id}`, requestData, { headers: headers })
       .then(response => {
         dispatch({
           type: APPROVE_CONDITION,
@@ -308,9 +335,11 @@ export function approveCondition(token, id) {
           });
         } else {
           if (error.request) {
+            var data = JSON.parse(error.request.response);
+            let respuesta = data.respuesta;
             dispatch({
               type: ADD_MESSAGE_APPROVE,
-              payload: 'error server'
+              payload: respuesta
             });
           }
         }

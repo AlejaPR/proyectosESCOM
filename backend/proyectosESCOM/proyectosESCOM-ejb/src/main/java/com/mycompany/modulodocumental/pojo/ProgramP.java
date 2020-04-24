@@ -1,34 +1,90 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.pojo;
 
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import java.io.Serializable;
 
 /**
+ * This is the POJO class of the program entity. contains the variables of the
+ * table without annotations
  *
- * @author HASHY
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 public class ProgramP implements Serializable {
 
+    /**
+     * id variable
+     */
     private int id;
+
+    /**
+     * variable name program
+     */
     private String name;
+
+    /**
+     * variable leven education program
+     */
     private String levelEducation;
+
+    /**
+     * variable institution program
+     */
     private String institution;
+
+    /**
+     * variable academic credits program
+     */
     private int academicCredits;
+
+    /**
+     * variable duration program
+     */
     private int duration;
+
+    /**
+     * variable methodology program
+     */
     private String methodology;
+
+    /**
+     * variable campus program
+     */
     private String campus;
+
+    /**
+     * variable state program
+     */
     private int state;
+
+    /**
+     * variable id general program
+     */
     private int idGeneral;
+
+    /**
+     * request data variable
+     */
     private DatosSolicitudPOJO requestData;
 
+    /**
+     * constructor method
+     */
     public ProgramP() {
     }
 
+    /**
+     * constructor method
+     *
+     * @param id
+     * @param name
+     * @param levelEducation
+     * @param institution
+     * @param academicCredits
+     * @param duration
+     * @param methodology
+     * @param campus
+     * @param state
+     */
     public ProgramP(int id, String name, String levelEducation, String institution, int academicCredits, int duration, String methodology, String campus, int state) {
         this.id = id;
         this.name = name;
@@ -41,6 +97,7 @@ public class ProgramP implements Serializable {
         this.state = state;
     }
 
+    //getter and setter
     public int getId() {
         return id;
     }
@@ -120,7 +177,7 @@ public class ProgramP implements Serializable {
     public void setIdGeneral(int idGeneral) {
         this.idGeneral = idGeneral;
     }
-    
+
     public DatosSolicitudPOJO getRequestData() {
         return requestData;
     }

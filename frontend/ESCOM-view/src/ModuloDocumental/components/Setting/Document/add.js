@@ -5,7 +5,7 @@ import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
 import { getListPrograms } from '../../../redux/actions/programA.js';
 import { addDocument } from '../../../redux/actions/documentA.js';
-import { required, thousand, twoHundred, minimum, select } from '../../utilitarian/validations.js';
+import { required, thousand, threeHundred, minimum, select } from '../../utilitarian/validations.js';
 import { getListUser } from '../../../redux/actions/userConditionA.js';
 
 class Add extends Component {
@@ -71,7 +71,7 @@ class Add extends Component {
                                     <div className="row">
                                         <div className="col-sm">
                                             <Field name="program" validate={[select]} className="bs-select form-control" component="select">
-                                                <option selected value="0">Seleccione...</option>
+                                                <option value="0">Seleccione...</option>
                                                 {this.loadProgram()}
                                             </Field>
                                         </div>
@@ -90,7 +90,7 @@ class Add extends Component {
                                     <div className="row">
                                         <div className="col-sm">
                                             <Field name="idUser" validate={[select]} className="bs-select form-control" component="select">
-                                                <option selected value="0">Seleccione...</option>
+                                                <option value="0">Seleccione...</option>
                                                 {this.loadList()}
                                             </Field>
                                         </div>
@@ -99,10 +99,14 @@ class Add extends Component {
 
                                     <label for="form_control_1">Tipo Documento: </label>
                                     <div className="row">
-                                        <div className="col-sm">
-                                            <Field name="type" validate={[required, minimum, twoHundred]} component={generarInput} label="Denominación del programa" />
+                                        <div className="col-sm">                                            
+                                            <Field name="type" validate={[select]} className="bs-select form-control" component="select">
+                                                <option value="0">Seleccione...</option>
+                                                <option value="Inscripción">Inscripción</option>
+                                                <option value="Modificación">Modificación</option>
+                                                <option value="Renovación">Renovación</option>
+                                            </Field>
                                         </div>
-
                                     </div>
                                 </div>
                                 <div class="modal-footer">

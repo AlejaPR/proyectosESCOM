@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.pojo;
 
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
@@ -10,25 +5,79 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
+ * This is the POJO class of the condition entity. contains the variables of the
+ * table without annotations
  *
- * @author HASHY
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 public class ConditionP implements Serializable {
 
+    /**
+     * id variable
+     */
     private int id;
+
+    /**
+     * varible name condition
+     */
     private String name;
+
+    /**
+     * varible description condition
+     */
     private String description;
+
+    /**
+     * varible state condition
+     */
     private int state;
+
+    /**
+     * variable start Date condition
+     */
     private Date startDate;
+
+    /**
+     * varible final date condition
+     */
     private Date finalDate;
+
+    /**
+     * varible start date string condition
+     */
     private String startDateS;
+
+    /**
+     * varible final date string condition
+     */
     private String finalDateS;
+
+    /**
+     * varible id process condition
+     */
     private int process;
+
+    /**
+     * request data variable
+     */
     private DatosSolicitudPOJO requestData;
 
+    /**
+     * constructor method
+     */
     public ConditionP() {
     }
 
+    /**
+     * constructor method
+     *
+     * @param id
+     * @param name
+     * @param description
+     * @param state
+     * @param startDate
+     * @param finalDate
+     */
     public ConditionP(int id, String name, String description, int state, Date startDate, Date finalDate) {
         this.id = id;
         this.name = name;
@@ -37,7 +86,18 @@ public class ConditionP implements Serializable {
         this.startDate = startDate;
         this.finalDate = finalDate;
     }
-    
+
+    /**
+     * constructor method
+     *
+     * @param id
+     * @param name
+     * @param description
+     * @param state
+     * @param startDateS
+     * @param finalDateS
+     * @param ol
+     */
     public ConditionP(int id, String name, String description, int state, String startDateS, String finalDateS, int ol) {
         this.id = id;
         this.name = name;
@@ -47,7 +107,7 @@ public class ConditionP implements Serializable {
         this.finalDateS = finalDateS;
     }
 
-
+    //getter and setter
     public int getId() {
         return id;
     }
@@ -127,6 +187,5 @@ public class ConditionP implements Serializable {
     public void setFinalDateS(String finalDateS) {
         this.finalDateS = finalDateS;
     }
-    
-    
+
 }

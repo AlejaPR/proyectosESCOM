@@ -7,6 +7,9 @@ import Add from './add.js';
 import Edit from './edit.js';
 import View from './view.js';
 import { ToastContainer, toast } from 'react-toastify';
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
+
 
 import MaterialTable from 'material-table';
 import EditIcon from '@material-ui/icons/Edit';
@@ -28,6 +31,10 @@ class ListAnnex extends Component {
                     this.props.addMessageEdit('');
                     this.props.getListAnnexes(localStorage.getItem('Token'), sessionStorage.getItem('programId'));
                     break;
+                case 'Sin permiso':
+                    toast.error('No tiene permisos suficientes para editar un elemento.');
+                    this.props.addMessageEdit('')
+                    break;
                 case 'error server':
                     toast.error('Se presento un error, intentelo mas tarde.');
                     break;
@@ -42,6 +49,10 @@ class ListAnnex extends Component {
                     this.props.getListAnnexes(localStorage.getItem('Token'), sessionStorage.getItem('programId'))
                     this.props.addMessageAdd('')
                     break;
+                case 'Sin permiso':
+                    toast.error('No tiene permisos suficientes para agregar un nuevo elemento.');
+                    this.props.addMessageAdd('')
+                    break;
                 case 'error server':
                     toast.error('Se presento un error, intentelo mas tarde.');
                     break;
@@ -54,6 +65,10 @@ class ListAnnex extends Component {
                 case 'disable':
                     toast.success('Se inhabilito con exito.');
                     this.props.getListAnnexes(localStorage.getItem('Token'), sessionStorage.getItem('programId'))
+                    this.props.addMessageDisable('')
+                    break;
+                case 'Sin permiso':
+                    toast.error('No tiene permisos suficientes para inhabilitar un elemento.');
                     this.props.addMessageDisable('')
                     break;
                 case 'error server':
@@ -82,83 +97,92 @@ class ListAnnex extends Component {
                 </div>
                 <br />
                 <div className="shadow" style={{ background: "#FFFFFF", padding: "30px" }}>
-                    <Add />
-                    <br />
-                    <br />
-                    <MaterialTable
-                        title=""
-                        localization={{
-                            header: {
-                                actions: ' '
-                            },
-                            pagination: {
-                                nextTooltip: 'Siguiente ',
-                                previousTooltip: 'Anterior',
-                                labelDisplayedRows: '{from}-{to} de {count}',
-                                lastTooltip: 'Ultima pagina',
-                                firstTooltip: 'Primera pagina',
-                                labelRowsSelect: 'Registros',
-                                firstAriaLabel: 'oooo'
-                            },
-                            body: {
-                                emptyDataSourceMessage: 'Aun no hay ningun documento registrado'
-                            },
-                            toolbar: {
-                                searchTooltip: 'Buscar',
-                                searchPlaceholder: 'Buscar'
-                            }
-                        }}
-                        columns={[
+                    {
+                        this.props.enabled ? <div className="col-sm-12">
+                            <Alert severity="error" variant="outlined">
+                                <AlertTitle>Sin permiso</AlertTitle>
+                        No tiene permisos suficientes para listar anexos</Alert>
+                        </div> :
+                            <div>
+                                <Add />
+                                <br />
+                                <br />
+                                <MaterialTable
+                                    title=""
+                                    localization={{
+                                        header: {
+                                            actions: ' '
+                                        },
+                                        pagination: {
+                                            nextTooltip: 'Siguiente ',
+                                            previousTooltip: 'Anterior',
+                                            labelDisplayedRows: '{from}-{to} de {count}',
+                                            lastTooltip: 'Ultima pagina',
+                                            firstTooltip: 'Primera pagina',
+                                            labelRowsSelect: 'Registros',
+                                            firstAriaLabel: 'oooo'
+                                        },
+                                        body: {
+                                            emptyDataSourceMessage: 'Aun no hay ningun documento registrado'
+                                        },
+                                        toolbar: {
+                                            searchTooltip: 'Buscar',
+                                            searchPlaceholder: 'Buscar'
+                                        }
+                                    }}
+                                    columns={[
 
-                            { title: 'Nombre del anexo', field: 'name' },
-                            { title: 'Descripción', field: 'description' },
-                            { title: 'Palabras clave', field: 'keywords' },
-                            {
-                                title: '', field: 'id',
-                                render: rowData => {
-                                    return (
-                                        <div>
-                                            <a onClick={() => this.save(rowData.id)} data-toggle="modal" data-target="#viewModal">
-                                                <VisibilityIcon />
-                                            </a>
-                                            <View />
-                                        </div>
-                                    )
-                                }
-                            },
-                            {
-                                title: '', field: 'id',
-                                render: rowData => {
-                                    return (
-                                        <div>
-                                            <a onClick={() => this.save(rowData.id)} data-toggle="modal" data-target="#editModal">
-                                                <EditIcon />
-                                            </a>
-                                            <Edit />
-                                        </div>
-                                    )
-                                }
-                            },
-                            {
-                                title: '', field: 'id',
-                                render: rowData => {
-                                    return (
-                                        <div>
-                                            <a onClick={() => this.disable(rowData.id)}>
-                                                <DeleteForeverIcon />
-                                            </a>
-                                        </div>
-                                    )
-                                }
-                            }
+                                        { title: 'Nombre del anexo', field: 'name' },
+                                        { title: 'Descripción', field: 'description' },
+                                        { title: 'Palabras clave', field: 'keywords' },
+                                        {
+                                            title: '', field: 'id',
+                                            render: rowData => {
+                                                return (
+                                                    <div>
+                                                        <a onClick={() => this.save(rowData.id)} data-toggle="modal" data-target="#viewModal">
+                                                            <VisibilityIcon />
+                                                        </a>
+                                                        <View />
+                                                    </div>
+                                                )
+                                            }
+                                        },
+                                        {
+                                            title: '', field: 'id',
+                                            render: rowData => {
+                                                return (
+                                                    <div>
+                                                        <a onClick={() => this.save(rowData.id)} data-toggle="modal" data-target="#editModal">
+                                                            <EditIcon />
+                                                        </a>
+                                                        <Edit />
+                                                    </div>
+                                                )
+                                            }
+                                        },
+                                        {
+                                            title: '', field: 'id',
+                                            render: rowData => {
+                                                return (
+                                                    <div>
+                                                        <a onClick={() => this.disable(rowData.id)}>
+                                                            <DeleteForeverIcon />
+                                                        </a>
+                                                    </div>
+                                                )
+                                            }
+                                        }
 
-                        ]}
-                        data={this.props.annexes}
-                        options={{
-                            search: true
-                        }}
+                                    ]}
+                                    data={this.props.annexes}
+                                    options={{
+                                        search: true
+                                    }}
 
-                    />
+                                />
+                            </div>
+                    }
                 </div>
             </div>
         )
@@ -171,7 +195,8 @@ function mapStateToProps(state) {
         annexes: state.annex.listAnnexR,
         messageEditX: state.annex.messageEdit,
         messageAddX: state.annex.messageAdd,
-        messageDisableX: state.annex.messageDisable
+        messageDisableX: state.annex.messageDisable,
+        enabled: state.annex.stateAnnex
     }
 }
 

@@ -3,7 +3,7 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { reduxForm, Field } from 'redux-form';
-import { required, minimum, twoHundred, select } from '../../../utilitarian/validations.js';
+import { required, minimum, fiveHundred, select } from '../../../utilitarian/validations.js';
 import { getListGeneralC } from '../../../../redux/actions/generalClassA.js';
 import { getListCompetitionG, addCompetitionG, deleteCompetitionG, addMessageDelete, addMessageAdd } from '../../../../redux/actions/competitionGeneralA.js';
 
@@ -104,7 +104,7 @@ class CompetitionG extends Component {
                                         <label for="form_control_1">Nombre: </label>
                                         <div className="row">
                                             <div className="col-sm">
-                                                <Field name="nameG" validate={[required, minimum, twoHundred]} component={generarInput} label="Nombre" />
+                                                <Field name="nameG" validate={[required, minimum, fiveHundred]} component={generarInput} label="Nombre" />
                                             </div>
                                         </div>
                                         <br />
@@ -112,7 +112,7 @@ class CompetitionG extends Component {
                                         <div className="row">
                                             <div className="col-sm">
                                                 <Field name="competition" validate={[select]} className="bs-select form-control" component={generarSelect}>
-                                                    <option selected value="0">Seleccione...</option>
+                                                    <option value="0">Seleccione...</option>
                                                     {this.loadList()}
                                                 </Field>
                                             </div>

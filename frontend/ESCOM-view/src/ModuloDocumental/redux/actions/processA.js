@@ -1,19 +1,20 @@
 import axios from 'axios';
 
 import { desencriptar } from '../../../SuperAdministrador/componentes/general/Encriptar.js';
+import { URL_BASE } from '../../../SuperAdministrador/utilitario/Configuracion.js';
 
 export const GET_LIST_PROCESSES = 'GET_LIST_PROCESSES';
 export const ADD_PROCESS = 'ADD_PROCESS';
 export const EDIT_PROCESS = 'EDIT_PROCESS';
 export const DISABLE_PROCESS = 'DISABLE_PROCESS';
 export const GET_PROCESS_ID = 'GET_PROCESS_ID';
+export const STATE_PROCESS = 'STATE_PROCESS';
 
 export const ADD_MESSAGE_EDIT = 'ADD_MESSAGE_EDIT';
 export const ADD_MESSAGE_ADD = 'ADD_MESSAGE_ADD';
 export const ADD_MESSAGE_DISABLE = 'ADD_MESSAGE_DISABLE';
 export const ADD_MESSAGE = 'ADD_MESSAGE';
 
-const URL_BASE = 'http://localhost:9090/proyectosESCOM-web';
 const PERMIT_LIST_PROCESSES = 'MD_Lista procesos';
 const PERMIT_GET_PROCESS = 'MD_Obtiene proceso';
 const PERMIT_ADD_PROCESS = 'MD_Agregar proceso';
@@ -55,7 +56,7 @@ export function getListProcesses(token, id) {
     'Permiso': PERMIT_LIST_PROCESSES
   }
   return (dispatch, getState) => {
-    axios.get(`${URL_BASE}/api/process/list/${id}`, { headers: headers })
+    axios.get(`${URL_BASE}/proyectosESCOM-web/api/process/list/${id}`, { headers: headers })
       .then(response => {
         dispatch({
           type: GET_LIST_PROCESSES,
@@ -69,10 +70,19 @@ export function getListProcesses(token, id) {
           });
         } else {
           if (error.request) {
-            dispatch({
-              type: ADD_MESSAGE,
-              payload: 'error server'
-            });
+            var data = JSON.parse(error.request.response);
+            let respuesta = data.respuesta;
+            if (respuesta === 'Sin permiso') {
+              dispatch({
+                type: STATE_PROCESS,
+                payload: true
+              });
+            } else {
+              dispatch({
+                type: ADD_MESSAGE,
+                payload: respuesta
+              });
+            }
           }
         }
 
@@ -88,7 +98,7 @@ export function getProcessId(token, id) {
     'Permiso': PERMIT_GET_PROCESS
   }
   return (dispatch, getState) => {
-    axios.get(`${URL_BASE}/api/process/get/${id}`, { headers: headers })
+    axios.get(`${URL_BASE}/proyectosESCOM-web/api/process/get/${id}`, { headers: headers })
       .then(response => {
         dispatch({
           type: GET_PROCESS_ID,
@@ -126,7 +136,7 @@ export function addProcess(token, processN) {
     'operacion': PERMIT_ADD_PROCESS
   };
   return (dispatch, getState) => {
-    axios.post(`${URL_BASE}/api/process/add`, processN, { headers: headers })
+    axios.post(`${URL_BASE}/proyectosESCOM-web/api/process/add`, processN, { headers: headers })
       .then(response => {
         dispatch({
           type: ADD_PROCESS,
@@ -140,9 +150,11 @@ export function addProcess(token, processN) {
           });
         } else {
           if (error.request) {
+            var data = JSON.parse(error.request.response);
+            let respuesta = data.respuesta;
             dispatch({
               type: ADD_MESSAGE_ADD,
-              payload: 'error server'
+              payload: respuesta
             });
           }
         }
@@ -164,7 +176,7 @@ export function editProcess(token, processE) {
     'operacion': PERMIT_EDIT_PROCESS
   };
   return (dispatch, getState) => {
-    axios.put(`${URL_BASE}/api/process/edit`, processE, { headers: headers })
+    axios.put(`${URL_BASE}/proyectosESCOM-web/api/process/edit`, processE, { headers: headers })
       .then(response => {
         dispatch({
           type: EDIT_PROCESS,
@@ -178,9 +190,11 @@ export function editProcess(token, processE) {
           });
         } else {
           if (error.request) {
+            var data = JSON.parse(error.request.response);
+            let respuesta = data.respuesta;
             dispatch({
               type: ADD_MESSAGE_EDIT,
-              payload: 'error server'
+              payload: respuesta
             });
           }
         }
@@ -203,7 +217,7 @@ export function disableProcess(token, id) {
     'operacion': PERMIT_DISABLE_PROCESS
   };
   return (dispatch, getState) => {
-    axios.put(`${URL_BASE}/api/process/disable/${id}`, requestData, { headers: headers })
+    axios.put(`${URL_BASE}/proyectosESCOM-web/api/process/disable/${id}`, requestData, { headers: headers })
       .then(response => {
         dispatch({
           type: DISABLE_PROCESS,
@@ -217,9 +231,11 @@ export function disableProcess(token, id) {
           });
         } else {
           if (error.request) {
+            var data = JSON.parse(error.request.response);
+            let respuesta = data.respuesta;
             dispatch({
               type: ADD_MESSAGE_DISABLE,
-              payload: 'error server'
+              payload: respuesta
             });
           }
         }

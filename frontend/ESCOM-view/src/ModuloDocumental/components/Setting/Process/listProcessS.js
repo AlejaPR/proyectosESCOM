@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { getListProcesses, getProcessId, addMessageEdit, addMessageAdd, addMessageDisable, disableProcess } from '../../../redux/actions/processA.js';
 import { ToastContainer, toast } from 'react-toastify';
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
 
 import Add from './add.js';
 import Edit from './edit.js';
@@ -23,6 +25,10 @@ class ListProcess extends Component {
                     this.props.addMessageEdit('');
                     this.props.getListProcesses(localStorage.getItem('Token'), sessionStorage.getItem('documentId'))
                     break;
+                case 'Sin permiso':
+                    toast.success('No tiene permisos suficientes para editar.');
+                    this.props.addMessageEdit('');
+                    break;
                 case 'error server':
                     toast.error('Se presento un error, intentelo mas tarde.');
                     break;
@@ -37,6 +43,10 @@ class ListProcess extends Component {
                     this.props.getListProcesses(localStorage.getItem('Token'), sessionStorage.getItem('documentId'))
                     this.props.addMessageAdd('')
                     break;
+                case 'Sin permiso':
+                    toast.success('No tiene permisos suficientes para agregar un nuevo elemento.');
+                    this.props.addMessageAdd('');
+                    break;
                 case 'error server':
                     toast.error('Se presento un error, intentelo mas tarde.');
                     break;
@@ -50,6 +60,10 @@ class ListProcess extends Component {
                     toast.success('Se inhabilito con exito.');
                     this.props.getListProcesses(localStorage.getItem('Token'), sessionStorage.getItem('documentId'))
                     this.props.addMessageDisable('')
+                    break;
+                case 'Sin permiso':
+                    toast.success('No tiene permisos suficientes para inhabilitar.');
+                    this.props.addMessageDisable('');
                     break;
                 case 'error server':
                     toast.error('Se presento un error, intentelo mas tarde.');
@@ -77,8 +91,6 @@ class ListProcess extends Component {
         this.props.disableProcess(localStorage.getItem('Token'), id)
     }
 
-    
-
     render() {
         return (
             <div className="container" style={{ width: "90%" }}>
@@ -88,71 +100,80 @@ class ListProcess extends Component {
                 </div>
                 <br />
                 <div className="shadow" style={{ background: "#FFFFFF", padding: "30px" }}>
-                    <div>
-                        <Add />
-                    </div>
-                    <br />
-                    <br />
-                    <MaterialTable
-                        title=""
-                        localization={{
-                            header: {
-                                actions: ' '
-                            },
-                            pagination: {
-                                nextTooltip: 'Siguiente ',
-                                previousTooltip: 'Anterior',
-                                labelDisplayedRows: '{from}-{to} de {count}',
-                                lastTooltip: 'Ultima pagina',
-                                firstTooltip: 'Primera pagina',
-                                labelRowsSelect: 'Registros',
-                                firstAriaLabel: 'oooo'
-                            },
-                            body: {
-                                emptyDataSourceMessage: 'Aun no hay ningun proceso registrado'
-                            },
-                            toolbar: {
-                                searchTooltip: 'Buscar',
-                                searchPlaceholder: 'Buscar'
-                            }
-                        }}
-                        columns={[
+                    {
+                        this.props.enabled ? <div className="col-sm-12">
+                            <Alert severity="error" variant="outlined">
+                                <AlertTitle>Sin permiso</AlertTitle>
+                                No tiene permisos suficientes para listar los procesos.</Alert>
+                        </div> :
+                            <div>
+                                <div>
+                                    <Add />
+                                </div>
+                                <br />
+                                <br />
+                                <MaterialTable
+                                    title=""
+                                    localization={{
+                                        header: {
+                                            actions: ' '
+                                        },
+                                        pagination: {
+                                            nextTooltip: 'Siguiente ',
+                                            previousTooltip: 'Anterior',
+                                            labelDisplayedRows: '{from}-{to} de {count}',
+                                            lastTooltip: 'Ultima pagina',
+                                            firstTooltip: 'Primera pagina',
+                                            labelRowsSelect: 'Registros',
+                                            firstAriaLabel: 'oooo'
+                                        },
+                                        body: {
+                                            emptyDataSourceMessage: 'Aun no hay ningun proceso registrado'
+                                        },
+                                        toolbar: {
+                                            searchTooltip: 'Buscar',
+                                            searchPlaceholder: 'Buscar'
+                                        }
+                                    }}
+                                    columns={[
 
-                            { title: 'Nombre del proceso', field: 'name' },
-                            { title: 'Descripción', field: 'description' },
-                            {
-                                title: '', field: 'id',
-                                render: rowData => {
-                                    return (
-                                        <div>
-                                            <a onClick={() => this.saveEdit(rowData.id)} data-toggle="modal" data-target="#editModal">
-                                                <EditIcon />
-                                            </a>
-                                            <Edit />
-                                        </div>
-                                    )
-                                }
-                            },
-                            {
-                                title: '', field: 'id',
-                                render: rowData => {
-                                    return (
-                                        <div>
-                                            <a onClick={() => this.disable(rowData.id)}>
-                                                <DeleteForeverIcon />
-                                            </a>
-                                        </div>
-                                    )
-                                }
-                            }
+                                        { title: 'Nombre del proceso', field: 'name' },
+                                        { title: 'Descripción', field: 'description' },
+                                        {
+                                            title: '', field: 'id',
+                                            render: rowData => {
+                                                return (
+                                                    <div>
+                                                        <a onClick={() => this.saveEdit(rowData.id)} data-toggle="modal" data-target="#editModal">
+                                                            <EditIcon />
+                                                        </a>
+                                                        <Edit />
+                                                    </div>
+                                                )
+                                            }
+                                        },
+                                        {
+                                            title: '', field: 'id',
+                                            render: rowData => {
+                                                return (
+                                                    <div>
+                                                        <a onClick={() => this.disable(rowData.id)}>
+                                                            <DeleteForeverIcon />
+                                                        </a>
+                                                    </div>
+                                                )
+                                            }
+                                        }
 
-                        ]}
-                        data={this.props.listProcess}
-                        options={{
-                            search: true
-                        }}
+                                    ]}
+                                    data={this.props.listProcess}
+                                    options={{
+                                        search: true
+                                    }}
 
-                    />                    
+                                />
+                            </div>
+                    }
                 </div>
             </div>
         )
@@ -165,7 +186,8 @@ function mapStateToProps(state) {
         listProcess: state.process.listProcessR,
         messageEditP: state.process.messageEdit,
         messageAddP: state.process.messageAdd,
-        messageDisableP: state.process.messageDisable
+        messageDisableP: state.process.messageDisable,
+        enabled: state.process.stateProcess
     }
 }
 

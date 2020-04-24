@@ -1,4 +1,4 @@
-import { ADD_MESSAGE_ADD, ADD_MESSAGE_ADD_INFO, ADD_INFORMATION, ADD_MESSAGE_DELETE, DELETE_ACTIVITY, ADD_ACTIVITY, EDIT_ACTIVITY, ADD_MESSAGE_EDIT, GET_ACTIVITY_ID, GET_ALL_INFORMATION, ASSOCIATE_ANNEX, ADD_MESSAGE_ASSOCIATE, GET_ACTIVITY_ANNEX, GET_LIST_ACTIVITIES_ANNEX, GET_LIST_ACTIVITIES_INFO, CHANGE_STATUS, ADD_MESSAGE_CHANGE } from '../actions/activityA.js'
+import { STATE_ACTIVITY_ANNEX, STATE_ACTIVITY_INFO, ADD_MESSAGE_ADD, ADD_MESSAGE_ADD_INFO, ADD_INFORMATION, ADD_MESSAGE_DELETE, DELETE_ACTIVITY, ADD_ACTIVITY, EDIT_ACTIVITY, ADD_MESSAGE_EDIT, GET_ACTIVITY_ID, GET_ALL_INFORMATION, ASSOCIATE_ANNEX, ADD_MESSAGE_ASSOCIATE, GET_ACTIVITY_ANNEX, GET_LIST_ACTIVITIES_ANNEX, GET_LIST_ACTIVITIES_INFO, CHANGE_STATUS, ADD_MESSAGE_CHANGE } from '../actions/activityA.js'
 
 
 const initialState = {
@@ -12,7 +12,9 @@ const initialState = {
     messageDelete: '',
     allInformation: '',
     messageAssociate: '',
-    messageChange: ''
+    messageChange: '',
+    stateActivityList: false,
+    stateActivityAnnex: false
 }
 
 export function reducersActivity(state = initialState, action) {
@@ -52,6 +54,10 @@ export function reducersActivity(state = initialState, action) {
             return Object.assign({}, state, { messageDelete: action.payload })
         case ADD_MESSAGE_ASSOCIATE:
             return Object.assign({}, state, { messageAssociate: action.payload })
+        case STATE_ACTIVITY_INFO:
+            return Object.assign({}, state, { stateActivityList: action.payload })
+        case STATE_ACTIVITY_ANNEX:
+            return Object.assign({}, state, { stateActivityAnnex: action.payload })
         default:
             return state
     }

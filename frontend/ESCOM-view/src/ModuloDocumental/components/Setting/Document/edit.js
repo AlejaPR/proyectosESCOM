@@ -63,7 +63,7 @@ class Edit extends Component {
                                     <div className="row">
                                         <div className="col-sm">
                                             <Field name="program" validate={[select]} className="bs-select form-control" component="select">
-                                                <option selected value="0">Seleccione...</option>
+                                                <option value="0">Seleccione...</option>
                                                 {this.loadProgram()}
                                             </Field>
                                         </div>
@@ -82,7 +82,7 @@ class Edit extends Component {
                                     <div className="row">
                                         <div className="col-sm">
                                             <Field name="idUser" validate={[select]} className="bs-select form-control" component="select">
-                                                <option selected value="0">Seleccione...</option>
+                                                <option value="0">Seleccione...</option>
                                                 {this.loadList()}
                                             </Field>
                                         </div>
@@ -92,7 +92,12 @@ class Edit extends Component {
                                     <label for="form_control_1">Tipo Documento: </label>
                                     <div className="row">
                                         <div className="col-sm">
-                                            <Field name="type" validate={[required, twoHundred, minimum]} component={generarInput} label="Denominación del programa" />
+                                            <Field name="type" validate={[select]} className="bs-select form-control" component="select">
+                                                <option value="0">Seleccione...</option>
+                                                <option value="Inscripción">Inscripción</option>
+                                                <option value="Modificación">Modificación</option>
+                                                <option value="Renovación">Renovación</option>
+                                            </Field>
                                         </div>
 
                                     </div>
@@ -149,4 +154,4 @@ let formEdit = reduxForm({
     enableReinitialize: true
 })(Edit)
 
-export default withRouter(connect(mapStateToProps, { getListPrograms, editDocument, getListUser})(formEdit));
+export default withRouter(connect(mapStateToProps, { getListPrograms, editDocument, getListUser })(formEdit));

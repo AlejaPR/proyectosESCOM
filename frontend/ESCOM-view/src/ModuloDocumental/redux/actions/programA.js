@@ -1,19 +1,20 @@
 import axios from 'axios';
 
 import { desencriptar } from '../../../SuperAdministrador/componentes/general/Encriptar.js';
+import { URL_BASE } from '../../../SuperAdministrador/utilitario/Configuracion.js';
 
 export const GET_LIST_PROGRAMS = 'GET_LIST_PROGRAMS';
 export const GET_PROGRAM_ID = 'GET_PROGRAM_ID';
 export const ADD_PROGRAM = 'ADD_PROGRAM';
 export const EDIT_PROGRAM = 'EDIT_PROGRAM';
 export const DISABLE_PROGRAM = 'DISABLE_PROGRAM';
+export const STATE_PROGRAM = 'STATE_PROGRAM';
 
 export const ADD_MESSAGE_EDIT = 'ADD_MESSAGE_EDIT';
 export const ADD_MESSAGE_ADD = 'ADD_MESSAGE_ADD';
 export const ADD_MESSAGE_DISABLE = 'ADD_MESSAGE_DISABLE';
 export const ADD_MESSAGE = 'ADD_MESSAGE';
 
-const URL_BASE = 'http://localhost:9090/proyectosESCOM-web';
 const PERMIT_LIST_PROGRAMS = 'MD_Lista programas';
 const PERMIT_GET_PROGRAM = 'MD_Obtiene programa';
 const PERMIT_ADD_PROGRAM = 'MD_Agregar programa';
@@ -55,7 +56,7 @@ export function getListPrograms(token) {
     'Permiso': PERMIT_LIST_PROGRAMS
   }
   return (dispatch, getState) => {
-    axios.get(`${URL_BASE}/api/program/list`, { headers: headers })
+    axios.get(`${URL_BASE}/proyectosESCOM-web/api/program/list`, { headers: headers })
       .then(response => {
         dispatch({
           type: GET_LIST_PROGRAMS,
@@ -69,10 +70,19 @@ export function getListPrograms(token) {
           });
         } else {
           if (error.request) {
-            dispatch({
-              type: ADD_MESSAGE,
-              payload: 'error server'
-            });
+            var data = JSON.parse(error.request.response);
+            let respuesta = data.respuesta;
+            if (respuesta === 'Sin permiso') {
+              dispatch({
+                type: STATE_PROGRAM,
+                payload: true
+              });
+            } else {
+              dispatch({
+                type: ADD_MESSAGE,
+                payload: respuesta
+              });
+            }
           }
         }
 
@@ -88,7 +98,7 @@ export function getProgramId(token, id) {
     'Permiso': PERMIT_GET_PROGRAM
   }
   return (dispatch, getState) => {
-    axios.get(`${URL_BASE}/api/program/get/${id}`, { headers: headers })
+    axios.get(`${URL_BASE}/proyectosESCOM-web/api/program/get/${id}`, { headers: headers })
       .then(response => {
         console.log(response.data)
         dispatch({
@@ -127,7 +137,7 @@ export function addProgram(token, programN) {
     'operacion': PERMIT_ADD_PROGRAM
   };
   return (dispatch, getState) => {
-    axios.post(`${URL_BASE}/api/program/add`, programN, { headers: headers })
+    axios.post(`${URL_BASE}/proyectosESCOM-web/api/program/add`, programN, { headers: headers })
       .then(response => {
         dispatch({
           type: ADD_PROGRAM,
@@ -141,9 +151,11 @@ export function addProgram(token, programN) {
           });
         } else {
           if (error.request) {
+            var data = JSON.parse(error.request.response);
+            let respuesta = data.respuesta;
             dispatch({
               type: ADD_MESSAGE_ADD,
-              payload: 'error server'
+              payload: respuesta
             });
           }
         }
@@ -165,7 +177,7 @@ export function editProgram(token, programE) {
     'operacion': PERMIT_EDIT_PROGRAM
   };
   return (dispatch, getState) => {
-    axios.put(`${URL_BASE}/api/program/edit`, programE, { headers: headers })
+    axios.put(`${URL_BASE}/proyectosESCOM-web/api/program/edit`, programE, { headers: headers })
       .then(response => {
         dispatch({
           type: EDIT_PROGRAM,
@@ -179,9 +191,11 @@ export function editProgram(token, programE) {
           });
         } else {
           if (error.request) {
+            var data = JSON.parse(error.request.response);
+            let respuesta = data.respuesta;
             dispatch({
               type: ADD_MESSAGE_EDIT,
-              payload: 'error server'
+              payload: respuesta
             });
           }
         }
@@ -204,7 +218,7 @@ export function disableProgram(token, id) {
     'operacion': PERMIT_DISABLE_PROGRAM
   };
   return (dispatch, getState) => {
-    axios.put(`${URL_BASE}/api/program/disable/${id}`, requestData, { headers: headers })
+    axios.put(`${URL_BASE}/proyectosESCOM-web/api/program/disable/${id}`, requestData, { headers: headers })
       .then(response => {
         dispatch({
           type: DISABLE_PROGRAM,
@@ -218,9 +232,11 @@ export function disableProgram(token, id) {
           });
         } else {
           if (error.request) {
+            var data = JSON.parse(error.request.response);
+            let respuesta = data.respuesta;
             dispatch({
               type: ADD_MESSAGE_DISABLE,
-              payload: 'error server'
+              payload: respuesta
             });
           }
         }

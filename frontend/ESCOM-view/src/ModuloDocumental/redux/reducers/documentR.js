@@ -1,4 +1,4 @@
-import { GET_ID_DOCUMENT, GET_DOCUMENT_ID, ADD_DOCUMENT, DISABLE_DOCUMENT, ADD_MESSAGE_ADD, ADD_MESSAGE_EDIT, GET_DOCUMENT_ID_EDIT, EDIT_DOCUMENT, GET_LIST_DOCUMENTS, ADD_MESSAGE_DISABLE, ADD_ID_DOCUMENT } from '../actions/documentA.js'
+import { STATE_DOCUMENT, GET_ID_DOCUMENT, GET_DOCUMENT_ID, ADD_DOCUMENT, DISABLE_DOCUMENT, ADD_MESSAGE_ADD, ADD_MESSAGE_EDIT, GET_DOCUMENT_ID_EDIT, EDIT_DOCUMENT, GET_LIST_DOCUMENTS, ADD_MESSAGE_DISABLE, ADD_ID_DOCUMENT } from '../actions/documentA.js'
 
 const initialState = {
     documentIdG: [],
@@ -6,7 +6,8 @@ const initialState = {
     documentR: [],
     messageEdit: '',
     messageAdd: '',
-    messageDisable: ''
+    messageDisable: '',
+    stateDocument: false
 }
 
 export function reducersDocument(state = initialState, action) {
@@ -34,6 +35,8 @@ export function reducersDocument(state = initialState, action) {
             return Object.assign({}, state, { messageDisable: action.payload })
         case ADD_ID_DOCUMENT:
             return Object.assign({}, state, { documentIdG: action.payload })
+        case STATE_DOCUMENT:
+            return Object.assign({}, state, { stateDocument: action.payload })
         default:
             return state
     }

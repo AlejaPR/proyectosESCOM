@@ -3,7 +3,7 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { reduxForm, Field } from 'redux-form';
-import { required, minimum, twoHundred, fiveHundred, select } from '../../../utilitarian/validations.js';
+import { required, minimum, fiveHundred, select } from '../../../utilitarian/validations.js';
 import { getListThematicCore, addThematicCore, addMessageAdd, addMessageDelete, deleteThemacticCore } from '../../../../redux/actions/thematicCoreA.js';
 import { getListGeneralC } from '../../../../redux/actions/generalClassA.js';
 
@@ -108,7 +108,7 @@ class ThematicCore extends Component {
                                         <label for="form_control_1">Nombre: </label>
                                         <div className="row">
                                             <div className="col-sm">
-                                                <Field name="nameTC" validate={[required, minimum, twoHundred]} component={generarInput} label="Nombre" />
+                                                <Field name="nameTC" validate={[required, minimum, fiveHundred]} component={generarInput} label="Nombre" />
                                             </div>
                                         </div>
                                         <br />
@@ -123,7 +123,7 @@ class ThematicCore extends Component {
                                         <div className="row">
                                             <div className="col-sm">
                                                 <Field name="trainingA" validate={[select]} className="bs-select form-control" component={generarSelect}>
-                                                    <option selected value="0">Seleccione...</option>
+                                                    <option value="0">Seleccione...</option>
                                                     {this.loadList()}
                                                 </Field>
                                             </div>
@@ -215,14 +215,6 @@ const generarSelect = ({ input, label, type, meta: { touched, error }, children 
     </div>
 )
 
-const generarText = ({ input, placeholder, label, type, meta: { touched, warning, error } }) => (
-    <div>
-        <div>
-            <textarea {...input} className="form-control letra form-control-solid placeholder-no-fix" />
-            {touched && ((error && <span className="text-danger letra form-group">{error}</span>) || (warning && <span>{warning}</span>))}
-        </div>
-    </div>
-)
 
 function mapStateToProps(state) {
     return {

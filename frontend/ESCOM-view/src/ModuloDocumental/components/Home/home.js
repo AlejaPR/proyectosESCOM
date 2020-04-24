@@ -23,14 +23,14 @@ class home extends Component {
     }
 
     handleSubmit = formValues => {
-        this.props.getIdDocument(localStorage.getItem('Token'),formValues.program);
+        this.props.getIdDocument(localStorage.getItem('Token'), formValues.program);
         sessionStorage.setItem('programId', formValues.program);
     }
 
     loadList() {
         return this.props.programs.map((pro) => {
             return (
-                <option key={pro.id} value={pro.id}>{pro.name}</option>
+                <option key={pro.id} value={pro.id}>{pro.name + "-" + pro.campus}</option>
             )
         })
     }

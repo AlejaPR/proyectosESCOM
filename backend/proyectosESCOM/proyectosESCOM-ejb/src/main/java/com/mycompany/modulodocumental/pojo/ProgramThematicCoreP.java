@@ -1,42 +1,109 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.pojo;
 
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import java.io.Serializable;
 
 /**
+ * This is the POJO class of the program thematic core entity. contains the
+ * variables of the table without annotations
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 public class ProgramThematicCoreP implements Serializable {
 
+    /**
+     * id variable
+     */
     private int id;
+
+    /**
+     * variable contribute Objetive
+     */
     private String contributeObjetive;
+
+    /**
+     * variable contribute Professional
+     */
     private String contributeProfessional;
+
+    /**
+     * variable contribute Occupational
+     */
     private String contributeOccupational;
+
+    /**
+     * variable objective Output
+     */
     private String objectiveOutput;
+
+    /**
+     * variable team Contribution
+     */
     private String teamContribution;
+
+    /**
+     * variable observation Final
+     */
     private String observationFinal;
+
+    /**
+     * variable id program
+     */
     private int idProgram;
+
+    /**
+     * variable id thematic core
+     */
     private int idThematicCore;
+
+    /**
+     * variable name thematic core
+     */
     private String nameThematicCore;
+
+    /**
+     * variable objetive
+     */
     private String objetive;
+
+    /**
+     * request data variable
+     */
     private DatosSolicitudPOJO requestData;
 
+    /**
+     * constructor method
+     */
     public ProgramThematicCoreP() {
-        
+
     }
 
+    /**
+     * constructor method
+     *
+     * @param id
+     * @param nameThematicCore
+     * @param objetive
+     */
     public ProgramThematicCoreP(int id, String nameThematicCore, String objetive) {
         this.id = id;
         this.nameThematicCore = nameThematicCore;
         this.objetive = objetive;
     }
-    
+
+    /**
+     * constructor method
+     *
+     * @param id
+     * @param contributeObjetive
+     * @param contributeProfessional
+     * @param contributeOccupational
+     * @param objectiveOutput
+     * @param teamContribution
+     * @param observationFinal
+     * @param idProgram
+     * @param idThematicCore
+     */
     public ProgramThematicCoreP(int id, String contributeObjetive, String contributeProfessional, String contributeOccupational, String objectiveOutput, String teamContribution, String observationFinal, int idProgram, int idThematicCore) {
         this.id = id;
         this.contributeObjetive = contributeObjetive;
@@ -49,12 +116,20 @@ public class ProgramThematicCoreP implements Serializable {
         this.idThematicCore = idThematicCore;
     }
 
+    /**
+     * constructor method
+     *
+     * @param id
+     * @param idProgram
+     * @param idThematicCore
+     */
     public ProgramThematicCoreP(int id, int idProgram, int idThematicCore) {
         this.id = id;
         this.idProgram = idProgram;
         this.idThematicCore = idThematicCore;
     }
 
+    //getter and setter
     public int getId() {
         return id;
     }
@@ -150,5 +225,5 @@ public class ProgramThematicCoreP implements Serializable {
     public void setObjetive(String objetive) {
         this.objetive = objetive;
     }
-    
+
 }

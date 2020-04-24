@@ -103,7 +103,7 @@ public class DocumentLogic implements DocumentLogicLocal {
             for (Document doc : list) {
                 if (doc.getState() == 1) {
                     DocumentP aux = new DocumentP(doc.getId(), doc.getDescription(), doc.getType(), doc.getState());
-                    aux.setProgram(doc.getFkDocProgram().getName());
+                    aux.setProgram(doc.getFkDocProgram().getName()+"-"+doc.getFkDocProgram().getCampus());
                     data.add(aux);
                 }
             }

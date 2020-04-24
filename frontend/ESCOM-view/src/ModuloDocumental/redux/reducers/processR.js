@@ -1,11 +1,12 @@
-import { GET_LIST_PROCESSES, DISABLE_PROCESS, ADD_PROCESS, EDIT_PROCESS, ADD_MESSAGE_EDIT, ADD_MESSAGE_ADD, GET_PROCESS_ID, ADD_MESSAGE_DISABLE } from '../actions/processA.js'
+import {STATE_PROCESS, GET_LIST_PROCESSES, DISABLE_PROCESS, ADD_PROCESS, EDIT_PROCESS, ADD_MESSAGE_EDIT, ADD_MESSAGE_ADD, GET_PROCESS_ID, ADD_MESSAGE_DISABLE } from '../actions/processA.js'
 
 const initialState = {
     listProcessR: [],
     processR: [],
     messageEdit: '',
     messageAdd: '',
-    messageDisable: ''
+    messageDisable: '',
+    stateProcess: false
 }
 
 export function reducersProcess(state = initialState, action) {
@@ -27,6 +28,8 @@ export function reducersProcess(state = initialState, action) {
             return Object.assign({}, state, { messageAdd: action.payload });
         case ADD_MESSAGE_DISABLE:
             return Object.assign({}, state, { messageDisable: action.payload });
+        case STATE_PROCESS:
+            return Object.assign({}, state, { stateProcess: action.payload });
         default:
             return state;
     }

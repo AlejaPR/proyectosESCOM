@@ -20,10 +20,10 @@ export const fiveHundred = value => {
     }
 }
 
-export const twoHundred = value => {
+export const threeHundred = value => {
     if (value !== undefined) {
-        if (value.length > 200) {
-            return 'El limite es de 200 caracteres';
+        if (value.length > 300) {
+            return 'El limite es de 300 caracteres';
         }
     }
 }
@@ -45,7 +45,7 @@ export const minimum = value => {
 }
 
 export const select = value => {
-    if (value === '0' || value === undefined) {
+    if (value === '0' || value === undefined || value === "") {
         return 'Seleccione una opcion';
     }
 };

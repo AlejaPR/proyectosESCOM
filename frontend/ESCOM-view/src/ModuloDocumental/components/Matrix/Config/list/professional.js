@@ -3,7 +3,7 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { reduxForm, Field } from 'redux-form';
-import { required, minimum, twoHundred } from '../../../utilitarian/validations.js';
+import { required, minimum, fiveHundred } from '../../../utilitarian/validations.js';
 import { getListGeneralC, addGeneralC, addMessageAdd, addMessageDelete, deleteGeneralC } from '../../../../redux/actions/generalClassA.js';
 
 import { toast } from 'react-toastify';
@@ -87,7 +87,7 @@ class Professional extends Component {
                                         <label for="form_control_1">Nombre: </label>
                                         <div className="row">
                                             <div className="col-sm">
-                                                <Field name="nameP" validate={[required, minimum, twoHundred]} component={generarInput} label="Nombre" />
+                                                <Field name="nameP" validate={[required, minimum, fiveHundred]} component={generarInput} label="Nombre" />
                                             </div>
                                         </div>
                                     </div>

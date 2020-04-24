@@ -1,17 +1,18 @@
 import axios from 'axios';
 import { desencriptar } from '../../../SuperAdministrador/componentes/general/Encriptar.js';
+import { URL_BASE } from '../../../SuperAdministrador/utilitario/Configuracion.js';
 
 export const ADD_COMMENTARY = 'ADD_COMMENTARY';
 export const GET_LIST_COMMENTS = 'GET_LIST_COMMENTS';
 export const DELETE_COMMENTARY = 'DELETE_COMMENTARY';
+export const STATE_COMMENTARY = 'STATE_COMMENTARY';
 
 export const ADD_MESSAGE_ADD = 'ADD_MESSAGE_ADD';
 export const ADD_MESSAGE_DELETE = 'ADD_MESSAGE_DELETE';
 export const ADD_MESSAGE = 'ADD_MESSAGE';
 
-const URL_BASE = 'http://localhost:9090/proyectosESCOM-web';
 const PERMIT_ADD_COMMENTARY = 'MD_Prueba';
-const PERMIT_LIST_COMMENTS= 'MD_Prueba';
+const PERMIT_LIST_COMMENTS = 'MD_Prueba';
 const PERMIT_DELETE_COMMENTARY = 'MD_Prueba';
 
 
@@ -47,7 +48,7 @@ export function addCommentary(token, commentaryN) {
         'operacion': PERMIT_ADD_COMMENTARY
     };
     return (dispatch, getState) => {
-        axios.post(`${URL_BASE}/api/commentary/add`, commentaryN, { headers: headers })
+        axios.post(`${URL_BASE}/proyectosESCOM-web/api/commentary/add`, commentaryN, { headers: headers })
             .then(response => {
                 dispatch({
                     type: ADD_COMMENTARY,
@@ -61,9 +62,11 @@ export function addCommentary(token, commentaryN) {
                     });
                 } else {
                     if (error.request) {
+                        var data = JSON.parse(error.request.response);
+                        let respuesta = data.respuesta;
                         dispatch({
                             type: ADD_MESSAGE_ADD,
-                            payload: 'error server'
+                            payload: respuesta
                         });
                     }
                 }
@@ -80,7 +83,7 @@ export function getListComments(token, id) {
         'Permiso': PERMIT_LIST_COMMENTS
     }
     return (dispatch, getState) => {
-        axios.get(`${URL_BASE}/api/commentary/list/${id}`, { headers: headers })
+        axios.get(`${URL_BASE}/proyectosESCOM-web/api/commentary/list/${id}`, { headers: headers })
             .then(response => {
                 dispatch({
                     type: GET_LIST_COMMENTS,
@@ -94,10 +97,19 @@ export function getListComments(token, id) {
                     });
                 } else {
                     if (error.request) {
-                        dispatch({
-                            type: ADD_MESSAGE,
-                            payload: 'error server'
-                        });
+                        var data = JSON.parse(error.request.response);
+                        let respuesta = data.respuesta;
+                        if (respuesta === 'Sin permiso') {
+                            dispatch({
+                                type: STATE_COMMENTARY,
+                                payload: true
+                            });
+                        } else {
+                            dispatch({
+                                type: ADD_MESSAGE,
+                                payload: respuesta
+                            });
+                        }
                     }
                 }
             });
@@ -117,7 +129,7 @@ export function deleteCommentary(token, id) {
         'operacion': PERMIT_DELETE_COMMENTARY
     };
     return (dispatch, getState) => {
-        axios.post(`${URL_BASE}/api/commentary/delete/${id}`, requestData , { headers: headers })
+        axios.post(`${URL_BASE}/proyectosESCOM-web/api/commentary/delete/${id}`, requestData, { headers: headers })
             .then(response => {
                 dispatch({
                     type: DELETE_COMMENTARY,
@@ -131,9 +143,11 @@ export function deleteCommentary(token, id) {
                     });
                 } else {
                     if (error.request) {
+                        var data = JSON.parse(error.request.response);
+                        let respuesta = data.respuesta;
                         dispatch({
                             type: ADD_MESSAGE_DELETE,
-                            payload: 'error server'
+                            payload: respuesta
                         });
                     }
                 }

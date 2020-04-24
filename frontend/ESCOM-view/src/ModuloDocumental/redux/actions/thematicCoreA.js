@@ -1,10 +1,12 @@
 import axios from 'axios';
 
 import { desencriptar } from '../../../SuperAdministrador/componentes/general/Encriptar.js';
+import { URL_BASE } from '../../../SuperAdministrador/utilitario/Configuracion.js';
 
 export const GET_LIST_THEMATIC_CORE = 'GET_LIST_THEMATIC_CORE';
 export const ADD_THEMATIC_CORE = 'ADD_THEMATIC_CORE';
 export const DELETE_THEMATIC_CORE = 'DELETE_THEMATIC_CORE';
+export const STATE_THEMATIC_C = 'STATE_THEMATIC_C';
 
 export const PERMIT_LIST_THEMATIC_CORE = 'MD_Prueba';
 export const PERMIT_ADD_THEMATIC_CORE = 'MD_Prueba';
@@ -13,8 +15,6 @@ export const PERMIT_DELETE_THEMATIC_CORE = 'MD_Prueba';
 export const ADD_MESSAGE_ADD = 'ADD_MESSAGE_ADD';
 export const ADD_MESSAGE_DELETE = 'ADD_MESSAGE_DELETE';
 export const ADD_MESSAGE = 'ADD_MESSAGE';
-
-const URL_BASE = 'http://localhost:9090/proyectosESCOM-web';
 
 export function addMessageAdd(mensaje) {
     return (dispatch, getState) => {
@@ -42,7 +42,7 @@ export function getListThematicCore(token, id) {
         'Permiso': PERMIT_LIST_THEMATIC_CORE
     }
     return (dispatch, getState) => {
-        axios.get(`${URL_BASE}/api/thematicCore/list/${id}`, { headers: headers })
+        axios.get(`${URL_BASE}/proyectosESCOM-web/api/thematicCore/list/${id}`, { headers: headers })
             .then(response => {
                 dispatch({
                     type: GET_LIST_THEMATIC_CORE,
@@ -56,10 +56,19 @@ export function getListThematicCore(token, id) {
                     });
                 } else {
                     if (error.request) {
-                        dispatch({
-                            type: ADD_MESSAGE,
-                            payload: 'error server'
-                        });
+                        var data = JSON.parse(error.request.response);
+                        let respuesta = data.respuesta;
+                        if (respuesta === 'Sin permiso') {
+                            dispatch({
+                                type: STATE_THEMATIC_C,
+                                payload: true
+                            });
+                        } else {
+                            dispatch({
+                                type: ADD_MESSAGE,
+                                payload: respuesta
+                            });
+                        }
                     }
                 }
             });
@@ -69,7 +78,7 @@ export function getListThematicCore(token, id) {
 //MD_Agregar nucleo tematica
 export function addThematicCore(token, thematicC) {
     const headers = {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset= UTF-8',
         'TokenAuto': desencriptar(token),
         'Permiso': PERMIT_ADD_THEMATIC_CORE
     }
@@ -79,7 +88,7 @@ export function addThematicCore(token, thematicC) {
         'operacion': PERMIT_ADD_THEMATIC_CORE
     };
     return (dispatch, getState) => {
-        axios.post(`${URL_BASE}/api/thematicCore/add`, thematicC, { headers: headers })
+        axios.post(`${URL_BASE}/proyectosESCOM-web/api/thematicCore/add`, thematicC, { headers: headers })
             .then(response => {
                 dispatch({
                     type: ADD_THEMATIC_CORE,
@@ -93,9 +102,11 @@ export function addThematicCore(token, thematicC) {
                     });
                 } else {
                     if (error.request) {
+                        var data = JSON.parse(error.request.response);
+                        let respuesta = data.respuesta;
                         dispatch({
                             type: ADD_THEMATIC_CORE,
-                            payload: 'error server'
+                            payload: respuesta
                         });
                     }
                 }
@@ -116,7 +127,7 @@ export function deleteThemacticCore(token, thematicC) {
         'operacion': PERMIT_DELETE_THEMATIC_CORE
     };
     return (dispatch, getState) => {
-        axios.put(`${URL_BASE}/api/thematicCore/delete`,thematicC, { headers: headers })
+        axios.put(`${URL_BASE}/proyectosESCOM-web/api/thematicCore/delete`, thematicC, { headers: headers })
             .then(response => {
                 dispatch({
                     type: DELETE_THEMATIC_CORE,
@@ -130,9 +141,11 @@ export function deleteThemacticCore(token, thematicC) {
                     });
                 } else {
                     if (error.request) {
+                        var data = JSON.parse(error.request.response);
+                        let respuesta = data.respuesta;
                         dispatch({
                             type: DELETE_THEMATIC_CORE,
-                            payload: 'error server'
+                            payload: respuesta
                         });
                     }
                 }

@@ -1,35 +1,63 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.pojo;
 
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import java.io.Serializable;
 
 /**
+ * This is the POJO class of the general program entity. contains the variables
+ * of the table without annotations
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
-public class GeneralProgramP implements Serializable{
-    
+public class GeneralProgramP implements Serializable {
+
+    /**
+     * id variable
+     */
     private int id;
+
+    /**
+     * variable name general program
+     */
     private String name;
+
+    /**
+     * variable description general program
+     */
     private String description;
+
+    /**
+     * variable state general program
+     */
     private int state;
+
+    /**
+     * request data variable
+     */
     private DatosSolicitudPOJO requestData;
 
+    /**
+     * constructor method
+     */
     public GeneralProgramP() {
     }
 
+    /**
+     * constructor method
+     *
+     * @param id
+     * @param name
+     * @param description
+     * @param state
+     */
     public GeneralProgramP(int id, String name, String description, int state) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.state = state;
-    }    
-   
+    }
+
+    //getter and setter
     public int getId() {
         return id;
     }
@@ -69,5 +97,5 @@ public class GeneralProgramP implements Serializable{
     public void setRequestData(DatosSolicitudPOJO requestData) {
         this.requestData = requestData;
     }
-    
+
 }

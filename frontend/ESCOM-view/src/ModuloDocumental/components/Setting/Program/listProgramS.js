@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { getListPrograms, getProgramId, disableProgram, addMessageDisable } from '../../../redux/actions/programA.js';
 import { ToastContainer, toast } from 'react-toastify';
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
 import Add from './add.js';
 import Edit from './edit.js';
 import View from './view.js';
@@ -27,6 +29,10 @@ class ListPrograms extends Component {
                     toast.success('Se inhabilito con éxito.');
                     this.props.addMessageDisable('');
                     this.props.getListPrograms(localStorage.getItem('Token'));
+                    break;
+                case 'Sin permiso':
+                    toast.success('No tiene permisos suficientes para inhabilitar.');
+                    this.props.addMessageDisable('');
                     break;
                 case 'error server':
                     toast.error('Se presento un error, intentelo mas tarde.');
@@ -55,84 +61,98 @@ class ListPrograms extends Component {
                 </div>
                 <br />
                 <div className="shadow" style={{ background: "#FFFFFF", padding: "30px" }}>
-                    <div>
-                        <Add />
-                    </div>
-                    <br />
-                    <br />
-                    <MaterialTable
-                        title=""
-                        localization={{
-                            header: {
-                                actions: ' '
-                            },
-                            pagination: {
-                                nextTooltip: 'Siguiente ',
-                                previousTooltip: 'Anterior',
-                                labelDisplayedRows: '{from}-{to} de {count}',
-                                lastTooltip: 'Ultima pagina',
-                                firstTooltip: 'Primera pagina',
-                                labelRowsSelect: 'Registros',
-                                firstAriaLabel: 'oooo'
-                            },
-                            body: {
-                                emptyDataSourceMessage: 'Aun no hay ningun programa registrado'
-                            },
-                            toolbar: {
-                                searchTooltip: 'Buscar',
-                                searchPlaceholder: 'Buscar'
-                            }
-                        }}
-                        columns={[
+                    {
+                        this.props.enabled ? <div className="col-sm-12">
+                            <Alert severity="error" variant="outlined">
+                                <AlertTitle>Sin permiso</AlertTitle>
+                                No tiene permisos suficientes para listar los programas.</Alert>
+                        </div> :
+                            <div>
+                                <div>
+                                    <Add />
+                                </div>
+                                <br />
+                                <br />
+                                <MaterialTable
+                                    title=""
+                                    localization={{
+                                        header: {
+                                            actions: ' '
+                                        },
+                                        pagination: {
+                                            nextTooltip: 'Siguiente ',
+                                            previousTooltip: 'Anterior',
+                                            labelDisplayedRows: '{from}-{to} de {count}',
+                                            lastTooltip: 'Ultima pagina',
+                                            firstTooltip: 'Primera pagina',
+                                            labelRowsSelect: 'Registros',
+                                            firstAriaLabel: 'oooo'
+                                        },
+                                        body: {
+                                            emptyDataSourceMessage: 'Aun no hay ningun programa registrado'
+                                        },
+                                        toolbar: {
+                                            searchTooltip: 'Buscar',
+                                            searchPlaceholder: 'Buscar'
+                                        }
+                                    }}
+                                    columns={[
 
-                            { title: 'Nombre del programa', field: 'name' },
-                            { title: 'Nivel educativo', field: 'levelEducation' },
-                            {
-                                title: '', field: 'id',
-                                render: rowData => {
-                                    return (
-                                        <div>
-                                            <a onClick={() => this.save(rowData.id)} data-toggle="modal" data-target="#viewModal">
-                                                <VisibilityIcon />
-                                            </a>
-                                            <View />
-                                        </div>
-                                    )
-                                }
-                            },
-                            {
-                                title: '', field: 'id',
-                                render: rowData => {
-                                    return (
-                                        <div>
-                                            <a onClick={() => this.save(rowData.id)} data-toggle="modal" data-target="#editModal">
-                                                <EditIcon />
-                                            </a>
-                                            <Edit />
-                                        </div>
-                                    )
-                                }
-                            },
-                            {
-                                title: '', field: 'id',
-                                render: rowData => {
-                                    return (
-                                        <div>
-                                            <a onClick={() => this.disable(rowData.id)}>
-                                                <DeleteForeverIcon />
-                                            </a>
-                                        </div>
-                                    )
-                                }
-                            }
+                                        {
+                                            title: 'Nombre del programa', field: 'name',
+                                            render: rowData => {
+                                                return (rowData.name + "-" + rowData.campus)
+                                            }
+                                        },
+                                        { title: 'Nivel educativo', field: 'levelEducation' },
+                                        {
+                                            title: '', field: 'id',
+                                            render: rowData => {
+                                                return (
+                                                    <div>
+                                                        <a onClick={() => this.save(rowData.id)} data-toggle="modal" data-target="#viewModal">
+                                                            <VisibilityIcon />
+                                                        </a>
+                                                        <View />
+                                                    </div>
+                                                )
+                                            }
+                                        },
+                                        {
+                                            title: '', field: 'id',
+                                            render: rowData => {
+                                                return (
+                                                    <div>
+                                                        <a onClick={() => this.save(rowData.id)} data-toggle="modal" data-target="#editModal">
+                                                            <EditIcon />
+                                                        </a>
+                                                        <Edit />
+                                                    </div>
+                                                )
+                                            }
+                                        },
+                                        {
+                                            title: '', field: 'id',
+                                            render: rowData => {
+                                                return (
+                                                    <div>
+                                                        <a onClick={() => this.disable(rowData.id)}>
+                                                            <DeleteForeverIcon />
+                                                        </a>
+                                                    </div>
+                                                )
+                                            }
+                                        }
 
-                        ]}
-                        data={this.props.listProgram}
-                        options={{
-                            search: true
-                        }}
+                                    ]}
+                                    data={this.props.listProgram}
+                                    options={{
+                                        search: true
+                                    }}
 
-                    />
+                                />
+                            </div>
+                    }
                 </div>
             </div>
         )
@@ -143,7 +163,8 @@ class ListPrograms extends Component {
 function mapStateToProps(state) {
     return {
         listProgram: state.program.listProgramR,
-        messageDisableP: state.program.messageDisable
+        messageDisableP: state.program.messageDisable,
+        enabled: state.program.stateProgram
 
     }
 }

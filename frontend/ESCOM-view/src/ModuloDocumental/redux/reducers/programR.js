@@ -1,11 +1,12 @@
-import { GET_LIST_PROGRAMS, GET_PROGRAM_ID, ADD_MESSAGE_ADD, ADD_MESSAGE_EDIT, ADD_PROGRAM, EDIT_PROGRAM, DISABLE_PROGRAM, ADD_MESSAGE_DISABLE } from '../actions/programA.js'
+import { GET_LIST_PROGRAMS, GET_PROGRAM_ID, ADD_MESSAGE_ADD, ADD_MESSAGE_EDIT, ADD_PROGRAM, EDIT_PROGRAM, DISABLE_PROGRAM, ADD_MESSAGE_DISABLE, STATE_PROGRAM } from '../actions/programA.js'
 
 const initialState = {
     listProgramR: [],
     programR: [],
     messageEdit: '',
     messageAdd: '',
-    messageDisable: ''
+    messageDisable: '',
+    stateProgram: false
 }
 
 export function reducersProgram(state = initialState, action) {
@@ -27,6 +28,8 @@ export function reducersProgram(state = initialState, action) {
             return Object.assign({}, state, { messageAdd: action.payload });
         case ADD_MESSAGE_DISABLE:
             return Object.assign({}, state, { messageDisable: action.payload });
+        case STATE_PROGRAM:
+            return Object.assign({}, state, { stateProgram: action.payload });
         default:
             return state;
     }

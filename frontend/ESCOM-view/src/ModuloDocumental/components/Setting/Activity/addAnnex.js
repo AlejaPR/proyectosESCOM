@@ -2,19 +2,23 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
-import { addActivity, addMessageAdd,getListActivitiesAnnex} from '../../../redux/actions/activityA.js';
+import { addActivity, addMessageAdd, getListActivitiesAnnex } from '../../../redux/actions/activityA.js';
 import { withRouter } from 'react-router-dom';
-import { required, thousand, twoHundred, minimum } from '../../utilitarian/validations.js';
+import { required, thousand, threeHundred, minimum } from '../../utilitarian/validations.js';
 import { toast } from 'react-toastify';
 
 class AddAnnex extends Component {
 
-    componentDidUpdate(){
+    componentDidUpdate() {
         if (this.props.messageAddA !== '') {
             switch (this.props.messageAddA) {
                 case 'add':
                     toast.success('Se agrego con exito.');
                     this.props.getListActivitiesAnnex(localStorage.getItem('Token'), sessionStorage.getItem('condition'));
+                    this.props.addMessageAdd('')
+                    break;
+                case 'Sin permiso':
+                    toast.error('No tiene permisos suficientes para agregar un nuevo elemento.');
                     this.props.addMessageAdd('')
                     break;
                 case 'error server':
@@ -66,7 +70,7 @@ class AddAnnex extends Component {
                                     <label for="form_control_1">Nombre: </label>
                                     <div className="row">
                                         <div className="col-sm">
-                                            <Field name="name" validate={[required, minimum, twoHundred]} type="text" component={generarInput} label="Nombre" />
+                                            <Field name="name" validate={[required, minimum, threeHundred]} type="text" component={generarInput} label="Nombre" />
                                         </div>
                                     </div>
                                     <br />

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
 import { addProcess } from '../../../redux/actions/processA.js';
-import { required, minimum, fiveHundred, twenty } from '../../utilitarian/validations.js';
+import { required, minimum, thousand, twenty } from '../../utilitarian/validations.js';
 
 class Add extends Component {
 
@@ -51,7 +51,7 @@ class Add extends Component {
                                     <label for="form_control_1">Descripción: </label>
                                     <div className="row">
                                         <div className="col-sm">
-                                            <Field name="description" validate={[required, minimum, fiveHundred]} component={generarText} label="Denominación del programa" />
+                                            <Field name="description" validate={[required, minimum, thousand]} component={generarText} label="Denominación del programa" />
                                         </div>
                                     </div>
                                 </div>

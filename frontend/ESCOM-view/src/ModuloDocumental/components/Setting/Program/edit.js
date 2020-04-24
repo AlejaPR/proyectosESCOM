@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
 import { editProgram, addMessageEdit } from '../../../redux/actions/programA.js';
-import { required, minimum, twoHundred } from '../../utilitarian/validations.js';
+import { required, minimum, threeHundred } from '../../utilitarian/validations.js';
 import { toast } from 'react-toastify';
 
 class Edit extends Component {
@@ -16,6 +16,10 @@ class Edit extends Component {
                     toast.success('Se modifico con exito.');
                     this.props.addMessageEdit('');
                     this.props.getListPrograms(localStorage.getItem('Token'))
+                    break;
+                case 'Sin permiso':
+                    toast.error('No tiene permisos suficientes para editar.');
+                    this.props.addMessageEdit('');
                     break;
                 case 'error server':
                     toast.error('Se presento un error, intentelo mas tarde.');
@@ -58,31 +62,31 @@ class Edit extends Component {
                                     <label for="form_control_1">Institución: </label>
                                     <div className="row">
                                         <div className="col-sm">
-                                            <Field name="institution" validate={[required, minimum, twoHundred]} component={generarInput} label="Institución" />
+                                            <Field name="institution" validate={[required, minimum, threeHundred]} component={generarInput} label="Institución" />
                                         </div>
                                     </div>
                                     <label for="form_control_1">Denominación del programa: </label>
                                     <div className="row">
                                         <div className="col-sm">
-                                            <Field name="name" validate={[required, minimum, twoHundred]} component={generarInput} label="Denominación del programa" />
+                                            <Field name="name" validate={[required, minimum, threeHundred]} component={generarInput} label="Denominación del programa" />
                                         </div>
                                     </div>
                                     <label for="form_control_1">Nivel de formación: </label>
                                     <div className="row">
                                         <div className="col-sm">
-                                            <Field name="levelEducation" validate={[required, minimum, twoHundred]} component={generarInput} label="Nivel de formación" />
+                                            <Field name="levelEducation" validate={[required, minimum, threeHundred]} component={generarInput} label="Nivel de formación" />
                                         </div>
                                     </div>
                                     <label for="form_control_1">Motodología: </label>
                                     <div className="row">
                                         <div className="col-sm">
-                                            <Field name="methodology" validate={[required, minimum, twoHundred]} component={generarInput} label="Motodología" />
+                                            <Field name="methodology" validate={[required, minimum, threeHundred]} component={generarInput} label="Motodología" />
                                         </div>
                                     </div>
                                     <label for="form_control_1">Campus: </label>
                                     <div className="row">
                                         <div className="col-sm">
-                                            <Field name="campus" validate={[required, minimum, twoHundred]} component={generarInput} label="Campus" />
+                                            <Field name="campus" validate={[required, minimum, threeHundred]} component={generarInput} label="Campus" />
                                         </div>
                                     </div>
                                     <label for="form_control_1">Créditos académicos: </label>

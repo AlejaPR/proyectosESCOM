@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { addAnnex } from '../../../redux/actions/annexA.js';
 import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
-import { required, fiveHundred, twoHundred, minimum } from '../../utilitarian/validations.js';
+import { required, thousand, threeHundred, minimum } from '../../utilitarian/validations.js';
 
 class Add extends Component {
 
@@ -49,21 +49,21 @@ class Add extends Component {
                                     <label for="form_control_1">Nombre: </label>
                                     <div className="row">
                                         <div className="col-sm">
-                                            <Field name="nameA" validate={[required, twoHundred, minimum]} component={generarInput} label="Nombre" />
+                                            <Field name="nameA" validate={[required, threeHundred, minimum]} component={generarInput} label="Nombre" />
                                         </div>
                                     </div>
                                     <br />
                                     <label for="form_control_1">Descripción: </label>
                                     <div className="row">
                                         <div className="col-sm">
-                                            <Field name="descriptionA" validate={[required, minimum, fiveHundred]} component={generarText} label="Descripcion" />
+                                            <Field name="descriptionA" validate={[required, minimum, thousand]} component={generarText} label="Descripcion" />
                                         </div>
                                     </div>
                                     <br />
                                     <label for="form_control_1">Palabras claves: </label>
                                     <div className="row">
                                         <div className="col-sm">
-                                            <Field name="keywordsA" validate={[required, twoHundred, minimum]} component={generarInput} label="Palabras claves" />
+                                            <Field name="keywordsA" validate={[required, threeHundred, minimum]} component={generarInput} label="Palabras claves" />
                                         </div>
                                     </div>
                                 </div>

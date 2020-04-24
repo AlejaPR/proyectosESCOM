@@ -3,7 +3,7 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
-import { select, fiveHundred, required, minimum } from '../../utilitarian/validations.js';
+import { fiveHundred, required, minimum } from '../../utilitarian/validations.js';
 import { toast } from 'react-toastify';
 import { getProgramT, addMessageEdit, editProgramT } from '../../../redux/actions/programThematicA.js';
 class EditProgramT extends Component {
@@ -39,7 +39,7 @@ class EditProgramT extends Component {
             objectiveOutput: formValues.objectiveOut,
             teamContribution: formValues.team,
             observationFinal: formValues.observation,
-            objective: formValues.objective,
+            objetive: formValues.objective,
             requestData: null
         }
         this.props.editProgramT(localStorage.getItem('Token'), programT);
@@ -137,6 +137,7 @@ function mapStateToProps(state) {
             contributeOc: state.programThematic.programTR.contributeOccupational,
             contributePr: state.programThematic.programTR.contributeProfessional,
             objectiveOut: state.programThematic.programTR.objectiveOutput,
+            objective: state.programThematic.programTR.objetive,
             observation: state.programThematic.programTR.observationFinal,
             team: state.programThematic.programTR.teamContribution
         }

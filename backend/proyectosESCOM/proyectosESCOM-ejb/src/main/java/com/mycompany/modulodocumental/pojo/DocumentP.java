@@ -1,30 +1,65 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.pojo;
 
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import java.io.Serializable;
 
 /**
+ * This is the POJO class of the document entity. contains the variables of the
+ * table without annotations
  *
- * @author HASHY
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 public class DocumentP implements Serializable {
 
+    /**
+     * id variable
+     */
     private int id;
+
+    /**
+     * variable description document
+     */
     private String description;
+
+    /**
+     * variable type document
+     */
     private String type;
+
+    /**
+     * variable state document
+     */
     private int state;
+
+    /**
+     * variable id user document
+     */
     private int idUser;
+
+    /**
+     * variable name programa document
+     */
     private String program;
+
+    /**
+     * request data variable
+     */
     private DatosSolicitudPOJO requestData;
 
+    /**
+     * constructor method
+     */
     public DocumentP() {
     }
 
+    /**
+     * constructor method
+     *
+     * @param id
+     * @param description
+     * @param type
+     * @param state
+     */
     public DocumentP(int id, String description, String type, int state) {
         this.id = id;
         this.description = description;
@@ -32,6 +67,7 @@ public class DocumentP implements Serializable {
         this.state = state;
     }
 
+    //getter and setter
     public int getId() {
         return id;
     }

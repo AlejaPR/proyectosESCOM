@@ -62,8 +62,8 @@ class ThematicList extends Component {
                         }}
                         columns={[
 
-                            { title: 'Nombre del nucleo thematico', field: 'nameThematicCore' },
-                            { title: 'Objetico', field: 'objetive' },
+                            { title: 'Nombre del nucleo tematico', field: 'nameThematicCore' },
+                            { title: 'Objetivo', field: 'objetive' },
                             {
                                 title: '', field: 'id',
                                 render: rowData => {

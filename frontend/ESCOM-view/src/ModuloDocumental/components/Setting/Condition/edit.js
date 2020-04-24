@@ -5,7 +5,8 @@ import { reduxForm, Field } from 'redux-form';
 import { getListProcesses } from '../../../redux/actions/processA.js';
 import { editCondition } from '../../../redux/actions/conditionA.js';
 import { withRouter } from 'react-router-dom';
-import { required, thousand, twoHundred, minimum, select } from '../../utilitarian/validations.js';
+import { required, thousand, threeHundred, minimum, select } from '../../utilitarian/validations.js';
+import { toast } from 'react-toastify';
 
 class Edit extends Component {
 
@@ -16,19 +17,26 @@ class Edit extends Component {
     handleSubmit = formValues => {
         let dateS = new Date(formValues.startDate);
         let dateF = new Date(formValues.finalDate);
-        console.log(formValues);
-        let conditionN = {
-            id: this.props.condition.id,
-            name: formValues.name,
-            description: formValues.description,
-            state: 1,
-            startDate: dateS,
-            finalDate: dateF,
-            process: formValues.process,
-            requestData: null
+        let nowD = new Date();
+        if (dateS.getDay < nowD.getDay) {
+            toast.info('La fecha inicial tiene que ser igual o mayor al día de hoy.');
+        } else if (dateF <= dateS) {
+            toast.info('La fecha final tiene que ser mayor a la fecha inicial.');
+        } else {
+            console.log(formValues);
+            let conditionN = {
+                id: this.props.condition.id,
+                name: formValues.name,
+                description: formValues.description,
+                state: 1,
+                startDate: dateS,
+                finalDate: dateF,
+                process: formValues.process,
+                requestData: null
+            }
+            console.log(conditionN);
+            this.props.editCondition(localStorage.getItem('Token'), conditionN);
         }
-        console.log(conditionN);
-        this.props.editCondition(localStorage.getItem('Token'), conditionN);
     }
 
     loadList() {
@@ -56,7 +64,7 @@ class Edit extends Component {
                                     <label for="form_control_1">Nombre: </label>
                                     <div className="row">
                                         <div className="col-sm">
-                                            <Field name="name" validate={[required, minimum, twoHundred]} component={generarInput} label="Nombre" />
+                                            <Field name="name" validate={[required, minimum, threeHundred]} component={generarInput} label="Nombre" />
                                         </div>
                                     </div>
                                     <br />
@@ -85,7 +93,7 @@ class Edit extends Component {
                                     <div className="row">
                                         <div className="col-sm">
                                             <Field name="process" validate={[select]} className="bs-select form-control" component={generarSelect}>
-                                                <option selected value="0">Seleccione...</option>
+                                                <option value="0">Seleccione...</option>
                                                 {this.loadList()}
                                             </Field>
                                         </div>

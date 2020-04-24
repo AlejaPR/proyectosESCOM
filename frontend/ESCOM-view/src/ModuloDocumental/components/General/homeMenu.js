@@ -72,7 +72,7 @@ class MenuLateral extends Component {
 						style={this.fondoBarr()}>
 						<Persona />
 						<br />
-						<span className="title letra">Programa general</span>
+						<span className="title letra">Facultades</span>
 					</Link>
 				</li>
 				<li className="nav-item" style={{ height: "65px" }}>
@@ -80,7 +80,7 @@ class MenuLateral extends Component {
 						style={this.fondoBarr()}>
 						<Persona />
 						<br />
-						<span className="title letra">Programa especifico</span>
+						<span className="title letra">Programas</span>
 					</Link>
 				</li>
 				<li className="nav-item" style={{ height: "65px" }}>
@@ -91,6 +91,7 @@ class MenuLateral extends Component {
 						<span className="title letra">Documentos maestros</span>
 					</Link>
 				</li>
+				{/**
 				<li className="nav-item" style={{ height: "65px" }}>
 					<Link to="/Prueba" name="hoverActividad" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
 						style={this.fondoBarr()} >
@@ -99,6 +100,8 @@ class MenuLateral extends Component {
 						<span className="title letra">Pruebas</span>
 					</Link>
 				</li>
+				*/
+				}
 			</div>
 
 		)

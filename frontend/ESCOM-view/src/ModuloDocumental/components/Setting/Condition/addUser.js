@@ -17,6 +17,10 @@ class AddUser extends Component {
                     this.props.getListUsersCondition(localStorage.getItem('Token'), sessionStorage.getItem('condition'));
                     this.props.addMessageAssociate('')
                     break;
+                case 'Sin persimo':
+                    toast.error('No tiene permiso para asociar este elemento.');
+                    this.props.addMessageAssociate('')
+                    break;
                 case 'error server':
                     toast.error('Se presento un error, intentelo mas tarde.');
                     this.props.addMessageAssociate('')
@@ -70,7 +74,7 @@ class AddUser extends Component {
                                     <div className="row">
                                         <div className="col-sm">
                                             <Field name="user" validate={[select]} className="bs-select form-control" component={generarSelect}>
-                                                <option selected value="0">Seleccione...</option>
+                                                <option value="0">Seleccione...</option>
                                                 {this.loadList()}
                                             </Field>
                                         </div>

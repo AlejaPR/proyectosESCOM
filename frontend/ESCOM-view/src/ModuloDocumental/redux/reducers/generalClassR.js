@@ -1,9 +1,10 @@
-import { GET_LIST_GENERAL_CLASS, ADD_GENERAL_CLASS, DELETE_GENERAL_CLASS, ADD_MESSAGE_ADD, ADD_MESSAGE_DELETE } from '../actions/generalClassA.js'
+import { GET_LIST_GENERAL_CLASS, ADD_GENERAL_CLASS, DELETE_GENERAL_CLASS, ADD_MESSAGE_ADD, ADD_MESSAGE_DELETE, STATE_GENERAL_CLASS } from '../actions/generalClassA.js'
 
 const initialState = {
     listGeneralClassR: [],
     messageAddC: '',
-    messageDeleteC: ''
+    messageDeleteC: '',
+    stateGeneralClass: ''
 }
 
 export function reducersGeneralClass(state = initialState, action) {
@@ -19,7 +20,8 @@ export function reducersGeneralClass(state = initialState, action) {
             return Object.assign({}, state, { messageAddC: action.payload })
         case ADD_MESSAGE_DELETE:
             return Object.assign({}, state, { messageDeleteC: action.payload })
-
+        case STATE_GENERAL_CLASS:
+            return Object.assign({}, state, { stateGeneralClass: action.payload })
         default:
             return state
     }

@@ -2,9 +2,9 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
-import { editActivity ,addMessageEdit} from '../../../redux/actions/activityA.js';
+import { editActivity, addMessageEdit } from '../../../redux/actions/activityA.js';
 import { withRouter } from 'react-router-dom';
-import { required, thousand, twoHundred, minimum, select } from '../../utilitarian/validations.js';
+import { required, thousand, threeHundred, minimum, select } from '../../utilitarian/validations.js';
 import { toast } from 'react-toastify';
 
 class Edit extends Component {
@@ -16,6 +16,10 @@ class Edit extends Component {
                     toast.success('Se agrego con exito.');
                     this.props.getListActivities(localStorage.getItem('Token'), sessionStorage.getItem('condition'));
                     this.props.addMessageEdit('');
+                    break;
+                case 'Sin permiso':
+                    toast.error('No tiene permisos suficientes para editar un elemento.');
+                    this.props.addMessageEdit('')
                     break;
                 case 'error server':
                     toast.error('Se presento un error, intentelo mas tarde.');
@@ -58,7 +62,7 @@ class Edit extends Component {
                                     <label for="form_control_1">Nombre: </label>
                                     <div className="row">
                                         <div className="col-sm">
-                                            <Field name="name" type="text" validate={[required, minimum, twoHundred]} component={generarInput} label="Nombre" />
+                                            <Field name="name" type="text" validate={[required, minimum, threeHundred]} component={generarInput} label="Nombre" />
                                         </div>
                                     </div>
                                     <br />
@@ -68,7 +72,7 @@ class Edit extends Component {
                                             <Field name="description" validate={[required, thousand, minimum]} type="text" component={generarText} label="Descripcion" />
                                         </div>
                                     </div>
-                                    <br />                                    
+                                    <br />
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>

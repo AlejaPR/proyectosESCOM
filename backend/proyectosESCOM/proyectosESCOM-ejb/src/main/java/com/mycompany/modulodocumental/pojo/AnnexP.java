@@ -1,33 +1,75 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.pojo;
 
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import java.io.Serializable;
 
 /**
+ * This is the POJO class of the annex entity. contains the variables of the
+ * table without annotations
  *
- * @author HASHY
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 public class AnnexP implements Serializable {
 
+    /**
+     * id variable
+     */
     private int id;
+
+    /**
+     * variable keywords annex
+     */
     private String keywords;
+
+    /**
+     * variable description annex
+     */
     private String description;
+
+    /**
+     * variable name annex
+     */
     private String name;
+
+    /**
+     * variable id program annex
+     */
     private int program;
+
+    /**
+     * variable name program annex
+     */
     private String nameProgram;
+
+    /**
+     * variable state annex
+     */
     private int state;
+
+    /**
+     * variable link annex
+     */
     private String link;
+
+    /**
+     * request data variable
+     */
     private DatosSolicitudPOJO requestData;
 
-    
+    /**
+     * constructor method
+     */
     public AnnexP() {
     }
 
+    /**
+     * constructor method
+     *
+     * @param id
+     * @param keywords
+     * @param description
+     * @param name
+     */
     public AnnexP(int id, String keywords, String description, String name) {
         this.id = id;
         this.keywords = keywords;
@@ -35,6 +77,7 @@ public class AnnexP implements Serializable {
         this.name = name;
     }
 
+    //getter and setter
     public int getId() {
         return id;
     }
@@ -106,5 +149,5 @@ public class AnnexP implements Serializable {
     public void setNameProgram(String nameProgram) {
         this.nameProgram = nameProgram;
     }
-    
+
 }

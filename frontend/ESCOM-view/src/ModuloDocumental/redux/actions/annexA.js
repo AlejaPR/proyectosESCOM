@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 import { desencriptar } from '../../../SuperAdministrador/componentes/general/Encriptar.js';
+import { URL_BASE } from '../../../SuperAdministrador/utilitario/Configuracion.js';
 
 export const GET_LIST_ANNEXES = 'GET_LIST_ANNEXES';
 export const SEARCH_ANNEX_S = 'SEARCH_ANNEX_S';
@@ -8,13 +9,13 @@ export const GET_ANNEX_ID = 'GET_ANNEX_ID';
 export const ADD_ANNEX = 'ADD_ANNEX';
 export const EDIT_ANNEX = 'EDIT_ANNEX';
 export const DISABLE_ANNEX = 'DISABLE_ANNEX';
+export const STATE_ANNEX = 'STATE_ANNEX';
 
 export const ADD_MESSAGE_EDIT = 'ADD_MESSAGE_EDIT';
 export const ADD_MESSAGE_ADD = 'ADD_MESSAGE_ADD';
 export const ADD_MESSAGE = 'ADD_MESSAGE';
 export const ADD_MESSAGE_DISABLE = 'ADD_MESSAGE_DISABLE';
 
-const URL_BASE = 'http://localhost:9090/proyectosESCOM-web';
 const PERMIT_LIST_ANNEXES = 'MD_Lista anexos';
 const PERMIT_SEARCH_ANNEXES = 'MD_Buscar anexos';
 const PERMIT_GET_ANNEX = 'MD_Obtiene anexo';
@@ -57,7 +58,7 @@ export function getListAnnexes(token, id) {
     'Permiso': PERMIT_LIST_ANNEXES
   }
   return (dispatch, getState) => {
-    axios.get(`${URL_BASE}/api/annex/list/${id}`, { headers: headers })
+    axios.get(`${URL_BASE}/proyectosESCOM-web/api/annex/list/${id}`, { headers: headers })
       .then(response => {
         dispatch({
           type: GET_LIST_ANNEXES,
@@ -71,10 +72,19 @@ export function getListAnnexes(token, id) {
           });
         } else {
           if (error.request) {
-            dispatch({
-              type: ADD_MESSAGE,
-              payload: 'error server'
-            });
+            var data = JSON.parse(error.request.response);
+            let respuesta = data.respuesta;
+            if (respuesta === 'Sin permiso') {
+              dispatch({
+                type: STATE_ANNEX,
+                payload: true
+              });
+            } else {
+              dispatch({
+                type: ADD_MESSAGE,
+                payload: respuesta
+              });
+            }
           }
         }
 
@@ -90,7 +100,7 @@ export function searchAnnexS(token, searchAnn) {
     'Permiso': PERMIT_SEARCH_ANNEXES
   }
   return (dispatch, getState) => {
-    axios.post(`${URL_BASE}/api/annex/searchAnnexS`, searchAnn, { headers: headers })
+    axios.post(`${URL_BASE}/proyectosESCOM-web/api/annex/searchAnnexS`, searchAnn, { headers: headers })
       .then(response => {
         dispatch({
           type: SEARCH_ANNEX_S,
@@ -104,10 +114,19 @@ export function searchAnnexS(token, searchAnn) {
           });
         } else {
           if (error.request) {
-            dispatch({
-              type: ADD_MESSAGE,
-              payload: 'error server'
-            });
+            var data = JSON.parse(error.request.response);
+            let respuesta = data.respuesta;
+            if (respuesta === 'Sin permiso') {
+              dispatch({
+                type: STATE_ANNEX,
+                payload: true
+              });
+            } else {
+              dispatch({
+                type: ADD_MESSAGE,
+                payload: respuesta
+              });
+            }
           }
         }
 
@@ -123,7 +142,7 @@ export function getAnnexId(token, id) {
     'Permiso': PERMIT_GET_ANNEX
   }
   return (dispatch, getState) => {
-    axios.get(`${URL_BASE}/api/annex/get/${id}`, { headers: headers })
+    axios.get(`${URL_BASE}/proyectosESCOM-web/api/annex/get/${id}`, { headers: headers })
       .then(response => {
         dispatch({
           type: GET_ANNEX_ID,
@@ -161,7 +180,7 @@ export function addAnnex(token, annex) {
     'operacion': PERMIT_ADD_ANNEX
   };
   return (dispatch, getState) => {
-    axios.post(`${URL_BASE}/api/annex/add`, annex, { headers: headers })
+    axios.post(`${URL_BASE}/proyectosESCOM-web/api/annex/add`, annex, { headers: headers })
       .then(response => {
         dispatch({
           type: ADD_ANNEX,
@@ -175,11 +194,13 @@ export function addAnnex(token, annex) {
           });
         } else {
           if (error.request) {
+            var data = JSON.parse(error.request.response);
+            let respuesta = data.respuesta;
             dispatch({
-              type: ADD_ANNEX,
-              payload: 'error server'
+                type: ADD_ANNEX,
+                payload: respuesta
             });
-          }
+        }
         }
 
       });
@@ -199,7 +220,7 @@ export function editAnnex(token, annex) {
     'operacion': PERMIT_EDIT_ANNEX
   };
   return (dispatch, getState) => {
-    axios.put(`${URL_BASE}/api/annex/edit`, annex, { headers: headers })
+    axios.put(`${URL_BASE}/proyectosESCOM-web/api/annex/edit`, annex, { headers: headers })
       .then(response => {
         dispatch({
           type: EDIT_ANNEX,
@@ -213,11 +234,13 @@ export function editAnnex(token, annex) {
           });
         } else {
           if (error.request) {
+            var data = JSON.parse(error.request.response);
+            let respuesta = data.respuesta;
             dispatch({
-              type: EDIT_ANNEX,
-              payload: 'error server'
+                type: EDIT_ANNEX,
+                payload: respuesta
             });
-          }
+        }
         }
 
       });
@@ -238,7 +261,7 @@ export function disableAnnex(token, id) {
     'operacion': PERMIT_DISABLE_ANNEX
   };
   return (dispatch, getState) => {
-    axios.put(`${URL_BASE}/api/annex/disable/${id}`, requestData, { headers: headers })
+    axios.put(`${URL_BASE}/proyectosESCOM-web/api/annex/disable/${id}`, requestData, { headers: headers })
       .then(response => {
         dispatch({
           type: DISABLE_ANNEX,
@@ -252,11 +275,13 @@ export function disableAnnex(token, id) {
           });
         } else {
           if (error.request) {
+            var data = JSON.parse(error.request.response);
+            let respuesta = data.respuesta;
             dispatch({
-              type: ADD_MESSAGE_DISABLE,
-              payload: 'error server'
+                type: ADD_MESSAGE_DISABLE,
+                payload: respuesta
             });
-          }
+        }
         }
 
       });

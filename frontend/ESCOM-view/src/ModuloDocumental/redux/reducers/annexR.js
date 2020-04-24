@@ -1,11 +1,12 @@
-import { SEARCH_ANNEX_S, ADD_MESSAGE_ADD, ADD_MESSAGE_EDIT, ADD_ANNEX, EDIT_ANNEX, GET_ANNEX_ID, GET_LIST_ANNEXES, ADD_MESSAGE_DISABLE, DISABLE_ANNEX } from '../actions/annexA.js';
+import { STATE_ANNEX, SEARCH_ANNEX_S, ADD_MESSAGE_ADD, ADD_MESSAGE_EDIT, ADD_ANNEX, EDIT_ANNEX, GET_ANNEX_ID, GET_LIST_ANNEXES, ADD_MESSAGE_DISABLE, DISABLE_ANNEX } from '../actions/annexA.js';
 
 const initialState = {
     listAnnexR: [],
     annexR: [],
     messageEdit: '',
     messageAdd: '',
-    messageDisable: ''
+    messageDisable: '',
+    stateAnnex: false
 }
 
 export function reducersAnnex(state = initialState, action) {
@@ -29,6 +30,8 @@ export function reducersAnnex(state = initialState, action) {
             return Object.assign({}, state, { messageAdd: action.payload })
         case ADD_MESSAGE_DISABLE:
             return Object.assign({}, state, { messageDisable: action.payload })
+        case STATE_ANNEX:
+            return Object.assign({}, state, { stateAnnex: action.payload })
         default:
             return state
     }

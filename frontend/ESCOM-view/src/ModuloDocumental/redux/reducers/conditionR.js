@@ -1,4 +1,4 @@
-import { GET_LIST_CONDITIONS, EDIT_CONDITION, ADD_MESSAGE_EDIT, ADD_MESSAGE_ADD, GET_CONDITIONS_PER, GET_CONDITION_ID, ADD_CONDITION, DISABLE_CONDITION, ADD_MESSAGE_DISABLE, ADD_MESSAGE_APPROVE, APPROVE_CONDITION } from '../actions/conditionA.js'
+import { STATE_CONDITION, STATE_CONDITION_PER, GET_LIST_CONDITIONS, EDIT_CONDITION, ADD_MESSAGE_EDIT, ADD_MESSAGE_ADD, GET_CONDITIONS_PER, GET_CONDITION_ID, ADD_CONDITION, DISABLE_CONDITION, ADD_MESSAGE_DISABLE, ADD_MESSAGE_APPROVE, APPROVE_CONDITION } from '../actions/conditionA.js'
 
 const initialState = {
     listConditions: [],
@@ -7,7 +7,9 @@ const initialState = {
     messageEdit: '',
     messageAdd: '',
     messageDisable: '',
-    messageApprove: ''
+    messageApprove: '',
+    stateCondition: false,
+    stateConditionPer: false
 }
 
 export function reducersCondition(state = initialState, action) {
@@ -35,6 +37,10 @@ export function reducersCondition(state = initialState, action) {
             return Object.assign({}, state, { messageDisable: action.payload })
         case ADD_MESSAGE_APPROVE:
             return Object.assign({}, state, { messageApprove: action.payload })
+        case STATE_CONDITION_PER:
+            return Object.assign({}, state, { stateConditionPer: action.payload })
+        case STATE_CONDITION:
+            return Object.assign({}, state, { stateCondition: action.payload })
         default:
             return state
     }

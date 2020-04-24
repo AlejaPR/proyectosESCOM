@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.pojo;
 
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
@@ -10,28 +5,68 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
+ * This is the POJO class of the commentary entity. contains the variables of
+ * the table without annotations
  *
- * @author HASHY
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 public class CommentaryP implements Serializable {
 
+    /**
+     * id variable
+     */
     private int id;
+
+    /**
+     * variable message commentary
+     */
     private String message;
+
+    /**
+     * variable date commentary
+     */
     private Date date;
+
+    /**
+     * variable id user commentary
+     */
     private int idUser;
+
+    /**
+     * variable name user commentary
+     */
     private String nameUser;
+
+    /**
+     * variable id activity commentary
+     */
     private int idActivity;
+
+    /**
+     * request data variable
+     */
     private DatosSolicitudPOJO requestData;
 
+    /**
+     * constructor method
+     */
     public CommentaryP() {
     }
 
+    /**
+     * constructor method
+     *
+     * @param id
+     * @param message
+     * @param date
+     */
     public CommentaryP(int id, String message, Date date) {
         this.id = id;
         this.message = message;
         this.date = date;
     }
 
+    //getter and setter
     public int getId() {
         return id;
     }
@@ -79,7 +114,7 @@ public class CommentaryP implements Serializable {
     public void setIdActivity(int idActivity) {
         this.idActivity = idActivity;
     }
-        
+
     public DatosSolicitudPOJO getRequestData() {
         return requestData;
     }

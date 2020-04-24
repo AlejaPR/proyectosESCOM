@@ -1,12 +1,16 @@
 import axios from 'axios';
 
 import { desencriptar } from '../../../SuperAdministrador/componentes/general/Encriptar.js';
+import { URL_BASE } from '../../../SuperAdministrador/utilitario/Configuracion.js';
 
 export const GET_LIST_CONDITIONS_USER = 'GET_LIST_CONDITIONS_USER';
 export const GET_LIST_USERS_CONDITION = 'GET_LIST_USERS_CONDITION';
 export const GET_LIST_USERS = 'GET_LIST_USERS';
 export const ASSOCIATE_USER_CONDITION = 'ASSOCIATE_USER_CONDITION';
 export const DELETE_USER_CONDITION = 'DELETE_USER_CONDITION';
+export const STATE_CONDITIONS_USER = 'STATE_CONDITIONS_USER';
+export const STATE_USERS_CONDITION = 'STATE_USERS_CONDITION';
+export const STATE_USERS = 'STATE_USERS';
 
 export const PERMIT_LIST_USERS = 'MD_Prueba';
 export const PERMIT_LIST_CONDITIONS_USER = 'MD_Prueba';
@@ -17,8 +21,6 @@ export const PERMIT_DELETE_USER_CONDITION = 'MD_Prueba';
 export const ADD_MESSAGE_ASSOCIATE = 'ADD_MESSAGE_ASSOCIATE';
 export const ADD_MESSAGE_DELETE = 'ADD_MESSAGE_DELETE';
 export const ADD_MESSAGE = 'ADD_MESSAGE';
-
-const URL_BASE = 'http://localhost:9090/proyectosESCOM-web';
 
 export function addMessageAssociate(mensaje) {
     return (dispatch, getState) => {
@@ -46,7 +48,7 @@ export function getConditionsUser(token, id) {
         'Permiso': PERMIT_LIST_CONDITIONS_USER
     }
     return (dispatch, getState) => {
-        axios.get(`${URL_BASE}/api/userCondition/list/` + id, { headers: headers })
+        axios.get(`${URL_BASE}/proyectosESCOM-web/api/userCondition/list/` + id, { headers: headers })
             .then(response => {
                 dispatch({
                     type: GET_LIST_CONDITIONS_USER,
@@ -60,10 +62,19 @@ export function getConditionsUser(token, id) {
                     });
                 } else {
                     if (error.request) {
-                        dispatch({
-                            type: ADD_MESSAGE,
-                            payload: 'error server'
-                        });
+                        var data = JSON.parse(error.request.response);
+                        let respuesta = data.respuesta;
+                        if (respuesta === 'Sin permiso') {
+                            dispatch({
+                                type: STATE_CONDITIONS_USER,
+                                payload: true
+                            });
+                        } else {
+                            dispatch({
+                                type: ADD_MESSAGE,
+                                payload: respuesta
+                            });
+                        }
                     }
                 }
             });
@@ -78,7 +89,7 @@ export function getListUser(token) {
         'Permiso': PERMIT_LIST_USERS
     }
     return (dispatch, getState) => {
-        axios.get(`${URL_BASE}/api/userCondition/listUsers/`, { headers: headers })
+        axios.get(`${URL_BASE}/proyectosESCOM-web/api/userCondition/listUsers/`, { headers: headers })
             .then(response => {
                 dispatch({
                     type: GET_LIST_USERS,
@@ -92,10 +103,19 @@ export function getListUser(token) {
                     });
                 } else {
                     if (error.request) {
-                        dispatch({
-                            type: ADD_MESSAGE,
-                            payload: 'error server'
-                        });
+                        var data = JSON.parse(error.request.response);
+                        let respuesta = data.respuesta;
+                        if (respuesta === 'Sin permiso') {
+                            dispatch({
+                                type: STATE_USERS,
+                                payload: true
+                            });
+                        } else {
+                            dispatch({
+                                type: ADD_MESSAGE,
+                                payload: respuesta
+                            });
+                        }
                     }
                 }
             });
@@ -110,7 +130,7 @@ export function getListUsersCondition(token, id) {
         'Permiso': PERMIT_LIST_USERS_CONDITION
     }
     return (dispatch, getState) => {
-        axios.get(`${URL_BASE}/api/userCondition/listUsersC/` + id, { headers: headers })
+        axios.get(`${URL_BASE}/proyectosESCOM-web/api/userCondition/listUsersC/` + id, { headers: headers })
             .then(response => {
                 dispatch({
                     type: GET_LIST_USERS_CONDITION,
@@ -124,10 +144,19 @@ export function getListUsersCondition(token, id) {
                     });
                 } else {
                     if (error.request) {
-                        dispatch({
-                            type: ADD_MESSAGE,
-                            payload: 'error server'
-                        });
+                        var data = JSON.parse(error.request.response);
+                        let respuesta = data.respuesta;
+                        if (respuesta === 'Sin permiso') {
+                            dispatch({
+                                type: STATE_USERS_CONDITION,
+                                payload: true
+                            });
+                        } else {
+                            dispatch({
+                                type: ADD_MESSAGE,
+                                payload: respuesta
+                            });
+                        }
                     }
                 }
             });
@@ -148,7 +177,7 @@ export function associateUserCondition(token, userCondition) {
         'operacion': PERMIT_ASSOCIATE_USER_CONDITION
     };
     return (dispatch, getState) => {
-        axios.post(`${URL_BASE}/api/userCondition/associate`, userCondition, { headers: headers })
+        axios.post(`${URL_BASE}/proyectosESCOM-web/api/userCondition/associate`, userCondition, { headers: headers })
             .then(response => {
                 dispatch({
                     type: ASSOCIATE_USER_CONDITION,
@@ -162,9 +191,11 @@ export function associateUserCondition(token, userCondition) {
                     });
                 } else {
                     if (error.request) {
+                        var data = JSON.parse(error.request.response);
+                        let respuesta = data.respuesta;
                         dispatch({
                             type: ADD_MESSAGE_ASSOCIATE,
-                            payload: 'error server'
+                            payload: respuesta
                         });
                     }
                 }
@@ -185,7 +216,7 @@ export function deleteUserCondition(token, userCondition) {
         'operacion': PERMIT_DELETE_USER_CONDITION
     };
     return (dispatch, getState) => {
-        axios.post(`${URL_BASE}/api/userCondition/delete`, userCondition, { headers: headers })
+        axios.post(`${URL_BASE}/proyectosESCOM-web/api/userCondition/delete`, userCondition, { headers: headers })
             .then(response => {
                 dispatch({
                     type: DELETE_USER_CONDITION,
@@ -199,9 +230,11 @@ export function deleteUserCondition(token, userCondition) {
                     });
                 } else {
                     if (error.request) {
+                        var data = JSON.parse(error.request.response);
+                        let respuesta = data.respuesta;
                         dispatch({
                             type: ADD_MESSAGE_DELETE,
-                            payload: 'error server'
+                            payload: respuesta
                         });
                     }
                 }

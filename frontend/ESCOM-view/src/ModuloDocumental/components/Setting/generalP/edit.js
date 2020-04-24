@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
 import { editGeneralPro  } from '../../../redux/actions/generalProgramA.js';
-import { required, minimum, fiveHundred, twenty } from '../../utilitarian/validations.js';
+import { required, minimum, thousand, threeHundred } from '../../utilitarian/validations.js';
 
 class Edit extends Component {
 
@@ -36,7 +36,7 @@ class Edit extends Component {
                                     <label for="form_control_1">Nombre: </label>
                                     <div className="row">
                                         <div className="col-sm">
-                                            <Field name="name" validate={[required, minimum, twenty]} component={generarInput} label="Nombre" />
+                                            <Field name="name" validate={[required, minimum, threeHundred]} component={generarInput} label="Nombre" />
                                         </div>
                                     </div>
                                     <br />
@@ -44,7 +44,7 @@ class Edit extends Component {
                                     <label for="form_control_1">Descripción: </label>
                                     <div className="row">
                                         <div className="col-sm">
-                                            <Field name="description" validate={[required, minimum, fiveHundred]} component={generarText} label="Denominación del programa" />
+                                            <Field name="description" validate={[required, minimum, thousand]} component={generarText} label="Denominación del programa" />
                                         </div>
                                     </div>
                                 </div>

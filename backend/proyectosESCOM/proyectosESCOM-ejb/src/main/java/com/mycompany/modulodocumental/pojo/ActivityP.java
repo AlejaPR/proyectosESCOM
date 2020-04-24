@@ -1,33 +1,88 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.pojo;
 
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import java.io.Serializable;
 
 /**
- * @author HASHY
+ * This is the POJO class of the activity entity. contains the variables of the
+ * table without annotations
+ *
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 public class ActivityP implements Serializable {
 
+    /**
+     * id variable
+     */
     private int id;
+
+    /**
+     * variable name activity
+     */
     private String name;
+
+    /**
+     * variable description activity
+     */
     private String description;
+
+    /**
+     * variable information activity
+     */
     private String information;
+
+    /**
+     * variable state activity
+     */
     private int state;
+
+    /**
+     * variable number activity
+     */
     private String number;
+
+    /**
+     * variable parent activity
+     */
     private int parentActivity;
+
+    /**
+     * variable id condition activity
+     */
     private int idCondition;
+
+    /**
+     * variable id annex activity
+     */
     private int idAnnex;
+
+    /**
+     * variable type activity
+     */
     private int type;
+
+    /**
+     * request data variable
+     */
     private DatosSolicitudPOJO requestData;
 
+    /**
+     * constructor method
+     */
     public ActivityP() {
     }
 
+    /**
+     * constructor method
+     *
+     * @param id
+     * @param name
+     * @param description
+     * @param information
+     * @param state
+     * @param type
+     * @param number
+     */
     public ActivityP(int id, String name, String description, String information, int state, int type, String number) {
         this.id = id;
         this.name = name;
@@ -38,6 +93,7 @@ public class ActivityP implements Serializable {
         this.number = number;
     }
 
+    //getter and setter
     public int getId() {
         return id;
     }
