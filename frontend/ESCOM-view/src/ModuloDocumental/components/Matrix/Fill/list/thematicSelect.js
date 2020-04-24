@@ -42,7 +42,7 @@ class ThematicList extends Component {
                             </div>
                             <div className="col-sm">
                                 <h6><strong>Objetivo</strong></h6>
-                                <p>{this.props.programTh.objetive}</p>
+                                <p>{this.props.programTh.objetive === '' || this.props.programTh.objetive === undefined ? 'No definido' : this.props.programTh.objetive}</p>
                             </div>
                         </div>
                         <div className="row">
