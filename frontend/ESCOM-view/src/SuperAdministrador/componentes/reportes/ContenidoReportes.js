@@ -136,7 +136,7 @@ class ContenidoReportes extends React.Component {
 	}
 
 	validarFechas = (fechaInicio, fechaFin) => {
-		if ((fechaInicio > fechaFin) | (fechaInicio.getTime() === fechaFin.getTime())) {
+		if (fechaInicio > fechaFin) {
 			NotificationManager.warning('Ingrese un rango de fechas valido');
 			return false;
 		} else {

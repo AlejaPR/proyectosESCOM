@@ -2,7 +2,7 @@ import axios from 'axios';
 import { desencriptar } from '../componentes/general/Encriptar.js';
 import { mensajesFiltro } from '../mensajesDeError/MensajeDeErrorFiltro.js';
 import { mensajeDeCargar, mensajeDeRegistro } from '../mensajesDeError/MensajesDeErrorConfiguracion.js';
-import {URL_BASE} from '../utilitario/Configuracion.js';
+import { URL_BASE } from '../utilitario/Configuracion.js';
 
 export const ESTADO_CONFIGURACION = 'ESTADO_CONFIGURACION';
 export const MOSTRAR_CONFIGURACION = 'MOSTRAR_CONFIGURACION'
@@ -41,23 +41,29 @@ export function actionActualizarConfiguracion(configuracion, token) {
                 });
 
             }).catch((error) => {
-                if (error.request.response === '') {
-                    dispatch({
-                        type: MENSAJE_CONFIGURACION,
-                        mensaje: 'Servidor fuera de servicio temporalmente'
-                    });
-                } else {
-                    if (error.request) {
-                        var o = JSON.parse(error.request.response);
-                        let respuesta = mensajeDeRegistro(o.respuesta);
+                try {
+                    if (error.request.response === '') {
                         dispatch({
                             type: MENSAJE_CONFIGURACION,
-                            mensaje: respuesta
+                            mensaje: 'Servidor fuera de servicio temporalmente'
                         });
+                    } else {
+                        if (error.request) {
+                            var o = JSON.parse(error.request.response);
+                            let respuesta = mensajeDeRegistro(o.respuesta);
+                            dispatch({
+                                type: MENSAJE_CONFIGURACION,
+                                mensaje: respuesta
+                            });
 
+                        }
                     }
+                } catch (error) {
+                    dispatch({
+                        type: MENSAJE_CONFIGURACION,
+                        mensaje: 'Ocurrio un error en el servidor'
+                    });
                 }
-
             });
     }
 }
@@ -75,41 +81,51 @@ export function consultarConfiguracion(token) {
                     configuracion: response.data[0]
                 });
             }).catch((error) => {
-                if (error.request.response === '') {
+                try {
+                    if (error.request.response === '') {
+                        dispatch({
+                            type: MOSTRAR_CONFIGURACION,
+                            configuracion: {
+                                barraLateral: "#164D14",
+                                barraSuperior: "white",
+                                botones: "#164D14"
+                            }
+                        });
+                    } else {
+                        if (error.request) {
+                            var o = JSON.parse(error.request.response);
+                            let respuesta = mensajesFiltro(o.respuesta);
+                            if (respuesta !== '') {
+                                dispatch({
+                                    type: MOSTRAR_CONFIGURACION,
+                                    configuracion: {
+                                        barraLateral: "#164D14",
+                                        barraSuperior: "#FFFFFF",
+                                        botones: "#164D14"
+                                    }
+                                });
+                            } else {
+                                dispatch({
+                                    type: MOSTRAR_CONFIGURACION,
+                                    configuracion: {
+                                        barraLateral: "#164D14",
+                                        fondoSuperior: "#FFFFFF",
+                                        botones: "#164D14"
+                                    }
+                                });
+                            }
+                        }
+                    }
+                } catch (error) {
                     dispatch({
                         type: MOSTRAR_CONFIGURACION,
                         configuracion: {
                             barraLateral: "#164D14",
-                            barraSuperior: "white",
+                            fondoSuperior: "#FFFFFF",
                             botones: "#164D14"
                         }
                     });
-                } else {
-                    if (error.request) {
-                        var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesFiltro(o.respuesta);
-                        if (respuesta !== '') {
-                            dispatch({
-                                type: MOSTRAR_CONFIGURACION,
-                                configuracion: {
-                                    barraLateral: "#164D14",
-                                    barraSuperior: "#FFFFFF",
-                                    botones: "#164D14"
-                                }
-                            });
-                        } else {
-                            dispatch({
-                                type: MOSTRAR_CONFIGURACION,
-                                configuracion: {
-                                    barraLateral: "#164D14",
-                                    fondoSuperior: "#FFFFFF",
-                                    botones: "#164D14"
-                                }
-                            });
-                        }
-                    }
                 }
-
             });
     }
 }
@@ -126,7 +142,39 @@ export function consultarConfiguracionLogin() {
                     configuracion: response.data[0]
                 });
             }).catch((error) => {
-                if (error.request.response === '') {
+                try {
+                    if (error.request.response === '') {
+                        dispatch({
+                            type: CONFIGURACION_LOGIN,
+                            configuracion: {
+                                botones: "#0E3D38",
+                                imagenLogin: undefined
+                            }
+                        });
+                    } else {
+                        if (error.request) {
+                            var o = JSON.parse(error.request.response);
+                            let respuesta = mensajesFiltro(o.respuesta);
+                            if (respuesta !== '') {
+                                dispatch({
+                                    type: CONFIGURACION_LOGIN,
+                                    configuracion: {
+                                        botones: "#0E3D38",
+                                        imagenLogin: undefined
+                                    }
+                                });
+                            } else {
+                                dispatch({
+                                    type: CONFIGURACION_LOGIN,
+                                    configuracion: {
+                                        botones: "#0E3D38",
+                                        imagenLogin: undefined
+                                    }
+                                });
+                            }
+                        }
+                    }
+                } catch (error) {
                     dispatch({
                         type: CONFIGURACION_LOGIN,
                         configuracion: {
@@ -134,30 +182,7 @@ export function consultarConfiguracionLogin() {
                             imagenLogin: undefined
                         }
                     });
-                } else {
-                    if (error.request) {
-                        var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesFiltro(o.respuesta);
-                        if (respuesta !== '') {
-                            dispatch({
-                                type: CONFIGURACION_LOGIN,
-                                configuracion: {
-                                    botones: "#0E3D38",
-                                    imagenLogin: undefined
-                                }
-                            });
-                        } else {
-                            dispatch({
-                                type: CONFIGURACION_LOGIN,
-                                configuracion: {
-                                    botones: "#0E3D38",
-                                    imagenLogin: undefined
-                                }
-                            });
-                        }
-                    }
                 }
-
             });
     }
 }
@@ -176,29 +201,35 @@ export function actionConsultarConfiguracionCompleta(token) {
                     configuracion: response.data[0]
                 });
             }).catch((error) => {
-                if (error.request.response === '') {
-                    dispatch({
-                        type: MENSAJE_CONFIGURACION,
-                        mensaje: 'Servidor fuera de servicio temporalmente'
-                    });
-                } else {
-                    if (error.request) {
-                        var o = JSON.parse(error.request.response);
-                        let respuesta = mensajeDeCargar(o.respuesta);
-                        if (respuesta === 'Sin permiso') {
-                            dispatch({
-                                type: ESTADO_CONFIGURACION,
-                                estado: true
-                            });
-                        } else {
-                            dispatch({
-                                type: MENSAJE_CONFIGURACION,
-                                mensaje: respuesta
-                            });
+                try {
+                    if (error.request.response === '') {
+                        dispatch({
+                            type: MENSAJE_CONFIGURACION,
+                            mensaje: 'Servidor fuera de servicio temporalmente'
+                        });
+                    } else {
+                        if (error.request) {
+                            var o = JSON.parse(error.request.response);
+                            let respuesta = mensajeDeCargar(o.respuesta);
+                            if (respuesta === 'Sin permiso') {
+                                dispatch({
+                                    type: ESTADO_CONFIGURACION,
+                                    estado: true
+                                });
+                            } else {
+                                dispatch({
+                                    type: MENSAJE_CONFIGURACION,
+                                    mensaje: respuesta
+                                });
+                            }
                         }
                     }
+                } catch (error) {
+                    dispatch({
+                        type: MENSAJE_CONFIGURACION,
+                        mensaje: 'Ocurrio un error en el servidor'
+                    });
                 }
-
             });
     }
 }

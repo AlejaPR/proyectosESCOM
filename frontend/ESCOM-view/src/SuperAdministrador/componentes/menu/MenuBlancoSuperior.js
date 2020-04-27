@@ -171,7 +171,7 @@ class BarraSuperior extends React.Component {
 		return (
 			<div>
 				<div>
-					<div className="jumbotron p-1 jumbotron-fluid shadow" style={{ background: this.props.configuracion.barraSuperior }} >
+					<div className="jumbotron p-1 jumbotron-fluid shadow" style={{ background: this.props.configuracion.barraSuperior,overflow:'hidden',position:'fixed', width:'100%',zIndex:'13' }} >
 						<nav className="navbar navbar-expand" style={this.fondoPerfil()}>
 							<div className="collapse navbar-collapse" id="navbarSupportedContent">
 								<ul className="navbar-nav ml-auto mt-2 mt-lg-1 ">

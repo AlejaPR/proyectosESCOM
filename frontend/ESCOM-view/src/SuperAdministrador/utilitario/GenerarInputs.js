@@ -366,7 +366,7 @@ function RenderAlgoCorreo({
         onClose={handlePopoverClose}
         disableRestoreFocus
       >
-        <Typography className={classesP.typography}>Si se modifica el correo, para poder acceder el usuario tendra que recuperar la contraseña desde el iniciar sesion </Typography>
+        <Typography className={classesP.typography}>Si se modifica el correo,el usuario para poder acceder tendra que recuperar la contraseña desde el formulario de iniciar sesion</Typography>
       </Popover>
       <TextField
         fullWidth

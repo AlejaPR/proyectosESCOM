@@ -44,12 +44,12 @@ body {
  
 
  
-@media(min-width:768px) { 
+@media(min-width:400px) { 
  
     #wrapper { 
     /* ajuste de contenido */
     padding-left: 190px; 
- 
+      padding-top: 76px;
     } 
  
   

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { desencriptar } from '../componentes/general/Encriptar.js';
 import { mensajeDeConsulta } from '../mensajesDeError/MensajesDeErrorReporte.js';
-import {URL_BASE} from '../utilitario/Configuracion.js';
+import { URL_BASE } from '../utilitario/Configuracion.js';
 
 export const REPORTES = 'REPORTES';
 export const MENSAJE_REPORTE = 'MENSAJE_REPORTE';
@@ -16,11 +16,6 @@ export function actionConsultarReporte(token, reporte) {
         'TokenAuto': desencriptar(token),
         'Permiso': PERMISO_REALIZAR
     }
-    // actividad.datosSolicitud = {
-    //     'ip': localStorage.getItem('Ip'),
-    //     'token': desencriptar(token),
-    //     'operacion': PERMISO_ASIGNACION_ACTIVIDADES
-    // }
     return (dispatch, getState) => {
         axios.post(`${URL_BASE}/proyectosESCOM-web/api/bitacora/consultar`, reporte, { headers: headers })
             .then(response => {
@@ -29,24 +24,29 @@ export function actionConsultarReporte(token, reporte) {
                     reporte: response.data
                 });
             }).catch((error) => {
-                if (error.request.response === '') {
-                    dispatch({
-                        type: MENSAJE_REPORTE,
-                        mensaje: 'Servidor fuera de servicio temporalmente'
-                    });
-                } else {
-                    if (error.request) {
-                        var o = JSON.parse(error.request.response);
-                        let respuesta = mensajeDeConsulta(o.respuesta);
+                try {
+                    if (error.request.response === '') {
                         dispatch({
                             type: MENSAJE_REPORTE,
-                            mensaje: respuesta
+                            mensaje: 'Servidor fuera de servicio temporalmente'
                         });
+                    } else {
+                        if (error.request) {
+                            var o = JSON.parse(error.request.response);
+                            let respuesta = mensajeDeConsulta(o.respuesta);
+                            dispatch({
+                                type: MENSAJE_REPORTE,
+                                mensaje: respuesta
+                            });
+                        }
                     }
+                } catch (error) {
+                    dispatch({
+                        type: MENSAJE_REPORTE,
+                        mensaje: 'Ocurrio un error en el servidor'
+                    });
                 }
-
             });
-
     }
 }
 

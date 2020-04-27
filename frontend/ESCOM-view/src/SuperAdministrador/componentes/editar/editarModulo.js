@@ -244,15 +244,15 @@ class EditarModulo extends React.Component {
         if (this.props.initialValues.id === undefined || this.props.initialValues.id === 0) {
             this.props.history.goBack();
         }
-        //  else {
-        //     this.props.actionCargarInformacionDeModulo(this.props.codigoModulo, localStorage.getItem('Token'));
-        // }
+         else {
+            this.props.actionCargarInformacionDeModulo(this.props.codigoModulo, localStorage.getItem('Token'));
+        }
     }
 
 
     onClickCancelar = (event) => {
         event.preventDefault();
-        this.handlePreview(null);
+        // this.handlePreview(null);
         this.props.history.goBack();
     }
 

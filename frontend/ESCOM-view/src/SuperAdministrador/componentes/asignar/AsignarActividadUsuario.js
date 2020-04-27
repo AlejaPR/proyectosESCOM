@@ -66,7 +66,7 @@ class AsignarActividadUsuario extends React.Component {
                     this.props.actualizarMensajeAsignar('');
                     break;
                 case 'No se encontraron datos del usuario':
-                    NotificationManager.error('No se encontraron actividades asociadas al usuario');
+                    NotificationManager.warning('No se encontraron actividades asociadas al usuario');
                     this.props.actualizarMensajeAsignar('');
 
                     break;
@@ -176,7 +176,7 @@ class AsignarActividadUsuario extends React.Component {
                     <h4>Administrar actividades del usuario</h4>
                 </div>
                 <Barra texto="Inicio > Administracion de usuarios > Administracion de actividades del usuario" />
-                <div className="container" style={{
+                <div className="container col-sm-12" style={{
                     paddingTop: "7px",
                     paddingRight: "44px",
                     paddingLeft: "40px",

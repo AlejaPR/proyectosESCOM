@@ -172,7 +172,7 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
         em.merge(modulo);
     }
 
-    /**
+        /**
      * Metodo que realiza la consulta a la tabla modulo Devuelve los datos de un
      * modulo registrado para la bitacora
      *
@@ -182,22 +182,21 @@ public class ModuloFacade extends AbstractFacade<Modulo> implements ModuloFacade
      */
     @Override
     public List<ModuloPOJO> buscarModuloBitacora(String palabraBusqueda) {
-
         String busqueda = palabraBusqueda.toLowerCase();
         List<Modulo> lista = new ArrayList();
         TypedQuery<Modulo> moduloDB = em.createQuery("select m from Modulo m where Lower(m.nombreModulo)=:busqueda", Modulo.class);
         moduloDB.setParameter("busqueda", busqueda);
         lista = moduloDB.getResultList();
-
         List<ModuloPOJO> listaModulo = new ArrayList();
         for (Modulo m : lista) {
             ModuloPOJO moduloRespuesta = new ModuloPOJO();
             moduloRespuesta.setIdModulo(m.getIdModulo());
             moduloRespuesta.setNombreModulo(m.getNombreModulo());
+            listaModulo.add(moduloRespuesta);
         }
         return listaModulo;
     }
-
+    
     /**
      * Metodo que realiza la consulta a la tabla modulo Devuelve los datos de un
      * modulo registrado para la bitacora, recibe el id de modulo

@@ -204,8 +204,8 @@ class ContenidoAdminActividad extends React.Component {
 										}}
 										columns={[
 											{ title: 'Nombre', field: 'nombre', headerStyle: estiloCabecera, cellStyle: estiloFila },
+											{ title: 'Descripcion', field: 'descripcionActividad', headerStyle: estiloCabecera, cellStyle: estiloFila },
 											{ title: 'Modulo', field: 'moduloActividad', headerStyle: estiloCabecera, cellStyle: estiloFila },
-
 											{
 												title: 'Estado', field: 'estado',
 												render: rowData => {

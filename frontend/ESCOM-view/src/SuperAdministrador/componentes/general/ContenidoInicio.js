@@ -63,6 +63,11 @@ class ContenidoInicio extends React.Component {
 		this.props.actionCerrarSesionInicio(localStorage.getItem('Token'));
 	}
 
+	
+	onClickRedirigir= () => {
+		console.log('hola');
+	}
+
 	render() {
 		return (
 			<>
@@ -101,6 +106,7 @@ class ContenidoInicio extends React.Component {
 							toggle={this.toggle}
 							className={this.props.className}
 							size="col-md-6"
+							style={{width:'450px'}}
 						>
 							<ModalBody>
 								<MaterialTable
@@ -128,24 +134,35 @@ class ContenidoInicio extends React.Component {
 
 									}}
 									columns={[
-										{ title: '', field: 'imagenModulo', render: rowData => { return <img src={campo(rowData.imagenModulo)} alt='' style={{ width: 60, borderRadius: '50%' }} /> } },
-										{ title: '', field: 'nombreModulo', headerStyle: estiloCabecera, cellStyle: estiloFila },
+										{
+											title: '', field: 'imagenModulo', render: rowData => {
+												return <Button
+														variant="contained"
+														style={{
+															background: "white",
+															fontSize: "14px",
+															fontFamily: "sans-serif",
+															textTransform: "none",
+															width:'100%'
+														}}
+														onClick={() => {
+															this.props.history.push(rowData.url);
+														}}
+														startIcon={<img src={campo(rowData.imagenModulo)} alt='' style={{ width: 60, borderRadius: '50%' }} />}
+													>
+													<div>
+														<span>{rowData.nombreModulo}</span>
+													</div>
+													</Button>
+											}
+										}
 									]}
 									data={this.props.modulosAcceso}
 									options={{
 										search: false,
 										rowStyle: estiloFila
 									}}
-									actions={[
-										{
-											icon: 'subdirectory_arrow_right',
-											tooltip: 'Ir',
-											onClick: (event, rowData) => {
-												event.preventDefault();
-												this.props.history.push(rowData.url);
-											}
-										}
-									]}
+									
 								/>
 								<ModalFooter>
 

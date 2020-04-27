@@ -35,6 +35,8 @@ class editar extends React.Component {
   }
 
   componentDidUpdate() {
+    console.log('cedula del up',this.props.cedula)
+    debugger;
     if (this.props.mensajeEditar !== '') {
       switch (this.props.mensajeEditar) {
         case 'Ocurrio un error en el servidor':
@@ -60,8 +62,12 @@ class editar extends React.Component {
           this.props.actualizarMensajeEditar('');
           break;
         case 'El correo o numero de documento ya esta registrado':
+          console.log('cedula del state es ',this.props.cedula)
           this.props.actionCargarInformacionDeUsuario(this.props.cedula, localStorage.getItem('Token'));
           NotificationManager.error('El correo o numero de identificacion ya estan registrados');
+          if(this.state.cambioDocumento!==null){
+            this.setState({cambioDocumento:null})
+          }
           this.props.actualizarMensajeEditar('');
           break;
         case 'Token requerido':
@@ -88,6 +94,7 @@ class editar extends React.Component {
   }
 
   componentDidMount() {
+    console.log('cedula del state es did mount',this.props.cedula)
     if (this.props.cedula === undefined || this.props.cedula.length === 0) {
       this.props.history.goBack();
     } else {
@@ -128,14 +135,14 @@ class editar extends React.Component {
           <h4>Editar usuario</h4>
         </div>
         <Barra texto="Inicio > Administracion de usuarios > Editar usuario" />
-        <div className="container" style={{
+        <div className="container col-sm-12" style={{
           paddingTop: "7px",
           paddingRight: "44px",
           paddingLeft: "40px",
           paddingBottom: "20px",
           margin: "0px 0px 32px"
         }}>
-          <div className="container shadow" style={
+          <div className="container shadow col-sm-12" style={
             {
               background: "white",
               paddingTop: "37px",

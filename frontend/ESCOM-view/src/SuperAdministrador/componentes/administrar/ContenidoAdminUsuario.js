@@ -134,12 +134,11 @@ class ContenidoAdminUsuario extends React.Component {
 					paddingBottom: "7px",
 				}}>
 				</div>
-				<div className="container" style={{
+				<div className="container col-sm-12" style={{
 					paddingTop: "5px",
 					paddingRight: "43px",
 					paddingLeft: "40px",
-					paddingBottom: "0px",
-					margin: "0px 0px 32px"
+					paddingBottom: "0px"
 				}}>
 					<div className="container shadow" style={fondoBarraSuperior}>
 						<div>

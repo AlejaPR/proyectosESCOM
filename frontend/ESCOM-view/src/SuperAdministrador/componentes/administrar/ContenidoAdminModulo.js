@@ -69,7 +69,7 @@ class ContenidoAdminModulo extends React.Component {
 		if (this.props.mensajeSuspender !== '') {
 			switch (this.props.mensajeSuspender) {
 				case 'Sin permiso':
-					NotificationManager.error('No tiene permisos para suspender/activar los usuarios');
+					NotificationManager.error('No tiene permisos para suspender/activar los modulos');
 					break;
 				case 'Operacion hecha con exito':
 					NotificationManager.success('Operacion realizada con exito');
@@ -242,6 +242,7 @@ class ContenidoAdminModulo extends React.Component {
 													'url': rowData.url.replace('/', '')
 												}
 												this.props.actionAsignarModulo(moduloEdit);
+												this.props.actionAsignarCodigoModulo(rowData.idModulo);
 												this.props.history.push('/editarModulo');
 											}
 										},

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { encriptar, desencriptar } from '../componentes/general/Encriptar.js';
-import {URL_BASE} from '../utilitario/Configuracion.js';
+import { URL_BASE } from '../utilitario/Configuracion.js';
 import {
     mensajesDeErrorModulosAcceso,
     mensajesDeErrorRegistroUsuarios,
@@ -74,21 +74,28 @@ export function actionLoginUsuario(correo, contrasena, cambiar) {
                     });
                 }
             }).catch((error) => {
-                if (error.request.response === '') {
-                    dispatch({
-                        type: MENSAJE_LOGIN,
-                        mensaje: 'Servidor fuera de servicio temporalmente'
-                    });
-                    cambiar(false);
-                } else {
-                    if (error.request) {
-                        var o = JSON.parse(error.request.response);
-                        cambiar(false);
+                try {
+                    if (error.request.response === '') {
                         dispatch({
                             type: MENSAJE_LOGIN,
-                            mensaje: o.respuesta
+                            mensaje: 'Servidor fuera de servicio temporalmente'
                         });
+                        cambiar(false);
+                    } else {
+                        if (error.request) {
+                            var o = JSON.parse(error.request.response);
+                            cambiar(false);
+                            dispatch({
+                                type: MENSAJE_LOGIN,
+                                mensaje: o.respuesta
+                            });
+                        }
                     }
+                } catch (error) {
+                    dispatch({
+                        type: MENSAJE_LOGIN,
+                        mensaje: 'Ocurrio un error en el servidor'
+                    });
                 }
             })
     };
@@ -105,22 +112,29 @@ export function actionRecuperarContrasena(correo, cambiar) {
                     mensaje: 'Se enviaron las instrucciones para recuperar la contraseña a su correo'
                 });
             }).catch((error) => {
-                if (error.request.response === '') {
-                    dispatch({
-                        type: MENSAJE_LOGIN,
-                        mensaje: 'Servidor fuera de servicio temporalmente'
-                    });
-                    cambiar(false);
-                } else {
-                    if (error.request) {
-                        var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeErrorGenerarToken(o.respuesta);
-                        cambiar(false);
+                try {
+                    if (error.request.response === '') {
                         dispatch({
                             type: MENSAJE_LOGIN,
-                            mensaje: respuesta
+                            mensaje: 'Servidor fuera de servicio temporalmente'
                         });
+                        cambiar(false);
+                    } else {
+                        if (error.request) {
+                            var o = JSON.parse(error.request.response);
+                            let respuesta = mensajesDeErrorGenerarToken(o.respuesta);
+                            cambiar(false);
+                            dispatch({
+                                type: MENSAJE_LOGIN,
+                                mensaje: respuesta
+                            });
+                        }
                     }
+                } catch (error) {
+                    dispatch({
+                        type: MENSAJE_LOGIN,
+                        mensaje: 'Ocurrio un error en el servidor'
+                    });
                 }
             })
     };
@@ -140,20 +154,27 @@ export function actionValidarToken(token) {
                     nombre: response.data
                 });
             }).catch((error) => {
-                if (error.request.response === '') {
-                    dispatch({
-                        type: MENSAJE_CONTRASENA_EXTERNA,
-                        mensaje: 'Servidor fuera de servicio temporalmente'
-                    });
-                } else {
-                    if (error.request) {
-                        var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeValidarToken(o.respuesta);
+                try {
+                    if (error.request.response === '') {
                         dispatch({
                             type: MENSAJE_CONTRASENA_EXTERNA,
-                            mensaje: respuesta
+                            mensaje: 'Servidor fuera de servicio temporalmente'
                         });
+                    } else {
+                        if (error.request) {
+                            var o = JSON.parse(error.request.response);
+                            let respuesta = mensajesDeValidarToken(o.respuesta);
+                            dispatch({
+                                type: MENSAJE_CONTRASENA_EXTERNA,
+                                mensaje: respuesta
+                            });
+                        }
                     }
+                } catch (error) {
+                    dispatch({
+                        type: MENSAJE_CONTRASENA_EXTERNA,
+                        mensaje: 'Ocurrio un error en el servidor'
+                    });
                 }
             })
     };
@@ -168,27 +189,34 @@ export function actionCambiarContrasenaExterna(correo, contrasena, token) {
         'operacion': PERMISO_CAMBIAR_CONTRASENA
     };
     return (dispatch, getState) => {
-        axios.put(`${URL_BASE}/proyectosESCOM-web/api/login/cambiarClaveExterna/${contrasenaEncryp}/${token}`,datosSolicitud)
+        axios.put(`${URL_BASE}/proyectosESCOM-web/api/login/cambiarClaveExterna/${contrasenaEncryp}/${token}`, datosSolicitud)
             .then(response => {
                 dispatch({
                     type: MENSAJE_CONTRASENA_EXTERNA,
                     mensaje: 'Contraseña actualizada'
                 });
             }).catch((error) => {
-                if (error.request.response === '') {
-                    dispatch({
-                        type: MENSAJE_CONTRASENA_EXTERNA,
-                        mensaje: 'Servidor fuera de servicio temporalmente'
-                    });
-                } else {
-                    if (error.request) {
-                        var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeCambiarContrasenaExterna(o.respuesta);
+                try {
+                    if (error.request.response === '') {
                         dispatch({
                             type: MENSAJE_CONTRASENA_EXTERNA,
-                            mensaje: respuesta
+                            mensaje: 'Servidor fuera de servicio temporalmente'
                         });
+                    } else {
+                        if (error.request) {
+                            var o = JSON.parse(error.request.response);
+                            let respuesta = mensajesDeCambiarContrasenaExterna(o.respuesta);
+                            dispatch({
+                                type: MENSAJE_CONTRASENA_EXTERNA,
+                                mensaje: respuesta
+                            });
+                        }
                     }
+                } catch (error) {
+                    dispatch({
+                        type: MENSAJE_CONTRASENA_EXTERNA,
+                        mensaje: 'Ocurrio un error en el servidor'
+                    });
                 }
             })
     };
@@ -228,12 +256,19 @@ export function actionCerrarSesionInicio(token) {
                     mensaje: 'sesion cerrada'
                 });
             }).catch(function (error) {
-                if (error.request.response === '') {
-                    dispatch({
-                        type: MENSAJE_INICIO,
-                        mensaje: 'sesion cerrada'
-                    });
-                } else {
+                try {
+                    if (error.request.response === '') {
+                        dispatch({
+                            type: MENSAJE_INICIO,
+                            mensaje: 'sesion cerrada'
+                        });
+                    } else {
+                        dispatch({
+                            type: MENSAJE_INICIO,
+                            mensaje: 'sesion cerrada'
+                        });
+                    }
+                } catch (error) {
                     dispatch({
                         type: MENSAJE_INICIO,
                         mensaje: 'sesion cerrada'
@@ -258,20 +293,27 @@ export function actionConsultarCorreo(token) {
                     email: response.data
                 });
             }).catch((error) => {
-                if (error.request.response === '') {
-                    dispatch({
-                        type: MENSAJE_CONTRASENA,
-                        mensaje: 'Servidor fuera de servicio temporalmente'
-                    });
-                } else {
-                    if (error.request) {
-                        var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeErrorConsultarCorreo(o.respuesta);
+                try {
+                    if (error.request.response === '') {
                         dispatch({
                             type: MENSAJE_CONTRASENA,
-                            mensaje: respuesta
+                            mensaje: 'Servidor fuera de servicio temporalmente'
                         });
+                    } else {
+                        if (error.request) {
+                            var o = JSON.parse(error.request.response);
+                            let respuesta = mensajesDeErrorConsultarCorreo(o.respuesta);
+                            dispatch({
+                                type: MENSAJE_CONTRASENA,
+                                mensaje: respuesta
+                            });
+                        }
                     }
+                } catch (error) {
+                    dispatch({
+                        type: MENSAJE_CONTRASENA,
+                        mensaje: 'Ocurrio un error en el servidor'
+                    });
                 }
             });
     };
@@ -291,27 +333,34 @@ export function actionConsultarUsuarios(token) {
                     respuesta: response.data
                 });
             }).catch((error) => {
-                if (error.request.response === '') {
-                    dispatch({
-                        type: MENSAJE_SUSPENDER,
-                        mensaje: 'Servidor fuera de servicio temporalmente'
-                    });
-                } else {
-                    if (error.request) {
-                        var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeErrorListarUsuarios(o.respuesta);
-                        if (respuesta === 'Sin permiso') {
-                            dispatch({
-                                type: ESTADO_USUARIOS,
-                                estado: true
-                            });
-                        } else {
-                            dispatch({
-                                type: MENSAJE_SUSPENDER,
-                                mensaje: respuesta
-                            });
+                try {
+                    if (error.request.response === '') {
+                        dispatch({
+                            type: MENSAJE_SUSPENDER,
+                            mensaje: 'Servidor fuera de servicio temporalmente'
+                        });
+                    } else {
+                        if (error.request) {
+                            var o = JSON.parse(error.request.response);
+                            let respuesta = mensajesDeErrorListarUsuarios(o.respuesta);
+                            if (respuesta === 'Sin permiso') {
+                                dispatch({
+                                    type: ESTADO_USUARIOS,
+                                    estado: true
+                                });
+                            } else {
+                                dispatch({
+                                    type: MENSAJE_SUSPENDER,
+                                    mensaje: respuesta
+                                });
+                            }
                         }
                     }
+                } catch (error) {
+                    dispatch({
+                        type: MENSAJE_SUSPENDER,
+                        mensaje: 'Ocurrio un error en el servidor'
+                    });
                 }
             });
     };
@@ -341,24 +390,30 @@ export function actionCambiarContrasena(clave, correo, token) {
                     mensaje: 'Contraseña cambiada'
                 });
             }).catch((error) => {
-                if (error.request.response === '') {
-                    dispatch({
-                        type: MENSAJE_CONTRASENA,
-                        mensaje: 'Servidor fuera de servicio temporalmente'
-                    });
-                } else {
-                    if (error.request) {
-                        var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeErrorCambiarContrasena(o.respuesta);
-                        if (respuesta !== '') {
-                            dispatch({
-                                type: MENSAJE_CONTRASENA,
-                                mensaje: respuesta
-                            });
+                try {
+                    if (error.request.response === '') {
+                        dispatch({
+                            type: MENSAJE_CONTRASENA,
+                            mensaje: 'Servidor fuera de servicio temporalmente'
+                        });
+                    } else {
+                        if (error.request) {
+                            var o = JSON.parse(error.request.response);
+                            let respuesta = mensajesDeErrorCambiarContrasena(o.respuesta);
+                            if (respuesta !== '') {
+                                dispatch({
+                                    type: MENSAJE_CONTRASENA,
+                                    mensaje: respuesta
+                                });
+                            }
                         }
                     }
+                } catch (error) {
+                    dispatch({
+                        type: MENSAJE_CONTRASENA,
+                        mensaje: 'Ocurrio un error en el servidor'
+                    });
                 }
-
             });
     }
 }
@@ -376,22 +431,29 @@ export function actionConsultarModulosAcceso(token) {
                     respuesta: response.data
                 });
             }).catch((error) => {
-                if (error.request.response === '') {
-                    dispatch({
-                        type: MENSAJE_INICIO,
-                        mensaje: 'Servidor fuera de servicio temporalmente'
-                    });
-                } else {
-                    if (error.request) {
-                        var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeErrorModulosAcceso(o.respuesta);
-                        if (respuesta !== '') {
-                            dispatch({
-                                type: MENSAJE_INICIO,
-                                mensaje: respuesta
-                            });
+                try {
+                    if (error.request.response === '') {
+                        dispatch({
+                            type: MENSAJE_INICIO,
+                            mensaje: 'Servidor fuera de servicio temporalmente'
+                        });
+                    } else {
+                        if (error.request) {
+                            var o = JSON.parse(error.request.response);
+                            let respuesta = mensajesDeErrorModulosAcceso(o.respuesta);
+                            if (respuesta !== '') {
+                                dispatch({
+                                    type: MENSAJE_INICIO,
+                                    mensaje: respuesta
+                                });
+                            }
                         }
                     }
+                } catch (error) {
+                    dispatch({
+                        type: MENSAJE_INICIO,
+                        mensaje: 'Ocurrio un error en el servidor'
+                    });
                 }
             });
     };
@@ -411,22 +473,29 @@ export function actionConsultarActividadesUsuario(numeroDocumento, token) {
                     respuesta: response.data
                 });
             }).catch((error) => {
-                if (error.request.response === '') {
-                    dispatch({
-                        type: MENSAJE_ASIGNAR,
-                        mensaje: 'Servidor fuera de servicio temporalmente'
-                    });
-                } else {
-                    if (error.request) {
-                        var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeErrorConsultarActividadesUsuario(o.respuesta);
-                        if (respuesta !== '') {
-                            dispatch({
-                                type: MENSAJE_ASIGNAR,
-                                mensaje: respuesta
-                            });
+                try {
+                    if (error.request.response === '') {
+                        dispatch({
+                            type: MENSAJE_ASIGNAR,
+                            mensaje: 'Servidor fuera de servicio temporalmente'
+                        });
+                    } else {
+                        if (error.request) {
+                            var o = JSON.parse(error.request.response);
+                            let respuesta = mensajesDeErrorConsultarActividadesUsuario(o.respuesta);
+                            if (respuesta !== '') {
+                                dispatch({
+                                    type: MENSAJE_ASIGNAR,
+                                    mensaje: respuesta
+                                });
+                            }
                         }
                     }
+                } catch (error) {
+                    dispatch({
+                        type: MENSAJE_ASIGNAR,
+                        mensaje: 'Ocurrio un error en el servidor'
+                    });
                 }
             });
     };
@@ -446,12 +515,30 @@ export function actionConsultarDocumentos(token) {
                     respuesta: response.data
                 });
             }).catch((error) => {
-                if (error.request.response === '') {
-                    dispatch({
-                        type: MENSAJE_REGISTRAR,
-                        mensaje: 'Servidor fuera de servicio temporalmente'
-                    });
-                } else {
+                try {
+                    if (error.request.response === '') {
+                        dispatch({
+                            type: MENSAJE_REGISTRAR,
+                            mensaje: 'Servidor fuera de servicio temporalmente'
+                        });
+                    } else {
+                        let cedula = {
+                            'idTipoDocumento': '1',
+                            'tipoDocumento': 'Cedula'
+                        }
+                        let tarjetaIdentidad = {
+                            'idTipoDocumento': '2',
+                            'tipoDocumento': 'Tarjeta de identidad'
+                        }
+                        var documentos = [cedula, tarjetaIdentidad];
+                        if (error.request) {
+                            dispatch({
+                                type: MOSTRAR_DOCUMENTOS,
+                                respuesta: documentos
+                            });
+                        }
+                    }
+                } catch (error) {
                     let cedula = {
                         'idTipoDocumento': '1',
                         'tipoDocumento': 'Cedula'
@@ -508,24 +595,30 @@ export function actionAgregarUsuario(usuario, token) {
                     mensaje: 'Usuario registrado'
                 });
             }).catch((error) => {
-                if (error.request.response === '') {
-                    dispatch({
-                        type: MENSAJE_REGISTRAR,
-                        mensaje: 'Servidor fuera de servicio temporalmente'
-                    });
-                } else {
-                    if (error.request) {
-                        var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeErrorRegistroUsuarios(o.respuesta);
-                        if (respuesta !== '') {
-                            dispatch({
-                                type: MENSAJE_REGISTRAR,
-                                mensaje: respuesta
-                            });
+                try {
+                    if (error.request.response === '') {
+                        dispatch({
+                            type: MENSAJE_REGISTRAR,
+                            mensaje: 'Servidor fuera de servicio temporalmente'
+                        });
+                    } else {
+                        if (error.request) {
+                            var o = JSON.parse(error.request.response);
+                            let respuesta = mensajesDeErrorRegistroUsuarios(o.respuesta);
+                            if (respuesta !== '') {
+                                dispatch({
+                                    type: MENSAJE_REGISTRAR,
+                                    mensaje: respuesta
+                                });
+                            }
                         }
                     }
+                } catch (error) {
+                    dispatch({
+                        type: MENSAJE_REGISTRAR,
+                        mensaje: 'Ocurrio un error en el servidor'
+                    });
                 }
-
             });
 
     }
@@ -550,24 +643,30 @@ export function actionAsignarActividad(token, numeroDocumento, actividad) {
                     mensaje: 'Actividad asignada'
                 });
             }).catch((error) => {
-                if (error.request.response === '') {
-                    dispatch({
-                        type: MENSAJE_ASIGNAR,
-                        mensaje: 'Servidor fuera de servicio temporalmente'
-                    });
-                } else {
-                    if (error.request) {
-                        var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeErrorAsignarActividad(o.respuesta);
-                        if (respuesta !== '') {
-                            dispatch({
-                                type: MENSAJE_ASIGNAR,
-                                mensaje: respuesta
-                            });
+                try {
+                    if (error.request.response === '') {
+                        dispatch({
+                            type: MENSAJE_ASIGNAR,
+                            mensaje: 'Servidor fuera de servicio temporalmente'
+                        });
+                    } else {
+                        if (error.request) {
+                            var o = JSON.parse(error.request.response);
+                            let respuesta = mensajesDeErrorAsignarActividad(o.respuesta);
+                            if (respuesta !== '') {
+                                dispatch({
+                                    type: MENSAJE_ASIGNAR,
+                                    mensaje: respuesta
+                                });
+                            }
                         }
                     }
+                } catch (error) {
+                    dispatch({
+                        type: MENSAJE_ASIGNAR,
+                        mensaje: 'Ocurrio un error en el servidor'
+                    });
                 }
-
             });
     }
 }
@@ -596,24 +695,30 @@ export function actionSuspenderActivarUsuario(cedula, token, actualizados) {
                 });
 
             }).catch((error) => {
-                if (error.request.response === '') {
-                    dispatch({
-                        type: MENSAJE_SUSPENDER,
-                        mensaje: 'Servidor fuera de servicio temporalmente'
-                    });
-                } else {
-                    if (error.request) {
-                        var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeErrorCambiarEstadoUsuario(o.respuesta);
-                        if (respuesta !== '') {
-                            dispatch({
-                                type: MENSAJE_SUSPENDER,
-                                mensaje: respuesta
-                            });
+                try {
+                    if (error.request.response === '') {
+                        dispatch({
+                            type: MENSAJE_SUSPENDER,
+                            mensaje: 'Servidor fuera de servicio temporalmente'
+                        });
+                    } else {
+                        if (error.request) {
+                            var o = JSON.parse(error.request.response);
+                            let respuesta = mensajesDeErrorCambiarEstadoUsuario(o.respuesta);
+                            if (respuesta !== '') {
+                                dispatch({
+                                    type: MENSAJE_SUSPENDER,
+                                    mensaje: respuesta
+                                });
+                            }
                         }
                     }
+                } catch (error) {
+                    dispatch({
+                        type: MENSAJE_SUSPENDER,
+                        mensaje: 'Ocurrio un error en el servidor'
+                    });
                 }
-
             });
 
     }
@@ -633,22 +738,29 @@ export function actionCargarInformacionDeUsuario(cedula, token) {
                     informacionUsuario: response.data
                 });
             }).catch((error) => {
-                if (error.request.response === '') {
-                    dispatch({
-                        type: MENSAJE_EDITAR,
-                        mensaje: 'Servidor fuera de servicio temporalmente'
-                    });
-                } else {
-                    if (error.request) {
-                        var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeErrorCargarInformacion(o.respuesta);
-                        if (respuesta !== '') {
-                            dispatch({
-                                type: MENSAJE_EDITAR,
-                                mensaje: respuesta
-                            });
+                try {
+                    if (error.request.response === '') {
+                        dispatch({
+                            type: MENSAJE_EDITAR,
+                            mensaje: 'Servidor fuera de servicio temporalmente'
+                        });
+                    } else {
+                        if (error.request) {
+                            var o = JSON.parse(error.request.response);
+                            let respuesta = mensajesDeErrorCargarInformacion(o.respuesta);
+                            if (respuesta !== '') {
+                                dispatch({
+                                    type: MENSAJE_EDITAR,
+                                    mensaje: respuesta
+                                });
+                            }
                         }
                     }
+                } catch (error) {
+                    dispatch({
+                        type: MENSAJE_EDITAR,
+                        mensaje: 'Ocurrio un error en el servidor'
+                    });
                 }
             });
     };
@@ -670,27 +782,34 @@ export function actionConsultarModulos(token) {
                 });
 
             }).catch((error) => {
-                if (error.request.response === '') {
-                    dispatch({
-                        type: MENSAJE_ASIGNAR,
-                        mensaje: 'Servidor fuera de servicio temporalmente'
-                    });
-                } else {
-                    if (error.request) {
-                        var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeErrorConsultarModulosUsuario(o.respuesta);
-                        if (respuesta === 'Sin permiso') {
-                            dispatch({
-                                type: ESTADO_ASIGNAR,
-                                estado: true
-                            });
-                        } else {
-                            dispatch({
-                                type: MENSAJE_ASIGNAR,
-                                mensaje: respuesta
-                            });
+                try {
+                    if (error.request.response === '') {
+                        dispatch({
+                            type: MENSAJE_ASIGNAR,
+                            mensaje: 'Servidor fuera de servicio temporalmente'
+                        });
+                    } else {
+                        if (error.request) {
+                            var o = JSON.parse(error.request.response);
+                            let respuesta = mensajesDeErrorConsultarModulosUsuario(o.respuesta);
+                            if (respuesta === 'Sin permiso') {
+                                dispatch({
+                                    type: ESTADO_ASIGNAR,
+                                    estado: true
+                                });
+                            } else {
+                                dispatch({
+                                    type: MENSAJE_ASIGNAR,
+                                    mensaje: respuesta
+                                });
+                            }
                         }
                     }
+                } catch (error) {
+                    dispatch({
+                        type: MENSAJE_ASIGNAR,
+                        mensaje: 'Ocurrio un error en el servidor'
+                    });
                 }
             });
     };
@@ -717,31 +836,31 @@ export function actionEliminarActividades(actividades, token, numeroDocumento) {
                     mensaje: 'Actividades eliminadas'
                 });
             }).catch((error) => {
-                try{if (error.request.response === '') {
-                    dispatch({
-                        type: MENSAJE_ASIGNAR,
-                        mensaje: 'Servidor fuera de servicio temporalmente'
-                    });
-                } else {
-                    if (error.request) {
-                        var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeErrorConsultarActividadesUsuario(o.respuesta);
-                        if (respuesta !== '') {
-                            dispatch({
-                                type: MENSAJE_ASIGNAR,
-                                mensaje: respuesta
-                            });
+                try {
+                    if (error.request.response === '') {
+                        dispatch({
+                            type: MENSAJE_ASIGNAR,
+                            mensaje: 'Servidor fuera de servicio temporalmente'
+                        });
+                    } else {
+                        if (error.request) {
+                            var o = JSON.parse(error.request.response);
+                            let respuesta = mensajesDeErrorConsultarActividadesUsuario(o.respuesta);
+                            if (respuesta !== '') {
+                                dispatch({
+                                    type: MENSAJE_ASIGNAR,
+                                    mensaje: respuesta
+                                });
+                            }
                         }
                     }
-                }}catch(error){
+                } catch (error) {
                     dispatch({
                         type: MENSAJE_ASIGNAR,
                         mensaje: 'Ocurrio un error en el servidor'
                     });
                 }
-
             });
-
     }
 }
 
@@ -760,27 +879,34 @@ export function actionConsultarActividadesSinAsignar(token, numeroDocumento, cod
                 });
 
             }).catch((error) => {
-                if (error.request.response === '') {
-                    dispatch({
-                        type: MENSAJE_ASIGNAR,
-                        mensaje: 'Servidor fuera de servicio temporalmente'
-                    });
-                } else {
-                    if (error.request) {
-                        var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeErrorConsultarActividadesUsuario(o.respuesta);
-                        if (respuesta === 'Sin permiso') {
-                            dispatch({
-                                type: ESTADO_ASIGNAR,
-                                estado: true
-                            });
-                        } else {
-                            dispatch({
-                                type: MENSAJE_ASIGNAR,
-                                mensaje: respuesta
-                            });
+                try {
+                    if (error.request.response === '') {
+                        dispatch({
+                            type: MENSAJE_ASIGNAR,
+                            mensaje: 'Servidor fuera de servicio temporalmente'
+                        });
+                    } else {
+                        if (error.request) {
+                            var o = JSON.parse(error.request.response);
+                            let respuesta = mensajesDeErrorConsultarActividadesUsuario(o.respuesta);
+                            if (respuesta === 'Sin permiso') {
+                                dispatch({
+                                    type: ESTADO_ASIGNAR,
+                                    estado: true
+                                });
+                            } else {
+                                dispatch({
+                                    type: MENSAJE_ASIGNAR,
+                                    mensaje: respuesta
+                                });
+                            }
                         }
                     }
+                } catch (error) {
+                    dispatch({
+                        type: MENSAJE_ASIGNAR,
+                        mensaje: 'Ocurrio un error en el servidor'
+                    });
                 }
             });
     };
@@ -810,28 +936,34 @@ export function actionEditarUsuario(usuario, cedula, token) {
                     mensaje: 'Modificado'
                 });
             }).catch((error) => {
-                if (error.request.response === '') {
-                    dispatch({
-                        type: MENSAJE_EDITAR,
-                        mensaje: 'Servidor fuera de servicio temporalmente'
-                    });
-                } else {
-                    if (error.request) {
-                        var o = JSON.parse(error.request.response);
-                        let respuesta = mensajesDeErrorEditarUsuario(o.respuesta);
-                        if (respuesta !== '') {
-                            dispatch({
-                                type: EDITAR_USUARIO,
-                                payload: usuario
-                            });
-                            dispatch({
-                                type: MENSAJE_EDITAR,
-                                mensaje: respuesta
-                            });
+                try {
+                    if (error.request.response === '') {
+                        dispatch({
+                            type: MENSAJE_EDITAR,
+                            mensaje: 'Servidor fuera de servicio temporalmente'
+                        });
+                    } else {
+                        if (error.request) {
+                            var o = JSON.parse(error.request.response);
+                            let respuesta = mensajesDeErrorEditarUsuario(o.respuesta);
+                            if (respuesta !== '') {
+                                dispatch({
+                                    type: EDITAR_USUARIO,
+                                    payload: usuario
+                                });
+                                dispatch({
+                                    type: MENSAJE_EDITAR,
+                                    mensaje: respuesta
+                                });
+                            }
                         }
                     }
+                } catch (error) {
+                    dispatch({
+                        type: MENSAJE_EDITAR,
+                        mensaje: 'Ocurrio un error en el servidor'
+                    });
                 }
-
             });
     }
 }
