@@ -128,7 +128,7 @@ export function deleteCompetitionG(token, competitionG) {
         'operacion': PERMIT_DELETE_COMPETITION_GENERAL
     };
     return (dispatch, getState) => {
-        axios.get(`${URL_BASE}/proyectosESCOM-web/api/competitionGeneral/delete`, competitionG, { headers: headers })
+        axios.put(`${URL_BASE}/proyectosESCOM-web/api/competitionGeneral/delete`, competitionG, { headers: headers })
             .then(response => {
                 dispatch({
                     type: DELETE_COMPETITION_GENERAL,

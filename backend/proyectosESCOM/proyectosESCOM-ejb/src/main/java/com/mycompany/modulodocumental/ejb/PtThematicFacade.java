@@ -38,7 +38,7 @@ public class PtThematicFacade extends AbstractFacade<PtThematic> implements PtTh
      */
     @Override
     public List<PtThematic> getList(int programT) {
-        Query query = em.createQuery("SELECT t FROM PtCompetitionG t WHERE t.fkPtcProgramThematic.id = ?1");
+        Query query = em.createQuery("SELECT t FROM PtThematic t WHERE t.fkPttProgramThematic.id = ?1");
         query.setParameter(1, programT);
         List<PtThematic> list = query.getResultList();
         return list;

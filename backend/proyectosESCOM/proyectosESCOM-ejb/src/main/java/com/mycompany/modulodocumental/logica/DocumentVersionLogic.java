@@ -1,6 +1,8 @@
 package com.mycompany.modulodocumental.logica;
 
+import com.mycompany.modulodocumental.entity.Document;
 import com.mycompany.modulodocumental.entity.DocumentVersion;
+import com.mycompany.modulodocumental.interfaces.DocumentFacadeLocal;
 import com.mycompany.modulodocumental.interfaces.DocumentVersionFacadeLocal;
 import com.mycompany.modulodocumental.interfaces.logic.DocumentVersionLogicLocal;
 import com.mycompany.modulodocumental.pojo.DocumentVersionP;
@@ -25,6 +27,12 @@ public class DocumentVersionLogic implements DocumentVersionLogicLocal {
      */
     @EJB
     private DocumentVersionFacadeLocal documentVersionFacade;
+
+    /**
+     * Document version interface injection
+     */
+    @EJB
+    private DocumentFacadeLocal documentFacade;
 
     /**
      * Bitacora interface injection
@@ -99,17 +107,23 @@ public class DocumentVersionLogic implements DocumentVersionLogicLocal {
         try {
             List<DocumentVersion> list = documentVersionFacade.listCurrentVersions(version.getDocument());
             int value = 0;
-            if (list.size() > 0) {
-                value = list.get(0).getVersion() + 1;
+            if (version.getState() != 2) {
+                if (list.size() > 0) {
+                    value = list.get(0).getVersion() + 1;
+                } else {
+                    value = 1;
+                }
+                if (list.size() > 0) {
+                    DocumentVersion fin = list.get(0);
+                    fin.setState(-1);
+                    documentVersionFacade.edit(fin);
+                }
             } else {
                 value = 1;
             }
-            if (list.size() > 0) {
-                DocumentVersion fin = list.get(0);
-                fin.setState(-1);
-                documentVersionFacade.edit(fin);
-            }
             DocumentVersion data = new DocumentVersion(version.getDescription(), value, version.getLocation(), version.getState(), version.getDate());
+            Document doc = documentFacade.find(version.getDocument());
+            data.setFkDvDocument(doc);
             documentVersionFacade.create(data);
             version.getRequestData().setTablaInvolucrada(TABLE);
             bitacora.registrarEnBitacora(version.getRequestData());

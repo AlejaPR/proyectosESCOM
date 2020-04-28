@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.view;
 
 import com.mycompany.modulodocumental.pojo.ActivityP;
@@ -10,19 +5,47 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
+ * This is the view class of the condition process entity. contains the
+ * variables of the table without annotations
  *
- * @author HASHY
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
-public class ConditionProcessView implements Serializable{
-    
+public class ConditionProcessView implements Serializable {
+
+    /**
+     * variable name condition
+     */
     private String name;
+
+    /**
+     * variable description condition
+     */
     private String description;
+
+    /**
+     * variable string managers
+     */
     private String managers;
+
+    /**
+     * variable list activities
+     */
     private List<ActivityP> listActivities;
 
+    /**
+     * constructor method
+     */
     public ConditionProcessView() {
     }
 
+    /**
+     * constructor method
+     *
+     * @param name
+     * @param description
+     * @param managers
+     * @param listActivities
+     */
     public ConditionProcessView(String name, String description, String managers, List<ActivityP> listActivities) {
         this.name = name;
         this.description = description;
@@ -30,6 +53,7 @@ public class ConditionProcessView implements Serializable{
         this.listActivities = listActivities;
     }
 
+    //getter and setter
     public String getName() {
         return name;
     }
@@ -61,5 +85,5 @@ public class ConditionProcessView implements Serializable{
     public void setListActivities(List<ActivityP> listActivities) {
         this.listActivities = listActivities;
     }
-        
+
 }

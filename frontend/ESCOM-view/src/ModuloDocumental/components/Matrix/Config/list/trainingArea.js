@@ -174,9 +174,9 @@ function mapStateToProps(state) {
     }
 }
 
-let formAdd = reduxForm({
+let formAddTR = reduxForm({
     form: 'addTraining',
     enableReinitialize: true
 })(TrainingArea)
 
-export default withRouter(connect(mapStateToProps, { getListGeneralC, deleteGeneralC, addGeneralC, addMessageAdd, addMessageDelete })(formAdd));
+export default withRouter(connect(mapStateToProps, { getListGeneralC, deleteGeneralC, addGeneralC, addMessageAdd, addMessageDelete })(formAddTR));

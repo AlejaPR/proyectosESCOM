@@ -173,9 +173,9 @@ function mapStateToProps(state) {
     }
 }
 
-let formAdd = reduxForm({
+let formAddD = reduxForm({
     form: 'addDistinctive',
     enableReinitialize: true
 })(Distinctive)
 
-export default withRouter(connect(mapStateToProps, { getListGeneralC, deleteGeneralC, addGeneralC, addMessageAdd, addMessageDelete })(formAdd));
+export default withRouter(connect(mapStateToProps, { getListGeneralC, deleteGeneralC, addGeneralC, addMessageAdd, addMessageDelete })(formAddD));

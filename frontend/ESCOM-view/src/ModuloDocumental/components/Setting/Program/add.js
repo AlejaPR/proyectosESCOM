@@ -107,13 +107,13 @@ class Add extends Component {
                                             <Field name="levelEducation" validate={[required, minimum, threeHundred]} component={generarInput} label="Nivel de formación" />
                                         </div>
                                     </div>
-                                    <label for="form_control_1">Motodología: </label>
+                                    <label for="form_control_1">Metodología: </label>
                                     <div className="row">
                                         <div className="col-sm">
                                             <Field name="methodology" validate={[required, minimum, threeHundred]} component={generarInput} label="Motodología" />
                                         </div>
                                     </div>
-                                    <label for="form_control_1">Campus: </label>
+                                    <label for="form_control_1">Sede: </label>
                                     <div className="row">
                                         <div className="col-sm">
                                             <Field name="campus" validate={[required, minimum, threeHundred]} component={generarInput} label="Campus" />

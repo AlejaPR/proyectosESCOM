@@ -20,6 +20,10 @@ class EditProgramT extends Component {
                     this.props.getProgramT(localStorage.getItem('Token'), sessionStorage.getItem('programT'))
                     this.props.addMessageEdit('');
                     break;
+                case 'Sin persimo':
+                    toast.error('No tiene permiso para editar este elemento.');
+                    this.props.addMessageEdit('')
+                    break;
                 case 'error server':
                     toast.error('Se presento un error, intentelo mas tarde.');
                     this.props.addMessageEdit('');

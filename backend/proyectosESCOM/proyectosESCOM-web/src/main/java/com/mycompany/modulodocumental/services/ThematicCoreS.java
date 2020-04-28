@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.services;
 
 import com.mycompany.modulodocumental.interfaces.logic.ThematicCoreLogicLocal;
@@ -23,18 +18,29 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
+ * Class in charge of managing all the services related to the thematic core
+ * entity
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @RequestScoped
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Path("thematicCore")
 public class ThematicCoreS {
-    
+
+    /**
+     * Thematic core logical interface injection
+     */
     @EJB
     private ThematicCoreLogicLocal thematicCoreLogic;
 
+    /**
+     * Service to list thematic core
+     *
+     * @param id
+     * @return
+     */
     @GET
     @Path("/list/{id}")
     public Response getList(@PathParam("id") int id) {
@@ -48,6 +54,12 @@ public class ThematicCoreS {
 
     }
 
+    /**
+     * Service to obtain a thematic core
+     *
+     * @param id
+     * @return
+     */
     @GET
     @Path("/get/{id}")
     public Response get(@PathParam("id") int id) {
@@ -61,6 +73,12 @@ public class ThematicCoreS {
 
     }
 
+    /**
+     * Service to add a thematic core
+     *
+     * @param them
+     * @return
+     */
     @POST
     @Path("/add")
     public Response add(ThematicCoreP them) {
@@ -75,6 +93,12 @@ public class ThematicCoreS {
 
     }
 
+    /**
+     * Service to edit a thematic core
+     *
+     * @param comG
+     * @return
+     */
     @PUT
     @Path("/edit")
     public Response edit(ThematicCoreP comG) {
@@ -89,6 +113,12 @@ public class ThematicCoreS {
 
     }
 
+    /**
+     * Service to remove a thematic core
+     *
+     * @param them
+     * @return
+     */
     @PUT
     @Path("/delete")
     public Response delete(ThematicCoreP them) {
@@ -101,5 +131,5 @@ public class ThematicCoreS {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
-    
+
 }

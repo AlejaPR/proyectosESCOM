@@ -173,9 +173,9 @@ function mapStateToProps(state) {
     }
 }
 
-let formAdd = reduxForm({
+let formAddO = reduxForm({
     form: 'addOccupational',
     enableReinitialize: true
 })(Occupational)
 
-export default withRouter(connect(mapStateToProps, { getListGeneralC, deleteGeneralC, addGeneralC, addMessageAdd, addMessageDelete })(formAdd));
+export default withRouter(connect(mapStateToProps, { getListGeneralC, deleteGeneralC, addGeneralC, addMessageAdd, addMessageDelete })(formAddO));

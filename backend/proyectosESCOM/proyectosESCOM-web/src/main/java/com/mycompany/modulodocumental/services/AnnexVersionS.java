@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.services;
 
 import com.mycompany.modulodocumental.interfaces.logic.AnnexVersionLogicLocal;
@@ -24,8 +19,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
+ * Class in charge of managing all the services related to the annex version
+ * entity
  *
- * @author HASHY
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @RequestScoped
 @Produces(MediaType.APPLICATION_JSON)
@@ -33,9 +30,17 @@ import javax.ws.rs.core.Response;
 @Path("annexVersion")
 public class AnnexVersionS {
 
+    /**
+     * Annex version logical interface injection
+     */
     @EJB
     private AnnexVersionLogicLocal annexVersionLogicFacade;
 
+    /**
+     * Service that lists the versions of the annex
+     * @param id
+     * @return 
+     */
     @GET
     @Path("/list/{id}")
     public Response getList(@PathParam("id") int id) {
@@ -48,6 +53,11 @@ public class AnnexVersionS {
         }
     }
 
+    /**
+     * Service that adds an annex version
+     * @param annexV
+     * @return 
+     */
     @POST
     @Path("/add")
     public Response add(AnnexVersionP annexV) {
@@ -62,6 +72,12 @@ public class AnnexVersionS {
 
     }
 
+    /**
+     * Service that removes an annex version
+     * @param id
+     * @param dataR
+     * @return 
+     */
     @DELETE
     @Path("/delete/{id}")
     public Response delete(@PathParam("id") int id, DatosSolicitudPOJO dataR) {

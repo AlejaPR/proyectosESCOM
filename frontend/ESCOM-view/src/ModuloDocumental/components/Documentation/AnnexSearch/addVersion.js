@@ -11,7 +11,7 @@ import { getAnnexVersions, addAnnexVersion, addMessageAdd } from '../../../redux
 class AddVersion extends Component {
 
     componentWillMount() {
-        this.props.getAnnexVersions(localStorage.getItem('Token'),sessionStorage.getItem('annex'))
+        this.props.getAnnexVersions(localStorage.getItem('Token'), sessionStorage.getItem('annex'))
     }
 
     constructor(props) {
@@ -83,15 +83,19 @@ class AddVersion extends Component {
         }
         const data = new FormData()
         data.append('file', this.state.selectedFile[0])
-        this.props.addAnnexVersion(localStorage.getItem('Token'), data, annexN);        
+        this.props.addAnnexVersion(localStorage.getItem('Token'), data, annexN);
     }
 
-    componentDidUpdate(){
+    componentDidUpdate() {
         if (this.props.messageAdd !== '') {
             switch (this.props.messageAdd) {
                 case 'add':
                     toast.success('Se agrego con exito.');
                     this.props.getAnnexVersions(localStorage.getItem('Token'), sessionStorage.getItem('annex'))
+                    this.props.addMessageAdd('');
+                    break;
+                case 'Sin permiso':
+                    toast.error('No tiene permisos suficientes para agregar un elemento.');
                     this.props.addMessageAdd('');
                     break;
                 case 'error server':
@@ -127,14 +131,14 @@ class AddVersion extends Component {
 
                                     <label for="form_control_1">Descripción: </label>
                                     <div className="row">
-                                        <div className="col-sm-5">
-                                            <Field name="descriptionA" validate={[required]} component={generarInput} label="Descripcion" />
+                                        <div className="col-sm">
+                                            <Field name="descriptionA" validate={[required]} component={generarText} label="Descripcion" />
                                         </div>
                                     </div>
                                     <br />
                                     <label for="form_control_1">Documento: </label>
                                     <div className="row">
-                                        <div className="col-sm-10">
+                                        <div className="col-sm">
                                             <input type="file" class="form-control" multiple onChange={this.onChangeHandler} />
                                         </div>
                                     </div>
@@ -152,10 +156,10 @@ class AddVersion extends Component {
     }
 }
 
-const generarInput = ({ input, placeholder, label, type, meta: { touched, warning, error } }) => (
+const generarText = ({ input, placeholder, label, type, meta: { touched, warning, error } }) => (
     <div>
         <div>
-            <input {...input} type={type} className="form-control letra form-control-solid placeholder-no-fix" />
+            <textarea {...input} className="form-control letra form-control-solid placeholder-no-fix" />
             {touched && ((error && <span className="text-danger letra form-group">{error}</span>) || (warning && <span>{warning}</span>))}
         </div>
     </div>

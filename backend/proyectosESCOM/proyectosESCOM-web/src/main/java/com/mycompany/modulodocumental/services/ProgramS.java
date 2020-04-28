@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.services;
 
 import com.mycompany.modulodocumental.interfaces.logic.ProgramLogicLocal;
@@ -24,8 +19,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
+ * Class in charge of managing all the services related to the program entity
  *
- * @author HASHY
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @RequestScoped
 @Produces(MediaType.APPLICATION_JSON)
@@ -33,9 +29,17 @@ import javax.ws.rs.core.Response;
 @Path("program")
 public class ProgramS {
 
+    /**
+     * Program logical interface injection
+     */
     @EJB
     ProgramLogicLocal programLogicFacade;
 
+    /**
+     * Service to list programs
+     *
+     * @return
+     */
     @GET
     @Path("/list")
     public Response getList() {
@@ -48,6 +52,12 @@ public class ProgramS {
         }
     }
 
+    /**
+     * Service to obtain a program
+     *
+     * @param id
+     * @return
+     */
     @GET
     @Path("/get/{id}")
     public Response get(@PathParam("id") int id) {
@@ -60,6 +70,12 @@ public class ProgramS {
         }
     }
 
+    /**
+     * Service to add a program
+     *
+     * @param pro
+     * @return
+     */
     @POST
     @Path("/add")
     public Response add(ProgramP pro) {
@@ -74,6 +90,12 @@ public class ProgramS {
 
     }
 
+    /**
+     * Service to edit a program
+     *
+     * @param pro
+     * @return
+     */
     @PUT
     @Path("/edit")
     public Response edit(ProgramP pro) {
@@ -88,6 +110,13 @@ public class ProgramS {
 
     }
 
+    /**
+     * Service to disable a program
+     *
+     * @param id
+     * @param dataS
+     * @return
+     */
     @PUT
     @Path("/disable/{id}")
     public Response disable(@PathParam("id") int id, DatosSolicitudPOJO dataS) {

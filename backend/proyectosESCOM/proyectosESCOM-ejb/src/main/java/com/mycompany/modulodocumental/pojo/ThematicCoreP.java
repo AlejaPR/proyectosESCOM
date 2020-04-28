@@ -1,28 +1,55 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.pojo;
 
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import java.io.Serializable;
 
 /**
+ * This is the POJO class of the thematic core entity. contains the variables of
+ * the table without annotations
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 public class ThematicCoreP implements Serializable {
 
+    /**
+     * if variable
+     */
     private int id;
+
+    /**
+     * variable name thematic core
+     */
     private String name;
+
+    /**
+     * variable credits thematic core
+     */
     private int credits;
+
+    /**
+     * variable id training area
+     */
     private int idTrainingArea;
+
+    /**
+     * request data variable
+     */
     private DatosSolicitudPOJO requestData;
 
+    /**
+     * constructor method
+     */
     public ThematicCoreP() {
     }
 
+    /**
+     * constructor method
+     *
+     * @param id
+     * @param name
+     * @param credits
+     * @param idTrainingArea
+     */
     public ThematicCoreP(int id, String name, int credits, int idTrainingArea) {
         this.id = id;
         this.name = name;
@@ -30,6 +57,7 @@ public class ThematicCoreP implements Serializable {
         this.idTrainingArea = idTrainingArea;
     }
 
+    //getter and setter
     public int getId() {
         return id;
     }
@@ -69,5 +97,5 @@ public class ThematicCoreP implements Serializable {
     public void setRequestData(DatosSolicitudPOJO requestData) {
         this.requestData = requestData;
     }
-    
+
 }

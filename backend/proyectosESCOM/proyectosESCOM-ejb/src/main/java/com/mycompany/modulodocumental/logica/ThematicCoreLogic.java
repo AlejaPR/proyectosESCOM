@@ -153,9 +153,11 @@ public class ThematicCoreLogic implements ThematicCoreLogicLocal {
     public void delete(ThematicCoreP thematic) throws GenericException {
         try {
             ThematicCore data = thematicCoreFacade.find(thematic.getId());
-            thematicCoreFacade.remove(data);
-            thematic.getRequestData().setTablaInvolucrada(TABLE);
-            bitacora.registrarEnBitacora(thematic.getRequestData());
+            if (data != null) {
+                thematicCoreFacade.remove(data);
+                thematic.getRequestData().setTablaInvolucrada(TABLE);
+                bitacora.registrarEnBitacora(thematic.getRequestData());
+            }
         } catch (Exception ex) {
             bitacora.registroLogger(CLASS, "Eliminar", Level.SEVERE, ex.getMessage());
             throw new GenericException("error server");

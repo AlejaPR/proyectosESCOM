@@ -213,9 +213,9 @@ function mapStateToProps(state) {
     }
 }
 
-let formAdd = reduxForm({
+let formAddCG = reduxForm({
     form: 'addCompetitionG',
     enableReinitialize: true
 })(CompetitionG)
 
-export default withRouter(connect(mapStateToProps, { getListGeneralC, getListCompetitionG, addCompetitionG, deleteCompetitionG, addMessageAdd, addMessageDelete })(formAdd));
+export default withRouter(connect(mapStateToProps, { getListGeneralC, getListCompetitionG, addCompetitionG, deleteCompetitionG, addMessageAdd, addMessageDelete })(formAddCG));

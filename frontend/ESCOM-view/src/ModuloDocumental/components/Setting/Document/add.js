@@ -5,7 +5,7 @@ import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
 import { getListPrograms } from '../../../redux/actions/programA.js';
 import { addDocument } from '../../../redux/actions/documentA.js';
-import { required, thousand, threeHundred, minimum, select } from '../../utilitarian/validations.js';
+import { required, thousand, minimum, select } from '../../utilitarian/validations.js';
 import { getListUser } from '../../../redux/actions/userConditionA.js';
 
 class Add extends Component {
@@ -36,7 +36,7 @@ class Add extends Component {
     loadProgram() {
         return this.props.listProgram.map((program) => {
             return (
-                <option value={program.id}>{program.name}</option>
+                <option value={program.id}>{program.name + "-" + program.campus}</option>
             )
         })
     }
@@ -70,7 +70,7 @@ class Add extends Component {
                                     <label for="form_control_1">Programa académico: </label>
                                     <div className="row">
                                         <div className="col-sm">
-                                            <Field name="program" validate={[select]} className="bs-select form-control" component="select">
+                                            <Field name="program" validate={[select]} className="bs-select form-control" component={generarSelect}>
                                                 <option value="0">Seleccione...</option>
                                                 {this.loadProgram()}
                                             </Field>
@@ -89,7 +89,7 @@ class Add extends Component {
                                     <label for="form_control_1">Usuario encargado: </label>
                                     <div className="row">
                                         <div className="col-sm">
-                                            <Field name="idUser" validate={[select]} className="bs-select form-control" component="select">
+                                            <Field name="idUser" validate={[select]} className="bs-select form-control" component={generarSelect}>
                                                 <option value="0">Seleccione...</option>
                                                 {this.loadList()}
                                             </Field>
@@ -100,7 +100,7 @@ class Add extends Component {
                                     <label for="form_control_1">Tipo Documento: </label>
                                     <div className="row">
                                         <div className="col-sm">                                            
-                                            <Field name="type" validate={[select]} className="bs-select form-control" component="select">
+                                            <Field name="type" validate={[select]} className="bs-select form-control" component={generarSelect}>
                                                 <option value="0">Seleccione...</option>
                                                 <option value="Inscripción">Inscripción</option>
                                                 <option value="Modificación">Modificación</option>
@@ -123,12 +123,13 @@ class Add extends Component {
     }
 }
 
-
-const generarInput = ({ input, placeholder, label, type, meta: { touched, warning, error } }) => (
+const generarSelect = ({ input, label, type, meta: { touched, error }, children }) => (
     <div>
         <div>
-            <input {...input} type={type} className="form-control letra form-control-solid placeholder-no-fix" />
-            {touched && ((error && <span className="text-danger letra form-group">{error}</span>) || (warning && <span>{warning}</span>))}
+            <select {...input} className="form-control letra" style={{ height: "35px", fontSize: "13px" }}>
+                {children}
+            </select>
+            {touched && ((error && <span className="text-danger letra form-group">{error}</span>))}
         </div>
     </div>
 )

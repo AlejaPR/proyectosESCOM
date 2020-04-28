@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.services;
 
 import com.mycompany.modulodocumental.interfaces.logic.CompetitionGeneralLogicLocal;
@@ -23,18 +18,29 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
+ * Class in charge of managing all the services related to the competition
+ * general entity
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @RequestScoped
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Path("competitionGeneral")
 public class CompetitionGeneralS {
-    
+
+    /**
+     * Competition general logical interface injection
+     */
     @EJB
     private CompetitionGeneralLogicLocal competitionGeneralLogic;
 
+    /**
+     * Service to list general competences
+     *
+     * @param id
+     * @return
+     */
     @GET
     @Path("/list/{id}")
     public Response getList(@PathParam("id") int id) {
@@ -48,6 +54,12 @@ public class CompetitionGeneralS {
 
     }
 
+    /**
+     * Service to obtain general competence
+     *
+     * @param id
+     * @return
+     */
     @GET
     @Path("/get/{id}")
     public Response get(@PathParam("id") int id) {
@@ -61,6 +73,12 @@ public class CompetitionGeneralS {
 
     }
 
+    /**
+     * Service to add general competence
+     *
+     * @param comG
+     * @return
+     */
     @POST
     @Path("/add")
     public Response add(CompetitionGeneralP comG) {
@@ -75,6 +93,12 @@ public class CompetitionGeneralS {
 
     }
 
+    /**
+     * Service to edit a general competence
+     *
+     * @param comG
+     * @return
+     */
     @PUT
     @Path("/edit")
     public Response edit(CompetitionGeneralP comG) {
@@ -89,6 +113,12 @@ public class CompetitionGeneralS {
 
     }
 
+    /**
+     * Service to eliminate general competition
+     *
+     * @param comG
+     * @return
+     */
     @PUT
     @Path("/delete")
     public Response delete(CompetitionGeneralP comG) {
@@ -102,5 +132,4 @@ public class CompetitionGeneralS {
         }
     }
 
-    
 }

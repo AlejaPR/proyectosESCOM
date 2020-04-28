@@ -18,8 +18,8 @@ class Edit extends Component {
         let dateS = new Date(formValues.startDate);
         let dateF = new Date(formValues.finalDate);
         let nowD = new Date();
-        if (dateS.getDay < nowD.getDay) {
-            toast.info('La fecha inicial tiene que ser igual o mayor al día de hoy.');
+        if (dateS < nowD) {
+            toast.info('La fecha inicial tiene que ser mayor al día de hoy.');
         } else if (dateF <= dateS) {
             toast.info('La fecha final tiene que ser mayor a la fecha inicial.');
         } else {

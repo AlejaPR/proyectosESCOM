@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
 import { editActivity, addMessageEdit } from '../../../redux/actions/activityA.js';
 import { withRouter } from 'react-router-dom';
-import { required, thousand, threeHundred, minimum, select } from '../../utilitarian/validations.js';
+import { required, thousand, threeHundred, minimum } from '../../utilitarian/validations.js';
 import { toast } from 'react-toastify';
 
 class Edit extends Component {
@@ -87,17 +87,6 @@ class Edit extends Component {
         )
     }
 }
-
-const generarSelect = ({ input, label, type, meta: { touched, error }, children }) => (
-    <div>
-        <div>
-            <select {...input} className="form-control letra" style={{ height: "35px", fontSize: "13px" }}>
-                {children}
-            </select>
-            {touched && ((error && <span className="text-danger letra form-group">{error}</span>))}
-        </div>
-    </div>
-)
 
 const generarText = ({ input, placeholder, label, type, meta: { touched, warning, error } }) => (
     <div>

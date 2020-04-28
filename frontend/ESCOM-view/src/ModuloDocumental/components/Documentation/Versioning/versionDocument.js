@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { getProgramId } from '../../../redux/actions/programA';
 import { getCurrentVersions, getOldVersions } from '../../../redux/actions/documentVersionA.js';
 import MaterialTable from 'material-table';
+import AddVersionD from './addVersionD.js';
 
 class versionDocument extends Component {
 
@@ -20,11 +21,11 @@ class versionDocument extends Component {
                 <div className="text-left titulo">
                     <h4>Lista versiones documento maestro</h4>
                 </div>
-                <br/>
+                <br />
                 <div className="shadow" style={{ background: "#FFFFFF", padding: "30px" }}>
                     <h5 className="text-center"><strong>{this.props.program.name}</strong></h5>
                     <h6 className="text-center">Sede:{this.props.program.campus}</h6>
-                    <hr />
+                    {/*<hr />
                     <MaterialTable
                         title="Versiones documento actual"
                         localization={{
@@ -85,6 +86,10 @@ class versionDocument extends Component {
 
                     />
                     <hr />
+                    */}
+                    <AddVersionD />
+                    <br />
+                    <br />
                     <MaterialTable
                         title="Documentos anteriores"
                         localization={{

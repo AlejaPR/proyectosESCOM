@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.services;
 
 import com.mycompany.modulodocumental.interfaces.logic.ProcessLogicLocal;
@@ -24,8 +19,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
+ * Class in charge of managing all the services related to the process entity
  *
- * @author HASHY
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @RequestScoped
 @Produces(MediaType.APPLICATION_JSON)
@@ -33,9 +29,18 @@ import javax.ws.rs.core.Response;
 @Path("process")
 public class ProcessS {
 
+    /**
+     * process logical interface injection
+     */
     @EJB
     private ProcessLogicLocal processLogicFacadeLocal;
 
+    /**
+     * Service to list processes
+     *
+     * @param id
+     * @return
+     */
     @GET
     @Path("/list/{id}")
     public Response getList(@PathParam("id") int id) {
@@ -49,6 +54,12 @@ public class ProcessS {
 
     }
 
+    /**
+     * Service to obtain a process
+     *
+     * @param id
+     * @return
+     */
     @GET
     @Path("/get/{id}")
     public Response get(@PathParam("id") int id) {
@@ -62,6 +73,12 @@ public class ProcessS {
 
     }
 
+    /**
+     * Service to add a process
+     *
+     * @param pro
+     * @return
+     */
     @POST
     @Path("/add")
     public Response add(ProcessP pro) {
@@ -76,6 +93,12 @@ public class ProcessS {
 
     }
 
+    /**
+     * Service to edit a process
+     *
+     * @param pro
+     * @return
+     */
     @PUT
     @Path("/edit")
     public Response edit(ProcessP pro) {
@@ -90,6 +113,13 @@ public class ProcessS {
 
     }
 
+    /**
+     * Service to disable a process
+     *
+     * @param id
+     * @param dataR
+     * @return
+     */
     @PUT
     @Path("/disable/{id}")
     public Response disable(@PathParam("id") int id, DatosSolicitudPOJO dataR) {

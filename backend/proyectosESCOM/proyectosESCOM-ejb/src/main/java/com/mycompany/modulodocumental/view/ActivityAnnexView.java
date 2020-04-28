@@ -1,27 +1,61 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.view;
 
 import java.io.Serializable;
 
 /**
+ * This is the view class of the activity annex entity. contains the variables
+ * of the table without annotations
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
-public class ActivityAnnexView implements Serializable{
+public class ActivityAnnexView implements Serializable {
+
+    /**
+     * variable id activity
+     */
     private int idActivity;
+
+    /**
+     * variable name activity
+     */
     private String nameActivity;
+
+    /**
+     * variable name description activity
+     */
     private String descriptionActivity;
+
+    /**
+     * variable id annex
+     */
     private int idAnnex;
+
+    /**
+     * variable name annex
+     */
     private String nameAnnex;
+
+    /**
+     * variable url annex
+     */
     private String url;
 
+    /**
+     * constructor method
+     */
     public ActivityAnnexView() {
     }
 
+    /**
+     * constructor method
+     *
+     * @param idActivity
+     * @param nameActivity
+     * @param descriptionActivity
+     * @param idAnnex
+     * @param nameAnnex
+     * @param url
+     */
     public ActivityAnnexView(int idActivity, String nameActivity, String descriptionActivity, int idAnnex, String nameAnnex, String url) {
         this.idActivity = idActivity;
         this.nameActivity = nameActivity;
@@ -31,6 +65,7 @@ public class ActivityAnnexView implements Serializable{
         this.url = url;
     }
 
+    //getter and setter
     public int getIdActivity() {
         return idActivity;
     }
@@ -78,5 +113,5 @@ public class ActivityAnnexView implements Serializable{
     public void setUrl(String url) {
         this.url = url;
     }
-    
+
 }

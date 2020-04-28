@@ -1,8 +1,3 @@
- /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.services;
 
 import com.mycompany.modulodocumental.interfaces.logic.ActivityLogicLocal;
@@ -25,8 +20,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
+ * Class in charge of managing all the services related to the activity entity
  *
- * @author HASHY
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @RequestScoped
 @Produces(MediaType.APPLICATION_JSON)
@@ -34,9 +30,18 @@ import javax.ws.rs.core.Response;
 @Path("activity")
 public class ActivityS {
 
+    /**
+     * Activity logical interface injection
+     */
     @EJB
     private ActivityLogicLocal activityLogicFacade;
 
+    /**
+     * Service that adds an activity
+     *
+     * @param act
+     * @return
+     */
     @POST
     @Path("/add")
     public Response add(ActivityP act) {
@@ -51,6 +56,12 @@ public class ActivityS {
 
     }
 
+    /**
+     * Service that edits an activity
+     *
+     * @param act
+     * @return
+     */
     @PUT
     @Path("/edit")
     public Response edit(ActivityP act) {
@@ -65,6 +76,12 @@ public class ActivityS {
 
     }
 
+    /**
+     * Service that information type activities
+     *
+     * @param id
+     * @return
+     */
     @GET
     @Path("/listInfo/{id}")
     public Response listInfo(@PathParam("id") int id) {
@@ -77,6 +94,12 @@ public class ActivityS {
         }
     }
 
+    /**
+     * Service than annex type activities
+     *
+     * @param id
+     * @return
+     */
     @GET
     @Path("/listAnnex/{id}")
     public Response listAnnex(@PathParam("id") int id) {
@@ -89,6 +112,12 @@ public class ActivityS {
         }
     }
 
+    /**
+     * Service that add information to the activity
+     *
+     * @param act
+     * @return
+     */
     @PUT
     @Path("/addInformation")
     public Response addInformation(ActivityP act) {
@@ -103,6 +132,12 @@ public class ActivityS {
 
     }
 
+    /**
+     * Service that gets an activity
+     *
+     * @param id
+     * @return
+     */
     @GET
     @Path("/get/{id}")
     public Response get(@PathParam("id") int id) {
@@ -115,6 +150,12 @@ public class ActivityS {
         }
     }
 
+    /**
+     * Service that obtains all the information of the activities
+     *
+     * @param id
+     * @return
+     */
     @GET
     @Path("/allInformation/{id}")
     public Response allInformation(@PathParam("id") int id) {
@@ -128,6 +169,13 @@ public class ActivityS {
         }
     }
 
+    /**
+     * Service that removes an activity
+     *
+     * @param id
+     * @param dataR
+     * @return
+     */
     @POST
     @Path("/delete/{id}")
     public Response delete(@PathParam("id") int id, DatosSolicitudPOJO dataR) {
@@ -141,18 +189,24 @@ public class ActivityS {
         }
     }
 
+    /**
+     * Service that the status of an activity
+     *
+     * @param activity
+     * @return
+     */
     @PUT
     @Path("/changeStatus")
     public Response changeStatus(ActivityP activity) {
         try {
             activityLogicFacade.changeStatus(activity);
-            if (activity.getState()==1) {
+            if (activity.getState() == 1) {
                 JsonObject rest = Json.createObjectBuilder().add("respuesta", "denied").build();
                 return Response.status(Response.Status.OK).entity(rest).build();
-            } else if(activity.getState()==2) {
+            } else if (activity.getState() == 2) {
                 JsonObject rest = Json.createObjectBuilder().add("respuesta", "approved").build();
                 return Response.status(Response.Status.OK).entity(rest).build();
-            }else{
+            } else {
                 JsonObject rest = Json.createObjectBuilder().add("respuesta", "notify").build();
                 return Response.status(Response.Status.OK).entity(rest).build();
             }
@@ -164,6 +218,14 @@ public class ActivityS {
 
     }
 
+    /**
+     * Service that relates an activity to an annex
+     *
+     * @param id
+     * @param idA
+     * @param dataS
+     * @return
+     */
     @PUT
     @Path("/associate/{id}/{idA}")
     public Response associateAnnex(@PathParam("id") int id, @PathParam("idA") int idA, DatosSolicitudPOJO dataS) {
@@ -177,6 +239,12 @@ public class ActivityS {
         }
     }
 
+    /**
+     * Service that obtains the annex type activity
+     *
+     * @param id
+     * @return
+     */
     @GET
     @Path("/getActivityAnnex/{id}")
     public Response getAnnex(@PathParam("id") int id) {

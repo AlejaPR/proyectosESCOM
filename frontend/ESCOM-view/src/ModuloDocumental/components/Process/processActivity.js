@@ -31,9 +31,13 @@ class ProcessActivity extends Component {
                     toast.success('Denegada con éxito.');
                     this.props.addMessageChange('');
                     break;
+                case 'Sin persimo':
+                    toast.error('No tiene permiso para editar este elemento.');
+                    this.props.addMessageChange('')
+                    break;
                 case 'error server':
                     toast.error('Se presento un error, inténtelo más tarde.');
-                    this.props.addMessageAdd('');
+                    this.props.addMessageChange('');
                     break;
                 default:
                     break;
@@ -112,7 +116,7 @@ class ProcessActivity extends Component {
                             onEditorChange={this.handleEditorChange}
                         />
                     </div>
-                    <hr/>
+                    <hr />
                     <ProcessCommentary />
                 </div>
             </div>

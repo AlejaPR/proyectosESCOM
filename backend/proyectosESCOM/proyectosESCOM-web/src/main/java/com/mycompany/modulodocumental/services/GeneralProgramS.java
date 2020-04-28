@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.services;
 
 import com.mycompany.modulodocumental.interfaces.logic.GeneralProgramLogicLocal;
@@ -23,18 +18,28 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
+ * Class in charge of managing all the services related to the genaral program
+ * entity
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @RequestScoped
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Path("generalProgram")
 public class GeneralProgramS {
-    
+
+    /**
+     * General program logical interface injection
+     */
     @EJB
-    private GeneralProgramLogicLocal generalProgramLogic ;
-    
+    private GeneralProgramLogicLocal generalProgramLogic;
+
+    /**
+     * Service to list general programs
+     *
+     * @return
+     */
     @GET
     @Path("/list")
     public Response getList() {
@@ -48,6 +53,12 @@ public class GeneralProgramS {
 
     }
 
+    /**
+     * Service to obtain a general program
+     *
+     * @param id
+     * @return
+     */
     @GET
     @Path("/get/{id}")
     public Response get(@PathParam("id") int id) {
@@ -61,6 +72,12 @@ public class GeneralProgramS {
 
     }
 
+    /**
+     * Service to add a general program
+     *
+     * @param gen
+     * @return
+     */
     @POST
     @Path("/add")
     public Response add(GeneralProgramP gen) {
@@ -75,6 +92,12 @@ public class GeneralProgramS {
 
     }
 
+    /**
+     * Service to edit a general program
+     *
+     * @param gen
+     * @return
+     */
     @PUT
     @Path("/edit")
     public Response edit(GeneralProgramP gen) {
@@ -88,7 +111,13 @@ public class GeneralProgramS {
         }
 
     }
-    
+
+    /**
+     * Service to disable a general program
+     *
+     * @param gen
+     * @return
+     */
     @PUT
     @Path("/disable")
     public Response disable(GeneralProgramP gen) {
@@ -102,5 +131,5 @@ public class GeneralProgramS {
         }
 
     }
-    
+
 }

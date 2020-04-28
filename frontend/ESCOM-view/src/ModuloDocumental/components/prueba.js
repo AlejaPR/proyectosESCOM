@@ -1,5 +1,4 @@
-import React, { Component } from 'react';
-import { Editor } from '@tinymce/tinymce-react';
+import { Component } from 'react';
 
 class Prueba extends Component {
     

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.services;
 
 import com.mycompany.modulodocumental.interfaces.logic.ConditionLogicLocal;
@@ -25,8 +20,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
+ * Class in charge of managing all the services related to the codition entity
  *
- * @author HASHY
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @RequestScoped
 @Produces(MediaType.APPLICATION_JSON)
@@ -34,11 +30,14 @@ import javax.ws.rs.core.Response;
 @Path("condition")
 public class ConditionS {
 
+    /**
+     * Condition logical interface injection
+     */
     @EJB
     private ConditionLogicLocal conditionLogicFacade;
 
     /**
-     * this method returns the list of conditions with active status
+     * Service to list the conditions
      *
      * @param idD
      * @return
@@ -56,7 +55,7 @@ public class ConditionS {
     }
 
     /**
-     * this method returns a condition specified by the id
+     * Service to obtain a condition
      *
      * @param id
      * @return
@@ -74,7 +73,7 @@ public class ConditionS {
     }
 
     /**
-     * this method returns a list of conditions with the current progress
+     * Service to list the conditions with their percentage
      *
      * @param idP
      * @return
@@ -92,7 +91,7 @@ public class ConditionS {
     }
 
     /**
-     * this method adds a new condition to database
+     * Service to add a condition
      *
      * @param con
      * @return
@@ -110,6 +109,12 @@ public class ConditionS {
         }
     }
 
+    /**
+     * Service to edit a condition
+     *
+     * @param con
+     * @return
+     */
     @PUT
     @Path("/edit")
     public Response edit(ConditionP con) {
@@ -124,6 +129,13 @@ public class ConditionS {
 
     }
 
+    /**
+     * Service to disable a condition
+     *
+     * @param id
+     * @param dataR
+     * @return
+     */
     @PUT
     @Path("/disable/{id}")
     public Response disable(@PathParam("id") int id, DatosSolicitudPOJO dataR) {
@@ -138,6 +150,13 @@ public class ConditionS {
 
     }
 
+    /**
+     * Service to approve a condition
+     *
+     * @param id
+     * @param dataR
+     * @return
+     */
     @PUT
     @Path("/approve/{id}")
     public Response approve(@PathParam("id") int id, DatosSolicitudPOJO dataR) {

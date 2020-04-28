@@ -1,26 +1,49 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.view;
 
 import java.io.Serializable;
 
 /**
+ * This is the view class of the annex entity. contains the variables of the
+ * table without annotations
  *
- * @author HASHY
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
-public class AnnexView implements Serializable{
-    
+public class AnnexView implements Serializable {
+
+    /**
+     * variable name annex
+     */
     private String name;
+
+    /**
+     * variable description annex
+     */
     private String description;
+
+    /**
+     * variable name condition
+     */
     private String condition;
+
+    /**
+     * variable keywords annex
+     */
     private String keywords;
 
+    /**
+     * constructor method
+     */
     public AnnexView() {
     }
 
+    /**
+     * constructor method
+     *
+     * @param name
+     * @param description
+     * @param condition
+     * @param keywords
+     */
     public AnnexView(String name, String description, String condition, String keywords) {
         this.name = name;
         this.description = description;
@@ -28,6 +51,7 @@ public class AnnexView implements Serializable{
         this.keywords = keywords;
     }
 
+    //getter and setter
     public String getName() {
         return name;
     }
@@ -59,5 +83,5 @@ public class AnnexView implements Serializable{
     public void setKeywords(String keywords) {
         this.keywords = keywords;
     }
-    
+
 }

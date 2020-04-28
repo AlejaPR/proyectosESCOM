@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.services;
 
 import com.mycompany.modulodocumental.interfaces.logic.AnnexLogicLocal;
@@ -25,8 +20,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
+ * Class in charge of managing all the services related to the annex entity
  *
- * @author HASHY
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @RequestScoped
 @Produces(MediaType.APPLICATION_JSON)
@@ -34,9 +30,18 @@ import javax.ws.rs.core.Response;
 @Path("annex")
 public class AnnexS {
 
+    /**
+     * Annex logical interface injection
+     */
     @EJB
     private AnnexLogicLocal annexLogicFacade;
 
+    /**
+     * Service that adds an annex
+     *
+     * @param annex
+     * @return
+     */
     @POST
     @Path("/add")
     public Response add(AnnexP annex) {
@@ -51,6 +56,12 @@ public class AnnexS {
 
     }
 
+    /**
+     * Service to edit an attachment
+     *
+     * @param annex
+     * @return
+     */
     @PUT
     @Path("/edit")
     public Response edit(AnnexP annex) {
@@ -64,6 +75,13 @@ public class AnnexS {
         }
     }
 
+    /**
+     * Service that disable an annex
+     *
+     * @param id
+     * @param dataR
+     * @return
+     */
     @PUT
     @Path("/disable/{id}")
     public Response disableAnnex(@PathParam("id") int id, DatosSolicitudPOJO dataR) {
@@ -77,6 +95,12 @@ public class AnnexS {
         }
     }
 
+    /**
+     * Service that obtains the list of annexes
+     *
+     * @param id
+     * @return
+     */
     @GET
     @Path("/list/{id}")
     public Response getList(@PathParam("id") int id) {
@@ -89,6 +113,12 @@ public class AnnexS {
         }
     }
 
+    /**
+     * Service that gets an annex
+     *
+     * @param id
+     * @return
+     */
     @GET
     @Path("/get/{id}")
     public Response get(@PathParam("id") int id) {
@@ -101,6 +131,12 @@ public class AnnexS {
         }
     }
 
+    /**
+     * Service seeking annexes
+     *
+     * @param search
+     * @return
+     */
     @POST
     @Path("/searchAnnexS")
     public Response searchAnnexS(SearchAnnP search) {

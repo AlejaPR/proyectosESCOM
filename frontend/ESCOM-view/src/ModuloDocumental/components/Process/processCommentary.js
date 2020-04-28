@@ -7,6 +7,8 @@ import { toast } from 'react-toastify';
 import { getListComments, deleteCommentary, addCommentary, addMessageDelete, addMessageAdd } from '../../redux/actions/commentaryA.js';
 import { required, thousand, minimum } from '../utilitarian/validations.js';
 import { confirmAlert } from 'react-confirm-alert';
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
 
 class ProcessCommentary extends Component {
 
@@ -34,6 +36,10 @@ class ProcessCommentary extends Component {
                     this.props.getListComments(localStorage.getItem('Token'), sessionStorage.getItem('activity'));
                     this.props.addMessageAdd('');
                     break;
+                case 'Sin persimo':
+                    toast.error('No tiene permiso para agregar este elemento.');
+                    this.props.addMessageAdd('')
+                    break;
                 case 'error server':
                     toast.error('Se presento un error, intentelo mas tarde.');
                     this.props.addMessageAdd('');
@@ -48,6 +54,10 @@ class ProcessCommentary extends Component {
                     toast.success('Se elimino con éxito.');
                     this.props.getListComments(localStorage.getItem('Token'), sessionStorage.getItem('activity'));
                     this.props.addMessageDelete('');
+                    break;
+                case 'Sin persimo':
+                    toast.error('No tiene permiso para agregar este elemento.');
+                    this.props.addMessageDelete('')
                     break;
                 case 'error server':
                     toast.error('Se presento un error, intentelo mas tarde.');
@@ -127,42 +137,52 @@ class ProcessCommentary extends Component {
     render() {
         return (
             <div >
-                <h5><strong>Comentarios</strong></h5>
-                <table class="table border">
-                    <tbody>
-                        {this.loadTable()}
-                    </tbody>
-                </table>
-                <br />
+                {
+                    this.props.enabled ? <div className="col-sm-12">
+                        <Alert severity="error" variant="outlined">
+                            <AlertTitle>Sin permiso</AlertTitle>
+                        No tiene permisos suficientes para listar los Comentarios</Alert>
+                    </div> :
+                        <div>
+                            <h5><strong>Comentarios</strong></h5>
+                            <table class="table border">
+                                <tbody>
+                                    {this.loadTable()}
+                                </tbody>
+                            </table>
+                            <br />
 
-                <button type="button" className="btn text-light btn-sm float-right naranja " data-toggle="modal" data-target="#addModalComment" >
-                    <i class="fas fa-plus"></i> Agregar
-                     </button>
-                <div class="modal fade" id="addModalComment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <form className="form-horizontal" onSubmit={this.props.handleSubmit(this.handleSubmit)}>
-                                <div class="modal-header">
-                                    <h4 class="modal-title">Nuevo comentario</h4>
-                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                </div>
-                                <div class="modal-body">
-                                    <label for="form_control_1">Mensaje: </label>
-                                    <div className="row">
-                                        <div className="col-sm-8">
-                                            <Field name="message" validate={[required, thousand, minimum]} component={generarText} label="Nombre" />
-                                        </div>
+                            <button type="button" className="btn text-light btn-sm float-right naranja " data-toggle="modal" data-target="#addModalComment" >
+                                <i class="fas fa-plus"></i> Agregar
+                            </button>
+                            <div class="modal fade" id="addModalComment" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <form className="form-horizontal" onSubmit={this.props.handleSubmit(this.handleSubmit)}>
+                                            <div class="modal-header">
+                                                <h4 class="modal-title">Nuevo comentario</h4>
+                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <label for="form_control_1">Mensaje: </label>
+                                                <div className="row">
+                                                    <div className="col-sm-8">
+                                                        <Field name="message" validate={[required, thousand, minimum]} component={generarText} label="Nombre" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                <button type="submit" className="btn btn-default naranja">Agregar</button>
+                                            </div>
+                                        </form>
                                     </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                                    <button type="submit" className="btn btn-default naranja">Agregar</button>
-                                </div>
-                            </form>
-                        </div>
 
-                    </div>
-                </div>
+                                </div>
+                            </div>
+
+                        </div>
+                }
 
             </div>
         );
@@ -183,7 +203,8 @@ function mapStateToProps(state) {
     return {
         listComments: state.commentary.listCommentsR,
         messageAddC: state.commentary.messageAdd,
-        messageDeleteC: state.commentary.messageDelete
+        messageDeleteC: state.commentary.messageDelete,
+        enabled: state.commentary.stateActivityAnnex
     }
 }
 

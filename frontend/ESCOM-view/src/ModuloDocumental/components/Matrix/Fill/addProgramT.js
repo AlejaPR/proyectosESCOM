@@ -30,6 +30,10 @@ class AddProgramT extends Component {
                     this.props.getListProgramT(localStorage.getItem('Token'), sessionStorage.getItem('programId'))
                     this.props.addMessageAdd('');
                     break;
+                case 'Sin persimo':
+                    toast.error('No tiene permiso para agregar este elemento.');
+                    this.props.addMessageAdd('');
+                    break;
                 case 'error server':
                     toast.error('Se presento un error, intentelo mas tarde.');
                     this.props.addMessageAdd('');

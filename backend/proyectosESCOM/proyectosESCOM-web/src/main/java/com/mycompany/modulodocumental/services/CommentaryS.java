@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.services;
 
 import com.mycompany.modulodocumental.interfaces.logic.CommentaryLogicLocal;
@@ -23,21 +18,31 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
+ * Class in charge of managing all the services related to the commentary entity
  *
- * @author HASHY
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @RequestScoped
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Path("commentary")
 public class CommentaryS {
-    
+
+    /**
+     * Commentary logical interface injection
+     */
     @EJB
     private CommentaryLogicLocal commentaryLogicFacade;
-    
+
+    /**
+     * Service to add a comment
+     *
+     * @param commentary
+     * @return
+     */
     @POST
     @Path("/add")
-    public Response add(CommentaryP commentary){
+    public Response add(CommentaryP commentary) {
         try {
             commentaryLogicFacade.add(commentary);
             JsonObject rest = Json.createObjectBuilder().add("respuesta", "add").build();
@@ -47,10 +52,16 @@ public class CommentaryS {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
-    
+
+    /**
+     * Service to list comments
+     *
+     * @param id
+     * @return
+     */
     @GET
     @Path("/list/{id}")
-    public Response getList(@PathParam("id") int id){
+    public Response getList(@PathParam("id") int id) {
         try {
             List<CommentaryP> data = commentaryLogicFacade.getList(id);
             return Response.status(Response.Status.OK).entity(data).build();
@@ -58,12 +69,19 @@ public class CommentaryS {
             JsonObject rest = Json.createObjectBuilder().add("respuesta", "error server").build();
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
-        
+
     }
-    
+
+    /**
+     * Service to delete a comment
+     *
+     * @param id
+     * @param datosS
+     * @return
+     */
     @POST
     @Path("/delete/{id}")
-    public Response delete(@PathParam("id") int id, DatosSolicitudPOJO datosS){
+    public Response delete(@PathParam("id") int id, DatosSolicitudPOJO datosS) {
         try {
             commentaryLogicFacade.delete(id, datosS);
             JsonObject rest = Json.createObjectBuilder().add("respuesta", "delete").build();
@@ -73,5 +91,5 @@ public class CommentaryS {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
-    
+
 }

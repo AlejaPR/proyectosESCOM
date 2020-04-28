@@ -22,10 +22,6 @@ class PtThematic extends Component {
                     this.props.getListRelational(localStorage.getItem('Token'), sessionStorage.getItem('programT'), 'PtThematic');
                     this.props.addMessageAdd('');
                     break;
-                case 'error server':
-                    toast.error('Se presento un error, intentelo mas tarde.');
-                    this.props.addMessageAdd('');
-                    break;
                 default:
                     break;
             }
@@ -36,10 +32,6 @@ class PtThematic extends Component {
                     toast.success('Se elimino correctamente.');
                     this.props.addMessageDelete('');
                     this.props.getListRelational(localStorage.getItem('Token'), sessionStorage.getItem('programT'), 'PtThematic');
-                    break;
-                case 'error server':
-                    toast.error('Se presento un error, intentelo mas tarde.');
-                    this.props.addMessageDelete('');
                     break;
                 default:
                     break;
@@ -173,9 +165,9 @@ function mapStateToProps(state) {
     }
 }
 
-let formAdd = reduxForm({
+let formAddT = reduxForm({
     form: 'addThematic',
     enableReinitialize: true
 })(PtThematic)
 
-export default withRouter(connect(mapStateToProps, { addMessageAdd, addMessageDelete, getListRelational, addRelational, deleteRelational })(formAdd));
+export default withRouter(connect(mapStateToProps, { addMessageAdd, addMessageDelete, getListRelational, addRelational, deleteRelational })(formAddT));

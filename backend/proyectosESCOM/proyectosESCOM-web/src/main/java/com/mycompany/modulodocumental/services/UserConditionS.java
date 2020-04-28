@@ -1,10 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.services;
-
 
 import com.mycompany.modulodocumental.interfaces.logic.UserConditionLogicLocal;
 import com.mycompany.modulodocumental.pojo.UserConditionP;
@@ -26,8 +20,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
+ * Class in charge of managing all the services related to the user condition
+ * entity
  *
- * @author HASHY
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @RequestScoped
 @Produces(MediaType.APPLICATION_JSON)
@@ -35,9 +31,19 @@ import javax.ws.rs.core.Response;
 @Path("userCondition")
 public class UserConditionS {
 
+    /**
+     * User condition logical interface injection
+     */
     @EJB
     private UserConditionLogicLocal userConditionLogicFacade;
 
+    /**
+     * Service to list user condition
+     *
+     * @param idP
+     * @param token
+     * @return
+     */
     @GET
     @Path("/list/{idP}")
     public Response getList(@PathParam("idP") int idP, @HeaderParam("TokenAuto") String token) {
@@ -49,7 +55,12 @@ public class UserConditionS {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
-    
+
+    /**
+     * Service to list users
+     *
+     * @return
+     */
     @GET
     @Path("/listUsers")
     public Response listUsers() {
@@ -61,7 +72,13 @@ public class UserConditionS {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
-    
+
+    /**
+     * Service to list users by condition
+     *
+     * @param id
+     * @return
+     */
     @GET
     @Path("/listUsersC/{id}")
     public Response listUsersCondition(@PathParam("id") int id) {
@@ -73,10 +90,16 @@ public class UserConditionS {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
-    
+
+    /**
+     * Service to associate users to condition
+     *
+     * @param userCondition
+     * @return
+     */
     @POST
     @Path("/associate")
-    public Response associate(UserConditionP userCondition){
+    public Response associate(UserConditionP userCondition) {
         try {
             userConditionLogicFacade.associate(userCondition);
             JsonObject rest = Json.createObjectBuilder().add("respuesta", "associate").build();
@@ -86,10 +109,16 @@ public class UserConditionS {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
-    
+
+    /**
+     * Service to remove condition users
+     *
+     * @param userCondition
+     * @return
+     */
     @POST
     @Path("/delete")
-    public Response delete(UserConditionP userCondition){
+    public Response delete(UserConditionP userCondition) {
         try {
             userConditionLogicFacade.delete(userCondition);
             JsonObject rest = Json.createObjectBuilder().add("respuesta", "delete").build();
@@ -99,6 +128,5 @@ public class UserConditionS {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
-    
-    
- }
+
+}

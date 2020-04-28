@@ -23,10 +23,6 @@ class PtCompetitionG extends Component {
                     this.props.getListRelational(localStorage.getItem('Token'), sessionStorage.getItem('programT'), 'PtCompetitionG');
                     this.props.addMessageAdd('');
                     break;
-                case 'error server':
-                    toast.error('Se presento un error, intentelo mas tarde.');
-                    this.props.addMessageAdd('');
-                    break;
                 default:
                     break;
             }
@@ -37,10 +33,6 @@ class PtCompetitionG extends Component {
                     toast.success('Se inhabilito con exito.');
                     this.props.addMessageDelete('');
                     this.props.getListRelational(localStorage.getItem('Token'), sessionStorage.getItem('programT'), 'PtCompetitionG');
-                    break;
-                case 'error server':
-                    toast.error('Se presento un error, intentelo mas tarde.');
-                    this.props.addMessageDelete('');
                     break;
                 default:
                     break;
@@ -173,9 +165,9 @@ function mapStateToProps(state) {
     }
 }
 
-let formAdd = reduxForm({
-    form: 'addProcess',
+let formAddG = reduxForm({
+    form: 'addCompetitionG',
     enableReinitialize: true
 })(PtCompetitionG)
 
-export default withRouter(connect(mapStateToProps, { addMessageAdd, addMessageDelete, getListCompetitionG, getListRelational, addRelational, deleteRelational })(formAdd));
+export default withRouter(connect(mapStateToProps, { addMessageAdd, addMessageDelete, getListCompetitionG, getListRelational, addRelational, deleteRelational })(formAddG));

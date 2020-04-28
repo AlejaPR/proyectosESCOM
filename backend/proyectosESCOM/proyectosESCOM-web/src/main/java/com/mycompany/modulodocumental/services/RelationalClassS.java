@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.services;
 
 import com.mycompany.modulodocumental.interfaces.logic.RelationalClassLogicLocal;
@@ -23,21 +18,33 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
+ * Class in charge of managing all the services related to the program thematic
+ * core entity
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @RequestScoped
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @Path("relationalClass")
 public class RelationalClassS {
-    
+
+    /**
+     * Relational class logical interface injection
+     */
     @EJB
     private RelationalClassLogicLocal relationalClassLogic;
 
+    /**
+     * Service to list relational classes
+     *
+     * @param id
+     * @param table
+     * @return
+     */
     @GET
     @Path("/list/{id}/{table}")
-    public Response getList(@PathParam("id") int id,@PathParam("table") String table ) {
+    public Response getList(@PathParam("id") int id, @PathParam("table") String table) {
         try {
             List<RelationalClassP> data = relationalClassLogic.getList(id, table);
             return Response.status(Response.Status.OK).entity(data).build();
@@ -47,7 +54,13 @@ public class RelationalClassS {
         }
 
     }
-    
+
+    /**
+     * Service to add a relational class
+     *
+     * @param relation
+     * @return
+     */
     @POST
     @Path("/add")
     public Response add(RelationalClassP relation) {
@@ -61,7 +74,13 @@ public class RelationalClassS {
         }
 
     }
-    
+
+    /**
+     * Service to remove a relational class
+     *
+     * @param relation
+     * @return
+     */
     @PUT
     @Path("/delete")
     public Response delete(RelationalClassP relation) {

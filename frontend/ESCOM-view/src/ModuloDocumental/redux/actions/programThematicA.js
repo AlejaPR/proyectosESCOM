@@ -208,13 +208,13 @@ export function deleteProgramT(token, programT) {
         'Permiso': PERMIT_DELETE_PROGRAM_T
 
     }
-    programT.requestData = {
+    let requestData = {
         'ip': localStorage.getItem('Ip'),
         'token': desencriptar(token),
         'operacion': PERMIT_DELETE_PROGRAM_T
     };
     return (dispatch, getState) => {
-        axios.put(`${URL_BASE}/proyectosESCOM-web/api/programThematicCore/delete`, programT, { headers: headers })
+        axios.put(`${URL_BASE}/proyectosESCOM-web/api/programThematicCore/delete/${programT}`, requestData, { headers: headers })
             .then(response => {
                 dispatch({
                     type: DELETE_PROGRAM_T,

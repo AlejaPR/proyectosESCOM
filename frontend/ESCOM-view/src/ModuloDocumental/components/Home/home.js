@@ -17,7 +17,7 @@ class home extends Component {
             sessionStorage.setItem('documentId', this.props.idDocument)
             this.props.history.push("/HomeDef")
         } else if (this.props.idDocument === -1) {
-            alert('no tiene un docuemnto asociado')
+            alert('No tiene un documento asociado')
         }
 
     }

@@ -101,7 +101,6 @@ class FormCondition extends Component {
                 </div>
                 <br />
                 <div className="shadow" style={{ background: "#FFFFFF", padding: "30px" }}>
-
                     {
                         this.props.enabled ? <div className="col-sm-12">
                             <Alert severity="error" variant="outlined">

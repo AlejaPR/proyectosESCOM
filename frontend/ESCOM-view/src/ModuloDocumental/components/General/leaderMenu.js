@@ -12,7 +12,6 @@ import HomeIcon from '@material-ui/icons/Home';
 import LibraryBooksIcon from '@material-ui/icons/LibraryBooks';
 import SettingsIcon from '@material-ui/icons/Settings';
 import AccountTreeIcon from '@material-ui/icons/AccountTree';
-import AmpStoriesIcon from '@material-ui/icons/AmpStories';
 import ArchiveIcon from '@material-ui/icons/Archive';
 import ViewListIcon from '@material-ui/icons/ViewList';
 
@@ -84,7 +83,7 @@ class MenuLateral extends Component {
 					</div>
 				</div>
 				<li className="nav-item" style={{ height: "65px" }}>
-					<Link to="/HomeDocumentary" onClick ={() => this.props.addIdDocument(0)} name="hoverUsuario" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
+					<Link to="/HomeDocumentary" onClick={() => this.props.addIdDocument(0)} name="hoverUsuario" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
 						style={this.fondoBarr()}>
 						<HomeIcon />
 						<br />
@@ -172,6 +171,7 @@ class MenuLateral extends Component {
 						<span className="title letra">Digitación documento</span>
 					</Link>
 				</li>
+				{/*
 				<li className="nav-item" style={{ height: "65px" }}>
 					<Link to="/Classification" name="hoverReportes" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
 						style={this.fondoBarr()}>
@@ -180,6 +180,8 @@ class MenuLateral extends Component {
 						<span className="title letra">Clasificación Documental</span>
 					</Link>
 				</li>
+				*/
+				}
 				<li className="nav-item" style={{ height: "65px" }} data-toggle="collapse" data-target="#collapseMatrix" aria-expanded="false" aria-controls="collapseMatrix">
 					<Link name="hoverReportes" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
 						style={this.fondoBarr()}>
@@ -217,4 +219,4 @@ function mapStateToProps(state) {
 }
 
 
-export default connect(mapStateToProps, { getListProcesses,addIdDocument, getConditionsPer, consultarConfiguracion })(MenuLateral)
+export default connect(mapStateToProps, { getListProcesses, addIdDocument, getConditionsPer, consultarConfiguracion })(MenuLateral)

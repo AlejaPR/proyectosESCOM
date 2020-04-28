@@ -1,29 +1,43 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.pojo;
 
 import java.io.Serializable;
 
 /**
+ * This is the POJO class of the search annex entity. contains the variables of
+ * the table without annotations
  *
- * @author HASHY
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
-public class SearchAnnP implements Serializable{
-    
+public class SearchAnnP implements Serializable {
+
+    /**
+     * variable id program
+     */
     private int idProgram;
+
+    /**
+     * variable name
+     */
     private String name;
 
+    /**
+     * constructor method
+     */
     public SearchAnnP() {
     }
 
+    /**
+     * constructor method
+     *
+     * @param idProgram
+     * @param name
+     */
     public SearchAnnP(int idProgram, String name) {
         this.idProgram = idProgram;
         this.name = name;
     }
 
+    //getter and setter
     public int getIdProgram() {
         return idProgram;
     }
@@ -40,5 +54,4 @@ public class SearchAnnP implements Serializable{
         this.name = name;
     }
 
-    
 }

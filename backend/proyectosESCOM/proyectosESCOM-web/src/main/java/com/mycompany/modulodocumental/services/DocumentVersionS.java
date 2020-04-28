@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.services;
 
 import com.mycompany.modulodocumental.interfaces.logic.DocumentVersionLogicLocal;
@@ -22,8 +17,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
+ * Class in charge of managing all the services related to the document version
+ * entity
  *
- * @author HASHY
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @RequestScoped
 @Produces(MediaType.APPLICATION_JSON)
@@ -31,9 +28,18 @@ import javax.ws.rs.core.Response;
 @Path("documentVersion")
 public class DocumentVersionS {
 
+    /**
+     * Document version logical interface injection
+     */
     @EJB
     private DocumentVersionLogicLocal documentVersionLogicFacade;
 
+    /**
+     * Service to list current versions
+     *
+     * @param id
+     * @return
+     */
     @GET
     @Path("/listCurrent/{id}")
     public Response getListCurrent(@PathParam("id") int id) {
@@ -46,6 +52,12 @@ public class DocumentVersionS {
         }
     }
 
+    /**
+     * Service to list old versions
+     *
+     * @param id
+     * @return
+     */
     @GET
     @Path("/listOld/{id}")
     public Response getListOld(@PathParam("id") int id) {
@@ -57,7 +69,13 @@ public class DocumentVersionS {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(rest).build();
         }
     }
-    
+
+    /**
+     * Service to add a version of the document
+     *
+     * @param version
+     * @return
+     */
     @POST
     @Path("/add")
     public Response add(DocumentVersionP version) {
@@ -71,6 +89,5 @@ public class DocumentVersionS {
         }
 
     }
-    
-    
+
 }

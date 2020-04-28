@@ -6,11 +6,23 @@ export const GET_CURRENT_VERSIONS = 'GET_CURRENT_VERSIONS';
 export const GET_OLD_VERSIONS = 'GET_OLD_VERSIONS';
 export const STATE_OLD_VERSION = 'STATE_OLD_VERSION';
 export const STATE_CURRENT_VERSION = 'STATE_CURRENT_VERSION';
+export const ADD_DOCUMENT_VERSION = 'ADD_DOCUMENT_VERSION';
 
 const PERMIT_CURRENT_VERSIONS = 'MD_Prueba';
 const PERMIT_OLD_VERSIONS = 'MD_Prueba';
+const PERMIT_ADD_DOCUMENT_VERSION = 'MD_Prueba';
 
-const ADD_MESSAGE = 'ADD_MESSAGE';
+export const ADD_MESSAGE = 'ADD_MESSAGE';
+export const ADD_MESSAGE_ADD = 'ADD_MESSAGE_ADD';
+
+export function addMessageAdd(mensaje) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: ADD_MESSAGE_ADD,
+            mensaje: mensaje
+        });
+    };
+}
 
 //MD_Lista versiones actuales
 export function getCurrentVersions(token, id) {
@@ -94,5 +106,54 @@ export function getOldVersions(token, id) {
                 }
 
             });
+    }
+}
+
+//MD_Agregar version anexo
+export function addDocumentVersion(token, data, document) {
+    const headers = {
+        'Content-Type': 'application/json; charset= UTF-8',
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMIT_ADD_DOCUMENT_VERSION
+    }
+    document.requestData = {
+        'ip': localStorage.getItem('Ip'),
+        'token': desencriptar(token),
+        'operacion': PERMIT_ADD_DOCUMENT_VERSION
+    };
+    return (dispatch, getState) => {
+        axios.post("http://localhost:8000/upload", data)
+            .then(res => {
+                document.location = res.data
+                axios.post(`${URL_BASE}/proyectosESCOM-web/api/documentVersion/add/`, document, { headers: headers })
+                    .then(response => {
+                        dispatch({
+                            type: ADD_DOCUMENT_VERSION,
+                            payload: response.data.respuesta
+                        });
+                    }).catch(error => {
+                        if (error.request.response === '') {
+                            dispatch({
+                                type: ADD_DOCUMENT_VERSION,
+                                payload: 'error server'
+                            });
+                        } else {
+                            if (error.request) {
+                                var data = JSON.parse(error.request.response);
+                                let respuesta = data.respuesta;
+                                dispatch({
+                                    type: ADD_DOCUMENT_VERSION,
+                                    payload: respuesta
+                                });
+                            }
+                        }
+
+                    })
+            }).catch(err => {
+                dispatch({
+                    type: ADD_DOCUMENT_VERSION,
+                    payload: err.data
+                });
+            })
     }
 }

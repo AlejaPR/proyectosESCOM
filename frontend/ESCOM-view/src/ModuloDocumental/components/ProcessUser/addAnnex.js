@@ -24,6 +24,10 @@ class AddAnnex extends Component {
                     this.props.addMessageAssociate('');
                     this.props.getActivityAnnex(localStorage.getItem('Token'), sessionStorage.getItem('activity'))
                     break;
+                case 'Sin persimo':
+                    toast.error('No tiene permiso para asociar este elemento.');
+                    this.props.addMessageAssociate('')
+                    break;
                 case 'error server':
                     toast.error('Se presento un error, intentelo mas tarde.');
                     this.props.addMessageAssociate('');
@@ -38,6 +42,10 @@ class AddAnnex extends Component {
                 case 'notify':
                     toast.success('Notificada con éxito.');
                     this.props.addMessageChange('');
+                    break;
+                case 'Sin persimo':
+                    toast.error('No tiene permiso para notificar este elemento.');
+                    this.props.addMessageEdit('')
                     break;
                 case 'error server':
                     toast.error('Se presento un error, intentelo mas tarde.');

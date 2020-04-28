@@ -165,7 +165,6 @@ function mapStateToProps(state) {
         listProgram: state.program.listProgramR,
         messageDisableP: state.program.messageDisable,
         enabled: state.program.stateProgram
-
     }
 }
 

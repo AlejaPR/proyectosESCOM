@@ -37,7 +37,7 @@ public class DocumentVersionFacade extends AbstractFacade<DocumentVersion> imple
      */
     @Override
     public List<DocumentVersion> listCurrentVersions(int idDocument) {
-        Query query = em.createQuery("SELECT v FROM DocumentVersion v WHERE v.fkDvDocument.id = ?1 ORDER BY V.state DESC");
+        Query query = em.createQuery("SELECT v FROM DocumentVersion v WHERE v.fkDvDocument.id = ?1 and v.state <> 2 ORDER BY V.state DESC");
         query.setParameter(1, idDocument);
         List<DocumentVersion> list = query.getResultList();
         return list;
@@ -51,7 +51,7 @@ public class DocumentVersionFacade extends AbstractFacade<DocumentVersion> imple
      */
     @Override
     public List<DocumentVersion> listOldVersions(int idProgram) {
-        Query query = em.createQuery("SELECT v FROM DocumentVersion v WHERE v.fkDvDocument.fkDocProgram.id = ?1 and v.fkDvDocument.state = 2 and v.state = 1 ORDER BY V.date DESC");
+        Query query = em.createQuery("SELECT v FROM DocumentVersion v WHERE v.fkDvDocument.fkDocProgram.id = ?1 and v.state = 2 ORDER BY V.date DESC");
         query.setParameter(1, idProgram);
         List<DocumentVersion> list = query.getResultList();
         return list;

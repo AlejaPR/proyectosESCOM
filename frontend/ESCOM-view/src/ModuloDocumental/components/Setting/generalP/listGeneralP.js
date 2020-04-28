@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { getListGeneralPro, getGeneralPro, addMessageAdd, addMessageDisable, addMessageEdit, disableGeneralPro } from '../../../redux/actions/generalProgramA.js';
 import { ToastContainer, toast } from 'react-toastify';
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
 
 import Add from './add.js';
 import Edit from './edit.js';
@@ -22,6 +24,10 @@ class ListGeneral extends Component {
                     this.props.addMessageEdit('');
                     this.props.getListGeneralPro(localStorage.getItem('Token'))
                     break;
+                case 'Sin persimo':
+                    toast.error('No tiene permiso para editar este elemento.');
+                    this.props.addMessageEdit('')
+                    break;
                 case 'error server':
                     toast.error('Se presento un error, intentelo mas tarde.');
                     this.props.addMessageEdit('');
@@ -35,6 +41,10 @@ class ListGeneral extends Component {
                 case 'add':
                     toast.success('Se agrego con exito.');
                     this.props.getListGeneralPro(localStorage.getItem('Token'))
+                    this.props.addMessageAdd('')
+                    break;
+                case 'Sin persimo':
+                    toast.error('No tiene permiso para agregar este elemento.');
                     this.props.addMessageAdd('')
                     break;
                 case 'error server':
@@ -52,6 +62,10 @@ class ListGeneral extends Component {
                     this.props.getListGeneralPro(localStorage.getItem('Token'))
                     this.props.addMessageDisable('')
                     break;
+                case 'Sin persimo':
+                    toast.error('No tiene permiso para inhabilitar este elemento.');
+                    this.props.addMessageDisable('')
+                    break;
                 case 'error server':
                     toast.error('Se presento un error, intentelo mas tarde.');
                     this.props.addMessageDisable('')
@@ -63,7 +77,7 @@ class ListGeneral extends Component {
     }
 
 
-    componentDidMountMount() {
+    componentDidMount() {
         this.props.getListGeneralPro(localStorage.getItem('Token'))
     }
 
@@ -91,71 +105,80 @@ class ListGeneral extends Component {
                 </div>
                 <br />
                 <div className="shadow" style={{ background: "#FFFFFF", padding: "30px" }}>
-                    <div>
-                        <Add />
-                    </div>
-                    <br />
-                    <br />
-                    <MaterialTable
-                        title=""
-                        localization={{
-                            header: {
-                                actions: ' '
-                            },
-                            pagination: {
-                                nextTooltip: 'Siguiente ',
-                                previousTooltip: 'Anterior',
-                                labelDisplayedRows: '{from}-{to} de {count}',
-                                lastTooltip: 'Ultima pagina',
-                                firstTooltip: 'Primera pagina',
-                                labelRowsSelect: 'Registros',
-                                firstAriaLabel: 'oooo'
-                            },
-                            body: {
-                                emptyDataSourceMessage: 'Aun no hay ninguna facultad registrada'
-                            },
-                            toolbar: {
-                                searchTooltip: 'Buscar',
-                                searchPlaceholder: 'Buscar'
-                            }
-                        }}
-                        columns={[
+                    {
+                        this.props.enabled ? <div className="col-sm-12">
+                            <Alert severity="error" variant="outlined">
+                                <AlertTitle>Sin permiso</AlertTitle>
+                            No tiene permisos suficientes para listar las condiciones</Alert>
+                        </div> :
+                            <div>
+                                <div>
+                                    <Add />
+                                </div>
+                                <br />
+                                <br />
+                                <MaterialTable
+                                    title=""
+                                    localization={{
+                                        header: {
+                                            actions: ' '
+                                        },
+                                        pagination: {
+                                            nextTooltip: 'Siguiente ',
+                                            previousTooltip: 'Anterior',
+                                            labelDisplayedRows: '{from}-{to} de {count}',
+                                            lastTooltip: 'Ultima pagina',
+                                            firstTooltip: 'Primera pagina',
+                                            labelRowsSelect: 'Registros',
+                                            firstAriaLabel: 'oooo'
+                                        },
+                                        body: {
+                                            emptyDataSourceMessage: 'Aun no hay ninguna facultad registrada'
+                                        },
+                                        toolbar: {
+                                            searchTooltip: 'Buscar',
+                                            searchPlaceholder: 'Buscar'
+                                        }
+                                    }}
+                                    columns={[
 
-                            { title: 'Nombre de la facultad', field: 'name' },
-                            { title: 'Descripción', field: 'description' },
-                            {
-                                title: '', field: 'id',
-                                render: rowData => {
-                                    return (
-                                        <div>
-                                            <a onClick={() => this.saveEdit(rowData.id)} data-toggle="modal" data-target="#editModal">
-                                                <EditIcon />
-                                            </a>
-                                            <Edit />
-                                        </div>
-                                    )
-                                }
-                            },
-                            {
-                                title: '', field: 'id',
-                                render: rowData => {
-                                    return (
-                                        <div>
-                                            <a onClick={() => this.disable(rowData.id)}>
-                                                <DeleteForeverIcon />
-                                            </a>
-                                        </div>
-                                    )
-                                }
-                            }
+                                        { title: 'Nombre de la facultad', field: 'name' },
+                                        { title: 'Descripción', field: 'description' },
+                                        {
+                                            title: '', field: 'id',
+                                            render: rowData => {
+                                                return (
+                                                    <div>
+                                                        <a onClick={() => this.saveEdit(rowData.id)} data-toggle="modal" data-target="#editModal">
+                                                            <EditIcon />
+                                                        </a>
+                                                        <Edit />
+                                                    </div>
+                                                )
+                                            }
+                                        },
+                                        {
+                                            title: '', field: 'id',
+                                            render: rowData => {
+                                                return (
+                                                    <div>
+                                                        <a onClick={() => this.disable(rowData.id)}>
+                                                            <DeleteForeverIcon />
+                                                        </a>
+                                                    </div>
+                                                )
+                                            }
+                                        }
 
-                        ]}
-                        data={this.props.listGeneralPro}
-                        options={{
-                            search: true
-                        }}
+                                    ]}
+                                    data={this.props.listGeneralPro}
+                                    options={{
+                                        search: true
+                                    }}
 
-                    />
+                                />
+                            </div>
+                    }
                 </div>
             </div>
         )
@@ -168,8 +191,9 @@ function mapStateToProps(state) {
         listGeneralPro: state.generalProgram.listGeneralPro,
         messageEditG: state.generalProgram.messageEdit,
         messageAddG: state.generalProgram.messageAdd,
-        messageDisableG: state.generalProgram.messageDisable
+        messageDisableG: state.generalProgram.messageDisable,
+        enabled: state.generalProgram.stateGeneralProgram
     }
 }
 
-export default withRouter(connect(mapStateToProps, { getListGeneralPro,getGeneralPro, addMessageEdit, addMessageAdd, addMessageDisable, disableGeneralPro })(ListGeneral));
+export default withRouter(connect(mapStateToProps, { getListGeneralPro, getGeneralPro, addMessageEdit, addMessageAdd, addMessageDisable, disableGeneralPro })(ListGeneral));

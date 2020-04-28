@@ -1,20 +1,16 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { getListPrograms } from '../../../redux/actions/programA.js';
 import { getListAnnexes, searchAnnexS } from '../../../redux/actions/annexA.js';
-import { reduxForm, Field } from 'redux-form';
 import { Link, withRouter } from 'react-router-dom';
-
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
 import MaterialTable from 'material-table';
-import EditIcon from '@material-ui/icons/Edit';
 import VisibilityIcon from '@material-ui/icons/Visibility';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 class searchAnnexs extends Component {
 
-    componentWillMount() {
-        this.props.getListPrograms(localStorage.getItem('Token'))
+    componentDidMount() {
         this.props.getListAnnexes(localStorage.getItem('Token'), 0)
     }
 
@@ -31,62 +27,69 @@ class searchAnnexs extends Component {
                 </div>
                 <br />
                 <div className="shadow" style={{ background: "#FFFFFF", padding: "30px" }}>
-                    <MaterialTable
-                        title=""
-                        localization={{
-                            header: {
-                                actions: ' '
-                            },
-                            pagination: {
-                                nextTooltip: 'Siguiente ',
-                                previousTooltip: 'Anterior',
-                                labelDisplayedRows: '{from}-{to} de {count}',
-                                lastTooltip: 'Ultima pagina',
-                                firstTooltip: 'Primera pagina',
-                                labelRowsSelect: 'Registros',
-                                firstAriaLabel: 'oooo'
-                            },
-                            body: {
-                                emptyDataSourceMessage: 'Aun no hay ningun documento registrado'
-                            },
-                            toolbar: {
-                                searchTooltip: 'Buscar',
-                                searchPlaceholder: 'Buscar'
-                            }
-                        }}
-                        columns={[
-                            { title: 'Nombre del anexo', field: 'name' },
-                            { title: 'Programa', field: 'nameProgram' },
-                            { title: 'Palabras clave', field: 'keywords' },
-                            {
-                                title: '', field: 'id',
-                                render: rowData => {
-                                    return (
-                                        <div>
-                                            <a onClick={() => this.save(rowData.id)} data-toggle="modal" data-target="#viewModal">
-                                                <VisibilityIcon />
-                                            </a>
-                                        </div>
-                                    )
-                                }
-                            },
-                            {
-                                title: '', field: 'link',
-                                render: rowData => {
-                                    if (rowData.link !== null) {
-                                        return <Link to={'/' + rowData.link} target="_blank" download><i class="fas fa-download"></i></Link>
-                                    } else {
-                                        return ''
+                    {
+                        this.props.enabled ? <div className="col-sm-12">
+                            <Alert severity="error" variant="outlined">
+                                <AlertTitle>Sin permiso</AlertTitle>
+                            No tiene permisos suficientes para listar los anexos</Alert>
+                        </div> :
+                            <MaterialTable
+                                title=""
+                                localization={{
+                                    header: {
+                                        actions: ' '
+                                    },
+                                    pagination: {
+                                        nextTooltip: 'Siguiente ',
+                                        previousTooltip: 'Anterior',
+                                        labelDisplayedRows: '{from}-{to} de {count}',
+                                        lastTooltip: 'Ultima pagina',
+                                        firstTooltip: 'Primera pagina',
+                                        labelRowsSelect: 'Registros',
+                                        firstAriaLabel: 'oooo'
+                                    },
+                                    body: {
+                                        emptyDataSourceMessage: 'Aun no hay ningun documento registrado'
+                                    },
+                                    toolbar: {
+                                        searchTooltip: 'Buscar',
+                                        searchPlaceholder: 'Buscar'
                                     }
-                                }
-                            }
-                        ]}
-                        data={this.props.annexes}
-                        options={{
-                            search: true
-                        }}
+                                }}
+                                columns={[
+                                    { title: 'Nombre del anexo', field: 'name' },
+                                    { title: 'Programa', field: 'nameProgram' },
+                                    { title: 'Palabras clave', field: 'keywords' },
+                                    {
+                                        title: '', field: 'id',
+                                        render: rowData => {
+                                            return (
+                                                <div>
+                                                    <a onClick={() => this.save(rowData.id)} data-toggle="modal" data-target="#viewModal">
+                                                        <VisibilityIcon />
+                                                    </a>
+                                                </div>
+                                            )
+                                        }
+                                    },
+                                    {
+                                        title: '', field: 'link',
+                                        render: rowData => {
+                                            if (rowData.link !== null) {
+                                                return <Link to={'/' + rowData.link} target="_blank" download><i class="fas fa-download"></i></Link>
+                                            } else {
+                                                return ''
+                                            }
+                                        }
+                                    }
+                                ]}
+                                data={this.props.annexes}
+                                options={{
+                                    search: true
+                                }}
 
-                    />
+                            />
+                    }
                 </div>
                 <br />
             </div >
@@ -98,13 +101,9 @@ class searchAnnexs extends Component {
 
 function mapStateToProps(state) {
     return {
-        programs: state.program.listProgramR,
-        annexes: state.annex.listAnnexR
+        annexes: state.annex.listAnnexR,
+        enabled: state.annex.stateAnnex
     }
 }
 
-let formSearch = reduxForm({
-    form: 'searchAnnex',
-    enableReinitialize: true
-})(searchAnnexs)
-export default withRouter(connect(mapStateToProps, { getListPrograms, getListAnnexes, searchAnnexS })(formSearch));
+export default withRouter(connect(mapStateToProps, { getListAnnexes, searchAnnexS })(searchAnnexs));

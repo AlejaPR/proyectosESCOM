@@ -99,7 +99,7 @@ class ThematicCore extends Component {
 
                                 <form className="form-horizontal" onSubmit={this.props.handleSubmit(this.handleSubmit)}>
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Nueva temática</h5>
+                                        <h5 class="modal-title" id="exampleModalLabel">Nuevo núcleo temático</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
@@ -141,7 +141,7 @@ class ThematicCore extends Component {
                     <br />
                     <br />
                     <MaterialTable
-                        title="Temáticas"
+                        title="Núcleos temáticos"
                         localization={{
                             header: {
                                 actions: ' '
@@ -225,9 +225,9 @@ function mapStateToProps(state) {
     }
 }
 
-let formAdd = reduxForm({
+let formAddTC = reduxForm({
     form: 'addThematicCore',
     enableReinitialize: true
 })(ThematicCore)
 
-export default withRouter(connect(mapStateToProps, { getListGeneralC, deleteThemacticCore, getListThematicCore, addThematicCore, addMessageAdd, addMessageDelete })(formAdd));
+export default withRouter(connect(mapStateToProps, { getListGeneralC, deleteThemacticCore, getListThematicCore, addThematicCore, addMessageAdd, addMessageDelete })(formAddTC));

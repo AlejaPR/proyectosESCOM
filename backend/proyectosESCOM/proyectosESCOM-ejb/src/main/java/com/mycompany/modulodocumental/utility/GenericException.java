@@ -1,14 +1,12 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.utility;
+
 /**
+ * Class in charge of catching exceptions thrown in the application
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
-public class GenericException extends Exception{
+public class GenericException extends Exception {
+
     public GenericException(String message) {
         super(message);
     }

@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.services;
 
 import com.mycompany.modulodocumental.interfaces.logic.ProgramThematicCoreLogicLocal;
@@ -24,8 +19,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
+ * Class in charge of managing all the services related to the program thematic
+ * core entity
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @RequestScoped
 @Produces(MediaType.APPLICATION_JSON)
@@ -33,9 +30,18 @@ import javax.ws.rs.core.Response;
 @Path("programThematicCore")
 public class ProgramThematicCoreS {
 
+    /**
+     * program thematic core logical interface injection
+     */
     @EJB
     private ProgramThematicCoreLogicLocal programThematicCoreLogic;
 
+    /**
+     * Service to list the thematic core of the program
+     *
+     * @param id
+     * @return
+     */
     @GET
     @Path("/list/{id}")
     public Response getList(@PathParam("id") int id) {
@@ -49,6 +55,12 @@ public class ProgramThematicCoreS {
 
     }
 
+    /**
+     * Service to obtain a thematic core of the program
+     *
+     * @param id
+     * @return
+     */
     @GET
     @Path("/get/{id}")
     public Response get(@PathParam("id") int id) {
@@ -62,6 +74,12 @@ public class ProgramThematicCoreS {
 
     }
 
+    /**
+     * Service to add a thematic core of the program
+     *
+     * @param pro
+     * @return
+     */
     @POST
     @Path("/add")
     public Response add(ProgramThematicCoreP pro) {
@@ -76,6 +94,12 @@ public class ProgramThematicCoreS {
 
     }
 
+    /**
+     * Service to edit a thematic core of the program
+     *
+     * @param pro
+     * @return
+     */
     @PUT
     @Path("/edit")
     public Response edit(ProgramThematicCoreP pro) {
@@ -90,6 +114,13 @@ public class ProgramThematicCoreS {
 
     }
 
+    /**
+     * Service to remove a thematic core from the program
+     *
+     * @param id
+     * @param dataS
+     * @return
+     */
     @PUT
     @Path("/delete/{id}")
     public Response delete(@PathParam("id") int id, DatosSolicitudPOJO dataS) {

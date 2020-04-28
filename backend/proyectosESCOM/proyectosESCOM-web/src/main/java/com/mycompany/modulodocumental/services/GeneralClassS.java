@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.services;
 
 import com.mycompany.modulodocumental.interfaces.logic.GeneralClassLogicLocal;
@@ -23,8 +18,10 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
+ * Class in charge of managing all the services related to the general class
+ * entity
  *
- * @author hashy
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @RequestScoped
 @Produces(MediaType.APPLICATION_JSON)
@@ -32,9 +29,19 @@ import javax.ws.rs.core.Response;
 @Path("generalClass")
 public class GeneralClassS {
 
+    /**
+     * General class logical interface injection
+     */
     @EJB
     private GeneralClassLogicLocal generalClassLogic;
 
+    /**
+     * Service to list general classes
+     *
+     * @param id
+     * @param table
+     * @return
+     */
     @GET
     @Path("/list/{id}/{table}")
     public Response getList(@PathParam("id") int id, @PathParam("table") String table) {
@@ -48,6 +55,13 @@ public class GeneralClassS {
 
     }
 
+    /**
+     * Service to obtain a general class
+     *
+     * @param id
+     * @param table
+     * @return
+     */
     @GET
     @Path("/get/{id}/{table}")
     public Response get(@PathParam("id") int id, @PathParam("respuesta") String table) {
@@ -61,6 +75,12 @@ public class GeneralClassS {
 
     }
 
+    /**
+     * Service to add a general class
+     *
+     * @param com
+     * @return
+     */
     @POST
     @Path("/add")
     public Response add(GeneralClassP com) {
@@ -75,6 +95,12 @@ public class GeneralClassS {
 
     }
 
+    /**
+     * Service to edit a general class
+     *
+     * @param com
+     * @return
+     */
     @PUT
     @Path("/edit")
     public Response edit(GeneralClassP com) {
@@ -89,6 +115,12 @@ public class GeneralClassS {
 
     }
 
+    /**
+     * Service to remove a general class
+     *
+     * @param com
+     * @return
+     */
     @PUT
     @Path("/delete")
     public Response delete(GeneralClassP com) {

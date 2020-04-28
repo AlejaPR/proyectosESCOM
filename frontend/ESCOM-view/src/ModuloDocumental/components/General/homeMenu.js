@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 //iconos
-import Persona from '@material-ui/icons/Person';
 import Folder from '@material-ui/icons/LocalLibrary';
-import Bombillo from '@material-ui/icons/EmojiObjects';
 import logoDefecto from '../../../SuperAdministrador/imagenes/defectoLogo.png';
 import HomeIcon from '@material-ui/icons/Home';
+import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
+import SchoolIcon from '@material-ui/icons/School';
 
 import { consultarConfiguracion } from '../../../SuperAdministrador/actions/actionConfiguracion.js';
 
@@ -70,7 +70,7 @@ class MenuLateral extends Component {
 				<li className="nav-item" style={{ height: "65px" }}>
 					<Link to="/ListGeneral" name="hoverUsuario" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
 						style={this.fondoBarr()}>
-						<Persona />
+						<AccountBalanceIcon />
 						<br />
 						<span className="title letra">Facultades</span>
 					</Link>
@@ -78,7 +78,7 @@ class MenuLateral extends Component {
 				<li className="nav-item" style={{ height: "65px" }}>
 					<Link to="/ListProgram" name="hoverUsuario" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
 						style={this.fondoBarr()}>
-						<Persona />
+						<SchoolIcon />
 						<br />
 						<span className="title letra">Programas</span>
 					</Link>

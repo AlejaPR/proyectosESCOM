@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.mycompany.modulodocumental.services;
 
 import com.mycompany.modulodocumental.interfaces.logic.DocumentLogicLocal;
@@ -24,8 +19,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 /**
+ * Class in charge of managing all the services related to the document entity
  *
- * @author HASHY
+ * @author Cristian Estevez - Anggy - University of Cundinamarca
  */
 @RequestScoped
 @Produces(MediaType.APPLICATION_JSON)
@@ -33,9 +29,18 @@ import javax.ws.rs.core.Response;
 @Path("document")
 public class DocumentS {
 
+    /**
+     * Document logical interface injection
+     */
     @EJB
     DocumentLogicLocal documentLogicFacade;
 
+    /**
+     * Service to obtain the document id
+     *
+     * @param id
+     * @return
+     */
     @GET
     @Path("/getIdDocument/{id}")
     public Response getIdDocument(@PathParam("id") int id) {
@@ -49,6 +54,12 @@ public class DocumentS {
 
     }
 
+    /**
+     * Service to obtain a document
+     *
+     * @param id
+     * @return
+     */
     @GET
     @Path("/get/{id}")
     public Response get(@PathParam("id") int id) {
@@ -62,6 +73,11 @@ public class DocumentS {
 
     }
 
+    /**
+     * Service to list documents
+     *
+     * @return
+     */
     @GET
     @Path("/list")
     public Response getList() {
@@ -75,6 +91,12 @@ public class DocumentS {
 
     }
 
+    /**
+     * Service to obtain the document to edit
+     *
+     * @param id
+     * @return
+     */
     @GET
     @Path("/documentIdEdit/{id}")
     public Response documentIdEdit(@PathParam("id") int id) {
@@ -88,6 +110,12 @@ public class DocumentS {
 
     }
 
+    /**
+     * Service to add a document
+     *
+     * @param doc
+     * @return
+     */
     @POST
     @Path("/add")
     public Response add(DocumentP doc) {
@@ -102,6 +130,12 @@ public class DocumentS {
 
     }
 
+    /**
+     * Service to edit a document
+     *
+     * @param doc
+     * @return
+     */
     @PUT
     @Path("/edit")
     public Response edit(DocumentP doc) {
@@ -115,6 +149,13 @@ public class DocumentS {
         }
     }
 
+    /**
+     * Service to disable a document
+     *
+     * @param id
+     * @param dataR
+     * @return
+     */
     @PUT
     @Path("/disable/{id}")
     public Response disable(@PathParam("id") int id, DatosSolicitudPOJO dataR) {

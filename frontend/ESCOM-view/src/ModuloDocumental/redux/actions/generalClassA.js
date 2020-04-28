@@ -80,7 +80,7 @@ export function getListGeneralC(token, id, table) {
 //MD_Agregar clase general
 export function addGeneralC(token, generalN) {
     const headers = {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset= UTF-8',
         'TokenAuto': desencriptar(token),
         'Permiso': PERMIT_ADD_GENERAL_CLASS
     }

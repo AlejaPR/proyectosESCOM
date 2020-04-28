@@ -2,9 +2,11 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import { getListProgramT, deleteProgramT, addMessageDelete } from '../../../redux/actions/programThematicA.js';
 import AddProgramT from './addProgramT.js';
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
 
 import MaterialTable from 'material-table';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
@@ -16,13 +18,27 @@ class ThematicList extends Component {
         this.props.getListProgramT(localStorage.getItem('Token'), sessionStorage.getItem('programId'))
     }
 
-    componentDidUpdate() {
-
-    }
-
     save(id) {
         sessionStorage.setItem('programT', id);
         this.props.history.push('/ThematicSelect');
+    }
+
+    componentDidUpdate() {
+        if (this.props.messageDelete !== '') {
+            switch (this.props.messageDelete) {
+                case 'delete':
+                    toast.success('Se elimino con exito.');
+                    this.props.addMessageDelete('');
+                    this.props.getListProgramT(localStorage.getItem('Token'), sessionStorage.getItem('programId'))
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    delete(idP) {
+        this.props.deleteProgramT(localStorage.getItem('Token'), idP);
     }
 
     render() {
@@ -34,71 +50,80 @@ class ThematicList extends Component {
                 </div>
                 <br />
                 <div className="shadow" style={{ background: "#FFFFFF", padding: "30px" }}>
-                    <AddProgramT />
-                    <br />
-                    <br />
-                    <MaterialTable
-                        title=""
-                        localization={{
-                            header: {
-                                actions: ' '
-                            },
-                            pagination: {
-                                nextTooltip: 'Siguiente ',
-                                previousTooltip: 'Anterior',
-                                labelDisplayedRows: '{from}-{to} de {count}',
-                                lastTooltip: 'Ultima pagina',
-                                firstTooltip: 'Primera pagina',
-                                labelRowsSelect: 'Registros',
-                                firstAriaLabel: 'oooo'
-                            },
-                            body: {
-                                emptyDataSourceMessage: 'Aun no hay ninguna temática registrada'
-                            },
-                            toolbar: {
-                                searchTooltip: 'Buscar',
-                                searchPlaceholder: 'Buscar'
-                            }
-                        }}
-                        columns={[
+                    {
+                        this.props.enabled ? <div className="col-sm-12">
+                            <Alert severity="error" variant="outlined">
+                                <AlertTitle>Sin permiso</AlertTitle>
+                            No tiene permisos suficientes para listar los nucleos temáticos</Alert>
+                        </div> :
+                            <div>
+                                <AddProgramT />
+                                <br />
+                                <br />
+                                <MaterialTable
+                                    title=""
+                                    localization={{
+                                        header: {
+                                            actions: ' '
+                                        },
+                                        pagination: {
+                                            nextTooltip: 'Siguiente ',
+                                            previousTooltip: 'Anterior',
+                                            labelDisplayedRows: '{from}-{to} de {count}',
+                                            lastTooltip: 'Ultima pagina',
+                                            firstTooltip: 'Primera pagina',
+                                            labelRowsSelect: 'Registros',
+                                            firstAriaLabel: 'oooo'
+                                        },
+                                        body: {
+                                            emptyDataSourceMessage: 'Aun no hay ninguna temática registrada'
+                                        },
+                                        toolbar: {
+                                            searchTooltip: 'Buscar',
+                                            searchPlaceholder: 'Buscar'
+                                        }
+                                    }}
+                                    columns={[
 
-                            { title: 'Nombre del nucleo tematico', field: 'nameThematicCore' },
-                            { title: 'Objetivo', field: 'objetive' },
-                            {
-                                title: '', field: 'id',
-                                render: rowData => {
-                                    return (
-                                        <div>
-                                            <a onClick={() => this.save(rowData.id)} data-toggle="modal" data-target="#viewModal">
-                                                <VisibilityIcon />
-                                            </a>
-                                        </div>
-                                    )
-                                }
-                            },
-                            {
-                                title: '', field: 'id',
-                                render: rowData => {
-                                    return (
-                                        <div>
-                                            <a onClick={() => this.disable(rowData.id)}>
-                                                <DeleteForeverIcon />
-                                            </a>
-                                        </div>
-                                    )
-                                }
-                            }
+                                        { title: 'Nombre del nucleo tematico', field: 'nameThematicCore' },
+                                        { title: 'Objetivo', field: 'objetive' },
+                                        {
+                                            title: '', field: 'id',
+                                            render: rowData => {
+                                                return (
+                                                    <div>
+                                                        <a onClick={() => this.save(rowData.id)} data-toggle="modal" data-target="#viewModal">
+                                                            <VisibilityIcon />
+                                                        </a>
+                                                    </div>
+                                                )
+                                            }
+                                        },
+                                        {
+                                            title: '', field: 'id',
+                                            render: rowData => {
+                                                return (
+                                                    <div>
+                                                        <a onClick={() => this.delete(rowData.id)}>
+                                                            <DeleteForeverIcon />
+                                                        </a>
+                                                    </div>
+                                                )
+                                            }
+                                        }
 
-                        ]}
-                        data={this.props.listProgramT}
-                        options={{
-                            search: true
-                        }}
+                                    ]}
+                                    data={this.props.listProgramT}
+                                    options={{
+                                        search: true
+                                    }}
 
-                    />
+                                />
+                            </div>
+                    }
                 </div>
                 <br />
-            </div>
+            </div >
         );
     }
 
@@ -107,7 +132,8 @@ class ThematicList extends Component {
 function mapStateToProps(state) {
     return {
         listProgramT: state.programThematic.listProgramTR,
-        messageDelete: state.programThematic.messageDelete
+        messageDelete: state.programThematic.messageDelete,
+        enabled: state.programThematic.stateProgramT
     }
 }
 

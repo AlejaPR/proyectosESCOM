@@ -33,7 +33,7 @@ class Add extends Component {
 
                             <form className="form-horizontal" onSubmit={this.props.handleSubmit(this.handleSubmit)}>
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Nuevo programa general</h5>
+                                    <h5 class="modal-title" id="exampleModalLabel">Nueva facultad</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>

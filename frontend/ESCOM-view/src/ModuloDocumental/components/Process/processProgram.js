@@ -6,9 +6,9 @@ import { getConditionsPer } from '../../redux/actions/conditionA.js';
 import { getAllInformation } from '../../redux/actions/activityA.js';
 
 import MaterialTable from 'material-table';
-import EditIcon from '@material-ui/icons/Edit';
 import VisibilityIcon from '@material-ui/icons/Visibility';
-import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import Alert from '@material-ui/lab/Alert';
+import AlertTitle from '@material-ui/lab/AlertTitle';
 
 class ProcessPrograma extends Component {
 
@@ -67,76 +67,85 @@ class ProcessPrograma extends Component {
                 </div>
                 <br />
                 <div className="shadow" style={{ background: "#FFFFFF", padding: "30px" }}>
-                    <button onClick={() => this.convertHtmlToWord()} className="btn btn-sm float-right naranja">
-                        <i class="fas fa-download"></i>
-                    </button>
-                    <br />
-                    <br />
-                    <MaterialTable
-                        title=""
-                        localization={{
-                            header: {
-                                actions: ' '
-                            },
-                            pagination: {
-                                nextTooltip: 'Siguiente ',
-                                previousTooltip: 'Anterior',
-                                labelDisplayedRows: '{from}-{to} de {count}',
-                                lastTooltip: 'Ultima pagina',
-                                firstTooltip: 'Primera pagina',
-                                labelRowsSelect: 'Registros',
-                                firstAriaLabel: 'oooo'
-                            },
-                            body: {
-                                emptyDataSourceMessage: 'Aun no hay ninguna condición registrada'
-                            },
-                            toolbar: {
-                                searchTooltip: 'Buscar',
-                                searchPlaceholder: 'Buscar'
-                            }
-                        }}
-                        columns={[
+                    {
+                        this.props.enabledP ? <div className="col-sm-12">
+                            <Alert severity="error" variant="outlined">
+                                <AlertTitle>Sin permiso</AlertTitle>
+                            No tiene permisos suficientes para listar las condiciones</Alert>
+                        </div> :
+                            <div>
+                                <button onClick={() => this.convertHtmlToWord()} className="btn btn-sm float-right naranja">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                                <br />
+                                <br />
+                                <MaterialTable
+                                    title=""
+                                    localization={{
+                                        header: {
+                                            actions: ' '
+                                        },
+                                        pagination: {
+                                            nextTooltip: 'Siguiente ',
+                                            previousTooltip: 'Anterior',
+                                            labelDisplayedRows: '{from}-{to} de {count}',
+                                            lastTooltip: 'Ultima pagina',
+                                            firstTooltip: 'Primera pagina',
+                                            labelRowsSelect: 'Registros',
+                                            firstAriaLabel: 'oooo'
+                                        },
+                                        body: {
+                                            emptyDataSourceMessage: 'Aun no hay ninguna condición registrada'
+                                        },
+                                        toolbar: {
+                                            searchTooltip: 'Buscar',
+                                            searchPlaceholder: 'Buscar'
+                                        }
+                                    }}
+                                    columns={[
 
-                            { title: 'Nombre de la condición', field: 'name' },
-                            {
-                                title: 'Estado', field: 'description',
-                                render: rowData => {
-                                    if (rowData.state === 1) {
-                                        return 'Activo'
-                                    } else {
-                                        return 'Finalizado'
-                                    }
-                                }
-                            },
-                            {
-                                title: 'Proceso', field: 'percentage',
-                                render: rowData => {
-                                    return (
-                                        <div className="progress">
-                                            <div className="progress-bar" style={bar(rowData.percentage)} role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">{rowData.percentage}%</div>
-                                        </div>
-                                    )
-                                }
-                            },
-                            {
-                                title: '', field: 'id',
-                                render: rowData => {
-                                    return (
-                                        <div>
-                                            <a onClick={() => this.save(rowData.id)} data-toggle="modal" data-target="#viewModal">
-                                                <VisibilityIcon />
-                                            </a>
-                                        </div>
-                                    )
-                                }
-                            }
-                        ]}
-                        data={this.props.conditions}
-                        options={{
-                            search: true
-                        }}
+                                        { title: 'Nombre de la condición', field: 'name' },
+                                        {
+                                            title: 'Estado', field: 'description',
+                                            render: rowData => {
+                                                if (rowData.state === 1) {
+                                                    return 'Activo'
+                                                } else {
+                                                    return 'Finalizado'
+                                                }
+                                            }
+                                        },
+                                        {
+                                            title: 'Proceso', field: 'percentage',
+                                            render: rowData => {
+                                                return (
+                                                    <div className="progress">
+                                                        <div className="progress-bar" style={bar(rowData.percentage)} role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">{rowData.percentage}%</div>
+                                                    </div>
+                                                )
+                                            }
+                                        },
+                                        {
+                                            title: '', field: 'id',
+                                            render: rowData => {
+                                                return (
+                                                    <div>
+                                                        <a onClick={() => this.save(rowData.id)} data-toggle="modal" data-target="#viewModal">
+                                                            <VisibilityIcon />
+                                                        </a>
+                                                    </div>
+                                                )
+                                            }
+                                        }
+                                    ]}
+                                    data={this.props.conditions}
+                                    options={{
+                                        search: true
+                                    }}
 
-                    />
+                                />
+                            </div>
+                    }
                 </div>
             </div>
         )
@@ -157,7 +166,9 @@ function mapStateToProps(state) {
     return {
         conditions: state.condition.listConditionsPer,
         pro: state.condition.processId,
-        allInformation: state.activity.allInformation
+        allInformation: state.activity.allInformation,
+        enabledP: state.condition.stateConditionPer
+
     }
 }
 

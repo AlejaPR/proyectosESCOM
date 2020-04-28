@@ -16,6 +16,10 @@ class AddInformation extends Component {
                     toast.success('Se agrego con exito.');
                     this.props.addMessageAddInfo('');
                     break;
+                case 'Sin persimo':
+                    toast.error('No tiene permiso para agregar este elemento.');
+                    this.props.addMessageAddInfo('')
+                    break;
                 case 'error server':
                     toast.error('Se presento un error, intentelo mas tarde.');
                     this.props.addMessageAddInfo('');
@@ -29,6 +33,10 @@ class AddInformation extends Component {
                 case 'notify':
                     toast.success('Notificada con exito.');
                     this.props.addMessageChange('');
+                    break;
+                case 'Sin persimo':
+                    toast.error('No tiene permiso para notificar este elemento.');
+                    this.props.addMessageChange('')
                     break;
                 case 'error server':
                     toast.error('Se presento un error, intentelo mas tarde.');
@@ -121,7 +129,7 @@ class AddInformation extends Component {
                     <button onClick={() => this.saveView()} className="btn btn-sm text-light float-right naranja">
                         Guardar
                     </button>
-                    <br/>
+                    <br />
                     <hr />
                     <ProcessCommentary />
                 </div>
