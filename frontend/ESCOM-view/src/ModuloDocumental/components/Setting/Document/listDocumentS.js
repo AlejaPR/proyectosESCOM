@@ -3,10 +3,12 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { getListDocuments, getDocumentIdEdit, addMessageEdit, addMessageAdd, addMessageDisable, disableDocument } from '../../../redux/actions/documentA.js';
+import { ToastContainer, toast } from 'react-toastify';
+import { confirmAlert } from 'react-confirm-alert';
+
 import Add from './add.js';
 import Edit from './edit.js';
 import View from './view.js';
-import { ToastContainer, toast } from 'react-toastify';
 
 import MaterialTable from 'material-table';
 import EditIcon from '@material-ui/icons/Edit';
@@ -83,7 +85,22 @@ class ListDocument extends Component {
     }
 
     disable(id) {
-        this.props.disableDocument(localStorage.getItem('Token'), id)
+        confirmAlert({
+            title: '',
+            message: '¿Esta seguro?',
+            buttons: [
+                {
+                    label: 'Si',
+                    onClick: () => {
+                        this.props.disableDocument(localStorage.getItem('Token'), id)
+                    }
+                },
+                {
+                    label: 'No',
+                    onClick: () => { }
+                }
+            ]
+        });
     }
 
     render() {

@@ -78,8 +78,8 @@ class ViewCondition extends Component {
 
     deleteUser(id) {
         confirmAlert({
-            title: 'Eliminar',
-            message: '¿Desea eliminar este elemento de forma permanente?',
+            title: '',
+            message: '¿Esta seguro?',
             buttons: [
                 {
                     label: 'Si',
@@ -91,14 +91,14 @@ class ViewCondition extends Component {
                             requestData: null
                         }
                         this.props.deleteUserCondition(localStorage.getItem('Token'), userCondition)
-                    },
+                    }
                 },
                 {
                     label: 'No',
-                    onClick: () => { },
+                    onClick: () => { }
                 }
-            ],
-        })
+            ]
+        });
     }
 
     tableUser() {

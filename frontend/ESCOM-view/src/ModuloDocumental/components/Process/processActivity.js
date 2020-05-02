@@ -1,8 +1,7 @@
 import React from 'react';
 import { Component } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
-
-// Require Font Awesome.
+import { confirmAlert } from 'react-confirm-alert';
 import 'font-awesome/css/font-awesome.css';
 import { ToastContainer, toast } from 'react-toastify';
 import { connect } from 'react-redux';
@@ -46,12 +45,27 @@ class ProcessActivity extends Component {
     }
 
     approveActivity() {
-        let activityN = {
-            id: sessionStorage.getItem('activity'),
-            state: 2,
-            requestData: null
-        }
-        this.props.changeStatus(localStorage.getItem('Token'), activityN)
+        confirmAlert({
+            title: '',
+            message: '¿Esta seguro?',
+            buttons: [
+                {
+                    label: 'Si',
+                    onClick: () => {
+                        let activityN = {
+                            id: sessionStorage.getItem('activity'),
+                            state: 2,
+                            requestData: null
+                        }
+                        this.props.changeStatus(localStorage.getItem('Token'), activityN)
+                    }
+                },
+                {
+                    label: 'No',
+                    onClick: () => { }
+                }
+            ]
+        });
     }
 
     deniedActivity() {

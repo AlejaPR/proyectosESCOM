@@ -3,6 +3,7 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { reduxForm, Field } from 'redux-form';
+import { confirmAlert } from 'react-confirm-alert';
 import { required, minimum, fiveHundred, select } from '../../../utilitarian/validations.js';
 import { getListGeneralC } from '../../../../redux/actions/generalClassA.js';
 import { getListCompetitionG, addCompetitionG, deleteCompetitionG, addMessageDelete, addMessageAdd } from '../../../../redux/actions/competitionGeneralA.js';
@@ -73,13 +74,28 @@ class CompetitionG extends Component {
     }
 
     disable(id) {
-        let generalA = {
-            id: id,
-            name: '',
-            idCompetition: '',
-            requestData: null
-        }
-        this.props.deleteCompetitionG(localStorage.getItem('Token'), generalA)
+        confirmAlert({
+            title: '',
+            message: '¿Esta seguro?',
+            buttons: [
+                {
+                    label: 'Si',
+                    onClick: () => {
+                        let generalA = {
+                            id: id,
+                            name: '',
+                            idCompetition: '',
+                            requestData: null
+                        }
+                        this.props.deleteCompetitionG(localStorage.getItem('Token'), generalA)
+                    }
+                },
+                {
+                    label: 'No',
+                    onClick: () => { }
+                }
+            ]
+        });
     }
 
     render() {

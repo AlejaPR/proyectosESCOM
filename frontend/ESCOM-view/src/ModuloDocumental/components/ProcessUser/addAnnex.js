@@ -1,7 +1,8 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom';
+import { confirmAlert } from 'react-confirm-alert';
 import { getActivityAnnex, associateAnnex, addMessageAssociate, changeStatus, addMessageChange } from '../../redux/actions/activityA.js';
 import { getListAnnexes } from '../../redux/actions/annexA';
 import { ToastContainer, toast } from 'react-toastify';
@@ -65,12 +66,27 @@ class AddAnnex extends Component {
         })
     }
     notifyActivity() {
-        let activityN = {
-            id: sessionStorage.getItem('activity'),
-            state: 3,
-            requestData: null
-        }
-        this.props.changeStatus(localStorage.getItem('Token'), activityN)
+        confirmAlert({
+            title: '',
+            message: '¿Esta seguro?',
+            buttons: [
+                {
+                    label: 'Si',
+                    onClick: () => {
+                        let activityN = {
+                            id: sessionStorage.getItem('activity'),
+                            state: 3,
+                            requestData: null
+                        }
+                        this.props.changeStatus(localStorage.getItem('Token'), activityN)
+                    }
+                },
+                {
+                    label: 'No',
+                    onClick: () => { }
+                }
+            ]
+        });
     }
 
 

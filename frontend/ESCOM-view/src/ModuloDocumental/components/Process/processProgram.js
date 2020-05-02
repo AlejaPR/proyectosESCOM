@@ -9,6 +9,7 @@ import MaterialTable from 'material-table';
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
+import { confirmAlert } from 'react-confirm-alert';
 
 class ProcessPrograma extends Component {
 
@@ -18,9 +19,10 @@ class ProcessPrograma extends Component {
     }
 
     convertHtmlToWord() {
+
         var preHtml = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Export HTML To Doc</title></head><body>";
         var postHtml = "</body></html>";
-        var html = preHtml + this.props.allInformation.data + postHtml;
+        var html = preHtml + this.props.allInformation.respuesta + postHtml;
 
         var blob = new Blob(['ufeff', html], {
             type: 'application/msword'
@@ -51,6 +53,7 @@ class ProcessPrograma extends Component {
         }
 
         document.body.removeChild(downloadLink);
+
 
     }
 

@@ -6,6 +6,7 @@ import { getListGeneralPro, getGeneralPro, addMessageAdd, addMessageDisable, add
 import { ToastContainer, toast } from 'react-toastify';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
+import { confirmAlert } from 'react-confirm-alert';
 
 import Add from './add.js';
 import Edit from './edit.js';
@@ -87,13 +88,28 @@ class ListGeneral extends Component {
     }
 
     disable(id) {
-        let generalN = {
-            id: id,
-            description: "",
-            name: "",
-            requestData: null
-        }
-        this.props.disableGeneralPro(localStorage.getItem('Token'), generalN)
+        confirmAlert({
+            title: '',
+            message: '¿Esta seguro?',
+            buttons: [
+                {
+                    label: 'Si',
+                    onClick: () => {
+                        let generalN = {
+                            id: id,
+                            description: "",
+                            name: "",
+                            requestData: null
+                        }
+                        this.props.disableGeneralPro(localStorage.getItem('Token'), generalN)
+                    }
+                },
+                {
+                    label: 'No',
+                    onClick: () => { }
+                }
+            ]
+        });
     }
 
     render() {

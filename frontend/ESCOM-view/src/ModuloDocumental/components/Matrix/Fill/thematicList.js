@@ -3,6 +3,7 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+import { confirmAlert } from 'react-confirm-alert';
 import { getListProgramT, deleteProgramT, addMessageDelete } from '../../../redux/actions/programThematicA.js';
 import AddProgramT from './addProgramT.js';
 import Alert from '@material-ui/lab/Alert';
@@ -38,7 +39,22 @@ class ThematicList extends Component {
     }
 
     delete(idP) {
-        this.props.deleteProgramT(localStorage.getItem('Token'), idP);
+        confirmAlert({
+            title: '',
+            message: '¿Esta seguro?',
+            buttons: [
+                {
+                    label: 'Si',
+                    onClick: () => {
+                        this.props.deleteProgramT(localStorage.getItem('Token'), idP);
+                    }
+                },
+                {
+                    label: 'No',
+                    onClick: () => { }
+                }
+            ]
+        });
     }
 
     render() {

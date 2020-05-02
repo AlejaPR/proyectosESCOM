@@ -9,6 +9,7 @@ import Edit from './edit.js';
 import MaterialTable from 'material-table';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
+import { confirmAlert } from 'react-confirm-alert';
 
 import EditIcon from '@material-ui/icons/Edit';
 import VisibilityIcon from '@material-ui/icons/Visibility';
@@ -88,7 +89,22 @@ class FormCondition extends Component {
     }
 
     disable(id) {
-        this.props.disableCondition(localStorage.getItem('Token'), id)
+        confirmAlert({
+            title: '',
+            message: '¿Esta seguro?',
+            buttons: [
+                {
+                    label: 'Si',
+                    onClick: () => {
+                        this.props.disableCondition(localStorage.getItem('Token'), id)
+                    }
+                },
+                {
+                    label: 'No',
+                    onClick: () => { }
+                }
+            ]
+        });
     }
 
 
@@ -164,26 +180,34 @@ class FormCondition extends Component {
                                         {
                                             title: '', field: 'id',
                                             render: rowData => {
-                                                return (
-                                                    <div>
-                                                        <a onClick={() => this.saveEdit(rowData.id)} data-toggle="modal" data-target="#editModal">
-                                                            <EditIcon />
-                                                        </a>
-                                                        <Edit />
-                                                    </div>
-                                                )
+                                                if (rowData.name === 'General') {
+                                                    return (<div></div>)
+                                                } else {
+                                                    return (
+                                                        <div>
+                                                            <a onClick={() => this.saveEdit(rowData.id)} data-toggle="modal" data-target="#editModal">
+                                                                <EditIcon />
+                                                            </a>
+                                                            <Edit />
+                                                        </div>
+                                                    )
+                                                }
                                             }
                                         },
                                         {
                                             title: '', field: 'id',
                                             render: rowData => {
-                                                return (
-                                                    <div>
-                                                        <a onClick={() => this.disable(rowData.id)}>
-                                                            <DeleteForeverIcon />
-                                                        </a>
-                                                    </div>
-                                                )
+                                                if (rowData.name === 'General') {
+                                                    return (<div></div>)
+                                                } else {
+                                                    return (
+                                                        <div>
+                                                            <a onClick={() => this.disable(rowData.id)}>
+                                                                <DeleteForeverIcon />
+                                                            </a>
+                                                        </div>
+                                                    )
+                                                }
                                             }
                                         }
 

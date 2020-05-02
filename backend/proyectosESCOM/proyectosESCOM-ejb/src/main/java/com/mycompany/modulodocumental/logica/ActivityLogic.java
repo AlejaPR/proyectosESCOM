@@ -135,7 +135,7 @@ public class ActivityLogic implements ActivityLogicLocal {
             Condition condition = conditionFacade.find(activity.getIdCondition());
             data.setFkActCondition(condition);
             activityFacade.create(data);
-            activity.getRequestData().setOperacion(TABLE);
+            activity.getRequestData().setTablaInvolucrada(TABLE);
             bitacora.registrarEnBitacora(activity.getRequestData());
         } catch (Exception ex) {
             bitacora.registroLogger(CLASS, "Agregar actividad", Level.SEVERE, ex.getMessage());
@@ -228,11 +228,21 @@ public class ActivityLogic implements ActivityLogicLocal {
             String data = "";
 
             for (Condition condition : conditions) {
-                data = data + "<h3 style=\"font-size: 14px; font-family: arial, helvetica, sans-serif;\">" + cont + "." + condition.getName() + "</h3>";
+                if ("General".equals(condition.getName())) {
+                    List<ActivityP> info = listInfo(condition.getId());
+                    for (ActivityP inf : info) {
+                        if (inf.getInformation() != null) {
+                            data = data + inf.getInformation() + "<br/>";
+                        }
+                    }
+                }
+            }
+
+            for (Condition condition : conditions) {
+                data = data + "<p style=\"font-size: 14px; font-family: arial, helvetica, sans-serif;\">" + cont + "." + condition.getName() + "</p>";
                 List<ActivityP> info = listInfo(condition.getId());
                 for (ActivityP inf : info) {
-                    data = data + "<h4 style=\"font-size: 14px; font-family: arial, helvetica, sans-serif;\">" + cont + "." + inf.getNumber() + ". " + inf.getName() + "</h4>";
-
+                    data = data + "<p style=\"font-size: 14px; font-family: arial, helvetica, sans-serif;\">" + cont + "." + inf.getNumber() + ". " + inf.getName() + "</p>";
                 }
                 cont++;
             }
@@ -245,7 +255,11 @@ public class ActivityLogic implements ActivityLogicLocal {
                 List<ActivityP> info = listInfo(condition.getId());
                 for (ActivityP inf : info) {
                     data = data + "<h4 style=\"font-size: 14px; font-family: arial, helvetica, sans-serif;\">" + cont + "." + inf.getNumber() + ". " + inf.getName() + "</h4>" + "<br/>";
-                    data = data + inf.getInformation() + "<br/>";
+                    if (inf.getInformation() != null) {
+                        data = data + inf.getInformation() + "<br/>";
+                    } else {
+                        data = data + "" + "<br/>";
+                    }
                 }
                 cont++;
             }

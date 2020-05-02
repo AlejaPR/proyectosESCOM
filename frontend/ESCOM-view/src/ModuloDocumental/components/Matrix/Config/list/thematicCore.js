@@ -3,6 +3,7 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { reduxForm, Field } from 'redux-form';
+import { confirmAlert } from 'react-confirm-alert';
 import { required, minimum, fiveHundred, select } from '../../../utilitarian/validations.js';
 import { getListThematicCore, addThematicCore, addMessageAdd, addMessageDelete, deleteThemacticCore } from '../../../../redux/actions/thematicCoreA.js';
 import { getListGeneralC } from '../../../../redux/actions/generalClassA.js';
@@ -68,14 +69,29 @@ class ThematicCore extends Component {
 
 
     disable(id) {
-        let generalA = {
-            id: id,
-            name: '',
-            objective: '',
-            idTrainingArea: '',
-            requestData: null
-        }
-        this.props.deleteThemacticCore(localStorage.getItem('Token'), generalA)
+        confirmAlert({
+            title: '',
+            message: '¿Esta seguro?',
+            buttons: [
+                {
+                    label: 'Si',
+                    onClick: () => {
+                        let generalA = {
+                            id: id,
+                            name: '',
+                            objective: '',
+                            idTrainingArea: '',
+                            requestData: null
+                        }
+                        this.props.deleteThemacticCore(localStorage.getItem('Token'), generalA)
+                    }
+                },
+                {
+                    label: 'No',
+                    onClick: () => { }
+                }
+            ]
+        });
     }
 
     loadList() {
@@ -118,7 +134,7 @@ class ThematicCore extends Component {
                                                 <Field name="credits" validate={[required]} type="number" component={generarInput} label="Créditos académicos" />
                                             </div>
                                         </div>
-                                        <br/>
+                                        <br />
                                         <label for="form_control_1">Área de formación: </label>
                                         <div className="row">
                                             <div className="col-sm">

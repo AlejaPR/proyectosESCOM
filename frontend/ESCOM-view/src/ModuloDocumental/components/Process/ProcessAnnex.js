@@ -3,26 +3,56 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
 import { changeStatus } from '../../redux/actions/activityA.js';
-
+import { confirmAlert } from 'react-confirm-alert';
 
 class ProcessAnnex extends Component {
 
     approveActivity() {
-        let activityN = {
-            id: sessionStorage.getItem('activity'),
-            state: 2,
-            requestData: null
-        }
-        this.props.changeStatus(localStorage.getItem('Token'), activityN)
+        confirmAlert({
+            title: '',
+            message: '¿Esta seguro?',
+            buttons: [
+                {
+                    label: 'Si',
+                    onClick: () => {
+                        let activityN = {
+                            id: sessionStorage.getItem('activity'),
+                            state: 2,
+                            requestData: null
+                        }
+                        this.props.changeStatus(localStorage.getItem('Token'), activityN)
+                    }
+                },
+                {
+                    label: 'No',
+                    onClick: () => { }
+                }
+            ]
+        });
     }
 
     deniedActivity() {
-        let activityN = {
-            id: sessionStorage.getItem('activity'),
-            state: 1,
-            requestData: null
-        }
-        this.props.changeStatus(localStorage.getItem('Token'), activityN)
+        confirmAlert({
+            title: '',
+            message: '¿Esta seguro?',
+            buttons: [
+                {
+                    label: 'Si',
+                    onClick: () => {
+                        let activityN = {
+                            id: sessionStorage.getItem('activity'),
+                            state: 1,
+                            requestData: null
+                        }
+                        this.props.changeStatus(localStorage.getItem('Token'), activityN)
+                    }
+                },
+                {
+                    label: 'No',
+                    onClick: () => { }
+                }
+            ]
+        });
     }
 
     render() {

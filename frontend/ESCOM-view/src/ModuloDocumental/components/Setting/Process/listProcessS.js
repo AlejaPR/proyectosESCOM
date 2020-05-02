@@ -6,12 +6,12 @@ import { getListProcesses, getProcessId, addMessageEdit, addMessageAdd, addMessa
 import { ToastContainer, toast } from 'react-toastify';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
+import { confirmAlert } from 'react-confirm-alert';
 
 import Add from './add.js';
 import Edit from './edit.js';
 
 import MaterialTable from 'material-table';
-
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
@@ -88,7 +88,22 @@ class ListProcess extends Component {
     }
 
     disable(id) {
-        this.props.disableProcess(localStorage.getItem('Token'), id)
+        confirmAlert({
+            title: '',
+            message: '¿Esta seguro?',
+            buttons: [
+                {
+                    label: 'Si',
+                    onClick: () => {
+                        this.props.disableProcess(localStorage.getItem('Token'), id)
+                    }
+                },
+                {
+                    label: 'No',
+                    onClick: () => { }
+                }
+            ]
+        });
     }
 
     render() {

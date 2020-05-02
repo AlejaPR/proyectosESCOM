@@ -2,7 +2,7 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
-import { addActivity, addMessageAdd, getListActivitiesInfo } from '../../../redux/actions/activityA.js';
+import { addActivity, addMessageAdd, getListActivitiesInfo, getListActivitiesAnnex } from '../../../redux/actions/activityA.js';
 import { withRouter } from 'react-router-dom';
 import { required, thousand, threeHundred, minimum, select } from '../../utilitarian/validations.js';
 import { toast } from 'react-toastify';
@@ -19,6 +19,7 @@ class AddInfo extends Component {
                 case 'add':
                     toast.success('Se agrego con exito.');
                     this.props.getListActivitiesInfo(localStorage.getItem('Token'), sessionStorage.getItem('condition'));
+                    this.props.getListActivitiesAnnex(localStorage.getItem('Token'), sessionStorage.getItem('condition'));
                     this.props.addMessageAdd('');
                     break;
                 case 'Sin permiso':
@@ -160,4 +161,4 @@ let formAdd = reduxForm({
     enableReinitialize: true
 })(AddInfo)
 
-export default withRouter(connect(mapStateToProps, { addActivity, addMessageAdd, getListActivitiesInfo })(formAdd));
+export default withRouter(connect(mapStateToProps, { addActivity, addMessageAdd, getListActivitiesInfo, getListActivitiesAnnex })(formAdd));

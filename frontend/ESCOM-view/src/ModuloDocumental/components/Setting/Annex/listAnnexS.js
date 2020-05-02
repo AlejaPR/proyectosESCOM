@@ -9,6 +9,7 @@ import View from './view.js';
 import { ToastContainer, toast } from 'react-toastify';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
+import { confirmAlert } from 'react-confirm-alert';
 
 
 import MaterialTable from 'material-table';
@@ -85,7 +86,22 @@ class ListAnnex extends Component {
     }
 
     disable(id) {
-        this.props.disableAnnex(localStorage.getItem('Token'), id)
+        confirmAlert({
+			title: '',
+			message: '¿Esta seguro?',
+			buttons: [
+				{
+					label: 'Si',
+					onClick: () => {
+						this.props.disableAnnex(localStorage.getItem('Token'), id)						
+					}
+				},
+				{
+					label: 'No',
+					onClick: () => {}
+				}
+			]
+		});        
     }
 
     render() {

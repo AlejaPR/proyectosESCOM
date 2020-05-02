@@ -4,12 +4,16 @@ import com.mycompany.modulodocumental.entity.Document;
 import com.mycompany.modulodocumental.entity.Process;
 import com.mycompany.modulodocumental.interfaces.DocumentFacadeLocal;
 import com.mycompany.modulodocumental.interfaces.ProcessFacadeLocal;
+import com.mycompany.modulodocumental.interfaces.logic.ConditionLogicLocal;
 import com.mycompany.modulodocumental.interfaces.logic.ProcessLogicLocal;
+import com.mycompany.modulodocumental.pojo.ConditionP;
 import com.mycompany.modulodocumental.pojo.ProcessP;
 import com.mycompany.modulodocumental.utility.GenericException;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import com.mycompany.superadministrador.interfaces.UtilitarioFacadeLocal;
+import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import javax.ejb.EJB;
@@ -34,6 +38,12 @@ public class ProcessLogic implements ProcessLogicLocal {
      */
     @EJB
     private DocumentFacadeLocal documentFacade;
+    
+    /**
+     * Condition logical interface injection
+     */
+    @EJB
+    private ConditionLogicLocal conditionLogicFacade;
 
     /**
      * bitacora interface injection
@@ -108,6 +118,10 @@ public class ProcessLogic implements ProcessLogicLocal {
             processFacade.create(data);
             process.getRequestData().setTablaInvolucrada(TABLE);
             bitacora.registrarEnBitacora(process.getRequestData());
+            ConditionP condition = new ConditionP(0,"General", "Esta condición se define para la contrición de elementos básicos que van al inicio como la portada", 1, Date.from(Instant.EPOCH), Date.from(Instant.EPOCH));
+            condition.setProcess(data.getId());
+            condition.setRequestData(process.getRequestData());
+            conditionLogicFacade.add(condition);
         } catch (Exception ex) {
             bitacora.registroLogger(CLASS, "Agregar proceso", Level.SEVERE, ex.getMessage());
             throw new GenericException("error server");

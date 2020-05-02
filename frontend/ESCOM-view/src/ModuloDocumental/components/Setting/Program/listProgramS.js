@@ -4,8 +4,11 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { getListPrograms, getProgramId, disableProgram, addMessageDisable } from '../../../redux/actions/programA.js';
 import { ToastContainer, toast } from 'react-toastify';
+import { confirmAlert } from 'react-confirm-alert';
+
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
+
 import Add from './add.js';
 import Edit from './edit.js';
 import View from './view.js';
@@ -49,7 +52,22 @@ class ListPrograms extends Component {
     }
 
     disable(id) {
-        this.props.disableProgram(localStorage.getItem('Token'), id)
+        confirmAlert({
+            title: '',
+            message: '¿Esta seguro?',
+            buttons: [
+                {
+                    label: 'Si',
+                    onClick: () => {
+                        this.props.disableProgram(localStorage.getItem('Token'), id)
+                    }
+                },
+                {
+                    label: 'No',
+                    onClick: () => { }
+                }
+            ]
+        });
     }
 
     render() {

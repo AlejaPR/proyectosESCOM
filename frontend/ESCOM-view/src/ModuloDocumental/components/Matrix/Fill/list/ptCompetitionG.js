@@ -3,6 +3,7 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { reduxForm, Field } from 'redux-form';
+import { confirmAlert } from 'react-confirm-alert';
 import { select } from '../../../utilitarian/validations.js';
 import { getListRelational, addMessageAdd, addMessageDelete, addRelational, deleteRelational } from '../../../../redux/actions/relationalClassA.js';
 import { toast } from 'react-toastify';
@@ -55,14 +56,29 @@ class PtCompetitionG extends Component {
 
 
     delete(id) {
-        let relationalN = {
-            id: id,
-            idRelation: "",
-            nameRelation: "",
-            table: 'PtCompetitionG',
-            requestData: null
-        }
-        this.props.deleteRelational(localStorage.getItem('Token'), relationalN)
+        confirmAlert({
+            title: '',
+            message: '¿Esta seguro?',
+            buttons: [
+                {
+                    label: 'Si',
+                    onClick: () => {
+                        let relationalN = {
+                            id: id,
+                            idRelation: "",
+                            nameRelation: "",
+                            table: 'PtCompetitionG',
+                            requestData: null
+                        }
+                        this.props.deleteRelational(localStorage.getItem('Token'), relationalN)
+                    }
+                },
+                {
+                    label: 'No',
+                    onClick: () => { }
+                }
+            ]
+        });
     }
 
     loadList() {

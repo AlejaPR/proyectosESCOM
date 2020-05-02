@@ -21,8 +21,8 @@ class AddVersionD extends Component {
         let files = event.target.files
 
         let exte = files[0].name.split('.').pop()
-        if (exte !== 'docx' && exte !== 'pdf' && exte !== 'rtf' && exte !== 'xlsx') {
-            toast.error(exte + ' is not a supported format\n')
+        if (exte !== 'doc' && exte !== 'docx' && exte !== 'pdf' && exte !== 'rtf' && exte !== 'xlsx') {
+            toast.error(exte + ' es un formato no soportado')
             event.target.value = null
             return false
         }
@@ -31,7 +31,7 @@ class AddVersionD extends Component {
     maxSelectFile = (event) => {
         let files = event.target.files
         if (files.length > 1) {
-            const msg = 'Only 1 images can be uploaded at a time'
+            const msg = 'Solo puede subir un documento al tiempo'
             event.target.value = null
             toast.warn(msg)
             return false;
@@ -42,7 +42,7 @@ class AddVersionD extends Component {
         let files = event.target.files
         let size = 50000000
         if (files[0].size > size) {
-            toast.error('is too large, please pick a smaller file\n')
+            toast.error('El documento es muy pesado')
             event.target.value = null
             return false
         }

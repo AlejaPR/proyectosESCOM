@@ -9,28 +9,6 @@ import { toast } from 'react-toastify';
 
 class AddAnnex extends Component {
 
-    componentDidUpdate() {
-        if (this.props.messageAddA !== '') {
-            switch (this.props.messageAddA) {
-                case 'add':
-                    toast.success('Se agrego con exito.');
-                    this.props.getListActivitiesAnnex(localStorage.getItem('Token'), sessionStorage.getItem('condition'));
-                    this.props.addMessageAdd('')
-                    break;
-                case 'Sin permiso':
-                    toast.error('No tiene permisos suficientes para agregar un nuevo elemento.');
-                    this.props.addMessageAdd('')
-                    break;
-                case 'error server':
-                    toast.error('Se presento un error, intentelo mas tarde.');
-                    this.props.addMessageAdd('')
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
-
     handleSubmit = formValues => {
         let activityN = {
             id: 0,

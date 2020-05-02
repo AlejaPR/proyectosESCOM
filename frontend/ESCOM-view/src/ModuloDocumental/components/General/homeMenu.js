@@ -95,13 +95,12 @@ class MenuLateral extends Component {
 				<li className="nav-item" style={{ height: "65px" }}>
 					<Link to="/Prueba" name="hoverActividad" onMouseEnter={this.hoverOn} onMouseLeave={this.hoverOff} className="list-group-item list-group-item-action text-light text-center"
 						style={this.fondoBarr()} >
-						<Bombillo />
+						
 						<br />
 						<span className="title letra">Pruebas</span>
 					</Link>
 				</li>
-				*/
-				}
+				*/}
 			</div>
 
 		)

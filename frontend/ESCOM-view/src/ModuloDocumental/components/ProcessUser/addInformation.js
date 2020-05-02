@@ -2,7 +2,8 @@ import React from 'react';
 import { Component } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom';
+import { confirmAlert } from 'react-confirm-alert';
 import { getActivityId, addInformation, addMessageAddInfo, changeStatus, addMessageChange } from '../../redux/actions/activityA.js';
 import ProcessCommentary from '../Process/processCommentary.js';
 import { ToastContainer, toast } from 'react-toastify';
@@ -63,12 +64,27 @@ class AddInformation extends Component {
     }
 
     notifyActivity() {
-        let activityN = {
-            id: sessionStorage.getItem('activity'),
-            state: 3,
-            requestData: null
-        }
-        this.props.changeStatus(localStorage.getItem('Token'), activityN)
+        confirmAlert({
+            title: '',
+            message: '¿Esta seguro?',
+            buttons: [
+                {
+                    label: 'Si',
+                    onClick: () => {
+                        let activityN = {
+                            id: sessionStorage.getItem('activity'),
+                            state: 3,
+                            requestData: null
+                        }
+                        this.props.changeStatus(localStorage.getItem('Token'), activityN)
+                    }
+                },
+                {
+                    label: 'No',
+                    onClick: () => { }
+                }
+            ]
+        });
     }
 
     componentDidMount() {
