@@ -63,11 +63,6 @@ class ContenidoInicio extends React.Component {
 		this.props.actionCerrarSesionInicio(localStorage.getItem('Token'));
 	}
 
-	
-	onClickRedirigir= () => {
-		console.log('hola');
-	}
-
 	render() {
 		return (
 			<>

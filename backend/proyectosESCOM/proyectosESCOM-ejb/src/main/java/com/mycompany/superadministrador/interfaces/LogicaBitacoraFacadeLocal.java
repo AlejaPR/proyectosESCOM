@@ -15,7 +15,9 @@ public interface LogicaBitacoraFacadeLocal {
     
     public void registrarEnBitacora(DatosSolicitudPOJO solicitud);
     
-    public List<DatosSolicitudPOJO> consultar(ReportePOJO reporte) throws ExcepcionGenerica;
+    public List<DatosSolicitudPOJO> consultar(ReportePOJO reporte,int cantidadDeDatos,int paginaActual) throws ExcepcionGenerica;
     
+    public int cantidadDeDatos(ReportePOJO reporte)throws ExcepcionGenerica;
     
+    public List<DatosSolicitudPOJO> consultarBitacoraCompleta(ReportePOJO reporte) throws ExcepcionGenerica;
 }

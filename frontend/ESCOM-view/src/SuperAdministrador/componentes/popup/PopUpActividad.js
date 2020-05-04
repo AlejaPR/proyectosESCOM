@@ -15,7 +15,7 @@ import AddIcon from '@material-ui/icons/Add';
 import SaveAltIcon from '@material-ui/icons/SaveAlt';
 import CancelIcon from '@material-ui/icons/Cancel';
 
-import { actionConsultarModulos, actionConsultarActividades, actionAgregarActividad, actualizarMensajeRegistrar } from '../../actions/actionActividad.js'
+import { actionConsultarModulos, actionConsultarActividades,actionConsultarCantidadActividades, actionAgregarActividad, actualizarMensajeRegistrar } from '../../actions/actionActividad.js'
 import { connect } from 'react-redux';
 
 class PopUpActividad extends React.Component {
@@ -43,7 +43,9 @@ class PopUpActividad extends React.Component {
         switch (this.props.mensaje) {
             case 'actividad registrada':
                 NotificationManager.success('Actividad registrada correctamente');
-                // this.props.actualizarMensajeRegistrar('');
+                this.props.actionConsultarActividades(localStorage.getItem('Token'), this.state.rowsPerPage, this.state.page);
+                this.props.actionConsultarCantidadActividades(localStorage.getItem('Token'));
+                this.props.actualizarMensajeRegistrar('');
                 break;
             case 'Sin permiso':
                 NotificationManager.error('No tiene permisos sucifientes para registrar una actividad');
@@ -208,5 +210,5 @@ let formulario = reduxForm({
     form: 'registrarActividad'
 })(PopUpActividad)
 
-export default withRouter(connect(mapStateToProps, { actionConsultarModulos, actionConsultarActividades, actionAgregarActividad, actualizarMensajeRegistrar })(formulario));
+export default withRouter(connect(mapStateToProps, { actionConsultarModulos, actionConsultarActividades,actionConsultarCantidadActividades, actionAgregarActividad, actualizarMensajeRegistrar })(formulario));
 

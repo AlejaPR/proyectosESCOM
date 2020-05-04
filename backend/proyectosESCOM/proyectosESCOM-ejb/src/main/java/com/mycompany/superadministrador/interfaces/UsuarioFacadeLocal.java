@@ -48,8 +48,18 @@ public interface UsuarioFacadeLocal {
 
     public void registrarUsuario(UsuarioPOJO usuario);
     
-    public List<UsuarioPOJO> listarUsuarios();
+    public List<UsuarioPOJO> listarUsuarios(int cantidadDatos,int paginaActual);
     
+    public List<UsuarioPOJO> listarUsuariosSinSuper(int cantidadDatos,int paginaActual,String correoElectronico);
+    
+    public List<UsuarioPOJO> filtrarUsuariosSuper(String palabraBusqueda, int cantidadDatos, int paginaActual);
+    
+    public List<UsuarioPOJO> filtrarUsuarios(String palabraBusqueda, String correo, int cantidadDatos, int paginaActual);
+    
+    public int filtrarUsuariosSuperCantidad(String palabraBusqueda);
+    
+    public int filtrarUsuariosCantidad(String palabraBusqueda,String correo);
+            
     public UsuarioPOJO buscarUsuarioEspecifico(int cedula);
     
     public int editarUsuario(int cedula, UsuarioPOJO usuarioEditar,TipoDocumento tipo);

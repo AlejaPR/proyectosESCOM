@@ -5,24 +5,41 @@ import 'react-notifications/lib/notifications.css';
 
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
-import MaterialTable from 'material-table';
+import axios from 'axios';
 //componentes
+import { makeStyles, useTheme, withStyles } from '@material-ui/core/styles';
 import { generarInput, generarDate } from '../../utilitario/GenerarInputs.js'
-
+import { TablePagination } from '@material-ui/core';
 import Barra from '../general/BarraDirecciones.js'
 import { formatoFecha } from '../../utilitario/MensajesError.js';
 import { seleccione } from '../../utilitario/validacionCampos.js';
-import {validacionDoscientosCaracteres,requerido} from '../../utilitario/validacionCampos.js'
+import { validacionDoscientosCaracteres, requerido } from '../../utilitario/validacionCampos.js'
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableFooter from '@material-ui/core/TableFooter';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Paper from '@material-ui/core/Paper';
 import Select from 'react-select'
 import SearchIcon from '@material-ui/icons/Search';
 import ReplayIcon from '@material-ui/icons/Replay';
 import PictureAsPdfIcon from '@material-ui/icons/PictureAsPdf';
 import { connect } from 'react-redux';
-import { actionConsultarReporte, actualizarReporte, actualizarMensaje } from '../../actions/actionReporte.js';
+import { actionConsultarReporte, actualizarReporte, actualizarMensaje, actionConsultarReporteCantidad, actionConsultarReporteTotal } from '../../actions/actionReporte.js';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
+import IconButton from '@material-ui/core/IconButton';
+import FirstPageIcon from '@material-ui/icons/FirstPage';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import LastPageIcon from '@material-ui/icons/LastPage';
 import jsPDF from "jspdf";
+import Tooltip from '@material-ui/core/Tooltip';
+import { desencriptar } from '../../componentes/general/Encriptar.js';
+import { URL_BASE } from '../../utilitario/Configuracion.js';
 import "jspdf-autotable";
 
 class ContenidoReportes extends React.Component {
@@ -30,16 +47,34 @@ class ContenidoReportes extends React.Component {
 		super(props);
 		this.reiniciar = this.reiniciar.bind(this);
 		this.exportPDF = this.exportPDF.bind(this);
+		this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
 	}
 	state = {
 		valor: null,
 		textoAyuda: 'Buscar',
 		fechaInicio: [],
-		fechaFin: []
+		fechaFin: [],
+		page: 0,
+		rowsPerPage: 5,
+		reporte: []
 	}
+
 	retornarValor = () => {
 		return this.state.valor;
 	}
+
+	handleChangePage = (event, newPage) => {
+		this.setState({ page: newPage });
+		this.props.actionConsultarReporte(localStorage.getItem('Token'), this.state.reporte, this.state.rowsPerPage, newPage);
+		this.props.actionConsultarReporteCantidad(localStorage.getItem('Token'), this.state.reporte);
+	};
+
+	handleChangeRowsPerPage = (event) => {
+		this.setState({ rowsPerPage: +event.target.value })
+		this.setState({ page: 0 });
+		this.props.actionConsultarReporteCantidad(localStorage.getItem('Token'), this.state.reporte);
+		this.props.actionConsultarReporte(localStorage.getItem('Token'), this.state.reporte, +event.target.value, 0);
+	};
 
 	handleChangeDos = selectedOption => {
 		switch (selectedOption.value) {
@@ -79,7 +114,6 @@ class ContenidoReportes extends React.Component {
 	}
 	componentDidUpdate() {
 		if (this.props.mensaje !== '') {
-
 			switch (this.props.mensaje) {
 				case 'No se encontraron reportes':
 					NotificationManager.warning('No se encontraron resultados');
@@ -129,9 +163,11 @@ class ContenidoReportes extends React.Component {
 				fechaInicio: formatoFecha(formValues.fechaInicio),
 				fechaFin: formatoFecha(formValues.fechaFin)
 			}
+			this.setState({ reporte: reporte });
 			this.setState({ fechaInicio: formatoFecha(formValues.fechaInicio) });
 			this.setState({ fechaFin: formatoFecha(formValues.fechaFin) });
-			this.props.actionConsultarReporte(localStorage.getItem('Token'), reporte);
+			this.props.actionConsultarReporte(localStorage.getItem('Token'), reporte, this.state.rowsPerPage, this.state.page);
+			this.props.actionConsultarReporteCantidad(localStorage.getItem('Token'), reporte);
 		}
 	}
 
@@ -168,65 +204,76 @@ class ContenidoReportes extends React.Component {
 
 	exportPDF = () => {
 		try {
-			if (this.props.reporte.length === 0 | this.props.reporte === undefined) {
-				NotificationManager.error('No hay datos para exportar');
+			const headers = {
+				'Content-Type': 'application/json; charset=UTF-8',
+				'TokenAuto': desencriptar(localStorage.getItem('Token')),
+				'Permiso': 'SA_Realizar reportes'
 			}
-			else {
-				var doc = new jsPDF()
-				var totalPagesExp = this.calcularNumeroDePaginas();
-				const headers = [["OPERACION", "MODULO", "TABLA INVOLUCRADA", "FECHA BITACORA", "CORREO DEL RESPONSABLE", "IP         "]];
-				const data = this.props.reporte.map(elt => [elt.operacion, elt.nombreModulo, elt.tablaInvolucrada, elt.fechaBitacora, elt.correo, elt.ip]);
-				const logo = this.props.configuracion.logo;
-				let fechaHoy = new Date();
-				const fecha = this.devolverFechaString(fechaHoy);
-				const fechaInicio = this.devolverFechaString(this.state.fechaInicio);
-				const fechaFin = this.devolverFechaString(this.state.fechaFin);
-				doc.autoTable({
+			axios.post(`${URL_BASE}/proyectosESCOM-web/api/bitacora/consultarTotal/`, this.state.reporte, { headers: headers })
+				.then(response => {
+					let informe=response.data;
+					if (informe.length === 0 | informe === undefined) {
+						NotificationManager.error('No hay datos para exportar');
+					}else {
+						var doc = new jsPDF()
+						var totalPagesExp = this.calcularNumeroDePaginas();
+						const headers = [["OPERACION", "MODULO", "TABLA INVOLUCRADA", "FECHA BITACORA", "CORREO DEL RESPONSABLE", "IP         "]];
+						const data = informe.map(elt => [elt.operacion, elt.nombreModulo, elt.tablaInvolucrada, elt.fechaBitacora, elt.correo, elt.ip]);
+						const logo = this.props.configuracion.logo;
+						let fechaHoy = new Date();
+						const fecha = this.devolverFechaString(fechaHoy);
+						const fechaInicio = this.devolverFechaString(this.state.fechaInicio);
+						const fechaFin = this.devolverFechaString(this.state.fechaFin);
+						doc.autoTable({
 
-					head: headers,
-					body: data,
-					headStyles: {
-						fontSize: 8,
-					},
-					bodyStyles: {
-						fontSize: 8,
-					},
-					alternateRowStyles: {
-						fontSize: 8,
-					},
-					didDrawPage: function (data) {
-						// Header
-						doc.setFontSize(10);
-						doc.setTextColor(40);
-						doc.setFontStyle('normal');
-						doc.addImage(logo, 'PNG', data.settings.margin.left, 8, 43, 15);
-						doc.text('Fecha de generacion: ' + fecha, data.settings.margin.left + 125, 12);
-						doc.text('Fecha de inicio: ' + fechaInicio, data.settings.margin.left + 125, 16);
-						doc.text('Fecha de fin: ' + fechaFin, data.settings.margin.left + 125, 20);
-						// Footer
-						var str = 'Pagina ' + doc.internal.getNumberOfPages()
-						// Total page number plugin only available in jspdf v1.0+
-						if (typeof doc.putTotalPages === 'function') {
-							str = str + ' de ' + totalPagesExp
-						}
-						doc.setFontSize(10)
+							head: headers,
+							body: data,
+							headStyles: {
+								fontSize: 8,
+							},
+							bodyStyles: {
+								fontSize: 8,
+							},
+							alternateRowStyles: {
+								fontSize: 8,
+							},
+							didDrawPage: function (data) {
+								// Header
+								doc.setFontSize(10);
+								doc.setTextColor(40);
+								doc.setFontStyle('normal');
+								doc.addImage(logo, 'PNG', data.settings.margin.left, 8, 43, 15);
+								doc.text('Fecha de generacion: ' + fecha, data.settings.margin.left + 125, 12);
+								doc.text('Fecha de inicio: ' + fechaInicio, data.settings.margin.left + 125, 16);
+								doc.text('Fecha de fin: ' + fechaFin, data.settings.margin.left + 125, 20);
+								// Footer
+								var str = 'Pagina ' + doc.internal.getNumberOfPages()
+								// Total page number plugin only available in jspdf v1.0+
+								if (typeof doc.putTotalPages === 'function') {
+									str = str + ' de ' + totalPagesExp
+								}
+								doc.setFontSize(10)
 
-						// jsPDF 1.4+ uses getWidth, <1.4 uses .width
-						var pageSize = doc.internal.pageSize
-						var pageHeight = pageSize.height ? pageSize.height : pageSize.getHeight()
-						doc.text(str, data.settings.margin.left, pageHeight - 10)
-					},
-					margin: { top: 30 },
-				})
-
-				doc.save(`reporte de ${fecha}.pdf`);
-			}
+								// jsPDF 1.4+ uses getWidth, <1.4 uses .width
+								var pageSize = doc.internal.pageSize
+								var pageHeight = pageSize.height ? pageSize.height : pageSize.getHeight()
+								doc.text(str, data.settings.margin.left, pageHeight - 10)
+							},
+							margin: { top: 30 },
+						})
+						doc.save(`reporte de ${fecha}.pdf`);
+					}
+				}).catch((error) => {
+					NotificationManager.error(`Ocurrio un error intentelo de nuevo `);
+				});
 		} catch (error) {
-			NotificationManager.error('Ocurrio un error intentelo de nuevo');
+			NotificationManager.error(`Ocurrio un error intentelo de nuevo `);
 		}
 	}
 
 	render() {
+		const { page, rowsPerPage } = this.state;
+		const { cantidad, reporte } = this.props;
 		return (
 			<div>
 				<div className="text-left titulo" style={estiloLetrero}>
@@ -254,7 +301,7 @@ class ContenidoReportes extends React.Component {
 									<Field name="actividad" validate={[seleccione]} valor={this.retornarValor()} onChange={this.handleChangeDos} component={ReduxFormSelectDos} options={this.actividades()} />
 								</div>
 								<div className="col-sm-8" >
-									<Field name="palabraBusqueda" component={generarInput} validate={[validacionDoscientosCaracteres,requerido]} className="form-control" label={this.state.textoAyuda} />
+									<Field name="palabraBusqueda" component={generarInput} validate={[validacionDoscientosCaracteres, requerido]} className="form-control" label={this.state.textoAyuda} />
 								</div>
 							</div>
 							<div className="col-sm-12" style={{
@@ -302,56 +349,65 @@ class ContenidoReportes extends React.Component {
 						<br />
 						<Divider variant="middle" />
 						<br />
-
-						<MaterialTable
-							title=''
-							localization={{
-								header: {
-									actions: ' '
-								},
-								pagination: {
-									nextTooltip: 'Siguiente ',
-									previousTooltip: 'Anterior',
-									labelDisplayedRows: '{from}-{to} de {count}',
-									lastTooltip: 'Ultima pagina',
-									firstTooltip: 'Primera pagina',
-									labelRowsSelect: 'Registros',
-									firstAriaLabel: 'oooo'
-								},
-								body: {
-									emptyDataSourceMessage: 'Ningun registro de bitacora encontrado'
-								},
-								toolbar: {
-									searchTooltip: 'Buscar',
-									searchPlaceholder: 'Buscar',
-									nRowsSelected: '{0} actividades seleccionadas',
-								}
-							}}
-							columns={[
-								{ title: 'Operacion', field: 'operacion', headerStyle: estiloCabecera, cellStyle: estiloFila },
-								{ title: 'Nombre del modulo', field: 'nombreModulo', headerStyle: estiloCabecera, cellStyle: estiloFila },
-								{ title: 'Tabla involucrada', field: 'tablaInvolucrada', headerStyle: estiloCabecera, cellStyle: estiloFila },
-								{ title: 'Fecha de bitacora', field: 'fechaBitacora', headerStyle: estiloCabecera, cellStyle: estiloFila },
-								{ title: 'Correo del responsable', field: 'correo', headerStyle: estiloCabecera, cellStyle: estiloFila },
-								{ title: 'IP', field: 'ip', headerStyle: estiloCabecera, cellStyle: estiloFila },
-							]}
-							data={this.props.reporte}
-							options={{
-								search: false,
-								rowStyle: estiloFila
-							}}
-						/>
-						<br />
-						<div style={{ paddingLeft: "400px" }}>
-							<Button
-								onClick={() => this.exportPDF()}
-								startIcon={<PictureAsPdfIcon />}
-								className="btn btn-dark"
-								style={{ background: "#DF1417", fontSize: "14px", textTransform: "none" }}
-								variant="contained">Generar PDF</Button>
-						</div>
+						{reporte.length === 0 ? <></> : <>
+							<TableContainer component={Paper}>
+								<Table>
+									<TableHead>
+										<TableRow >
+											<StyledTableCell >Operacion</StyledTableCell>
+											<StyledTableCell >Nombre del modulo</StyledTableCell>
+											<StyledTableCell >Tabla involucrada</StyledTableCell>
+											<StyledTableCell >Fecha de bitacora</StyledTableCell>
+											<StyledTableCell >Correo del responsable</StyledTableCell>
+											<StyledTableCell >Ip</StyledTableCell>
+										</TableRow>
+									</TableHead>
+									<TableBody >
+										{
+											this.props.reporte.map((p, index) => {
+												return <StyledTableRow key={index}>
+													<StyledTableCell>{p.operacion}</StyledTableCell>
+													<StyledTableCell >{p.nombreModulo}</StyledTableCell>
+													<StyledTableCell >{p.tablaInvolucrada}</StyledTableCell>
+													<StyledTableCell >{p.fechaBitacora}</StyledTableCell>
+													<StyledTableCell >{p.correo}</StyledTableCell>
+													<StyledTableCell >{p.ip}</StyledTableCell>
+												</StyledTableRow >
+											})
+										}
+									</TableBody>
+									<TableFooter>
+										<TableRow >
+											<TablePagination
+												labelDisplayedRows={({ from, to, count }) => {
+													return `${from}-${to === -1 ? count : to} de ${count}`
+												}}
+												labelRowsPerPage={`Registros por página:`}
+												nextIconButtonText={`Siguiente pagina`}
+												backIconButtonText={`Pagina anterior`}
+												rowsPerPageOptions={[5, 10, 15]}
+												count={cantidad}
+												rowsPerPage={rowsPerPage}
+												page={page}
+												onChangePage={this.handleChangePage}
+												onChangeRowsPerPage={this.handleChangeRowsPerPage}
+												ActionsComponent={TablePaginationActions}
+											/>
+										</TableRow>
+									</TableFooter>
+								</Table>
+							</TableContainer>
+							<br />
+							<div style={{ paddingLeft: "400px" }}>
+								<Button
+									onClick={() => this.exportPDF()}
+									startIcon={<PictureAsPdfIcon />}
+									className="btn btn-dark"
+									style={{ background: "#DF1417", fontSize: "14px", textTransform: "none" }}
+									variant="contained">Generar PDF</Button>
+							</div>
+						</>}
 					</div>
-
 				</div>
 				<NotificationContainer />
 			</div >
@@ -360,6 +416,102 @@ class ContenidoReportes extends React.Component {
 
 
 }
+
+const useStyles1 = makeStyles((theme) => ({
+	root: {
+		flexShrink: 0,
+		marginLeft: theme.spacing(2.5),
+	},
+}));
+
+
+export const TablePaginationActions = (props) => {
+
+
+	const classes = useStyles1();
+	const theme = useTheme()
+	const { count, page, rowsPerPage, onChangePage } = props;
+
+	const handleFirstPageButtonClick = (event) => {
+		onChangePage(event, 0);
+	};
+
+	const handleBackButtonClick = (event) => {
+		onChangePage(event, page - 1);
+	};
+
+	const handleNextButtonClick = (event) => {
+		onChangePage(event, page + 1);
+	};
+
+	const handleLastPageButtonClick = (event) => {
+		onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+	};
+
+	return (
+		<div className={classes.root}>
+			<Tooltip title="Primera pagina">
+				<IconButton
+					onClick={handleFirstPageButtonClick}
+					disabled={page === 0}
+					aria-label="first page"
+				>
+					{theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+				</IconButton>
+			</Tooltip>
+
+			<Tooltip title="Pagina anterior">
+				<IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
+					{theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+				</IconButton>
+			</Tooltip>
+
+			<Tooltip title="Siguiente pagina">
+				<IconButton
+					onClick={handleNextButtonClick}
+					disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+					aria-label="next page"
+				>
+					{theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+				</IconButton>
+			</Tooltip>
+			<Tooltip title="Ultima pagina">
+				<IconButton
+					onClick={handleLastPageButtonClick}
+					disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+					aria-label="last page"
+				>
+
+					{theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+				</IconButton>
+			</Tooltip>
+		</div>
+	);
+}
+
+
+const StyledTableCell = withStyles((theme) => ({
+	head: {
+		backgroundColor: '#e7ecf1',
+		color: 'black',
+		fontSize: 14,
+		fontFamily: 'sans-serif',
+		padding: '8px'
+	},
+	body: {
+		fontSize: 13,
+		fontFamily: 'sans-serif',
+		padding: '10px'
+	},
+}))(TableCell);
+
+const StyledTableRow = withStyles((theme) => ({
+	root: {
+		'&:nth-of-type(odd)': {
+			backgroundColor: theme.palette.background.default,
+		},
+	},
+}))(TableRow);
 
 export const ReduxFormSelectDos = props => {
 	const customStyles = {
@@ -421,7 +573,9 @@ function mapStateToProps(state) {
 	return {
 		reporte: state.rep.reporte,
 		mensaje: state.rep.mensajeReporte,
-		configuracion: state.conf.configuracion
+		configuracion: state.conf.configuracion,
+		cantidad: state.rep.cantidad,
+		reporteTotal: state.rep.reporteTotal
 	}
 }
 
@@ -429,4 +583,4 @@ let reporte = reduxForm({
 	form: 'reporte'
 })(ContenidoReportes)
 
-export default withRouter(connect(mapStateToProps, { actionConsultarReporte, actualizarReporte, actualizarMensaje })(reporte));
+export default withRouter(connect(mapStateToProps, { actionConsultarReporte, actualizarReporte, actionConsultarReporteTotal, actualizarMensaje, actionConsultarReporteCantidad })(reporte));

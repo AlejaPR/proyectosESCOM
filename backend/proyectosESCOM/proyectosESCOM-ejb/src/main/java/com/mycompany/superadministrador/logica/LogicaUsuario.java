@@ -355,28 +355,22 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
      * Metodo que llama a la consulta para obtener la lista de usuarios
      *
      * @param token
+     * @param cantidadDatos
+     * @param paginaActual
      * @return
      * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
      *
      */
     @Override
-    public List<UsuarioPOJO> devolverUsuarios(String token) throws ExcepcionGenerica {
+    public List<UsuarioPOJO> devolverUsuarios(String token, int cantidadDatos, int paginaActual) throws ExcepcionGenerica {
         try {
             String correoSolicitud = Seguridad.desencriptar(token).getIssuer();
-            List<UsuarioPOJO> usuariosResultado = new ArrayList<>();
+            List<UsuarioPOJO> usuariosResultado = usuarioDB.listarUsuarios(cantidadDatos, paginaActual);
             if (correoSolicitud.equals(CORREOSUPERADMIN)) {
-                usuariosResultado = usuarioDB.listarUsuarios();
-            } else {
-                for (UsuarioPOJO usuario : usuarioDB.listarUsuarios()) {
-                    if (!usuario.getCorreoElectronico().equals(CORREOSUPERADMIN)) {
-                        usuariosResultado.add(usuario);
-                    }
-                }
-            }
-            if (!usuariosResultado.isEmpty()) {
                 return usuariosResultado;
             } else {
-                throw new NoResultException("No se encontraron datos");
+                List<UsuarioPOJO> usuariosFiltrados = usuarioDB.listarUsuariosSinSuper(cantidadDatos, paginaActual, CORREOSUPERADMIN);
+                return usuariosFiltrados;
             }
         } catch (NullPointerException ex) {
             bitacora.registroLogger(CLASE, "Devolver usuarios", Level.SEVERE, ex.getMessage());
@@ -384,6 +378,46 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
         } catch (Exception ex) {
             bitacora.registroLogger(CLASE, "Devolver usuarios", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
+        }
+    }
+
+    @Override
+    public List<UsuarioPOJO> devolverUsuariosFiltrados(String palabraBusqueda, String token, int cantidadDatos, int paginaActual) throws ExcepcionGenerica {
+        try {
+            String correoSolicitud = Seguridad.desencriptar(token).getIssuer();
+            List<UsuarioPOJO> usuariosResultado = usuarioDB.filtrarUsuariosSuper(palabraBusqueda.toLowerCase(), cantidadDatos, paginaActual);
+            if (correoSolicitud.equals(CORREOSUPERADMIN)) {
+                return usuariosResultado;
+            } else {
+                List<UsuarioPOJO> usuariosFiltrados = usuarioDB.filtrarUsuarios(palabraBusqueda.toLowerCase(), CORREOSUPERADMIN, cantidadDatos, paginaActual);
+                return usuariosFiltrados;
+            }
+        } catch (NullPointerException ex) {
+            bitacora.registroLogger(CLASE, "Devolver usuarios", Level.SEVERE, ex.getMessage());
+            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
+        } catch (Exception ex) {
+            bitacora.registroLogger(CLASE, "Devolver usuarios", Level.SEVERE, ex.getMessage());
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
+        }
+    }
+
+    @Override
+    public int cantidadDeDatos(String token) throws ExcepcionGenerica {
+        String correoSolicitud = Seguridad.desencriptar(token).getIssuer();
+        if (correoSolicitud.equals(CORREOSUPERADMIN)) {
+            return usuarioDB.count();
+        } else {
+            return usuarioDB.count() - 1;
+        }
+    }
+
+    @Override
+    public int cantidadDeDatosFiltrados(String token, String palabraBusqueda) throws ExcepcionGenerica {
+        String correoSolicitud = Seguridad.desencriptar(token).getIssuer();
+        if (correoSolicitud.equals(CORREOSUPERADMIN)) {
+            return usuarioDB.filtrarUsuariosSuperCantidad(palabraBusqueda.toLowerCase());
+        } else {
+            return usuarioDB.filtrarUsuariosCantidad(palabraBusqueda.toLowerCase(),CORREOSUPERADMIN);
         }
     }
 
@@ -545,11 +579,12 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
     @Override
     public List<ActividadPOJO> listarActividadesUsuario(int numeroDocumento) throws ExcepcionGenerica {
         try {
-            List<ActividadPOJO> listaActividades =actividadDB.listarActividadesUsuario(numeroDocumento);
+            List<ActividadPOJO> listaActividades = new ArrayList<>();
+            listaActividades = actividadDB.listarActividadesUsuario(numeroDocumento);
             if (!listaActividades.isEmpty()) {
                 return listaActividades;
             } else {
-                throw new NoResultException("Error en la consulta");
+                return listaActividades;
             }
         } catch (NoResultException ex) {
             bitacora.registroLogger(CLASE, "Listar actividades usuario", Level.WARNING, ex.getMessage());
@@ -576,11 +611,12 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
     @Override
     public List<ActividadPOJO> listarActividadesNoAsociadasUsuario(int numeroDocumento, int idModulo) throws ExcepcionGenerica {
         try {
-            List<ActividadPOJO> listaActividades =actividadDB.listarActividadesNoAsociadasUsuario(numeroDocumento, idModulo);
+            List<ActividadPOJO> listaActividades = new ArrayList<>();
+            listaActividades = actividadDB.listarActividadesNoAsociadasUsuario(numeroDocumento, idModulo);
             if (!listaActividades.isEmpty()) {
                 return listaActividades;
             } else {
-                throw new NoResultException("Error en la consulta");
+                return listaActividades;
             }
         } catch (NoResultException ex) {
             bitacora.registroLogger(CLASE, "Listar actividades no asociadas usuario", Level.WARNING, ex.getMessage());
@@ -674,11 +710,11 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
     @Override
     public List<ActividadPOJO> listarActividadesUsuarioActivas(int numeroDocumento) throws ExcepcionGenerica {
         try {
-            List<ActividadPOJO> listaActividades =actividadDB.listarActividadesUsuarioActivas(numeroDocumento);
+            List<ActividadPOJO> listaActividades = actividadDB.listarActividadesUsuarioActivas(numeroDocumento);
             if (!listaActividades.isEmpty()) {
                 return listaActividades;
             } else {
-                throw new NoResultException("Error en la consulta");
+                return new ArrayList<>();
             }
         } catch (NoResultException ex) {
             bitacora.registroLogger(CLASE, "Listar actividades usuario activas", Level.WARNING, ex.getMessage());
@@ -891,7 +927,7 @@ public class LogicaUsuario implements LogicaUsuarioFacadeLocal {
                     throw new ExcepcionGenerica("Ocurrio un error en el servidor");
                 } else {
                     EnvioCorreo e = new EnvioCorreo();
-                    String link = e.getIPSERVIDOR()+"/recuperarContrasena/" + token;
+                    String link = e.getIPSERVIDOR() + "/recuperarContrasena/" + token;
                     e.enviarCorreo(e.devolverEstructuraHTML(usuario.get(0).getNombre(), link), correoElectronico, "Recuperar contraseña");
                     return "Correo enviado";
                 }

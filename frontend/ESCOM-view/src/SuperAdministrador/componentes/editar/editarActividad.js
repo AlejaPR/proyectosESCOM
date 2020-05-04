@@ -8,7 +8,7 @@ import Divider from '@material-ui/core/Divider';
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { withRouter } from 'react-router-dom';
 import { generarInput, generarTextArea } from '../../utilitario/GenerarInputs.js'
-import { requerido, validacionCuarentaCaracteres,validacionDoscientosCaracteres } from '../../utilitario/validacionCampos.js';
+import { requerido, validacionCuarentaCaracteres, validacionDoscientosCaracteres } from '../../utilitario/validacionCampos.js';
 
 //iconos
 import Alert from '@material-ui/lab/Alert';
@@ -40,7 +40,8 @@ class EditarActividad extends React.Component {
                     break;
                 case 'Modificado':
                     NotificationManager.success('Informacion actualizada');
-                    this.props.actionCargarInformacionDeActividad(this.props.codigoActividad, localStorage.getItem('Token'));
+                    this.props.history.goBack();
+                    // this.props.actionCargarInformacionDeActividad(this.props.codigoActividad, localStorage.getItem('Token'));
                     this.props.actualizarMensajeEditar('');
                     break;
                 case 'Ocurrio un error al momento de hacer la modificacion de la actividad':
@@ -153,7 +154,7 @@ class EditarActividad extends React.Component {
                                         <br />
                                         <div className="row">
                                             <div className="col-sm-6">
-                                                <Field name="descripcion" validate={[requerido,validacionDoscientosCaracteres]} filas={4} component={generarTextArea} label="Descripcion" />
+                                                <Field name="descripcion" validate={[requerido, validacionDoscientosCaracteres]} filas={4} component={generarTextArea} label="Descripcion" />
                                             </div>
                                         </div>
                                         <br />

@@ -9,7 +9,7 @@ import { NotificationContainer, NotificationManager } from 'react-notifications'
 import { withRouter } from 'react-router-dom';
 import { generarInput, generarSelect, generarDate, generarInputCorreo } from '../../utilitario/GenerarInputs.js'
 import { formatoFecha } from '../../utilitario/MensajesError.js'
-import { nombre, requerido, seleccione, apellido, fechaNacimiento, validacionCuarentaCaracteres,validacionCincuentaCaracteres, documentoIdentificacion } from '../../utilitario/validacionCampos.js';
+import { nombre, requerido, seleccione, apellido, fechaNacimiento, validacionCuarentaCaracteres, validacionCincuentaCaracteres, documentoIdentificacion } from '../../utilitario/validacionCampos.js';
 
 //iconos
 import Alert from '@material-ui/lab/Alert';
@@ -35,8 +35,6 @@ class editar extends React.Component {
   }
 
   componentDidUpdate() {
-    console.log('cedula del up',this.props.cedula)
-    debugger;
     if (this.props.mensajeEditar !== '') {
       switch (this.props.mensajeEditar) {
         case 'Ocurrio un error en el servidor':
@@ -52,21 +50,21 @@ class editar extends React.Component {
           NotificationManager.error('Servidor fuera de servicio temporalmente');
           break;
         case 'Modificado':
+          this.props.history.goBack();
           NotificationManager.success('Informacion actualizada');
-          if (this.state.cambioDocumento === null) {
-            this.props.actionCargarInformacionDeUsuario(this.props.cedula, localStorage.getItem('Token'));
-          } else {
-            this.props.actionAsignarCedula(this.state.cambioDocumento);
-            this.props.actionCargarInformacionDeUsuario(this.state.cambioDocumento, localStorage.getItem('Token'));
-          }
+          // if (this.state.cambioDocumento === null) {
+          //   this.props.actionCargarInformacionDeUsuario(this.props.cedula, localStorage.getItem('Token'));
+          // } else {
+          //   this.props.actionAsignarCedula(this.state.cambioDocumento);
+          //   this.props.actionCargarInformacionDeUsuario(this.state.cambioDocumento, localStorage.getItem('Token'));
+          // }
           this.props.actualizarMensajeEditar('');
           break;
         case 'El correo o numero de documento ya esta registrado':
-          console.log('cedula del state es ',this.props.cedula)
           this.props.actionCargarInformacionDeUsuario(this.props.cedula, localStorage.getItem('Token'));
           NotificationManager.error('El correo o numero de identificacion ya estan registrados');
-          if(this.state.cambioDocumento!==null){
-            this.setState({cambioDocumento:null})
+          if (this.state.cambioDocumento !== null) {
+            this.setState({ cambioDocumento: null })
           }
           this.props.actualizarMensajeEditar('');
           break;
@@ -94,7 +92,6 @@ class editar extends React.Component {
   }
 
   componentDidMount() {
-    console.log('cedula del state es did mount',this.props.cedula)
     if (this.props.cedula === undefined || this.props.cedula.length === 0) {
       this.props.history.goBack();
     } else {
@@ -166,11 +163,11 @@ class editar extends React.Component {
                     <div className="row">
                       <div className="col-sm-6">
 
-                        <Field name="nombre" validate={[requerido, nombre,validacionCuarentaCaracteres]} component={generarInput} label="Nombre" />
+                        <Field name="nombre" validate={[requerido, nombre, validacionCuarentaCaracteres]} component={generarInput} label="Nombre" />
                       </div>
                       <div className="col-sm-6">
 
-                        <Field name="apellido" validate={[requerido, apellido,validacionCuarentaCaracteres]} component={generarInput} label="Apellido" />
+                        <Field name="apellido" validate={[requerido, apellido, validacionCuarentaCaracteres]} component={generarInput} label="Apellido" />
                       </div>
                     </div>
                     <br />

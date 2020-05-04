@@ -75,21 +75,93 @@ public class UsuarioServicio {
      * Servicio que lista los usuarios registrados
      *
      * @param token
+     * @param cantidadDatos
+     * @param paginaActual
      * @return *
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/listar/{token}")
-    public Response listar(@PathParam("token") String token) {
+    @Path("/listar/{token}/{cantidadDatos}/{paginaActual}")
+    public Response listar(@PathParam("token") String token,@PathParam("cantidadDatos") int cantidadDatos,@PathParam("paginaActual") int paginaActual) {
         try {
-            List<UsuarioPOJO> listaUsuarios = usuarioLogica.devolverUsuarios(token);
+            List<UsuarioPOJO> listaUsuarios = usuarioLogica.devolverUsuarios(token,cantidadDatos,paginaActual);
             return Response.status(Response.Status.OK).entity(listaUsuarios).build();
         } catch (ExcepcionGenerica e) {
             respuesta.setRespuesta(e.getMessage());
             return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
         } catch (Exception e) {
             respuesta.setRespuesta("Ocurrio un error en el servidor");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
+        }
+    }
+    
+    /**
+     * 
+     * @param palabraBusqueda
+     * @param token
+     * @return 
+     */
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/filtrar/{token}/{palabraBusqueda}")
+    public Response filtrarCantidad(@PathParam("palabraBusqueda") String palabraBusqueda,@PathParam("token") String token) {
+        try {
+            int cantidad= usuarioLogica.cantidadDeDatosFiltrados(token,palabraBusqueda);
+            return Response.status(Response.Status.OK).entity(cantidad).build();
+        } catch (ExcepcionGenerica e) {
+            respuesta.setRespuesta(e.getMessage());
+            return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
+        } catch (Exception e) {
+            respuesta.setRespuesta("Ocurrio un error en el servidor");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
+        }
+    }
+    
+    /**
+     * 
+     * @param palabraBusqueda
+     * @param token
+     * @param cantidadDatos
+     * @param paginaActual
+     * @return 
+     */
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/filtrar/{token}/{palabraBusqueda}/{cantidadDatos}/{paginaActual}")
+    public Response filtrar(@PathParam("palabraBusqueda") String palabraBusqueda,@PathParam("token") String token,@PathParam("cantidadDatos") int cantidadDatos,@PathParam("paginaActual") int paginaActual) {
+        try {
+            List<UsuarioPOJO> listaUsuarios = usuarioLogica.devolverUsuariosFiltrados(palabraBusqueda,token,cantidadDatos,paginaActual);
+            return Response.status(Response.Status.OK).entity(listaUsuarios).build();
+        } catch (ExcepcionGenerica e) {
+            respuesta.setRespuesta(e.getMessage());
+            return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
+        } catch (Exception e) {
+            respuesta.setRespuesta("Ocurrio un error en el servidor");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
+        }
+    }
+    
+    
+    /**
+     * 
+     * @param token
+     * @return 
+     */
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("/cantidadDatos/{token}")
+    public Response cantidad(@PathParam("token") String token) {
+        try {
+            return Response.status(Response.Status.OK).entity(usuarioLogica.cantidadDeDatos(token)).build();
+        } catch (ExcepcionGenerica e) {
+            respuesta.setRespuesta(e.getMessage());
+            return Response.status(Response.Status.NOT_ACCEPTABLE).entity(respuesta).build();
+        } catch (Exception e) {
+            respuesta.setRespuesta("Ocurrio un error interno del servidor");
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }

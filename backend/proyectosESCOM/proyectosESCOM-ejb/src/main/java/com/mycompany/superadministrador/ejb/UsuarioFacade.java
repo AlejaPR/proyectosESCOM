@@ -220,15 +220,94 @@ public class UsuarioFacade extends AbstractFacade<Usuario> implements UsuarioFac
      * Metodo que realiza la consulta a la tabla usuario Devuelve una lista con
      * los usuarios registrados
      *
+     * @param cantidadDatos
+     * @param paginaActual
      * @return
      *
      */
     @Override
-    public List<UsuarioPOJO> listarUsuarios() {
-
+    public List<UsuarioPOJO> listarUsuarios(int cantidadDatos, int paginaActual) {
         List<UsuarioPOJO> listaUsuarios = new ArrayList<>();
         TypedQuery<Usuario> consultaUsuariosRegistrados = em.createNamedQuery("consultaUsuarios", Usuario.class);
+//      setFirstResult((pageNumber-1) * pageSize); 
+//      setMaxResults(pageSize);
+        consultaUsuariosRegistrados.setFirstResult((paginaActual - 1) * cantidadDatos);
+        consultaUsuariosRegistrados.setMaxResults(cantidadDatos);
+        for (Usuario u : consultaUsuariosRegistrados.getResultList()) {
+            UsuarioPOJO usuario = new UsuarioPOJO();
+            usuario.setNombre(u.getNombre());
+            usuario.setApellido(u.getApellido());
+            usuario.setNumeroDocumento(u.getNumeroDocumento());
+            usuario.setCorreoElectronico(u.getCorreoElectronico());
+            usuario.setEstado(u.getEstado());
+            listaUsuarios.add(usuario);
+        }
+        return listaUsuarios;
+    }
 
+    @Override
+    public List<UsuarioPOJO> filtrarUsuarios(String palabraBusqueda, String correo, int cantidadDatos, int paginaActual) {
+        List<UsuarioPOJO> listaUsuarios = new ArrayList<>();
+        TypedQuery<Usuario> consultaUsuariosRegistrados = em.createNamedQuery("filtrarUsuarios", Usuario.class);
+        consultaUsuariosRegistrados.setParameter("palabraBusqueda", palabraBusqueda);
+        consultaUsuariosRegistrados.setParameter("correoElectronico", correo);
+        consultaUsuariosRegistrados.setFirstResult((paginaActual - 1) * cantidadDatos);
+        consultaUsuariosRegistrados.setMaxResults(cantidadDatos);
+        for (Usuario u : consultaUsuariosRegistrados.getResultList()) {
+            UsuarioPOJO usuario = new UsuarioPOJO();
+            usuario.setNombre(u.getNombre());
+            usuario.setApellido(u.getApellido());
+            usuario.setNumeroDocumento(u.getNumeroDocumento());
+            usuario.setCorreoElectronico(u.getCorreoElectronico());
+            usuario.setEstado(u.getEstado());
+            listaUsuarios.add(usuario);
+        }
+        return listaUsuarios;
+    }
+
+    @Override
+    public List<UsuarioPOJO> filtrarUsuariosSuper(String palabraBusqueda, int cantidadDatos, int paginaActual) {
+        List<UsuarioPOJO> listaUsuarios = new ArrayList<>();
+        TypedQuery<Usuario> consultaUsuariosRegistrados = em.createNamedQuery("filtrarUsuariosSuper", Usuario.class);
+        consultaUsuariosRegistrados.setParameter("palabraBusqueda", palabraBusqueda);
+        consultaUsuariosRegistrados.setFirstResult((paginaActual - 1) * cantidadDatos);
+        consultaUsuariosRegistrados.setMaxResults(cantidadDatos);
+        for (Usuario u : consultaUsuariosRegistrados.getResultList()) {
+            UsuarioPOJO usuario = new UsuarioPOJO();
+            usuario.setNombre(u.getNombre());
+            usuario.setApellido(u.getApellido());
+            usuario.setNumeroDocumento(u.getNumeroDocumento());
+            usuario.setCorreoElectronico(u.getCorreoElectronico());
+            usuario.setEstado(u.getEstado());
+            listaUsuarios.add(usuario);
+        }
+        return listaUsuarios;
+    }
+    
+    @Override
+    public int filtrarUsuariosSuperCantidad(String palabraBusqueda) {
+        TypedQuery<Usuario> consultaUsuariosRegistrados = em.createNamedQuery("filtrarUsuariosSuper", Usuario.class);
+        consultaUsuariosRegistrados.setParameter("palabraBusqueda", palabraBusqueda);
+        return consultaUsuariosRegistrados.getResultList().size();
+    }
+    
+    @Override
+    public int filtrarUsuariosCantidad(String palabraBusqueda,String correo) {
+        TypedQuery<Usuario> consultaUsuariosRegistrados = em.createNamedQuery("filtrarUsuarios", Usuario.class);
+        consultaUsuariosRegistrados.setParameter("palabraBusqueda", palabraBusqueda);
+        consultaUsuariosRegistrados.setParameter("correoElectronico", correo);
+        return consultaUsuariosRegistrados.getResultList().size();
+    }
+
+    @Override
+    public List<UsuarioPOJO> listarUsuariosSinSuper(int cantidadDatos, int paginaActual, String correoElectronico) {
+        List<UsuarioPOJO> listaUsuarios = new ArrayList<>();
+        TypedQuery<Usuario> consultaUsuariosRegistrados = em.createNamedQuery("consultaUsuariosNormal", Usuario.class);
+        consultaUsuariosRegistrados.setParameter("correoElectronico", correoElectronico);
+//      setFirstResult((pageNumber-1) * pageSize); 
+//      setMaxResults(pageSize);
+        consultaUsuariosRegistrados.setFirstResult((paginaActual - 1) * cantidadDatos);
+        consultaUsuariosRegistrados.setMaxResults(cantidadDatos);
         for (Usuario u : consultaUsuariosRegistrados.getResultList()) {
             UsuarioPOJO usuario = new UsuarioPOJO();
             usuario.setNombre(u.getNombre());

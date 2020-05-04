@@ -1,30 +1,51 @@
 import React from 'react';
 
 //componentes
+import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Barra from '../general/BarraDirecciones.js'
 import PopUpUsuario from '../popup/PopUpUsuario.js'
 import MaterialTable from 'material-table';
-import MTableToolbar from '../../utilitario/MTableToolbar.js';
 import { confirmAlert } from 'react-confirm-alert';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import 'react-confirm-alert/src/react-confirm-alert.css'; // Import css
 import { NotificationManager } from 'react-notifications';
+import { TablePagination } from '@material-ui/core';
+import IconButton from '@material-ui/core/IconButton';
+import Input from '@material-ui/core/Input';
+import ClearIcon from '@material-ui/icons/Clear';
+import SearchIcon from '@material-ui/icons/Search';
+import FirstPageIcon from '@material-ui/icons/FirstPage';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import LastPageIcon from '@material-ui/icons/LastPage';
+import Tooltip from '@material-ui/core/Tooltip';
+
 
 //redux conexion
 import { connect } from 'react-redux';
-import { actionConsultarUsuarios, actualizarMensajeSuspender, actionAsignarCedula, actualizarMensajeEditar, actionActualizarUsuarios, actionSuspenderActivarUsuario } from '../../actions/actionsUsuario.js'
+import { actionConsultarUsuarios, actualizarMensajeSuspender, actionConsultarUsuariosFiltrados, actionConsultarCentidadUsuariosFiltrados, actionConsultarCentidadUsuarios, actionAsignarCedula, actualizarMensajeEditar, actionActualizarUsuarios, actionSuspenderActivarUsuario } from '../../actions/actionsUsuario.js'
 import { withRouter } from 'react-router-dom';
 
 class ContenidoAdminUsuario extends React.Component {
+	constructor(props) {
+		super(props);
+		this.change = this.change.bind(this);
+	}
 
 	state = {
-		cedula: 0
+		cedula: 0,
+		page: 0,
+		rowsPerPage: 5,
+		valor: ''
 	}
 
-	componentWillMount() {
-		this.props.actionConsultarUsuarios(localStorage.getItem('Token'));
+	componentDidMount() {
+		this.props.actionConsultarUsuarios(localStorage.getItem('Token'), this.state.rowsPerPage, this.state.page);
+		this.props.actionConsultarCentidadUsuarios(localStorage.getItem('Token'));
 	}
+
+
 
 	componentDidUpdate() {
 		if (this.props.mensajeSuspender !== '') {
@@ -66,8 +87,8 @@ class ContenidoAdminUsuario extends React.Component {
 				default:
 					break;
 			}
+			this.props.actualizarMensajeSuspender('');
 		}
-		this.props.actualizarMensajeSuspender('');
 	}
 
 	actualizarUsuarios(numeroDocumento) {
@@ -120,7 +141,56 @@ class ContenidoAdminUsuario extends React.Component {
 
 	}
 
+	handleChangePage = (event, newPage) => {
+		this.setState({ page: newPage });
+		if (this.state.valor === '') {
+			this.props.actionConsultarUsuarios(localStorage.getItem('Token'), this.state.rowsPerPage, newPage);
+		} else {
+			this.props.actionConsultarUsuariosFiltrados(localStorage.getItem('Token'), this.state.valor, this.state.rowsPerPage, newPage);
+		}
+	};
+
+	handleChangeRowsPerPage = (event) => {
+		event.preventDefault();
+		this.setState({ rowsPerPage: +event.target.value });
+		this.setState({ page: 0 });
+		if (this.state.valor === '') {
+			this.props.actionConsultarCentidadUsuarios(localStorage.getItem('Token'));
+			this.props.actionConsultarUsuarios(localStorage.getItem('Token'), +event.target.value, 0);
+		} else {
+			this.props.actionConsultarCentidadUsuariosFiltrados(localStorage.getItem('Token'), this.state.valor);
+			this.props.actionConsultarUsuariosFiltrados(localStorage.getItem('Token'), this.state.valor, +event.target.value, 0);
+		}
+
+	};
+
+	change = (event) => {
+		this.setState({ valor: event.target.value });
+		if (event.target.value === '') {
+			this.setState({ valor: '' });
+			this.props.actionConsultarUsuarios(localStorage.getItem('Token'), this.state.rowsPerPage, 0);
+			this.props.actionConsultarCentidadUsuarios(localStorage.getItem('Token'));
+		}
+	}
+
+	press = (event) => {
+		if (event.key === 'Enter') {
+			if (this.state.valor !== '') {
+				this.props.actionConsultarCentidadUsuariosFiltrados(localStorage.getItem('Token'), this.state.valor);
+				this.props.actionConsultarUsuariosFiltrados(localStorage.getItem('Token'), this.state.valor, this.state.rowsPerPage, 0);
+			}
+		}
+	}
+
+	handleClickShowPassword = () => {
+		this.props.actionConsultarUsuarios(localStorage.getItem('Token'), this.state.rowsPerPage, 0);
+		this.props.actionConsultarCentidadUsuarios(localStorage.getItem('Token'));
+		this.setState({ valor: '' });
+	}
+
 	render() {
+		const { page, rowsPerPage, valor } = this.state;
+		const { cantidad } = this.props;
 		return (
 			<div>
 				<div className="text-left titulo" style={estiloLetrero}>
@@ -134,11 +204,12 @@ class ContenidoAdminUsuario extends React.Component {
 					paddingBottom: "7px",
 				}}>
 				</div>
+
 				<div className="container col-sm-12" style={{
 					paddingTop: "5px",
 					paddingRight: "43px",
 					paddingLeft: "40px",
-					paddingBottom: "0px"
+					paddingBottom: "25px"
 				}}>
 					<div className="container shadow" style={fondoBarraSuperior}>
 						<div>
@@ -148,115 +219,147 @@ class ContenidoAdminUsuario extends React.Component {
 										<AlertTitle>Sin permiso</AlertTitle>
 										No tiene permisos suficientes para consultar los usuarios registrados</Alert>
 								</div> :
-									<MaterialTable
-										title=""
-										localization={{
-											header: {
-												actions: ' '
-											},
-											pagination: {
-												nextTooltip: 'Siguiente ',
-												previousTooltip: 'Anterior',
-												labelDisplayedRows: '{from}-{to} de {count}',
-												lastTooltip: 'Ultima pagina',
-												firstTooltip: 'Primera pagina',
-												labelRowsSelect: 'Registros',
-												firstAriaLabel: 'oooo'
-											},
-											body: {
-												emptyDataSourceMessage: 'Ningun registro de usuarios encontrado'
-											},
-											toolbar: {
-												searchTooltip: 'Buscar',
-												searchPlaceholder: 'Buscar'
+									<>
+										<Input
+											id="standard-adornment-password"
+											type='text'
+											style={{ zIndex: '2', top: '48px', left: '667px' }}
+											value={valor}
+											onChange={this.change}
+											onKeyPress={this.press}
+											placeholder='Buscar'
+											startAdornment={
+												<SearchIcon fontSize='small' />
 											}
-										}}
-										columns={[
-											{
-												title: 'Numero de identificacion', field: 'numeroDocumento', type: 'numeric',
-												headerStyle: estiloCabecera,
-												cellStyle: estiloFila
-											},
-											{ title: 'Nombre', field: 'nombre', headerStyle: estiloCabecera, cellStyle: estiloFila },
-											{ title: 'Correo electronico', field: 'correoElectronico', headerStyle: estiloCabecera, cellStyle: estiloFila },
-											{
-												title: 'Estado', field: 'estado',
-												render: rowData => {
-													if (rowData.estado === 'Suspendido') {
-														return <span className="label label-sm letra"
-															style={{
-																textShadow: "none!important",
-																fontSize: "12px",
-																fontFamily: "Open Sans,sans-serif",
-																fontWeight: "300",
-																padding: "3px 6px",
-																color: "#fff",
-																background: "#ED6B75"
-															}}>{rowData.estado}</span>
-													} else {
-														return <span className="label label-sm letra"
-															style={{
-																textShadow: "none!important",
-																fontSize: "12px",
-																fontFamily: "Open Sans,sans-serif",
-																fontWeight: "300",
-																padding: "3px 6px",
-																color: "#fff",
-																background: "#408725"
-															}}>{rowData.estado}</span>
+											endAdornment={
+												<IconButton disabled={valor === '' ? true : false} onClick={this.handleClickShowPassword}>
+													<ClearIcon fontSize='small' />
+												</IconButton>
+											}
+										/>
+										<MaterialTable
+											style={{ zIndex: '1', height: `${rowsPerPage * 71}px` }}
+											title=""
+											localization={{
+												header: {
+													actions: ' '
+												},
+												pagination: {
+													nextTooltip: 'Siguiente ',
+													previousTooltip: 'Anterior',
+													labelDisplayedRows: '{from}-{to} de {count}',
+													lastTooltip: 'Ultima pagina',
+													firstTooltip: 'Primera pagina',
+													labelRowsSelect: 'Registros',
+													firstAriaLabel: 'oooo'
+												},
+												body: {
+													emptyDataSourceMessage: 'Ningun registro de usuarios encontrado'
+												},
+												toolbar: {
+													searchTooltip: 'Buscar',
+													searchPlaceholder: 'Buscar'
+												}
+
+											}}
+											columns={[
+												{
+													title: 'Numero de identificacion', field: 'numeroDocumento', type: 'numeric',
+													headerStyle: estiloCabecera,
+													cellStyle: estiloFila
+												},
+												{ title: 'Nombre', field: 'nombre', headerStyle: estiloCabecera, cellStyle: estiloFila },
+												{ title: 'Correo electronico', field: 'correoElectronico', headerStyle: estiloCabecera, cellStyle: estiloFila },
+												{
+													title: 'Estado', field: 'estado',
+													render: rowData => {
+														if (rowData.estado === 'Suspendido') {
+															return <span className="label label-sm letra"
+																style={{
+																	textShadow: "none!important",
+																	fontSize: "12px",
+																	fontFamily: "Open Sans,sans-serif",
+																	fontWeight: "300",
+																	padding: "3px 6px",
+																	color: "#fff",
+																	background: "#ED6B75"
+																}}>{rowData.estado}</span>
+														} else {
+															return <span className="label label-sm letra"
+																style={{
+																	textShadow: "none!important",
+																	fontSize: "12px",
+																	fontFamily: "Open Sans,sans-serif",
+																	fontWeight: "300",
+																	padding: "3px 6px",
+																	color: "#fff",
+																	background: "#408725"
+																}}>{rowData.estado}</span>
+														}
+													},
+													headerStyle: estiloCabecera, cellStyle: estiloFila
+												},
+											]}
+											data={this.props.usuarios}
+											options={{
+												rowStyle: estiloFila,
+												paging: false
+											}}
+											actions={[
+												{
+													icon: 'edit',
+													tooltip: 'Editar informacion',
+													onClick: (event, rowData) => {
+														this.props.actualizarMensajeSuspender('');
+														this.props.actionAsignarCedula(rowData.numeroDocumento);
+														this.props.history.push('/editarUsuario');
 													}
 												},
-												headerStyle: estiloCabecera, cellStyle: estiloFila
-											},
-										]}
-										data={this.props.usuarios}
-										options={{
-											search: true,
-											rowStyle: estiloFila
-
-										}}
-										actions={[
-											{
-												icon: 'edit',
-												tooltip: 'Editar informacion',
-												onClick: (event, rowData) => {
-													this.props.actualizarMensajeSuspender('');
-													this.props.actionAsignarCedula(rowData.numeroDocumento);
-													this.props.history.push('/editarUsuario');
+												{
+													icon: 'restore',
+													tooltip: 'Suspender / Activar',
+													onClick: (event, rowData) => this.activarDesactivarUsuario(rowData.numeroDocumento)
+												},
+												{
+													icon: 'assignmentInd',
+													tooltip: 'Administrar actividades',
+													onClick: (event, rowData) => {
+														this.props.actualizarMensajeSuspender('');
+														this.props.actionAsignarCedula(rowData.numeroDocumento);
+														this.props.history.push('/asignarActividadUsuario');
+													}
 												}
-											},
-											{
-												icon: 'restore',
-												tooltip: 'Suspender / Activar',
-												onClick: (event, rowData) => this.activarDesactivarUsuario(rowData.numeroDocumento)
-											},
-											{
-												icon: 'assignmentInd',
-												tooltip: 'Administrar actividades',
-												onClick: (event, rowData) => {
-													this.props.actualizarMensajeSuspender('');
-													this.props.actionAsignarCedula(rowData.numeroDocumento);
-													this.props.history.push('/asignarActividadUsuario');
-												}
-											}
-										]}
+											]}
 
-										components={{
-											Toolbar: props => (
-												<div className="row">
-													<div className="col-sm-4">
-														<div style={{ padding: '16px' }}>
-															<PopUpUsuario funcion={this.anadirTarea} />
+											components={{
+												Toolbar: props => (
+													<div className="row">
+														<div className="col-sm-4">
+															<div style={{ padding: '16px' }}>
+																<PopUpUsuario funcion={this.anadirTarea} />
+															</div>
 														</div>
 													</div>
-													<div className="col-sm-8">
-														<MTableToolbar {...props} />
-													</div>
-												</div>
-											),
-										}}
-
-									/>
+												)
+											}}
+										/>
+										<TablePagination
+											rowsPerPageOptions={[5, 10, 15]}
+											component="div"
+											count={cantidad}
+											labelDisplayedRows={({ from, to, count }) => {
+												return `${from}-${to === -1 ? count : to} de ${count}`
+											}}
+											labelRowsPerPage={`Registros por página:`}
+											nextIconButtonText={`Siguiente pagina`}
+											backIconButtonText={`Pagina anterior`}
+											rowsPerPage={this.state.rowsPerPage}
+											page={page}
+											onChangePage={this.handleChangePage}
+											onChangeRowsPerPage={this.handleChangeRowsPerPage}
+											ActionsComponent={TablePaginationActions}
+										/>
+									</>
 							}
 						</div>
 					</div>
@@ -264,9 +367,79 @@ class ContenidoAdminUsuario extends React.Component {
 			</div>
 		);
 	}
-
-
 }
+
+export const TablePaginationActions = (props) => {
+
+
+	const classes = useStyles1();
+	const theme = useTheme()
+	const { count, page, rowsPerPage, onChangePage } = props;
+
+	const handleFirstPageButtonClick = (event) => {
+		onChangePage(event, 0);
+	};
+
+	const handleBackButtonClick = (event) => {
+		onChangePage(event, page - 1);
+	};
+
+	const handleNextButtonClick = (event) => {
+		onChangePage(event, page + 1);
+	};
+
+	const handleLastPageButtonClick = (event) => {
+		onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+	};
+
+	return (
+		<div className={classes.root}>
+			<Tooltip title="Primera pagina">
+				<IconButton
+					onClick={handleFirstPageButtonClick}
+					disabled={page === 0}
+					aria-label="first page"
+				>
+					{theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+				</IconButton>
+			</Tooltip>
+
+			<Tooltip title="Pagina anterior">
+				<IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
+					{theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+				</IconButton>
+			</Tooltip>
+
+			<Tooltip title="Siguiente pagina">
+				<IconButton
+					onClick={handleNextButtonClick}
+					disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+					aria-label="next page"
+				>
+					{theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+				</IconButton>
+			</Tooltip>
+			<Tooltip title="Ultima pagina">
+				<IconButton
+					onClick={handleLastPageButtonClick}
+					disabled={page >= Math.ceil(count / rowsPerPage) - 1}
+					aria-label="last page"
+				>
+
+					{theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+				</IconButton>
+			</Tooltip>
+		</div>
+	);
+}
+
+const useStyles1 = makeStyles((theme) => ({
+	root: {
+		flexShrink: 0,
+		marginLeft: theme.spacing(2.5),
+	},
+}));
+
 
 const estiloCabecera = {
 	fontSize: '14px',
@@ -291,7 +464,8 @@ const estiloLetrero = {
 
 const fondoBarraSuperior = {
 	background: "#FFFFFF",
-	padding: '30px'
+	padding: '30px',
+	paddingTop: '0px'
 }
 
 
@@ -302,9 +476,11 @@ function mapStateToProps(state) {
 		usuarios: state.user.usuariosRegistrados,
 		cedulaEditar: state.user.cedula,
 		habilitado: state.user.estadoUsuarios,
-		mensajeSuspender: state.user.mensajeSuspender
+		mensajeSuspender: state.user.mensajeSuspender,
+		cantidad: state.user.cantidad,
+		mensajeEditar: state.user.mensajeEditar
 	}
 }
 
 
-export default withRouter(connect(mapStateToProps, { actionConsultarUsuarios, actionAsignarCedula, actualizarMensajeSuspender, actualizarMensajeEditar, actionActualizarUsuarios, actionSuspenderActivarUsuario })(ContenidoAdminUsuario));
+export default withRouter(connect(mapStateToProps, { actionConsultarUsuarios, actionConsultarUsuariosFiltrados, actionConsultarCentidadUsuariosFiltrados, actionConsultarCentidadUsuarios, actionAsignarCedula, actualizarMensajeSuspender, actualizarMensajeEditar, actionActualizarUsuarios, actionSuspenderActivarUsuario })(ContenidoAdminUsuario));

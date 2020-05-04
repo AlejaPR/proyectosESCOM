@@ -44,6 +44,7 @@ export const MOSTRAR_DOCUMENTOS = 'MOSTRAR_DOCUMENTOS';
 export const MOSTRAR_USUARIOS = 'MOSTRAR_USUARIOS';
 export const NOMBRE_USUARIO = 'NOMBRE_USUARIO';
 export const REDIRECCIONAR_LOGIN = 'REDIRECCIONAR_LOGIN';
+export const CANTIDAD_USUARIOS='CANTIDAD_USUARIOS';
 
 const PERMISO_REGISTRAR = 'SA_Registrar usuarios';
 const PERMISO_CONSULTAR_USUARIOS = 'SA_Consultar usuarios registrados';
@@ -319,14 +320,14 @@ export function actionConsultarCorreo(token) {
     };
 }
 
-export function actionConsultarUsuarios(token) {
+export function actionConsultarUsuarios(token,cantidadDatos,paginaActual) {
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': desencriptar(token),
         'Permiso': PERMISO_CONSULTAR_USUARIOS
     }
     return (dispatch, getState) => {
-        axios.get(`${URL_BASE}/proyectosESCOM-web/api/usuarios/listar/${desencriptar(token)}`, { headers: headers })
+        axios.get(`${URL_BASE}/proyectosESCOM-web/api/usuarios/listar/${desencriptar(token)}/${cantidadDatos}/${paginaActual+1}`, { headers: headers })
             .then(response => {
                 dispatch({
                     type: MOSTRAR_USUARIOS,
@@ -365,6 +366,148 @@ export function actionConsultarUsuarios(token) {
             });
     };
 }
+
+export function actionConsultarUsuariosFiltrados(token,palabraBusqueda,cantidadDatos,paginaActual) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMISO_CONSULTAR_USUARIOS
+    }
+    return (dispatch, getState) => {
+        axios.get(`${URL_BASE}/proyectosESCOM-web/api/usuarios/filtrar/${desencriptar(token)}/${palabraBusqueda}/${cantidadDatos}/${paginaActual+1}`, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: MOSTRAR_USUARIOS,
+                    respuesta: response.data
+                });
+            }).catch((error) => {
+                try {
+                    if (error.request.response === '') {
+                        dispatch({
+                            type: MENSAJE_SUSPENDER,
+                            mensaje: 'Servidor fuera de servicio temporalmente'
+                        });
+                    } else {
+                        if (error.request) {
+                            var o = JSON.parse(error.request.response);
+                            let respuesta = mensajesDeErrorListarUsuarios(o.respuesta);
+                            if (respuesta === 'Sin permiso') {
+                                dispatch({
+                                    type: ESTADO_USUARIOS,
+                                    estado: true
+                                });
+                            } else {
+                                dispatch({
+                                    type: MENSAJE_SUSPENDER,
+                                    mensaje: respuesta
+                                });
+                            }
+                        }
+                    }
+                } catch (error) {
+                    dispatch({
+                        type: MENSAJE_SUSPENDER,
+                        mensaje: 'Ocurrio un error en el servidor'
+                    });
+                }
+            });
+    };
+}
+
+export function actionConsultarCentidadUsuariosFiltrados(token,palabraBusqueda) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMISO_CONSULTAR_USUARIOS
+    }
+    return (dispatch, getState) => {
+        axios.get(`${URL_BASE}/proyectosESCOM-web/api/usuarios/filtrar/${desencriptar(token)}/${palabraBusqueda}`, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: CANTIDAD_USUARIOS,
+                    respuesta: response.data
+                });
+            }).catch((error) => {
+                try {
+                    if (error.request.response === '') {
+                        dispatch({
+                            type: MENSAJE_SUSPENDER,
+                            mensaje: 'Servidor fuera de servicio temporalmente'
+                        });
+                    } else {
+                        if (error.request) {
+                            var o = JSON.parse(error.request.response);
+                            let respuesta = mensajesDeErrorListarUsuarios(o.respuesta);
+                            if (respuesta === 'Sin permiso') {
+                                dispatch({
+                                    type: MENSAJE_SUSPENDER,
+                                    estado: 'Ocurrio un error en el servidor'
+                                });
+                            } else {
+                                dispatch({
+                                    type: MENSAJE_SUSPENDER,
+                                    mensaje: respuesta
+                                });
+                            }
+                        }
+                    }
+                } catch (error) {
+                    dispatch({
+                        type: MENSAJE_SUSPENDER,
+                        mensaje: 'Ocurrio un error en el servidor'
+                    });
+                }
+            });
+    };
+}
+
+export function actionConsultarCentidadUsuarios(token) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMISO_CONSULTAR_USUARIOS
+    }
+    return (dispatch, getState) => {
+        axios.get(`${URL_BASE}/proyectosESCOM-web/api/usuarios/cantidadDatos/${desencriptar(token)}`, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: CANTIDAD_USUARIOS,
+                    respuesta: response.data
+                });
+            }).catch((error) => {
+                try {
+                    if (error.request.response === '') {
+                        dispatch({
+                            type: MENSAJE_SUSPENDER,
+                            mensaje: 'Servidor fuera de servicio temporalmente'
+                        });
+                    } else {
+                        if (error.request) {
+                            var o = JSON.parse(error.request.response);
+                            let respuesta = mensajesDeErrorListarUsuarios(o.respuesta);
+                            if (respuesta === 'Sin permiso') {
+                                dispatch({
+                                    type: MENSAJE_SUSPENDER,
+                                    estado: 'Ocurrio un error en el servidor'
+                                });
+                            } else {
+                                dispatch({
+                                    type: MENSAJE_SUSPENDER,
+                                    mensaje: respuesta
+                                });
+                            }
+                        }
+                    }
+                } catch (error) {
+                    dispatch({
+                        type: MENSAJE_SUSPENDER,
+                        mensaje: 'Ocurrio un error en el servidor'
+                    });
+                }
+            });
+    };
+}
+
 
 export function actionCambiarContrasena(clave, correo, token) {
     var crypto = require('crypto');
@@ -566,7 +709,7 @@ export function actionAsignarIp() {
                 localStorage.setItem('Ip', response.data.ip)
             }).catch((error) => {
                 if (error.request.response === '') {
-                    localStorage.setItem('Ip', '999.999.999');
+                    localStorage.setItem('Ip', '127.0.0.1');
                 }
             });
     };

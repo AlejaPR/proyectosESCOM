@@ -55,32 +55,19 @@ public class LogicaActividad implements LogicaActividadFacadeLocal {
     /**
      * Metodo que llama a la consulta para obtener la lista de actividades
      *
+     * @param cantidadDatos
+     * @param paginaActual
      * @return
-     * @throws com.mycompany.superadministrador.utilitarios.ExcepcionGenerica
-     *
+     * @throws ExcepcionGenerica
      */
     @Override
-    public List<ActividadPOJO> devolverActividades() throws ExcepcionGenerica {
+    public List<ActividadPOJO> devolverActividades(int cantidadDatos, int paginaActual) throws ExcepcionGenerica {
         try {
-            List<Actividad> actividadesResultado = actividadDB.findAll();
+            List<ActividadPOJO> actividadesResultado = actividadDB.listarActividades(cantidadDatos, paginaActual);
             if (!actividadesResultado.isEmpty()) {
-                List<ActividadPOJO> listaActividadesM = new ArrayList<>();
-                for (Actividad a : actividadesResultado) {
-                    ActividadPOJO actividad = new ActividadPOJO();
-                    actividad.setIdActividad(a.getIdActividad());
-
-                    String actividadConAcronimo = a.getNombreActividad();
-                    String actividadSinAcronimo = actividadConAcronimo.substring(3);
-                    actividad.setNombre(actividadSinAcronimo);
-
-                    actividad.setDescripcionActividad(a.getDescripcionActividad());
-                    actividad.setModuloActividad(a.getModulo().getNombreModulo());
-                    actividad.setEstado(a.getEstado());
-                    listaActividadesM.add(actividad);
-                }
-                return listaActividadesM;
+                return actividadesResultado;
             } else {
-                throw new NoResultException("No se encontraron datos");
+                return new ArrayList<>();
             }
         } catch (NullPointerException ex) {
             bitacora.registroLogger(CLASE, "Devolver actividades", Level.SEVERE, ex.getMessage());
@@ -89,6 +76,52 @@ public class LogicaActividad implements LogicaActividadFacadeLocal {
             bitacora.registroLogger(CLASE, "Devolver actividades", Level.SEVERE, ex.getMessage());
             throw new ExcepcionGenerica("Ocurrio un error en el servidor");
         }
+    }
+    
+    @Override
+    public List<ActividadPOJO> filtrarActividades(String palabraBusqueda,int cantidadDatos, int paginaActual) throws ExcepcionGenerica {
+        try {
+            List<ActividadPOJO> actividadesResultado = actividadDB.filtrarActividades(palabraBusqueda.toLowerCase(),cantidadDatos, paginaActual);
+            if (!actividadesResultado.isEmpty()) {
+                return actividadesResultado;
+            } else {
+                return new ArrayList<>();
+            }
+        } catch (NullPointerException ex) {
+            bitacora.registroLogger(CLASE, "Filtrar actividades", Level.SEVERE, ex.getMessage());
+            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
+        } catch (Exception ex) {
+            bitacora.registroLogger(CLASE, "Filtrar actividades", Level.SEVERE, ex.getMessage());
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
+        }
+    }
+    
+    @Override
+    public int filtrarActividadesCantidad(String palabraBusqueda) throws ExcepcionGenerica {
+        try {
+            int cantidad = actividadDB.filtrarActividadesCantidad(palabraBusqueda.toLowerCase());
+            if (cantidad!=0) {
+                return cantidad;
+            } else {
+                return 0;
+            }
+        } catch (NullPointerException ex) {
+            bitacora.registroLogger(CLASE, "Filtrar actividades", Level.SEVERE, ex.getMessage());
+            throw new ExcepcionGenerica("Ocurrio un error al momento de hacer la consulta");
+        } catch (Exception ex) {
+            bitacora.registroLogger(CLASE, "Filtrar actividades", Level.SEVERE, ex.getMessage());
+            throw new ExcepcionGenerica("Ocurrio un error en el servidor");
+        }
+    }
+    
+    /**
+     * Funcion encargada de obtener el numero de registro de actividades
+     * @return
+     * @throws ExcepcionGenerica 
+     */
+    @Override
+    public int cantidadActividades() throws ExcepcionGenerica {
+        return actividadDB.count();
     }
 
     /**

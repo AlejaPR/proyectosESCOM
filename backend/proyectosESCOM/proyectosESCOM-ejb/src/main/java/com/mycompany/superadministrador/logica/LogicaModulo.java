@@ -287,7 +287,7 @@ public class LogicaModulo implements LogicaModuloFacadeLocal {
             if (!listaActividadesM.isEmpty()) {
                 return listaActividadesM;
             } else {
-                throw new NoResultException("No se encontraron datos del modulo");
+                return new ArrayList<>();
             }
         } catch (NoResultException ex) {
            bitacora.registroLogger(CLASE,"Listar actividades modulo", Level.WARNING, ex.getMessage());

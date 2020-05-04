@@ -27,7 +27,13 @@ public interface LogicaUsuarioFacadeLocal {
 
     public void registrarUsuario(UsuarioPOJO usuario) throws ExcepcionGenerica;
 
-    public List<UsuarioPOJO> devolverUsuarios(String token) throws ExcepcionGenerica;
+    public List<UsuarioPOJO> devolverUsuarios(String token, int cantidadDatos, int paginaActual) throws ExcepcionGenerica;
+
+    public List<UsuarioPOJO> devolverUsuariosFiltrados(String palabraBusqueda, String token, int cantidadDatos, int paginaActual) throws ExcepcionGenerica;
+
+    public int cantidadDeDatosFiltrados(String token, String palabraBusqueda) throws ExcepcionGenerica;
+    
+    public int cantidadDeDatos(String token) throws ExcepcionGenerica;
 
     public List<TipoDocumentoPOJO> devolverDocumentos() throws ExcepcionGenerica;
 

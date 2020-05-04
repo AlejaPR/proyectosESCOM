@@ -43,18 +43,22 @@ class AsignarActividadModulo extends React.Component {
                     break;
                 case 'No se encontraron datos del modulo':
                     NotificationManager.warning('No se encontraron datos del modulo');
+                    this.props.actualizarMensajeActividades('');
                     break;
                 case 'No se encontraron datos de la actividad':
                     NotificationManager.error('No se encontraron datos de la actividad intentelo de nuevo');
+                    this.props.actualizarMensajeActividades('');
                     break;
                 case 'Sin permiso':
                     if (!this.state.habilitado) { this.setState({ habilitado: true }) };
                     break;
                 case 'Ocurrio un error en el servidor':
                     NotificationManager.error('Ocurrio un error en el servidor');
+                    this.props.actualizarMensajeActividades('');
                     break;
                 case 'Servidor fuera de servicio temporalmente':
                     NotificationManager.error('Servidor fuera de servicio temporalmente');
+                    this.props.actualizarMensajeActividades('');
                     break;
                 case 'Token requerido':
                     localStorage.removeItem('Token');

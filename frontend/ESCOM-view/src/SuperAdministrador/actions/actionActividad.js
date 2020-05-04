@@ -21,6 +21,7 @@ export const ANADIR_CODIGO_EDITAR = 'ANADIR_CODIGO_EDITAR';
 export const INFORMACION_ACTIVIDAD = 'INFORMACION_ACTIVIDAD';
 export const MENSAJE_EDITAR = 'MENSAJE_EDITAR';
 export const EDITAR_ACTIVIDAD = 'EDITAR_ACTIVIDAD';
+export const CANTIDAD_ACTIVIDADES='CANTIDAD_ACTIVIDADES';
 
 
 const PERMISO_CONSULTAR_ACTIVIDADES = 'SA_Consultar actividades registradas';
@@ -29,14 +30,14 @@ const PERMISO_SUSPENDER_ACTIVAR = 'SA_Suspender/activar actividades'
 const PERMISO_EDITAR_ACTIVIDAD = 'SA_Editar informacion de la actividad';
 
 
-export function actionConsultarActividades(token) {
+export function actionConsultarActividades(token,cantidadDatos,paginaActual) {
     const headers = {
         'Content-Type': 'application/json',
         'TokenAuto': desencriptar(token),
         'Permiso': PERMISO_CONSULTAR_ACTIVIDADES
     }
     return (dispatch, getState) => {
-        axios.get(`${URL_BASE}/proyectosESCOM-web/api/actividades/listar`, { headers: headers })
+        axios.get(`${URL_BASE}/proyectosESCOM-web/api/actividades/listar/${cantidadDatos}/${paginaActual+1}`, { headers: headers })
             .then(response => {
                 dispatch({
                     type: MOSTRAR_ACTIVIDADES,
@@ -57,6 +58,147 @@ export function actionConsultarActividades(token) {
                                 dispatch({
                                     type: ESTADO_ACTIVIDADES,
                                     estado: true
+                                });
+                            } else {
+                                dispatch({
+                                    type: MENSAJE_REGISTRAR,
+                                    mensaje: respuesta
+                                });
+                            }
+                        }
+                    }
+                } catch (error) {
+                    dispatch({
+                        type: MENSAJE_REGISTRAR,
+                        mensaje: 'Ocurrio un error en el servidor'
+                    });
+                }
+            });
+    };
+}
+
+export function actionFiltrarActividades(token,palabraBusqueda,cantidadDatos,paginaActual) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMISO_CONSULTAR_ACTIVIDADES
+    }
+    return (dispatch, getState) => {
+        axios.get(`${URL_BASE}/proyectosESCOM-web/api/actividades/filtrar/${palabraBusqueda}/${cantidadDatos}/${paginaActual+1}`, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: MOSTRAR_ACTIVIDADES,
+                    respuesta: response.data
+                });
+            }).catch((error) => {
+                try {
+                    if (error.request.response === '') {
+                        dispatch({
+                            type: MENSAJE_REGISTRAR,
+                            mensaje: 'Servidor fuera de servicio temporalmente'
+                        });
+                    } else {
+                        if (error.request) {
+                            var o = JSON.parse(error.request.response);
+                            let respuesta = mensajeDeListar(o.respuesta);
+                            if (respuesta === 'Sin permiso') {
+                                dispatch({
+                                    type: ESTADO_ACTIVIDADES,
+                                    estado: true
+                                });
+                            } else {
+                                dispatch({
+                                    type: MENSAJE_REGISTRAR,
+                                    mensaje: respuesta
+                                });
+                            }
+                        }
+                    }
+                } catch (error) {
+                    dispatch({
+                        type: MENSAJE_REGISTRAR,
+                        mensaje: 'Ocurrio un error en el servidor'
+                    });
+                }
+            });
+    };
+}
+
+export function actionConsultarCantidadActividades(token) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMISO_CONSULTAR_ACTIVIDADES
+    }
+    return (dispatch, getState) => {
+        axios.get(`${URL_BASE}/proyectosESCOM-web/api/actividades/cantidad`, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: CANTIDAD_ACTIVIDADES,
+                    respuesta: response.data
+                });
+            }).catch((error) => {
+                try {
+                    if (error.request.response === '') {
+                        dispatch({
+                            type: MENSAJE_SUSPENDER,
+                            mensaje: 'Servidor fuera de servicio temporalmente'
+                        });
+                    } else {
+                        if (error.request) {
+                            var o = JSON.parse(error.request.response);
+                            let respuesta = mensajeDeListar(o.respuesta);
+                            if (respuesta === 'Sin permiso') {
+                                dispatch({
+                                    type: MENSAJE_REGISTRAR,
+                                    estado: 'Ocurrio un error en el servidor'
+                                });
+                            } else {
+                                dispatch({
+                                    type: MENSAJE_REGISTRAR,
+                                    mensaje: respuesta
+                                });
+                            }
+                        }
+                    }
+                } catch (error) {
+                    dispatch({
+                        type: MENSAJE_REGISTRAR,
+                        mensaje: 'Ocurrio un error en el servidor'
+                    });
+                }
+            });
+    };
+}
+
+export function actionConsultarCantidadActividadesFiltradas(token,palabraBusqueda) {
+    const headers = {
+        'Content-Type': 'application/json',
+        'TokenAuto': desencriptar(token),
+        'Permiso': PERMISO_CONSULTAR_ACTIVIDADES
+    }
+    return (dispatch, getState) => {
+        axios.get(`${URL_BASE}/proyectosESCOM-web/api/actividades/filtrarCantidad/${palabraBusqueda}`, { headers: headers })
+            .then(response => {
+                dispatch({
+                    type: CANTIDAD_ACTIVIDADES,
+                    respuesta: response.data
+                });
+            }).catch((error) => {
+                try {
+                    if (error.request.response === '') {
+                        dispatch({
+                            type: MENSAJE_REGISTRAR,
+                            mensaje: 'Servidor fuera de servicio temporalmente'
+                        });
+                    } else {
+                        if (error.request) {
+                            var o = JSON.parse(error.request.response);
+                            let respuesta = mensajeDeListar(o.respuesta);
+                            if (respuesta === 'Sin permiso') {
+                                dispatch({
+                                    type: MENSAJE_REGISTRAR,
+                                    estado: 'Ocurrio un error en el servidor'
                                 });
                             } else {
                                 dispatch({

@@ -23,7 +23,8 @@ import {
     MOSTRAR_ACTIVIDADES_USUARIO,
     MOSTRAR_DOCUMENTOS,
     MOSTRAR_USUARIOS,
-    NOMBRE_USUARIO
+    NOMBRE_USUARIO,
+    CANTIDAD_USUARIOS
 } from '../actions/actionsUsuario.js'
 
 
@@ -50,6 +51,7 @@ const initialState = {
     tiposDocumento: [],
     usuarioEditar: [],
     usuariosRegistrados: [],
+    cantidad: 0
 }
 
 
@@ -67,6 +69,8 @@ export function reducerUsuario(state = initialState, action) {
             return Object.assign({}, state, { actividadesSinAsignar: action.respuesta })
         case MOSTRAR_ACTIVIDADES_USUARIO:
             return Object.assign({}, state, { actividadesUsuario: action.respuesta })
+        case CANTIDAD_USUARIOS:
+            return Object.assign({}, state, { cantidad: action.respuesta })
         case AGREGAR_USUARIO:
             return {
                 ...state,

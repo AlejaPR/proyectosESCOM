@@ -26,7 +26,9 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "TBL_ACTIVIDAD")
 @NamedQueries({
-    //consultaTodasActividades
+    @NamedQuery(name = "recuperarActividades", query = "SELECT a from Actividad a"),
+    @NamedQuery(name = "filtrarActividades", query = "SELECT a from Actividad a WHERE Lower(a.modulo.nombreModulo) LIKE CONCAT('%',:palabraBusqueda,'%') OR Lower(a.nombreActividad) LIKE CONCAT('%',:palabraBusqueda,'%') "
+            + "OR Lower(a.descripcionActividad) LIKE CONCAT('%',:palabraBusqueda,'%') OR Lower(a.estado) LIKE CONCAT('%',:palabraBusqueda,'%')"),
     @NamedQuery(name = "consultaTodasActividades", query = "SELECT a from Actividad a,Modulo m,Usuario u, UsuarioActividad ua WHERE m.idModulo=a.modulo.idModulo AND a.idActividad = ua.actividad.idActividad AND u.idUsuario=ua.usuario.idUsuario AND u.idUsuario=:idUsuario"),
     @NamedQuery(name = "consultaActividades", query = "SELECT a from Actividad a,Modulo m,Usuario u, UsuarioActividad ua WHERE m.idModulo=a.modulo.idModulo AND a.idActividad = ua.actividad.idActividad AND u.idUsuario=ua.usuario.idUsuario AND u.idUsuario=:idUsuario AND a.estado='Activo' AND a.modulo.estado='Activo'"),
     @NamedQuery(name = "consultaActividadesModulo", query = "SELECT a from Actividad a WHERE a.modulo = :idModulo"),
@@ -35,7 +37,6 @@ import javax.validation.constraints.NotNull;
     @NamedQuery(name = "consultaActividadPorNombre", query = "SELECT a from Actividad a WHERE a.nombreActividad = :nombreActividad"),
     @NamedQuery(name = "consultaActividadesUsuarioActivas", query = "SELECT ac from Actividad ac,Usuario us, UsuarioActividad ua WHERE us.idUsuario = ua.usuario.idUsuario AND ac.idActividad =ua.actividad.idActividad AND ac.estado='Activo' AND us.numeroDocumento=:numeroDocumento"),
     @NamedQuery(name = "consultaActividadesUsuarioSuper", query = "SELECT ac from Actividad ac,Usuario us, UsuarioActividad ua WHERE us.idUsuario = ua.usuario.idUsuario AND ac.idActividad =ua.actividad.idActividad AND us.numeroDocumento=:numeroDocumento"),})
-
 
 public class Actividad implements Serializable {
 

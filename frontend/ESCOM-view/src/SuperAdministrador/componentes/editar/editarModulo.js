@@ -193,8 +193,9 @@ class EditarModulo extends React.Component {
                     this.props.actualizarMensajeEditar('');
                     break;
                 case 'modulo editado':
-                    NotificationManager.success('Informacion actualizada correctamente');
-                    this.props.actionCargarInformacionDeModulo(this.props.initialValues.id, localStorage.getItem('Token'));
+                    this.props.history.goBack();
+                    NotificationManager.success('Informacion actualizada');
+                    // this.props.actionCargarInformacionDeModulo(this.props.initialValues.id, localStorage.getItem('Token'));
                     this.props.actualizarMensajeEditar('');
                     break;
                 case 'El modulo no existe':

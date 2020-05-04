@@ -9,7 +9,8 @@ import {
     ANADIR_CODIGO_EDITAR,
     INFORMACION_ACTIVIDAD,
     MENSAJE_EDITAR,
-    EDITAR_ACTIVIDAD
+    EDITAR_ACTIVIDAD,
+    CANTIDAD_ACTIVIDADES
 } from '../actions/actionActividad.js'
 
 
@@ -21,7 +22,8 @@ const initialState = {
     modulosActividades: [],
     codigoActividad: [],
     actividadEditar: [],
-    mensajeEditar: ''
+    mensajeEditar: '',
+    cantidad: 0
 }
 
 
@@ -29,9 +31,10 @@ export function reducerActividad(state = initialState, action) {
     switch (action.type) {
         case MODULOS_REGISTRADOS:
             return Object.assign({}, state, { modulosActividades: action.respuesta })
-
         case MOSTRAR_ACTIVIDADES:
             return Object.assign({}, state, { actividadesRegistradas: action.respuesta })
+        case CANTIDAD_ACTIVIDADES:
+            return Object.assign({}, state, { cantidad: action.respuesta })
         case AGREGAR_ACTIVIDAD:
             return {
                 ...state,

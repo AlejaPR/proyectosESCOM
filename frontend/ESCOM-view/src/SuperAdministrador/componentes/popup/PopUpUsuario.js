@@ -17,9 +17,9 @@ import Select from 'react-select';
 import { formatoFecha } from '../../utilitario/MensajesError.js'
 
 //redux
-import { actionAgregarUsuario, actionConsultarDocumentos, actualizarMensajeRegistrar } from '../../actions/actionsUsuario.js'
+import { actionAgregarUsuario, actionConsultarUsuarios, actionConsultarCentidadUsuarios, actionConsultarDocumentos, actualizarMensajeRegistrar } from '../../actions/actionsUsuario.js'
 import { connect } from 'react-redux';
-import { fechaNacimiento, seleccione, nombre, apellido, contrasena, documentoIdentificacion, requerido ,validacionCincuentaCaracteres, validacionCuarentaCaracteres} from '../../utilitario/validacionCampos.js';
+import { fechaNacimiento, seleccione, nombre, apellido, contrasena, documentoIdentificacion, requerido, validacionCincuentaCaracteres, validacionCuarentaCaracteres } from '../../utilitario/validacionCampos.js';
 
 class PopUpUsuario extends React.Component {
   constructor(props) {
@@ -44,6 +44,8 @@ class PopUpUsuario extends React.Component {
         case 'Usuario registrado':
           NotificationManager.success('Usuario registrado correctamente');
           this.props.actualizarMensajeRegistrar('');
+          this.props.actionConsultarUsuarios(localStorage.getItem('Token'), 5, 0);
+          this.props.actionConsultarCentidadUsuarios(localStorage.getItem('Token'));
           break;
         case 'Sin permiso':
           NotificationManager.error('No tiene los permisos suficientes para registrar un usuario');
@@ -144,13 +146,13 @@ class PopUpUsuario extends React.Component {
               <div className="contenedor-inputs">
                 <div className="row">
                   <div className="col-sm-12">
-                    <Field name="nombre" type="text" validate={[requerido, nombre,validacionCuarentaCaracteres]} component={generarInput} label="Nombre" />
+                    <Field name="nombre" type="text" validate={[requerido, nombre, validacionCuarentaCaracteres]} component={generarInput} label="Nombre" />
                   </div>
                 </div>
 
                 <div className="row">
                   <div className="col-sm-12">
-                    <Field name="apellido" type="text" validate={[requerido, apellido,validacionCuarentaCaracteres]} component={generarInput} label="Apellido" />
+                    <Field name="apellido" type="text" validate={[requerido, apellido, validacionCuarentaCaracteres]} component={generarInput} label="Apellido" />
                   </div>
                 </div>
 
@@ -167,7 +169,7 @@ class PopUpUsuario extends React.Component {
 
                 <div className="row">
                   <div className="col-sm-12">
-                    <Field name="correo" validate={[requerido,validacionCincuentaCaracteres]} type='email' component={generarInput} label="Correo electronico" />
+                    <Field name="correo" validate={[requerido, validacionCincuentaCaracteres]} type='email' component={generarInput} label="Correo electronico" />
                   </div>
                 </div>
 
@@ -251,4 +253,4 @@ let formulario = reduxForm({
   form: 'registrarUsuario'
 })(PopUpUsuario)
 
-export default withRouter(connect(mapStateToProps, { actionAgregarUsuario, actionConsultarDocumentos, actualizarMensajeRegistrar })(formulario));
+export default withRouter(connect(mapStateToProps, { actionAgregarUsuario, actionConsultarUsuarios, actionConsultarCentidadUsuarios, actionConsultarDocumentos, actualizarMensajeRegistrar })(formulario));

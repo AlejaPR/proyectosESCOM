@@ -31,17 +31,29 @@ public interface BitacoraFacadeLocal {
     
     public void registrarUsuario(DatosSolicitudPOJO solicitud);
     
-    public List<DatosSolicitudPOJO> buscarUsuarioSinFechaFin(Integer idUsuario, ReportePOJO reporte);
+    public List<DatosSolicitudPOJO> buscarUsuarioSinFechaFin(Integer idUsuario, ReportePOJO reporte,int cantidadDatos,int paginaActual);
     
-    public List<DatosSolicitudPOJO> buscarUsuarioConFechaFin(Integer idUsuario, ReportePOJO reporte);
+    public List<DatosSolicitudPOJO> buscarUsuarioConFechaFin(Integer idUsuario, ReportePOJO reporte,int cantidadDatos,int paginaActual);
     
-    public List<DatosSolicitudPOJO> buscarModuloSinFechaFin(Integer idModulo, ReportePOJO reporte);
+    public List<DatosSolicitudPOJO> buscarModuloSinFechaFin(Integer idModulo, ReportePOJO reporte,int cantidadDatos,int paginaActual);
     
-    public List<DatosSolicitudPOJO> buscarModuloConFechaFin(Integer idModulo, ReportePOJO reporte);
+    public List<DatosSolicitudPOJO> buscarModuloConFechaFin(Integer idModulo, ReportePOJO reporte,int cantidadDatos,int paginaActual);
     
-    public List<DatosSolicitudPOJO> buscarActividadSinFechaFin(ReportePOJO reporte);
+    public List<DatosSolicitudPOJO> buscarActividadSinFechaFin(ReportePOJO reporte,int cantidadDatos,int paginaActual);
     
-    public List<DatosSolicitudPOJO> buscarActividadConFechaFin(ReportePOJO reporte);
+    public List<DatosSolicitudPOJO> buscarActividadConFechaFin(ReportePOJO reporte,int cantidadDatos,int paginaActual);
+    
+     public int buscarUsuarioSinFechaFinCantidad(Integer idUsuario, ReportePOJO reporte);
+    
+    public int buscarUsuarioConFechaFinCantidad(Integer idUsuario, ReportePOJO reporte);
+    
+    public int buscarModuloSinFechaFinCantidad(Integer idModulo, ReportePOJO reporte);
+    
+    public int buscarModuloConFechaFinCantidad(Integer idModulo, ReportePOJO reporte);
+    
+    public int buscarActividadSinFechaFinCantidad(ReportePOJO reporte);
+    
+    public int buscarActividadConFechaFinCantidad(ReportePOJO reporte);
     
     
 }

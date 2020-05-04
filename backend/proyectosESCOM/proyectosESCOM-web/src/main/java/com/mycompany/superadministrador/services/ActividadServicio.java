@@ -1,4 +1,5 @@
 package com.mycompany.superadministrador.services;
+
 import com.mycompany.superadministrador.POJO.ActividadPOJO;
 import com.mycompany.superadministrador.POJO.DatosSolicitudPOJO;
 import com.mycompany.superadministrador.POJO.Respuesta;
@@ -15,37 +16,70 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 /**
- * Clase encargada de manejar todos los servicios referente a la entidad actividad
+ * Clase encargada de manejar todos los servicios referente a la entidad
+ * actividad
  *
  * @author Alejandra Pabon- Jeison Gaona
  */
 @javax.enterprise.context.RequestScoped
 @Path("actividades")
 public class ActividadServicio {
-    
-    /**Inyeccion de la interfaz logica actividad**/
+
+    /**
+     * Inyeccion de la interfaz logica actividad*
+     */
     @EJB
     LogicaActividadFacadeLocal actividadLogica;
 
-    /**Variable para el manejo de mensajes**/
+    /**
+     * Variable para el manejo de mensajes*
+     */
     private final Respuesta respuesta = new Respuesta();
-    
-    /**Constructor vacio de la clase**/
+
+    /**
+     * Constructor vacio de la clase*
+     */
     public ActividadServicio() {
     }
 
     /**
      * Servicio que lista las actividades registradas
      *
-     * @return  *
+     * @param cantidadDatos
+     * @param paginaActual
+     * @return
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("/listar")
-    public Response listar() {
+    @Path("/listar/{cantidadDatos}/{paginaActual}")
+    public Response listar(@PathParam("cantidadDatos") int cantidadDatos, @PathParam("paginaActual") int paginaActual) {
         try {
-            List<ActividadPOJO> listaActividades = actividadLogica.devolverActividades();
+            List<ActividadPOJO> listaActividades = actividadLogica.devolverActividades(cantidadDatos, paginaActual);
+            return Response.status(Response.Status.OK).entity(listaActividades).build();
+        } catch (ExcepcionGenerica e) {
+            respuesta.setRespuesta(e.getMessage());
+            return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
+        } catch (Exception e) {
+            respuesta.setRespuesta("Ocurrio un error en el servidor");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
+        }
+    }
+
+    /**
+     * Servicio que filtra las actividades registradas
+     * @param palabraBusqueda
+     * @param cantidadDatos
+     * @param paginaActual
+     * @return
+     */
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/filtrar/{palabraBusqueda}/{cantidadDatos}/{paginaActual}")
+    public Response filtrar(@PathParam("palabraBusqueda") String palabraBusqueda, @PathParam("cantidadDatos") int cantidadDatos, @PathParam("paginaActual") int paginaActual) {
+        try {
+            List<ActividadPOJO> listaActividades = actividadLogica.filtrarActividades(palabraBusqueda,cantidadDatos, paginaActual);
             return Response.status(Response.Status.OK).entity(listaActividades).build();
         } catch (ExcepcionGenerica e) {
             respuesta.setRespuesta(e.getMessage());
@@ -56,11 +90,45 @@ public class ActividadServicio {
         }
     }
     
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/filtrarCantidad/{palabraBusqueda}")
+    public Response filtrarCantidad(@PathParam("palabraBusqueda") String palabraBusqueda) {
+        try {
+            int cantidad=0;
+            cantidad= actividadLogica.filtrarActividadesCantidad(palabraBusqueda);
+            return Response.status(Response.Status.OK).entity(cantidad).build();
+        } catch (ExcepcionGenerica e) {
+            respuesta.setRespuesta(e.getMessage());
+            return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
+        } catch (Exception e) {
+            respuesta.setRespuesta("Ocurrio un error en el servidor");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
+        }
+    }
+    
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/cantidad")
+    public Response cantidad() {
+        try {
+            int cantidad=0;
+            cantidad= actividadLogica.cantidadActividades();
+            return Response.status(Response.Status.OK).entity(cantidad).build();
+        } catch (ExcepcionGenerica e) {
+            respuesta.setRespuesta(e.getMessage());
+            return Response.status(Response.Status.UNAUTHORIZED).entity(respuesta).build();
+        } catch (Exception e) {
+            respuesta.setRespuesta("Ocurrio un error en el servidor");
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
+        }
+    }
+
     /**
      * Servicio que registra actividades
      *
      * @param actividad
-     * @return  *
+     * @return *
      */
     @POST
     @Produces(MediaType.APPLICATION_JSON)
@@ -69,7 +137,7 @@ public class ActividadServicio {
     public Response registrar(ActividadPOJO actividad) {
         try {
             ActividadPOJO actividadR = new ActividadPOJO();
-            actividadR=actividadLogica.registrarActividad(actividad);
+            actividadR = actividadLogica.registrarActividad(actividad);
             respuesta.setRespuesta("Actividad registrada");
             return Response.status(Response.Status.OK).entity(actividadR).build();
         } catch (ExcepcionGenerica e) {
@@ -80,13 +148,13 @@ public class ActividadServicio {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }
-    
-     /**
+
+    /**
      * Servicio que permite la edicion de actividades
      *
-     * 
+     *
      * @param actividadEditar
-     * @return  *
+     * @return *
      */
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
@@ -104,20 +172,20 @@ public class ActividadServicio {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }
-    
-     /**
+
+    /**
      * Servicio que permite la suspension/activacion de la actividad
      *
-     * 
+     *
      * @param idActividad
-     * @return  *
+     * @return *
      */
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/cambiarEstado/{idActividad}")
-    public Response cambiarEstado(@PathParam("idActividad") int idActividad,DatosSolicitudPOJO datosSolicitud) {
+    public Response cambiarEstado(@PathParam("idActividad") int idActividad, DatosSolicitudPOJO datosSolicitud) {
         try {
-            actividadLogica.cambiarEstadoActividad(idActividad,datosSolicitud);
+            actividadLogica.cambiarEstadoActividad(idActividad, datosSolicitud);
             respuesta.setRespuesta("Estado de actividad modificado correctamente");
             return Response.status(Response.Status.OK).entity(respuesta).build();
         } catch (ExcepcionGenerica e) {
@@ -128,13 +196,12 @@ public class ActividadServicio {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(respuesta).build();
         }
     }
-    
+
     /**
-     * Servicio que lista los datos de una actividad en especifico
-     * Recibe el id 
+     * Servicio que lista los datos de una actividad en especifico Recibe el id
      *
      * @param idActividad
-     * @return  *
+     * @return *
      */
     @GET
     @Produces(MediaType.APPLICATION_JSON)

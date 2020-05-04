@@ -65,11 +65,6 @@ class AsignarActividadUsuario extends React.Component {
                     NotificationManager.error('No se encontraron datos de modulos');
                     this.props.actualizarMensajeAsignar('');
                     break;
-                case 'No se encontraron datos del usuario':
-                    NotificationManager.warning('No se encontraron actividades asociadas al usuario');
-                    this.props.actualizarMensajeAsignar('');
-
-                    break;
                 case 'Ocurrio un error en el servidor':
                     NotificationManager.error('Ocurrio un error en el servidor');
                     this.props.actualizarMensajeAsignar('');
