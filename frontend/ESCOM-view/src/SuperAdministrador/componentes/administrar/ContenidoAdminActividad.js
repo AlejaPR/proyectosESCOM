@@ -22,6 +22,7 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import Tooltip from '@material-ui/core/Tooltip';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
 
 //redux conexion
 import { connect } from 'react-redux';
@@ -57,7 +58,7 @@ class ContenidoAdminActividad extends React.Component {
 					this.props.actualizarMensajeSuspender('');
 					break;
 				case 'Operacion hecha con exito':
-					this.props.actionConsultarActividades(localStorage.getItem('Token'),this.state.rowsPerPage,this.state.page);
+					this.props.actionConsultarActividades(localStorage.getItem('Token'), this.state.rowsPerPage, this.state.page);
 					NotificationManager.success('Operacion realizada con exito');
 					this.props.actualizarMensajeSuspender('');
 					break;
@@ -101,7 +102,6 @@ class ContenidoAdminActividad extends React.Component {
 					localStorage.removeItem('Token');
 					window.location.href = "/";
 					break;
-
 				default:
 					break;
 			}
@@ -243,7 +243,7 @@ class ContenidoAdminActividad extends React.Component {
 					paddingBottom: "0px",
 					margin: "0px 0px 32px"
 				}}>
-					<div className="container shadow" style={{ background: "#FFFFFF", padding: "30px",paddingTop:'0px' }}>
+					<div className="container shadow" style={{ background: "#FFFFFF", padding: "30px", paddingTop: '0px' }}>
 						<br />
 						<div className="jumbotron p-1 jumbotron-fluid" style={{ background: "white" }}>
 							{
@@ -256,7 +256,7 @@ class ContenidoAdminActividad extends React.Component {
 										<Input
 											id="standard-adornment-password"
 											type='text'
-											style={{ zIndex: '2', top: '48px', left: '667px' }}
+											style={{ zIndex: '2', top: '3em', left: '41.688em' }}
 											value={valor}
 											onChange={this.change}
 											onKeyPress={this.press}
@@ -270,114 +270,119 @@ class ContenidoAdminActividad extends React.Component {
 												</IconButton>
 											}
 										/>
-										<MaterialTable
-											
-											style={{ zIndex: '1', height: `${rowsPerPage * 71}px` }}
-											localization={{
-												header: {
-													actions: ' '
-												},
-												pagination: {
-													nextTooltip: 'Siguiente ',
-													previousTooltip: 'Anterior',
-													labelDisplayedRows: '{from}-{to} de {count}',
-													lastTooltip: 'Ultima pagina',
-													firstTooltip: 'Primera pagina',
-													labelRowsSelect: 'Registros',
-													firstAriaLabel: 'oooo'
-												},
-												body: {
-													emptyDataSourceMessage: 'Aun no hay ningun actividad registrada'
-												},
-												toolbar: {
-													searchTooltip: 'Buscar',
-													searchPlaceholder: 'Buscar'
-												}
-											}}
-											columns={[
-												{ title: 'Nombre', field: 'nombre', headerStyle: estiloCabecera, cellStyle: estiloFila },
-												{ title: 'Descripcion', field: 'descripcionActividad', headerStyle: estiloCabecera, cellStyle: estiloFila },
-												{ title: 'Modulo', field: 'moduloActividad', headerStyle: estiloCabecera, cellStyle: estiloFila },
-												{
-													title: 'Estado', field: 'estado',
-													render: rowData => {
-														if (rowData.estado === 'Suspendido') {
-															return <span className="label label-sm letra"
-																style={{
-																	textShadow: "none!important",
-																	fontSize: "12px",
-																	fontFamily: "Open Sans,sans-serif",
-																	fontWeight: "300",
-																	padding: "3px 6px",
-																	color: "#fff",
-																	background: "#ED6B75"
-																}}>{rowData.estado}</span>
-														} else {
-															return <span className="label label-sm letra"
-																style={{
-																	textShadow: "none!important",
-																	fontSize: "12px",
-																	fontFamily: "Open Sans,sans-serif",
-																	fontWeight: "300",
-																	padding: "3px 6px",
-																	color: "#fff",
-																	background: "#408725"
-																}}>{rowData.estado}</span>
+										<Paper elevation={2} >
+											<MaterialTable
+
+												style={{ zIndex: '1', height: `${rowsPerPage * 71}px` }}
+												localization={{
+													header: {
+														actions: ' '
+													},
+													pagination: {
+														nextTooltip: 'Siguiente ',
+														previousTooltip: 'Anterior',
+														labelDisplayedRows: '{from}-{to} de {count}',
+														lastTooltip: 'Ultima pagina',
+														firstTooltip: 'Primera pagina',
+														labelRowsSelect: 'Registros',
+														firstAriaLabel: 'oooo'
+													},
+													body: {
+														emptyDataSourceMessage: 'Aun no hay ningun actividad registrada'
+													},
+													toolbar: {
+														searchTooltip: 'Buscar',
+														searchPlaceholder: 'Buscar'
+													}
+												}}
+												columns={[
+													{ title: 'Nombre', field: 'nombre', headerStyle: estiloCabecera, cellStyle: estiloFila },
+													{ title: 'Descripcion', field: 'descripcionActividad', headerStyle: estiloCabecera, cellStyle: estiloFila },
+													{ title: 'Modulo', field: 'moduloActividad', headerStyle: estiloCabecera, cellStyle: estiloFila },
+													{
+														title: 'Estado', field: 'estado',
+														render: rowData => {
+															if (rowData.estado === 'Suspendido') {
+																return <span className="label label-sm letra"
+																	style={{
+																		textShadow: "none!important",
+																		fontSize: "12px",
+																		fontFamily: "Open Sans,sans-serif",
+																		fontWeight: "300",
+																		padding: "3px 6px",
+																		color: "#fff",
+																		background: "#ED6B75"
+																	}}>{rowData.estado}</span>
+															} else {
+																return <span className="label label-sm letra"
+																	style={{
+																		textShadow: "none!important",
+																		fontSize: "12px",
+																		fontFamily: "Open Sans,sans-serif",
+																		fontWeight: "300",
+																		padding: "3px 6px",
+																		color: "#fff",
+																		background: "#408725"
+																	}}>{rowData.estado}</span>
+															}
+														},
+														headerStyle: estiloCabecera, cellStyle: estiloFila
+													},
+												]}
+												data={this.props.actividades}
+												options={{
+													rowStyle: estiloFila,
+													paging: false
+
+												}}
+												actions={[
+													{
+														icon: 'edit',
+														tooltip: 'Editar informacion',
+														onClick: (event, rowData) => {
+															this.props.actionAsignarCodigoActividad(rowData.idActividad);
+															this.props.history.push('/editarActividad');
 														}
 													},
-													headerStyle: estiloCabecera, cellStyle: estiloFila
-												},
-											]}
-											data={this.props.actividades}
-											options={{
-												rowStyle: estiloFila,
-												paging: false
-
-											}}
-											actions={[
-												{
-													icon: 'edit',
-													tooltip: 'Editar informacion',
-													onClick: (event, rowData) => {
-														this.props.actionAsignarCodigoActividad(rowData.idActividad);
-														this.props.history.push('/editarActividad');
+													{
+														icon: 'restore',
+														tooltip: 'Suspender / Activar',
+														onClick: (event, rowData) => this.activarDesactivarActividad(rowData.idActividad)
 													}
-												},
-												{
-													icon: 'restore',
-													tooltip: 'Suspender / Activar',
-													onClick: (event, rowData) => this.activarDesactivarActividad(rowData.idActividad)
-												}
-											]}
-											components={{
-												Toolbar: props => (
-													<div className="row">
-														<div className="col-sm-4">
-															<div style={{ padding: '16px' }}>
-																<PopUpActividad />
+												]}
+												components={{
+													Toolbar: props => (
+														<div className="row">
+															<div className="col-sm-4">
+																<div style={{ padding: '16px' }}>
+																	<PopUpActividad />
+																</div>
 															</div>
 														</div>
-													</div>
-												),
-											}}
+													),
+													Container: props => (
+														<Paper {...props} elevation={0} />
+													)
+												}}
 
-										/>
-										<TablePagination
-											rowsPerPageOptions={[5, 10, 15]}
-											component="div"
-											count={cantidad}
-											labelDisplayedRows={({ from, to, count }) => {
-												return `${from}-${to === -1 ? count : to} de ${count}`
-											}}
-											labelRowsPerPage={`Registros por página:`}
-											nextIconButtonText={`Siguiente pagina`}
-											backIconButtonText={`Pagina anterior`}
-											rowsPerPage={rowsPerPage}
-											page={page}
-											onChangePage={this.handleChangePage}
-											onChangeRowsPerPage={this.handleChangeRowsPerPage}
-											ActionsComponent={TablePaginationActions}
-										/>
+											/>
+											<TablePagination
+												rowsPerPageOptions={[5, 10, 15]}
+												component="div"
+												count={cantidad}
+												labelDisplayedRows={({ from, to, count }) => {
+													return `${from}-${to === -1 ? count : to} de ${count}`
+												}}
+												labelRowsPerPage={`Registros por página:`}
+												nextIconButtonText={`Siguiente pagina`}
+												backIconButtonText={`Pagina anterior`}
+												rowsPerPage={rowsPerPage}
+												page={page}
+												onChangePage={this.handleChangePage}
+												onChangeRowsPerPage={this.handleChangeRowsPerPage}
+												ActionsComponent={TablePaginationActions}
+											/>
+										</Paper>
 									</>
 							}
 						</div>

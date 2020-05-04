@@ -47,7 +47,7 @@ export function actionConsultarActividades(token,cantidadDatos,paginaActual) {
                 try {
                     if (error.request.response === '') {
                         dispatch({
-                            type: MENSAJE_REGISTRAR,
+                            type: MENSAJE_SUSPENDER,
                             mensaje: 'Servidor fuera de servicio temporalmente'
                         });
                     } else {
@@ -61,7 +61,7 @@ export function actionConsultarActividades(token,cantidadDatos,paginaActual) {
                                 });
                             } else {
                                 dispatch({
-                                    type: MENSAJE_REGISTRAR,
+                                    type: MENSAJE_SUSPENDER,
                                     mensaje: respuesta
                                 });
                             }
@@ -69,7 +69,7 @@ export function actionConsultarActividades(token,cantidadDatos,paginaActual) {
                     }
                 } catch (error) {
                     dispatch({
-                        type: MENSAJE_REGISTRAR,
+                        type: MENSAJE_SUSPENDER,
                         mensaje: 'Ocurrio un error en el servidor'
                     });
                 }

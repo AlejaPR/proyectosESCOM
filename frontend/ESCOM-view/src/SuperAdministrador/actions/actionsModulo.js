@@ -104,7 +104,7 @@ export function actionConsultarModulos(token) {
                 try {
                     if (error.request.response === '') {
                         dispatch({
-                            type: MENSAJE_REGISTRAR_MODULO,
+                            type: MENSAJE_SUSPENDER_MODULO,
                             mensaje: 'Servidor fuera de servicio temporalmente'
                         });
                     } else {
@@ -118,7 +118,7 @@ export function actionConsultarModulos(token) {
                                 });
                             } else {
                                 dispatch({
-                                    type: MENSAJE_REGISTRAR_MODULO,
+                                    type: MENSAJE_SUSPENDER_MODULO,
                                     mensaje: respuesta
                                 });
                             }
@@ -126,7 +126,7 @@ export function actionConsultarModulos(token) {
                     }
                 } catch (error) {
                     dispatch({
-                        type: MENSAJE_REGISTRAR_MODULO,
+                        type: MENSAJE_SUSPENDER_MODULO,
                         mensaje: 'Ocurrio un error en el servidor'
                     });
                 }

@@ -74,7 +74,7 @@ class BarraSuperior extends React.Component {
 		if (this.props.mensaje !== '') {
 			switch (this.props.mensaje) {
 				case 'cerrada':
-					localStorage.setItem('Token', ' ');
+					localStorage.removeItem('Token');
 					this.props.history.go('/');
 					break;
 				default:

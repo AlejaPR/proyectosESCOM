@@ -20,7 +20,7 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import Tooltip from '@material-ui/core/Tooltip';
-
+import Paper from '@material-ui/core/Paper';
 
 //redux conexion
 import { connect } from 'react-redux';
@@ -237,129 +237,137 @@ class ContenidoAdminUsuario extends React.Component {
 												</IconButton>
 											}
 										/>
-										<MaterialTable
-											style={{ zIndex: '1', height: `${rowsPerPage * 71}px` }}
-											title=""
-											localization={{
-												header: {
-													actions: ' '
-												},
-												pagination: {
-													nextTooltip: 'Siguiente ',
-													previousTooltip: 'Anterior',
-													labelDisplayedRows: '{from}-{to} de {count}',
-													lastTooltip: 'Ultima pagina',
-													firstTooltip: 'Primera pagina',
-													labelRowsSelect: 'Registros',
-													firstAriaLabel: 'oooo'
-												},
-												body: {
-													emptyDataSourceMessage: 'Ningun registro de usuarios encontrado'
-												},
-												toolbar: {
-													searchTooltip: 'Buscar',
-													searchPlaceholder: 'Buscar'
-												}
+										<Paper elevation={2}>
+											<MaterialTable
+												style={{ zIndex: '1', height: `${rowsPerPage * 71}px` }}
+												title=""
+												localization={{
+													header: {
+														actions: ' '
+													},
+													pagination: {
+														nextTooltip: 'Siguiente ',
+														previousTooltip: 'Anterior',
+														labelDisplayedRows: '{from}-{to} de {count}',
+														lastTooltip: 'Ultima pagina',
+														firstTooltip: 'Primera pagina',
+														labelRowsSelect: 'Registros',
+														firstAriaLabel: 'oooo'
+													},
+													body: {
+														emptyDataSourceMessage: 'Ningun registro de usuarios encontrado'
+													},
+													toolbar: {
+														searchTooltip: 'Buscar',
+														searchPlaceholder: 'Buscar'
+													}
 
-											}}
-											columns={[
-												{
-													title: 'Numero de identificacion', field: 'numeroDocumento', type: 'numeric',
-													headerStyle: estiloCabecera,
-													cellStyle: estiloFila
-												},
-												{ title: 'Nombre', field: 'nombre', headerStyle: estiloCabecera, cellStyle: estiloFila },
-												{ title: 'Correo electronico', field: 'correoElectronico', headerStyle: estiloCabecera, cellStyle: estiloFila },
-												{
-													title: 'Estado', field: 'estado',
-													render: rowData => {
-														if (rowData.estado === 'Suspendido') {
-															return <span className="label label-sm letra"
-																style={{
-																	textShadow: "none!important",
-																	fontSize: "12px",
-																	fontFamily: "Open Sans,sans-serif",
-																	fontWeight: "300",
-																	padding: "3px 6px",
-																	color: "#fff",
-																	background: "#ED6B75"
-																}}>{rowData.estado}</span>
-														} else {
-															return <span className="label label-sm letra"
-																style={{
-																	textShadow: "none!important",
-																	fontSize: "12px",
-																	fontFamily: "Open Sans,sans-serif",
-																	fontWeight: "300",
-																	padding: "3px 6px",
-																	color: "#fff",
-																	background: "#408725"
-																}}>{rowData.estado}</span>
+												}}
+												columns={[
+													{
+														title: 'Numero de identificacion', field: 'numeroDocumento', type: 'numeric',
+														headerStyle: estiloCabecera,
+														cellStyle: estiloFila
+													},
+													{ title: 'Nombre', field: 'nombre', headerStyle: estiloCabecera, cellStyle: estiloFila },
+													{ title: 'Correo electronico', field: 'correoElectronico', headerStyle: estiloCabecera, cellStyle: estiloFila },
+													{
+														title: 'Estado', field: 'estado',
+														render: rowData => {
+															if (rowData.estado === 'Suspendido') {
+																return <span className="label label-sm letra"
+																	style={{
+																		textShadow: "none!important",
+																		fontSize: "12px",
+																		fontFamily: "Open Sans,sans-serif",
+																		fontWeight: "300",
+																		padding: "3px 6px",
+																		color: "#fff",
+																		background: "#ED6B75"
+																	}}>{rowData.estado}</span>
+															} else {
+																return <span className="label label-sm letra"
+																	style={{
+																		textShadow: "none!important",
+																		fontSize: "12px",
+																		fontFamily: "Open Sans,sans-serif",
+																		fontWeight: "300",
+																		padding: "3px 6px",
+																		color: "#fff",
+																		background: "#408725"
+																	}}>{rowData.estado}</span>
+															}
+														},
+														headerStyle: estiloCabecera, cellStyle: estiloFila
+													},
+												]}
+												data={this.props.usuarios}
+												options={{
+													rowStyle: estiloFila,
+													paging: false
+												}}
+												actions={[
+													{
+														icon: 'edit',
+														tooltip: 'Editar informacion',
+														onClick: (event, rowData) => {
+															this.props.actualizarMensajeSuspender('');
+															this.props.actionAsignarCedula(rowData.numeroDocumento);
+															this.props.history.push('/editarUsuario');
 														}
 													},
-													headerStyle: estiloCabecera, cellStyle: estiloFila
-												},
-											]}
-											data={this.props.usuarios}
-											options={{
-												rowStyle: estiloFila,
-												paging: false
-											}}
-											actions={[
-												{
-													icon: 'edit',
-													tooltip: 'Editar informacion',
-													onClick: (event, rowData) => {
-														this.props.actualizarMensajeSuspender('');
-														this.props.actionAsignarCedula(rowData.numeroDocumento);
-														this.props.history.push('/editarUsuario');
+													{
+														icon: 'restore',
+														tooltip: 'Suspender / Activar',
+														onClick: (event, rowData) => this.activarDesactivarUsuario(rowData.numeroDocumento)
+													},
+													{
+														icon: 'assignmentInd',
+														tooltip: 'Administrar actividades',
+														onClick: (event, rowData) => {
+															this.props.actualizarMensajeSuspender('');
+															this.props.actionAsignarCedula(rowData.numeroDocumento);
+															this.props.history.push('/asignarActividadUsuario');
+														}
 													}
-												},
-												{
-													icon: 'restore',
-													tooltip: 'Suspender / Activar',
-													onClick: (event, rowData) => this.activarDesactivarUsuario(rowData.numeroDocumento)
-												},
-												{
-													icon: 'assignmentInd',
-													tooltip: 'Administrar actividades',
-													onClick: (event, rowData) => {
-														this.props.actualizarMensajeSuspender('');
-														this.props.actionAsignarCedula(rowData.numeroDocumento);
-														this.props.history.push('/asignarActividadUsuario');
-													}
-												}
-											]}
+												]}
 
-											components={{
-												Toolbar: props => (
-													<div className="row">
-														<div className="col-sm-4">
-															<div style={{ padding: '16px' }}>
-																<PopUpUsuario funcion={this.anadirTarea} />
+												components={{
+													Toolbar: props => (
+														<div className="row">
+															<div className="col-sm-4">
+																<div style={{ padding: '16px' }}>
+																	<PopUpUsuario funcion={this.anadirTarea} />
+																</div>
 															</div>
 														</div>
-													</div>
-												)
-											}}
-										/>
-										<TablePagination
-											rowsPerPageOptions={[5, 10, 15]}
-											component="div"
-											count={cantidad}
-											labelDisplayedRows={({ from, to, count }) => {
-												return `${from}-${to === -1 ? count : to} de ${count}`
-											}}
-											labelRowsPerPage={`Registros por página:`}
-											nextIconButtonText={`Siguiente pagina`}
-											backIconButtonText={`Pagina anterior`}
-											rowsPerPage={this.state.rowsPerPage}
-											page={page}
-											onChangePage={this.handleChangePage}
-											onChangeRowsPerPage={this.handleChangeRowsPerPage}
-											ActionsComponent={TablePaginationActions}
-										/>
+													),
+													Container: props => (
+														<Paper {...props} elevation={0} />
+													)
+												}}
+											/>
+											<Paper elevation={0}>
+												<TablePagination
+													rowsPerPageOptions={[5, 10, 15]}
+													component="div"
+													count={cantidad}
+													labelDisplayedRows={({ from, to, count }) => {
+														return `${from}-${to === -1 ? count : to} de ${count}`
+													}}
+													labelRowsPerPage={`Registros por página:`}
+													nextIconButtonText={`Siguiente pagina`}
+													backIconButtonText={`Pagina anterior`}
+													rowsPerPage={this.state.rowsPerPage}
+													page={page}
+													onChangePage={this.handleChangePage}
+													onChangeRowsPerPage={this.handleChangeRowsPerPage}
+													ActionsComponent={TablePaginationActions}
+												/>
+											</Paper>
+										</Paper>
 									</>
+
 							}
 						</div>
 					</div>

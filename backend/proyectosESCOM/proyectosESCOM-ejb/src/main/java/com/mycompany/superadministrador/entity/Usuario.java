@@ -25,8 +25,8 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "TBL_USUARIO")
 @NamedQueries({
-    @NamedQuery(name = "filtrarUsuarios", query = "SELECT u FROM Usuario u WHERE u.numeroDocumento LIKE CONCAT('%',:palabraBusqueda,'%') OR Lower(u.nombre) LIKE CONCAT('%',:palabraBusqueda,'%') OR Lower(u.correoElectronico) LIKE CONCAT('%',:palabraBusqueda,'%') "
-            + "OR Lower(u.estado) LIKE CONCAT('%',:palabraBusqueda,'%') AND NOT u.correoElectronico=:correoElectronico"),
+    @NamedQuery(name = "filtrarUsuarios", query = "SELECT u FROM Usuario u WHERE (u.numeroDocumento LIKE CONCAT('%',:palabraBusqueda,'%') OR Lower(u.nombre) LIKE CONCAT('%',:palabraBusqueda,'%') OR Lower(u.correoElectronico) LIKE CONCAT('%',:palabraBusqueda,'%') "
+            + "OR Lower(u.estado) LIKE CONCAT('%',:palabraBusqueda,'%')) AND NOT u.correoElectronico=:correoElectronico"),
     @NamedQuery(name = "filtrarUsuariosSuper", query = "SELECT u FROM Usuario u WHERE u.numeroDocumento LIKE CONCAT('%',:palabraBusqueda,'%') OR Lower(u.nombre) LIKE CONCAT('%',:palabraBusqueda,'%') OR Lower(u.correoElectronico) LIKE CONCAT('%',:palabraBusqueda,'%') "
             + " OR Lower(u.estado) LIKE CONCAT('%',:palabraBusqueda,'%')"),
     @NamedQuery(name = "consultaUsuariosNormal", query = "SELECT u FROM Usuario u WHERE NOT u.correoElectronico=:correoElectronico"),
