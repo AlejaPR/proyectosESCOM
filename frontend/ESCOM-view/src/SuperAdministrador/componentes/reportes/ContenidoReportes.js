@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import axios from 'axios';
 //componentes
-import { makeStyles, useTheme, withStyles } from '@material-ui/core/styles';
+import {withStyles } from '@material-ui/core/styles';
 import { generarInput, generarDate } from '../../utilitario/GenerarInputs.js'
 import { TablePagination } from '@material-ui/core';
 import Barra from '../general/BarraDirecciones.js'
@@ -31,13 +31,8 @@ import { actionConsultarReporte, actualizarReporte, actualizarMensaje, actionCon
 import { NotificationContainer, NotificationManager } from 'react-notifications';
 import { reduxForm, Field } from 'redux-form';
 import { withRouter } from 'react-router-dom';
-import IconButton from '@material-ui/core/IconButton';
-import FirstPageIcon from '@material-ui/icons/FirstPage';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import LastPageIcon from '@material-ui/icons/LastPage';
 import jsPDF from "jspdf";
-import Tooltip from '@material-ui/core/Tooltip';
+import {TablePaginationActions} from '../../utilitario/paginacion.js';
 import { desencriptar } from '../../componentes/general/Encriptar.js';
 import { URL_BASE } from '../../utilitario/Configuracion.js';
 import "jspdf-autotable";
@@ -417,77 +412,6 @@ class ContenidoReportes extends React.Component {
 
 }
 
-const useStyles1 = makeStyles((theme) => ({
-	root: {
-		flexShrink: 0,
-		marginLeft: theme.spacing(2.5),
-	},
-}));
-
-
-export const TablePaginationActions = (props) => {
-
-
-	const classes = useStyles1();
-	const theme = useTheme()
-	const { count, page, rowsPerPage, onChangePage } = props;
-
-	const handleFirstPageButtonClick = (event) => {
-		onChangePage(event, 0);
-	};
-
-	const handleBackButtonClick = (event) => {
-		onChangePage(event, page - 1);
-	};
-
-	const handleNextButtonClick = (event) => {
-		onChangePage(event, page + 1);
-	};
-
-	const handleLastPageButtonClick = (event) => {
-		onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
-	};
-
-	return (
-		<div className={classes.root}>
-			<Tooltip title="Primera pagina">
-				<IconButton
-					onClick={handleFirstPageButtonClick}
-					disabled={page === 0}
-					aria-label="first page"
-				>
-					{theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
-				</IconButton>
-			</Tooltip>
-
-			<Tooltip title="Pagina anterior">
-				<IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
-					{theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
-				</IconButton>
-			</Tooltip>
-
-			<Tooltip title="Siguiente pagina">
-				<IconButton
-					onClick={handleNextButtonClick}
-					disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-					aria-label="next page"
-				>
-					{theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
-				</IconButton>
-			</Tooltip>
-			<Tooltip title="Ultima pagina">
-				<IconButton
-					onClick={handleLastPageButtonClick}
-					disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-					aria-label="last page"
-				>
-
-					{theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
-				</IconButton>
-			</Tooltip>
-		</div>
-	);
-}
 
 
 const StyledTableCell = withStyles((theme) => ({
@@ -545,20 +469,6 @@ export const ReduxFormSelectDos = props => {
 			{touched && ((error && <span className="text-danger letra form-group">{error}</span>))}
 		</div>
 	)
-}
-
-const estiloCabecera = {
-	fontSize: '14px',
-	fontFamily: 'sans-serif',
-	padding: '8px',
-	background: '#e7ecf1'
-
-}
-
-const estiloFila = {
-	fontSize: '13px',
-	fontFamily: 'sans-serif',
-	padding: '8px',
 }
 
 

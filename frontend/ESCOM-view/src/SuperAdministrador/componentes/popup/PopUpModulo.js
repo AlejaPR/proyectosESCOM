@@ -169,7 +169,7 @@ class PopUpModulo extends React.Component {
 
 
   handleSubmitForm = values => {
-    var linkFiltrado = values.link.replace('/', '');
+    var linkFiltrado = values.link.replace(/\//g, '');
     if(linkFiltrado===''){
       NotificationManager.error('Ingrese un link de acceso valido');
     }else{

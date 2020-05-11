@@ -673,7 +673,7 @@ export function actionConsultarDocumentos(token) {
                             'idTipoDocumento': '2',
                             'tipoDocumento': 'Tarjeta de identidad'
                         }
-                        var documentos = [cedula, tarjetaIdentidad];
+                        let documentos = [cedula, tarjetaIdentidad];
                         if (error.request) {
                             dispatch({
                                 type: MOSTRAR_DOCUMENTOS,
@@ -690,7 +690,7 @@ export function actionConsultarDocumentos(token) {
                         'idTipoDocumento': '2',
                         'tipoDocumento': 'Tarjeta de identidad'
                     }
-                    var documentos = [cedula, tarjetaIdentidad];
+                    let documentos = [cedula, tarjetaIdentidad];
                     if (error.request) {
                         dispatch({
                             type: MOSTRAR_DOCUMENTOS,
@@ -1215,7 +1215,7 @@ export function actionAsignarActividades() {
     return (dispatch, getState) => {
         dispatch({
             type: ACTIVIDADES_SIN_ASIGNAR,
-            respuesta: null
+            respuesta: []
         });
     }
 }

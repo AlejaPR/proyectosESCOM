@@ -23,7 +23,7 @@ import DoneOutlineIcon from '@material-ui/icons/DoneOutline';
 //componentes
 
 //redux
-import { actionConsultarModulos, actionConsultarActividadesSinAsignar, actionEliminarActividades, actualizarMensajeAsignar, actionAsignarActividades, actionConsultarActividadesUsuario, actionAsignarActividad } from '../../actions/actionsUsuario.js'
+import { actionConsultarModulos, actionConsultarActividadesSinAsignar,actionAsignarCedula, actionEliminarActividades, actualizarMensajeAsignar, actionAsignarActividades, actionConsultarActividadesUsuario, actionAsignarActividad } from '../../actions/actionsUsuario.js'
 import { connect } from 'react-redux';
 
 
@@ -36,6 +36,7 @@ class AsignarActividadUsuario extends React.Component {
     }
 
     componentDidMount() {
+        this.props.actionAsignarActividades();
         if (this.props.cedula === undefined || this.props.cedula.length === 0) {
             this.props.history.push('/adminUsuario');
         }else{
@@ -43,6 +44,8 @@ class AsignarActividadUsuario extends React.Component {
             this.props.actionConsultarActividadesUsuario(this.props.cedula, localStorage.getItem('Token'));
         }
     }
+
+
     componentDidUpdate() {
         if (this.props.mensaje !== '') {
             switch (this.props.mensaje) {
@@ -150,6 +153,7 @@ class AsignarActividadUsuario extends React.Component {
     };
 
     onClickCancelar = (event) => {
+        this.props.actionAsignarCedula([]);
         event.preventDefault();
         this.props.history.goBack();
     }
@@ -399,4 +403,4 @@ let asignarActividadUsuario = reduxForm({
     form: 'asignarActividadUsuario'
 })(AsignarActividadUsuario)
 
-export default withRouter(connect(mapStateToProps, { actionConsultarModulos, actionEliminarActividades, actionConsultarActividadesSinAsignar, actualizarMensajeAsignar, actionAsignarActividad, actionAsignarActividades, actionConsultarActividadesUsuario })(asignarActividadUsuario));
+export default withRouter(connect(mapStateToProps, { actionConsultarModulos,actionAsignarCedula, actionEliminarActividades, actionConsultarActividadesSinAsignar, actualizarMensajeAsignar, actionAsignarActividad, actionAsignarActividades, actionConsultarActividadesUsuario })(asignarActividadUsuario));

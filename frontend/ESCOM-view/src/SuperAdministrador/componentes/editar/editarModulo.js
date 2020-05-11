@@ -134,7 +134,7 @@ class EditarModulo extends React.Component {
 
     handleSubmitForm = values => {
         if (values.image === undefined | values.image === null) {
-            var linkFiltrado = values.url.replace('/', '');
+            var linkFiltrado = values.url.replace(/\//g, '');
             if (linkFiltrado === '') {
                 NotificationManager.error('Ingrese un link de acceso valido');
             } else {
@@ -148,7 +148,7 @@ class EditarModulo extends React.Component {
                 this.props.actionEditarModulo(modulo, this.props.initialValues.id, localStorage.getItem('Token'));
             }
         } else {
-             linkFiltrado = values.url.replace('/', '');
+             linkFiltrado = values.url.replace(/\//g, '');
             if (linkFiltrado === '') {
                 NotificationManager.error('Ingrese un link de acceso valido');
             } else {

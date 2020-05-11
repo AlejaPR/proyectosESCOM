@@ -12,17 +12,12 @@ import { confirmAlert } from 'react-confirm-alert';
 import Alert from '@material-ui/lab/Alert';
 import AlertTitle from '@material-ui/lab/AlertTitle';
 import { TablePagination } from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
 import Input from '@material-ui/core/Input';
+import IconButton from '@material-ui/core/IconButton';
 import ClearIcon from '@material-ui/icons/Clear';
 import SearchIcon from '@material-ui/icons/Search';
-import FirstPageIcon from '@material-ui/icons/FirstPage';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import LastPageIcon from '@material-ui/icons/LastPage';
-import Tooltip from '@material-ui/core/Tooltip';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
+import {TablePaginationActions} from '../../utilitario/paginacion.js';
 
 //redux conexion
 import { connect } from 'react-redux';
@@ -58,7 +53,6 @@ class ContenidoAdminActividad extends React.Component {
 					this.props.actualizarMensajeSuspender('');
 					break;
 				case 'Operacion hecha con exito':
-					this.props.actionConsultarActividades(localStorage.getItem('Token'), this.state.rowsPerPage, this.state.page);
 					NotificationManager.success('Operacion realizada con exito');
 					this.props.actualizarMensajeSuspender('');
 					break;
@@ -205,10 +199,12 @@ class ContenidoAdminActividad extends React.Component {
 	}
 
 	press = (event) => {
+		const { valor, rowsPerPage } = this.state;
 		if (event.key === 'Enter') {
-			if (this.state.valor !== '') {
-				this.props.actionConsultarCantidadActividadesFiltradas(localStorage.getItem('Token'), this.state.valor);
-				this.props.actionFiltrarActividades(localStorage.getItem('Token'), this.state.valor, this.state.rowsPerPage, 0);
+			if (valor !== '') {
+				var palabraFiltrada = valor.replace(/\//g, '%2f');
+				this.props.actionConsultarCantidadActividadesFiltradas(localStorage.getItem('Token'), palabraFiltrada);
+				this.props.actionFiltrarActividades(localStorage.getItem('Token'), palabraFiltrada, rowsPerPage, 0);
 			}
 		}
 	}
@@ -273,7 +269,9 @@ class ContenidoAdminActividad extends React.Component {
 										<Paper elevation={2} >
 											<MaterialTable
 
-												style={{ zIndex: '1', height: `${rowsPerPage * 71}px` }}
+												style={
+													estiloTabla(rowsPerPage,this.props.actividades)
+													}
 												localization={{
 													header: {
 														actions: ' '
@@ -364,7 +362,6 @@ class ContenidoAdminActividad extends React.Component {
 														<Paper {...props} elevation={0} />
 													)
 												}}
-
 											/>
 											<TablePagination
 												rowsPerPageOptions={[5, 10, 15]}
@@ -391,80 +388,26 @@ class ContenidoAdminActividad extends React.Component {
 			</div>
 		);
 	}
-
-
 }
 
-export const TablePaginationActions = (props) => {
 
 
-	const classes = useStyles1();
-	const theme = useTheme()
-	const { count, page, rowsPerPage, onChangePage } = props;
-
-	const handleFirstPageButtonClick = (event) => {
-		onChangePage(event, 0);
-	};
-
-	const handleBackButtonClick = (event) => {
-		onChangePage(event, page - 1);
-	};
-
-	const handleNextButtonClick = (event) => {
-		onChangePage(event, page + 1);
-	};
-
-	const handleLastPageButtonClick = (event) => {
-		onChangePage(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
-	};
-
-	return (
-		<div className={classes.root}>
-			<Tooltip title="Primera pagina">
-				<IconButton
-					onClick={handleFirstPageButtonClick}
-					disabled={page === 0}
-					aria-label="first page"
-				>
-					{theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
-				</IconButton>
-			</Tooltip>
-
-			<Tooltip title="Pagina anterior">
-				<IconButton onClick={handleBackButtonClick} disabled={page === 0} aria-label="previous page">
-					{theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
-				</IconButton>
-			</Tooltip>
-
-			<Tooltip title="Siguiente pagina">
-				<IconButton
-					onClick={handleNextButtonClick}
-					disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-					aria-label="next page"
-				>
-					{theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
-				</IconButton>
-			</Tooltip>
-			<Tooltip title="Ultima pagina">
-				<IconButton
-					onClick={handleLastPageButtonClick}
-					disabled={page >= Math.ceil(count / rowsPerPage) - 1}
-					aria-label="last page"
-				>
-
-					{theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
-				</IconButton>
-			</Tooltip>
-		</div>
-	);
+const estiloTabla=(numeroDeRegistros,cantidadDeDatos) => {
+	if(cantidadDeDatos.length<5){
+		return { zIndex: '1', height: `${5 * 71}px` }
+	}else{
+		switch (numeroDeRegistros) {
+			case 5:
+				return { zIndex: '1', height: `100%` }
+			case 10:
+				return { zIndex: '1', height: `100%` }
+			case 15:
+				return { zIndex: '1', height: `100%` }
+				default:
+					break;
+		}
+	}
 }
-
-const useStyles1 = makeStyles((theme) => ({
-	root: {
-		flexShrink: 0,
-		marginLeft: theme.spacing(2.5),
-	},
-}));
 
 
 const estiloCabecera = {

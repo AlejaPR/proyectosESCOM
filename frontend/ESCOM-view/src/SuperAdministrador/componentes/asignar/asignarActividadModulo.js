@@ -50,7 +50,9 @@ class AsignarActividadModulo extends React.Component {
                     this.props.actualizarMensajeActividades('');
                     break;
                 case 'Sin permiso':
-                    if (!this.state.habilitado) { this.setState({ habilitado: true }) };
+                    // if (!this.state.habilitado) { this.setState({ habilitado: true }) };
+                    this.setState({ habilitado: true }) 
+                    this.props.actualizarMensajeActividades('');
                     break;
                 case 'Ocurrio un error en el servidor':
                     NotificationManager.error('Ocurrio un error en el servidor');
@@ -91,7 +93,7 @@ class AsignarActividadModulo extends React.Component {
     render() {
         return (
             <div>
-                <div class="text-left titulo" style={estiloLetrero}>
+                <div className="text-left titulo" style={estiloLetrero}>
                     <h4>Administrar actividades del modulo</h4>
                 </div>
                 <Barra texto="Inicio > Administracion de modulos > Administrar actividades del modulo" />

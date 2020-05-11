@@ -175,13 +175,6 @@ class ContenidoInicio extends React.Component {
 
 }
 
-const estiloCabecera = {
-	fontSize: '13px',
-	fontFamily: 'sans-serif',
-	padding: '8px',
-	background: 'white'
-
-}
 
 const estiloFila = {
 	fontSize: '14px',
