@@ -138,6 +138,7 @@ class ContenidoAdminActividad extends React.Component {
 					let actividad = {
 						idActividad: task.idActividad,
 						nombre: task.nombre,
+						descripcionActividad:task.descripcionActividad,
 						moduloActividad: task.moduloActividad,
 						estado: "Activo"
 					}
@@ -145,8 +146,8 @@ class ContenidoAdminActividad extends React.Component {
 				} else {
 					let actividad = {
 						idActividad: task.idActividad,
-
 						nombre: task.nombre,
+						descripcionActividad:task.descripcionActividad,
 						moduloActividad: task.moduloActividad,
 						estado: "Suspendido"
 					}

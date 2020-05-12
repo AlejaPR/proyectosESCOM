@@ -54,6 +54,14 @@ class ContenidoReportes extends React.Component {
 		reporte: []
 	}
 
+	componentDidMount(){
+		if(localStorage.getItem('Token')===null){
+			window.location.href = "/";
+		}else{
+			this.reiniciar();
+		}
+	}
+
 	retornarValor = () => {
 		return this.state.valor;
 	}
